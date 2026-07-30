@@ -203,6 +203,80 @@
 
                         <li
                           ngTreeItem
+                          #objectsItem="ngTreeItem"
+                          class="tree-item"
+                          [parent]="databaseGroup"
+                          [value]="objectsNode(project.id, database.id)"
+                          label="Objects"
+                          [expanded]="isExpanded(objectsNode(project.id, database.id))"
+                          (expandedChange)="objectsExpanded(project.id, database.id, $event)"
+                        >
+                          <div class="tree-row">
+                            <mat-icon>category</mat-icon>
+                            <span class="item-label">Objects</span>
+                            <button
+                              type="button"
+                              matIconButton
+                              tabindex="-1"
+                              class="disclosure"
+                              [attr.aria-label]="
+                                (isExpanded(objectsNode(project.id, database.id))
+                                  ? 'Collapse '
+                                  : 'Expand ') +
+                                database.name +
+                                ' objects'
+                              "
+                              (click)="toggleObjects($event, project.id, database.id)"
+                            >
+                              <mat-icon>
+                                {{
+                                  isExpanded(objectsNode(project.id, database.id))
+                                    ? 'expand_more'
+                                    : 'chevron_right'
+                                }}
+                              </mat-icon>
+                            </button>
+                          </div>
+
+                          <ul role="group" class="tree-group">
+                            <ng-template
+                              ngTreeItemGroup
+                              #objectGroup="ngTreeItemGroup"
+                              [ownedBy]="objectsItem"
+                            >
+                              @for (kind of objectKinds; track kind) {
+                                <li
+                                  ngTreeItem
+                                  class="tree-item table-item"
+                                  [parent]="objectGroup"
+                                  [value]="objectNode(project.id, database.id, kind)"
+                                  [label]="objectConfig[kind].label"
+                                >
+                                  <div class="tree-row">
+                                    <mat-icon>{{ objectConfig[kind].icon }}</mat-icon>
+                                    <span class="item-label">{{ objectConfig[kind].label }}</span>
+                                  </div>
+                                </li>
+                              }
+                            </ng-template>
+                          </ul>
+                        </li>
+
+                        <li
+                          ngTreeItem
+                          class="tree-item"
+                          [parent]="databaseGroup"
+                          [value]="settingsNode(project.id, database.id)"
+                          label="Settings"
+                        >
+                          <div class="tree-row">
+                            <mat-icon>tune</mat-icon>
+                            <span class="item-label">Settings</span>
+                          </div>
+                        </li>
+
+                        <li
+                          ngTreeItem
                           class="tree-item"
                           [parent]="databaseGroup"
                           [value]="validationNode(project.id, database.id)"

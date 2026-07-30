@@ -10,6 +10,7 @@ import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/ro
 import { filter, startWith } from 'rxjs';
 import { AboutDialog } from './about-dialog';
 import { AppStore } from './app-store';
+import { OBJECT_CONFIG, OBJECT_KINDS } from '../features/objects/object-config';
 
 const projectNode = (projectId: string): string => `project:${projectId}`;
 const databaseNode = (projectId: string, databaseId: string): string =>
@@ -18,6 +19,12 @@ const tablesNode = (projectId: string, databaseId: string): string =>
   `tables:${projectId}:${databaseId}`;
 const tableNode = (projectId: string, databaseId: string, table: string): string =>
   `table:${projectId}:${databaseId}:${table}`;
+const objectsNode = (projectId: string, databaseId: string): string =>
+  `objects:${projectId}:${databaseId}`;
+const objectNode = (projectId: string, databaseId: string, kind: string): string =>
+  `object:${projectId}:${databaseId}:${kind}`;
+const settingsNode = (projectId: string, databaseId: string): string =>
+  `database-settings:${projectId}:${databaseId}`;
 const validationNode = (projectId: string, databaseId: string): string =>
   `validation:${projectId}:${databaseId}`;
 const exportNode = (projectId: string, databaseId: string): string =>
@@ -51,6 +58,11 @@ export class AppNavigation {
   protected readonly databaseNode = databaseNode;
   protected readonly tablesNode = tablesNode;
   protected readonly tableNode = tableNode;
+  protected readonly objectsNode = objectsNode;
+  protected readonly objectNode = objectNode;
+  protected readonly settingsNode = settingsNode;
+  protected readonly objectKinds = OBJECT_KINDS;
+  protected readonly objectConfig = OBJECT_CONFIG;
   protected readonly validationNode = validationNode;
   protected readonly exportNode = exportNode;
 
@@ -83,6 +95,10 @@ export class AppNavigation {
     if (expanded) void this.store.ensureTables(databaseId);
   }
 
+  protected objectsExpanded(projectId: string, databaseId: string, expanded: boolean): void {
+    this.setExpanded(objectsNode(projectId, databaseId), expanded);
+  }
+
   protected toggleProject(event: Event, projectId: string): void {
     event.stopPropagation();
     this.projectExpanded(projectId, !this.isExpanded(projectNode(projectId)));
@@ -102,6 +118,12 @@ export class AppNavigation {
     this.tablesExpanded(projectId, databaseId, !this.isExpanded(tablesNode(projectId, databaseId)));
   }
 
+  protected toggleObjects(event: Event, projectId: string, databaseId: string): void {
+    event.stopPropagation();
+    const node = objectsNode(projectId, databaseId);
+    this.setExpanded(node, !this.isExpanded(node));
+  }
+
   protected retryDatabases(event: Event, projectId: string): void {
     event.stopPropagation();
     void this.store.ensureDatabases(projectId, true);
@@ -116,13 +138,33 @@ export class AppNavigation {
     this.currentNodes.set(nodes);
     const node = nodes.at(-1);
     if (!node) return;
-    const [kind, projectId, databaseId, table] = node.split(':');
+    const [kind, projectId, databaseId, value] = node.split(':');
 
     if (kind === 'project') void this.router.navigate(['/projects', projectId]);
     else if (kind === 'database' || kind === 'tables')
       void this.router.navigate(['/projects', projectId, 'databases', databaseId, 'tables']);
     else if (kind === 'table')
-      void this.router.navigate(['/projects', projectId, 'databases', databaseId, 'tables', table]);
+      void this.router.navigate(['/projects', projectId, 'databases', databaseId, 'tables', value]);
+    else if (kind === 'objects')
+      void this.router.navigate([
+        '/projects',
+        projectId,
+        'databases',
+        databaseId,
+        'objects',
+        'countries',
+      ]);
+    else if (kind === 'object')
+      void this.router.navigate([
+        '/projects',
+        projectId,
+        'databases',
+        databaseId,
+        'objects',
+        value,
+      ]);
+    else if (kind === 'database-settings')
+      void this.router.navigate(['/projects', projectId, 'databases', databaseId, 'settings']);
     else if (kind === 'validation')
       void this.router.navigate(['/projects', projectId, 'databases', databaseId, 'validation']);
     else if (kind === 'export')
@@ -176,7 +218,12 @@ export class AppNavigation {
     let current = tablesNode(projectId, databaseId);
     if (url.endsWith('/validation')) current = validationNode(projectId, databaseId);
     else if (url.endsWith('/export')) current = exportNode(projectId, databaseId);
-    else if (table) {
+    else if (url.endsWith('/settings')) current = settingsNode(projectId, databaseId);
+    else if (url.includes('/objects/')) {
+      const objectKind = url.match(/\/objects\/([^/]+)/)?.[1] ?? 'countries';
+      current = objectNode(projectId, databaseId, objectKind);
+      this.setExpanded(objectsNode(projectId, databaseId), true);
+    } else if (table) {
       current = tableNode(projectId, databaseId, table);
       this.setExpanded(tablesNode(projectId, databaseId), true);
     }

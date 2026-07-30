@@ -4,6 +4,25 @@ export type DatabaseStatus = 'available' | 'corrupt';
 export type ValidationSeverity = 'error' | 'warning';
 export type TableValue = string | number;
 export type TableRowValues = Record<string, TableValue>;
+export type ObjectKind = 'countries' | 'stadiums' | 'leagues' | 'teams' | 'players' | 'referees';
+export type ObjectSection =
+  | 'root'
+  | 'teams'
+  | 'referees'
+  | 'identity'
+  | 'traits'
+  | 'tactics'
+  | 'manager'
+  | 'stadium'
+  | 'location'
+  | 'players'
+  | 'jersey-numbers'
+  | 'contract'
+  | 'appearance'
+  | 'gear'
+  | 'skills'
+  | 'behaviour'
+  | 'leagues';
 
 export interface ProjectDescriptor {
   id: string;
@@ -173,6 +192,123 @@ export interface SaveRowResult {
   warnings: ValidationIssue[];
 }
 
+export interface ObjectListRequest {
+  databaseId: string;
+  kind: ObjectKind;
+  pageIndex: number;
+  pageSize: number;
+  query: string;
+  sortField?: string;
+  sortDirection?: 'asc' | 'desc';
+}
+
+export interface ObjectSummary {
+  id: number;
+  name: string;
+  values: TableRowValues;
+}
+
+export interface ObjectListPage {
+  kind: ObjectKind;
+  items: ObjectSummary[];
+  total: number;
+}
+
+export interface ObjectReference {
+  id: number;
+  name: string;
+  values: TableRowValues;
+}
+
+export interface ObjectDetail {
+  kind: ObjectKind;
+  id: number;
+  title: string;
+  section: ObjectSection;
+  fields: FieldDescriptor[];
+  values: TableRowValues;
+  relationIds: number[];
+  related: ObjectReference[];
+  readOnly: boolean;
+}
+
+export interface ObjectReadRequest {
+  databaseId: string;
+  kind: ObjectKind;
+  id: number;
+  section: ObjectSection;
+}
+
+export interface SaveObjectRequest {
+  databaseId: string;
+  kind: ObjectKind;
+  id?: number;
+  section: ObjectSection;
+  values: TableRowValues;
+  relationIds?: number[];
+  related?: { id: number; values: TableRowValues }[];
+  acceptWarnings: boolean;
+}
+
+export interface SaveObjectResult {
+  id: number;
+  warnings: ValidationIssue[];
+}
+
+export interface ObjectDeleteRequest {
+  databaseId: string;
+  kind: ObjectKind;
+  id: number;
+}
+
+export interface ObjectDependency {
+  table: string;
+  field: string;
+  count: number;
+  sampleIds: number[];
+}
+
+export type ObjectDeleteResult =
+  { deleted: true; dependencies: [] } | { deleted: false; dependencies: ObjectDependency[] };
+
+export type WeightedSettings = Record<string, number>;
+
+export interface DatabaseObjectSettings {
+  ids: {
+    league: number;
+    team: number;
+    country: number;
+    player: number;
+    referee: number;
+  };
+  dates: { date: number; now: boolean };
+  referee: {
+    foulsStyle: WeightedSettings;
+    cardsStyle: WeightedSettings;
+    jerseySleeve: WeightedSettings;
+  };
+  traits: { teamTraits: WeightedSettings; playerTraits: WeightedSettings };
+  shoes: { shoeType: WeightedSettings };
+  kit: {
+    jerseyFit: WeightedSettings;
+    jerseyStyle: WeightedSettings;
+    jerseySleeveLength: WeightedSettings;
+    sockLength: WeightedSettings;
+    winterAccessories: WeightedSettings;
+  };
+  tactics: {
+    busPositioning: WeightedSettings;
+    ccPositioning: WeightedSettings;
+    defDefenderLine: WeightedSettings;
+  };
+  animations: {
+    freeKickStart: WeightedSettings;
+    penaltiesStart: WeightedSettings;
+    penaltiesMotionStyle: WeightedSettings;
+    penaltiesKickStyle: WeightedSettings;
+  };
+}
+
 export interface ExportDatabaseRequest {
   databaseId: string;
   targetParentPath: string;
@@ -209,6 +345,16 @@ export interface QdbEditorApi {
   readRow(databaseId: string, table: string, rowId: number): Promise<TableRow>;
   saveRow(request: SaveRowRequest): Promise<SaveRowResult>;
   deleteRow(request: DeleteRowRequest): Promise<boolean>;
+  listObjects(request: ObjectListRequest): Promise<ObjectListPage>;
+  readObject(request: ObjectReadRequest): Promise<ObjectDetail>;
+  saveObject(request: SaveObjectRequest): Promise<SaveObjectResult>;
+  deleteObject(request: ObjectDeleteRequest): Promise<ObjectDeleteResult>;
+  getDatabaseObjectSettings(databaseId: string): Promise<DatabaseObjectSettings>;
+  saveDatabaseObjectSettings(
+    databaseId: string,
+    settings: DatabaseObjectSettings,
+  ): Promise<DatabaseObjectSettings>;
+  restoreDatabaseObjectSettings(databaseId: string): Promise<DatabaseObjectSettings>;
   validateDatabase(databaseId: string): Promise<ValidationReport>;
   getValidation(databaseId: string): Promise<ValidationReport>;
   selectExportDirectory(): Promise<string | undefined>;

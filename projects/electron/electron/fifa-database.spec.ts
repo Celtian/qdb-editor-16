@@ -29,6 +29,11 @@ afterEach(() =>
 );
 
 describe('FIFA database', () => {
+  const row = (table: string, overrides: Record<string, string | number>) =>
+    Object.fromEntries(
+      fieldsFor(table).map((field) => [field.name, overrides[field.name] ?? field.default]),
+    );
+
   it('creates every table and supports paginated transactional CRUD', () => {
     const { database } = createDatabase();
     expect(database.listTables().map((table) => table.name)).toEqual(FIFA_TABLES);
@@ -151,6 +156,210 @@ describe('FIFA database', () => {
         acceptWarnings: true,
       }),
     ).toThrow(/integer/i);
+    database.close();
+  });
+
+  it('projects joined domain objects and keeps object and table edits consistent', () => {
+    const { database } = createDatabase();
+    database.saveObject({
+      databaseId: crypto.randomUUID(),
+      kind: 'countries',
+      section: 'root',
+      values: {
+        nationid: 14,
+        nationname: 'Czech Republic',
+        confederation: 7,
+        isocountrycode: 'cz',
+      },
+      acceptWarnings: true,
+    });
+    database.saveRow({
+      databaseId: crypto.randomUUID(),
+      table: 'playernames',
+      values: row('playernames', { nameid: 100, name: 'Petr' }),
+      acceptWarnings: true,
+    });
+    database.saveRow({
+      databaseId: crypto.randomUUID(),
+      table: 'playernames',
+      values: row('playernames', { nameid: 101, name: 'Čech' }),
+      acceptWarnings: true,
+    });
+    database.saveRow({
+      databaseId: crypto.randomUUID(),
+      table: 'players',
+      values: row('players', {
+        playerid: 1,
+        firstnameid: 100,
+        lastnameid: 101,
+        nationality: 14,
+      }),
+      acceptWarnings: true,
+    });
+
+    expect(
+      database.listObjects({
+        databaseId: crypto.randomUUID(),
+        kind: 'players',
+        pageIndex: 0,
+        pageSize: 25,
+        query: 'Petr',
+        sortField: 'name',
+        sortDirection: 'asc',
+      }),
+    ).toMatchObject({
+      total: 1,
+      items: [{ id: 1, name: 'Petr Čech', values: { country: 'Czech Republic' } }],
+    });
+
+    database.saveObject({
+      databaseId: crypto.randomUUID(),
+      kind: 'players',
+      id: 1,
+      section: 'identity',
+      values: { height: 197, weight: 90 },
+      acceptWarnings: true,
+    });
+    expect(
+      database.readAllRows('players').find((candidate) => candidate.values['playerid'] === 1)
+        ?.values['height'],
+    ).toBe(197);
+    database.close();
+  });
+
+  it('blocks object deletion when relationship rows still depend on it', () => {
+    const { database } = createDatabase();
+    database.saveObject({
+      databaseId: crypto.randomUUID(),
+      kind: 'teams',
+      section: 'root',
+      values: { teamid: 42, teamname: 'Sparta Prague' },
+      acceptWarnings: true,
+    });
+    database.saveRow({
+      databaseId: crypto.randomUUID(),
+      table: 'players',
+      values: row('players', { playerid: 7 }),
+      acceptWarnings: true,
+    });
+    database.saveRow({
+      databaseId: crypto.randomUUID(),
+      table: 'teamplayerlinks',
+      values: row('teamplayerlinks', {
+        artificialkey: 1,
+        teamid: 42,
+        playerid: 7,
+        jerseynumber: 1,
+      }),
+      acceptWarnings: true,
+    });
+
+    expect(
+      database.deleteObject({
+        databaseId: crypto.randomUUID(),
+        kind: 'teams',
+        id: 42,
+      }),
+    ).toEqual({
+      deleted: false,
+      dependencies: [
+        expect.objectContaining({ table: 'teamplayerlinks', field: 'teamid', count: 1 }),
+      ],
+    });
+    expect(
+      database.listObjects({
+        databaseId: crypto.randomUUID(),
+        kind: 'teams',
+        pageIndex: 0,
+        pageSize: 25,
+        query: '',
+      }).total,
+    ).toBe(1);
+    database.close();
+  });
+
+  it('preserves player-team metadata and allocates collision-free relationship keys', () => {
+    const { database } = createDatabase();
+    for (const [teamid, teamname] of [
+      [1, 'Home'],
+      [2, 'Away'],
+    ] as const)
+      database.saveObject({
+        databaseId: crypto.randomUUID(),
+        kind: 'teams',
+        section: 'root',
+        values: { teamid, teamname },
+        acceptWarnings: true,
+      });
+    database.saveRow({
+      databaseId: crypto.randomUUID(),
+      table: 'players',
+      values: row('players', { playerid: 9 }),
+      acceptWarnings: true,
+    });
+    database.saveRow({
+      databaseId: crypto.randomUUID(),
+      table: 'teamplayerlinks',
+      values: row('teamplayerlinks', {
+        artificialkey: 10,
+        teamid: 1,
+        playerid: 9,
+        jerseynumber: 33,
+      }),
+      acceptWarnings: true,
+    });
+
+    database.saveObject({
+      databaseId: crypto.randomUUID(),
+      kind: 'players',
+      id: 9,
+      section: 'contract',
+      values: { contractvaliduntil: 2020, playerjointeamdate: 150000 },
+      relationIds: [1, 2],
+      acceptWarnings: true,
+    });
+
+    expect(
+      database
+        .readAllRows('teamplayerlinks')
+        .filter((candidate) => candidate.values['playerid'] === 9)
+        .map((candidate) => candidate.values)
+        .sort((left, right) => Number(left['teamid']) - Number(right['teamid'])),
+    ).toMatchObject([
+      { artificialkey: 10, teamid: 1, jerseynumber: 33 },
+      { artificialkey: 11, teamid: 2 },
+    ]);
+    database.close();
+  });
+
+  it('rejects unavailable object sections and read-only object mutations', () => {
+    const { database } = createDatabase();
+    database.saveObject({
+      databaseId: crypto.randomUUID(),
+      kind: 'countries',
+      section: 'root',
+      values: { nationid: 14, nationname: 'Czech Republic' },
+      acceptWarnings: true,
+    });
+
+    expect(() =>
+      database.readObject({
+        databaseId: crypto.randomUUID(),
+        kind: 'countries',
+        id: 14,
+        section: 'identity',
+      }),
+    ).toThrow(/invalid countries object section/i);
+    expect(() =>
+      database.saveObject({
+        databaseId: crypto.randomUUID(),
+        kind: 'stadiums',
+        id: 1,
+        section: 'root',
+        values: { stadiumid: 1, name: 'Read only' },
+        acceptWarnings: true,
+      }),
+    ).toThrow(/not available/i);
     database.close();
   });
 });

@@ -1,0 +1,193 @@
+<app-page-header [icon]="config().icon">
+  <div pageHeaderContent>
+    <h1>{{ detail()?.title ?? config().singular }}</h1>
+    <p>{{ config().singular }} #{{ id() }} · {{ section().replaceAll('-', ' ') }}</p>
+  </div>
+  <div pageHeaderActions>
+    <a
+      matButton
+      [routerLink]="['/projects', projectId(), 'databases', databaseId(), 'objects', kind()]"
+    >
+      <mat-icon>arrow_back</mat-icon>
+      {{ config().label }}
+    </a>
+  </div>
+</app-page-header>
+
+<section class="page max-w-5xl">
+  <nav mat-tab-nav-bar [tabPanel]="tabPanel" aria-label="Object detail sections">
+    @for (tab of config().sections; track tab.id) {
+      <a
+        mat-tab-link
+        [routerLink]="[
+          '/projects',
+          projectId(),
+          'databases',
+          databaseId(),
+          'objects',
+          kind(),
+          id(),
+          tab.id,
+        ]"
+        routerLinkActive
+        #active="routerLinkActive"
+        [active]="active.isActive"
+      >
+        <mat-icon>{{ tab.icon }}</mat-icon>
+        {{ tab.label }}
+      </a>
+    }
+  </nav>
+
+  <mat-tab-nav-panel #tabPanel>
+    @if (store.error()) {
+      <p class="error-banner mt-4" role="alert">{{ store.error() }}</p>
+    }
+
+    @if (detail(); as data) {
+      <mat-card appearance="outlined" class="mt-4">
+        <mat-card-content class="pt-4">
+          @if (stadiumImageUrl(); as imageUrl) {
+            <img
+              class="stadium-image mb-5"
+              [ngSrc]="imageUrl"
+              width="600"
+              height="233"
+              [alt]="'Stadium ' + values()['stadiumid']"
+            />
+          }
+
+          @if (section() === 'location') {
+            <mat-form-field appearance="outline" class="mb-3 w-full max-w-md">
+              <mat-label>City preset</mat-label>
+              <mat-select (selectionChange)="locationPresetChanged($event.value)">
+                @for (city of cityPresets; track $index) {
+                  <mat-option [value]="$index">
+                    {{ city.name }} ({{ city.isocountrycode }}, UTC
+                    {{ city.utcoffset >= 0 ? '+' : '' }}{{ city.utcoffset }})
+                  </mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+            <div
+              class="offline-map mb-5"
+              role="img"
+              [attr.aria-label]="
+                'Offline coordinate map at latitude ' +
+                values()['latitude'] +
+                ', longitude ' +
+                values()['longitude']
+              "
+            >
+              <span
+                class="map-marker"
+                [style.left]="mapPosition().left"
+                [style.top]="mapPosition().top"
+              ></span>
+              <span class="map-label">Offline coordinate grid</span>
+            </div>
+          }
+
+          @if (data.fields.length) {
+            @if (data.readOnly) {
+              <dl class="detail-values">
+                @for (field of data.fields; track field.name) {
+                  <div>
+                    <dt>{{ field.name.replaceAll('_', ' ') }}</dt>
+                    <dd>{{ fieldValue(field.name, field.defaultValue) }}</dd>
+                  </div>
+                }
+              </dl>
+            } @else if (section() === 'jersey-numbers') {
+              <div class="grid gap-3">
+                @for (item of related(); track item.id) {
+                  <div class="related-editor">
+                    <span>{{ item.name }}</span>
+                    <app-object-value-field
+                      [field]="data.fields[0]"
+                      [value]="item.values['jerseynumber'] ?? 0"
+                      (valueChange)="updateRelated(item.id, 'jerseynumber', $event)"
+                    />
+                  </div>
+                }
+              </div>
+            } @else {
+              <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                @for (field of data.fields; track field.name) {
+                  <app-object-value-field
+                    [field]="field"
+                    [value]="fieldValue(field.name, field.defaultValue)"
+                    (valueChange)="updateValue(field.name, $event)"
+                  />
+                }
+              </div>
+            }
+          }
+
+          @if (data.related.length && data.fields.length === 0) {
+            <ul class="related-list">
+              @for (item of related(); track item.id) {
+                <li>
+                  @if (relatedDestination(); as destination) {
+                    <a
+                      matButton
+                      [routerLink]="[
+                        '/projects',
+                        projectId(),
+                        'databases',
+                        databaseId(),
+                        'objects',
+                        destination,
+                        item.id,
+                      ]"
+                    >
+                      {{ item.name }}
+                    </a>
+                  } @else {
+                    {{ item.name }}
+                  }
+                </li>
+              }
+            </ul>
+          }
+
+          @if (data.related.length && ['contract', 'leagues'].includes(section())) {
+            <h2 class="mb-2 mt-5 text-lg">Relationships</h2>
+            <mat-selection-list
+              [attr.aria-label]="'Select related ' + section()"
+              (selectionChange)="relationsChanged($event)"
+            >
+              @for (item of data.related; track item.id) {
+                <mat-list-option [value]="item.id" [selected]="relationSelected(item.id)">
+                  {{ item.name }}
+                </mat-list-option>
+              }
+            </mat-selection-list>
+          }
+
+          @if (!data.fields.length && !data.related.length) {
+            <div class="empty-state">
+              <mat-icon>inbox</mat-icon>
+              <p>No related objects.</p>
+            </div>
+          }
+        </mat-card-content>
+        @if (!data.readOnly) {
+          <mat-card-actions align="end">
+            <button type="button" matButton [disabled]="!dirty()" (click)="reset()">Reset</button>
+            <button type="button" matButton (click)="randomize()">
+              <mat-icon>casino</mat-icon>
+              Randomize
+            </button>
+            <button type="button" matButton="filled" [disabled]="!dirty()" (click)="save(false)">
+              <mat-icon>save</mat-icon>
+              Save
+            </button>
+          </mat-card-actions>
+        }
+      </mat-card>
+    } @else {
+      <p class="mt-4" aria-live="polite">Loading object details…</p>
+    }
+  </mat-tab-nav-panel>
+</section>

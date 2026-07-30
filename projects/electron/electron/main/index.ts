@@ -16,6 +16,7 @@ import { updateElectronApp } from 'update-electron-app';
 import type {
   CreateBlankDatabaseRequest,
   CreateProjectRequest,
+  DatabaseObjectSettings,
   DatabaseDescriptor,
   DeleteRowRequest,
   ExportDatabaseRequest,
@@ -23,7 +24,13 @@ import type {
   ImportDatabaseResult,
   OperationKind,
   OperationProgress,
+  ObjectDeleteRequest,
+  ObjectKind,
+  ObjectListRequest,
+  ObjectReadRequest,
+  ObjectSection,
   PrepareT3dbRequest,
+  SaveObjectRequest,
   SaveRowRequest,
   SourceFileSelection,
   TablePageRequest,
@@ -108,6 +115,49 @@ const validateRowId = (value: number): number => {
   const rowId = Number(value);
   if (!Number.isSafeInteger(rowId) || rowId < 1) throw new Error('Invalid row identifier.');
   return rowId;
+};
+
+const objectKinds: readonly ObjectKind[] = [
+  'countries',
+  'stadiums',
+  'leagues',
+  'teams',
+  'players',
+  'referees',
+];
+const objectSections: Record<ObjectKind, readonly ObjectSection[]> = {
+  countries: ['root'],
+  stadiums: ['root'],
+  leagues: ['root', 'teams', 'referees'],
+  teams: [
+    'root',
+    'identity',
+    'traits',
+    'tactics',
+    'manager',
+    'stadium',
+    'location',
+    'players',
+    'jersey-numbers',
+  ],
+  players: ['identity', 'contract', 'appearance', 'gear', 'traits', 'skills', 'behaviour'],
+  referees: ['root', 'identity', 'appearance', 'gear', 'leagues'],
+};
+
+const validateObjectKind = (value: ObjectKind): ObjectKind => {
+  if (!objectKinds.includes(value)) throw new Error('Invalid object kind.');
+  return value;
+};
+
+const validateObjectSection = (kind: ObjectKind, value: ObjectSection): ObjectSection => {
+  if (!objectSections[kind].includes(value)) throw new Error(`Invalid ${kind} object section.`);
+  return value;
+};
+
+const validateObjectId = (value: number): number => {
+  const id = Number(value);
+  if (!Number.isSafeInteger(id) || id < 0) throw new Error('Invalid object identifier.');
+  return id;
 };
 
 const withDatabase = <T>(databaseId: string, operation: (database: FifaDatabase) => T): T => {
@@ -296,6 +346,46 @@ const registerHandlers = (): void => {
     if (removed) await refreshSummary(request.databaseId);
     return removed;
   });
+  ipcMain.handle('qdb-editor:list-objects', (_event, request: ObjectListRequest) => {
+    validateId(request.databaseId);
+    validateObjectKind(request.kind);
+    return withDatabase(request.databaseId, (database) => database.listObjects(request));
+  });
+  ipcMain.handle('qdb-editor:read-object', (_event, request: ObjectReadRequest) => {
+    validateId(request.databaseId);
+    const kind = validateObjectKind(request.kind);
+    validateObjectSection(kind, request.section);
+    validateObjectId(request.id);
+    return withDatabase(request.databaseId, (database) => database.readObject(request));
+  });
+  ipcMain.handle('qdb-editor:save-object', async (_event, request: SaveObjectRequest) => {
+    validateId(request.databaseId);
+    const kind = validateObjectKind(request.kind);
+    validateObjectSection(kind, request.section);
+    if (request.id !== undefined) validateObjectId(request.id);
+    const result = withDatabase(request.databaseId, (database) => database.saveObject(request));
+    if (!result.warnings.length || request.acceptWarnings) await refreshSummary(request.databaseId);
+    return result;
+  });
+  ipcMain.handle('qdb-editor:delete-object', async (_event, request: ObjectDeleteRequest) => {
+    validateId(request.databaseId);
+    validateObjectKind(request.kind);
+    validateObjectId(request.id);
+    const result = withDatabase(request.databaseId, (database) => database.deleteObject(request));
+    if (result.deleted) await refreshSummary(request.databaseId);
+    return result;
+  });
+  ipcMain.handle('qdb-editor:get-database-object-settings', (_event, databaseId: string) =>
+    catalog.getDatabaseObjectSettings(validateId(databaseId)),
+  );
+  ipcMain.handle(
+    'qdb-editor:save-database-object-settings',
+    (_event, databaseId: string, settings: DatabaseObjectSettings) =>
+      catalog.saveDatabaseObjectSettings(validateId(databaseId), settings),
+  );
+  ipcMain.handle('qdb-editor:restore-database-object-settings', (_event, databaseId: string) =>
+    catalog.restoreDatabaseObjectSettings(validateId(databaseId)),
+  );
   ipcMain.handle('qdb-editor:validate-database', async (_event, databaseId: string) => {
     const id = validateId(databaseId);
     await refreshSummary(id);

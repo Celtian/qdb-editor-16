@@ -10,6 +10,8 @@ describe('electron routes', () => {
         'projects/new',
         'projects/:projectId/import',
         'projects/:projectId/databases/:databaseId/tables/:table',
+        'projects/:projectId/databases/:databaseId/objects',
+        'projects/:projectId/databases/:databaseId/settings',
         'projects/:projectId/databases/:databaseId/validation',
         'projects/:projectId/databases/:databaseId/export',
         'settings',

@@ -2,8 +2,16 @@ import { existsSync } from 'node:fs';
 import { Datatype, type Field } from 'fifatables';
 import type {
   FieldDescriptor,
+  ObjectDeleteRequest,
+  ObjectDeleteResult,
+  ObjectDetail,
+  ObjectListPage,
+  ObjectListRequest,
+  ObjectReadRequest,
   SaveRowRequest,
   SaveRowResult,
+  SaveObjectRequest,
+  SaveObjectResult,
   TableDescriptor,
   TablePage,
   TablePageRequest,
@@ -21,6 +29,7 @@ import {
   tableForName,
 } from '../shared/table-config';
 import { closeDatabase, DatabaseSync, type SQLInputValue } from './runtime-sqlite';
+import { FifaObjects } from './fifa-objects';
 import { validateRows } from './validation';
 
 export const FIFA_DATABASE_SCHEMA_VERSION = 1;
@@ -160,6 +169,7 @@ const relationshipDefinitions: readonly {
 
 export class FifaDatabase {
   private readonly database: DatabaseSync;
+  private readonly objects: FifaObjects;
 
   static create(path: string, metadata: Record<string, string>): FifaDatabase {
     if (existsSync(path)) throw new Error('The database file already exists.');
@@ -170,6 +180,7 @@ export class FifaDatabase {
 
   constructor(path: string, readOnly = false) {
     this.database = new DatabaseSync(path, { readOnly });
+    this.objects = new FifaObjects(this.database);
     this.database.exec('PRAGMA foreign_keys = ON');
     if (!readOnly) this.database.exec('PRAGMA journal_mode = WAL');
   }
@@ -366,6 +377,22 @@ export class FifaDatabase {
       this.database.prepare(`DELETE FROM ${quote(table)} WHERE __row_id = ?`).run(rowId).changes ===
       1
     );
+  }
+
+  listObjects(request: ObjectListRequest): ObjectListPage {
+    return this.objects.list(request);
+  }
+
+  readObject(request: ObjectReadRequest): ObjectDetail {
+    return this.objects.read(request);
+  }
+
+  saveObject(request: SaveObjectRequest): SaveObjectResult {
+    return this.objects.save(request);
+  }
+
+  deleteObject(request: ObjectDeleteRequest): ObjectDeleteResult {
+    return this.objects.delete(request);
   }
 
   validate(databaseId: string, checkpoint?: () => void): ValidationReport {

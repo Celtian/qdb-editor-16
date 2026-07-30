@@ -21,6 +21,16 @@ const api: QdbEditorApi = {
     ipcRenderer.invoke('qdb-editor:read-row', databaseId, table, rowId),
   saveRow: (request) => ipcRenderer.invoke('qdb-editor:save-row', request),
   deleteRow: (request) => ipcRenderer.invoke('qdb-editor:delete-row', request),
+  listObjects: (request) => ipcRenderer.invoke('qdb-editor:list-objects', request),
+  readObject: (request) => ipcRenderer.invoke('qdb-editor:read-object', request),
+  saveObject: (request) => ipcRenderer.invoke('qdb-editor:save-object', request),
+  deleteObject: (request) => ipcRenderer.invoke('qdb-editor:delete-object', request),
+  getDatabaseObjectSettings: (databaseId) =>
+    ipcRenderer.invoke('qdb-editor:get-database-object-settings', databaseId),
+  saveDatabaseObjectSettings: (databaseId, settings) =>
+    ipcRenderer.invoke('qdb-editor:save-database-object-settings', databaseId, settings),
+  restoreDatabaseObjectSettings: (databaseId) =>
+    ipcRenderer.invoke('qdb-editor:restore-database-object-settings', databaseId),
   validateDatabase: (databaseId) => ipcRenderer.invoke('qdb-editor:validate-database', databaseId),
   getValidation: (databaseId) => ipcRenderer.invoke('qdb-editor:get-validation', databaseId),
   selectExportDirectory: () => ipcRenderer.invoke('qdb-editor:select-export-directory'),

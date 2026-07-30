@@ -1,0 +1,123 @@
+<app-page-header [icon]="config().icon">
+  <div pageHeaderContent>
+    <h1>{{ config().label }}</h1>
+    <p>
+      Domain-oriented FIFA 16 objects backed by
+      {{ store.activeDatabase()?.name ?? 'the managed SQLite database' }}.
+    </p>
+  </div>
+  <div pageHeaderActions class="flex flex-wrap gap-2">
+    <a matButton [routerLink]="['/projects', projectId(), 'databases', databaseId(), 'tables']">
+      <mat-icon>table_view</mat-icon>
+      Tables
+    </a>
+    @if (config().canCreate) {
+      <button type="button" matButton="filled" (click)="openEditor()">
+        <mat-icon>add</mat-icon>
+        Create {{ config().singular }}
+      </button>
+    }
+  </div>
+</app-page-header>
+
+<section class="page max-w-none">
+  @if (store.error()) {
+    <p class="error-banner" role="alert">{{ store.error() }}</p>
+  }
+  @if (blockedMessage()) {
+    <p class="error-banner" role="alert">{{ blockedMessage() }}</p>
+  }
+  @if (!config().canCreate && (kind() === 'players' || kind() === 'stadiums')) {
+    <p class="mb-4 text-sm text-[var(--mat-sys-on-surface-variant)]">
+      {{ kind() === 'players' ? 'Player creation and deletion' : 'Stadium editing' }} is not
+      available in the source Quick Editor feature set. Existing records remain available through
+      object details and Tables.
+    </p>
+  }
+
+  <mat-form-field appearance="outline" class="w-full max-w-xl">
+    <mat-label>Search {{ config().label.toLocaleLowerCase('en') }}</mat-label>
+    <mat-icon matPrefix>search</mat-icon>
+    <input matInput [value]="query()" (input)="queryChanged($event)" />
+  </mat-form-field>
+
+  @if (page(); as data) {
+    <div class="table-container">
+      <table
+        mat-table
+        matSort
+        [dataSource]="data.items"
+        [matSortActive]="sortField()"
+        [matSortDirection]="sortDirection()"
+        (matSortChange)="sortChanged($event)"
+      >
+        @for (column of config().columns; track column.key) {
+          <ng-container [matColumnDef]="column.key">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ column.label }}</th>
+            <td mat-cell *matCellDef="let item">
+              @if (column.key === 'name' && config().hasDetail) {
+                <a
+                  matButton
+                  [routerLink]="[
+                    '/projects',
+                    projectId(),
+                    'databases',
+                    databaseId(),
+                    'objects',
+                    kind(),
+                    item.id,
+                  ]"
+                >
+                  {{ item.name }}
+                </a>
+              } @else {
+                {{ value(item, column.key) }}
+              }
+            </td>
+          </ng-container>
+        }
+        @if (config().canEditRoot || config().canDelete) {
+          <ng-container matColumnDef="__actions" stickyEnd>
+            <th mat-header-cell *matHeaderCellDef class="text-right">Actions</th>
+            <td mat-cell *matCellDef="let item" class="text-right">
+              <button
+                type="button"
+                matIconButton
+                [matMenuTriggerFor]="actions"
+                [attr.aria-label]="'Actions for ' + item.name"
+              >
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #actions="matMenu">
+                @if (config().canEditRoot) {
+                  <button type="button" mat-menu-item (click)="openEditor(item)">
+                    <mat-icon>edit</mat-icon>
+                    Edit
+                  </button>
+                }
+                @if (config().canDelete) {
+                  <button type="button" mat-menu-item (click)="remove(item)">
+                    <mat-icon>delete</mat-icon>
+                    Delete
+                  </button>
+                }
+              </mat-menu>
+            </td>
+          </ng-container>
+        }
+        <tr mat-header-row *matHeaderRowDef="displayedColumns(); sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns()"></tr>
+      </table>
+      <mat-paginator
+        [length]="data.total"
+        [pageIndex]="pageIndex()"
+        [pageSize]="pageSize()"
+        [pageSizeOptions]="[10, 25, 50, 100]"
+        [attr.aria-label]="'Select page of ' + config().label.toLocaleLowerCase('en')"
+        (page)="pageChanged($event)"
+      />
+    </div>
+  } @else {
+    <p aria-live="polite">Loading {{ config().label.toLocaleLowerCase('en') }}…</p>
+  }
+</section>

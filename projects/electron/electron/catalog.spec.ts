@@ -4,6 +4,7 @@ import { join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 import { Catalog } from './catalog';
 import { createBlankDatabase } from './database-importer';
+import { closeDatabase, DatabaseSync } from './runtime-sqlite';
 
 const roots: string[] = [];
 
@@ -65,6 +66,12 @@ describe('Catalog', () => {
     expect(catalog.listProjects()[0]?.databaseCount).toBe(1);
     expect(catalog.setTheme('dark')).toBe('dark');
     expect(catalog.getTheme()).toBe('dark');
+    const settings = catalog.getDatabaseObjectSettings(id);
+    expect(settings.ids.team).toBe(1);
+    settings.ids.team = 500;
+    expect(catalog.saveDatabaseObjectSettings(id, settings).ids.team).toBe(500);
+    expect(catalog.getDatabaseObjectSettings(id).ids.team).toBe(500);
+    expect(catalog.restoreDatabaseObjectSettings(id).ids.team).toBe(1);
     expect(catalog.removeDatabase(id)).toBe(true);
     catalog.close();
   });
@@ -85,5 +92,51 @@ describe('Catalog', () => {
     for (const suffix of ['', '-wal', '-shm'])
       expect(existsSync(`${temporary}${suffix}`)).toBe(false);
     catalog.close();
+  });
+
+  it('migrates a version-one catalog to keyed database settings', () => {
+    const root = mkdtempSync(join(tmpdir(), 'qdb-editor-catalog-migration-'));
+    roots.push(root);
+    const legacy = new DatabaseSync(join(root, 'catalog.sqlite'));
+    legacy.exec(`
+      CREATE TABLE projects (
+        id TEXT PRIMARY KEY,
+        name TEXT NOT NULL COLLATE NOCASE UNIQUE,
+        reference_date TEXT NOT NULL,
+        created_at TEXT NOT NULL,
+        updated_at TEXT NOT NULL
+      );
+      CREATE TABLE databases (
+        id TEXT PRIMARY KEY,
+        project_id TEXT NOT NULL REFERENCES projects(id) ON DELETE CASCADE,
+        name TEXT NOT NULL COLLATE NOCASE,
+        source_json TEXT NOT NULL,
+        status TEXT NOT NULL,
+        table_count INTEGER NOT NULL,
+        row_count INTEGER NOT NULL,
+        created_at TEXT NOT NULL,
+        updated_at TEXT NOT NULL,
+        validated_at TEXT NOT NULL,
+        error_count INTEGER NOT NULL,
+        warning_count INTEGER NOT NULL,
+        error TEXT,
+        UNIQUE(project_id, name)
+      );
+      CREATE TABLE settings (key TEXT PRIMARY KEY, value TEXT NOT NULL);
+      PRAGMA user_version = 1;
+    `);
+    closeDatabase(legacy);
+
+    const catalog = new Catalog(root);
+    catalog.close();
+    const migrated = new DatabaseSync(join(root, 'catalog.sqlite'));
+    expect(migrated.prepare('PRAGMA user_version').get()?.['user_version']).toBe(2);
+    expect(
+      migrated
+        .prepare('PRAGMA table_info(database_settings)')
+        .all()
+        .map((column) => column['name']),
+    ).toEqual(['database_id', 'key', 'value_json']);
+    closeDatabase(migrated);
   });
 });

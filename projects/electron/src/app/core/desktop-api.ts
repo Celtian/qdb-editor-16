@@ -3,11 +3,16 @@ import type {
   CreateBlankDatabaseRequest,
   CreateProjectRequest,
   DeleteRowRequest,
+  DatabaseObjectSettings,
   ExportDatabaseRequest,
   ImportDatabaseRequest,
   OperationKind,
+  ObjectDeleteRequest,
+  ObjectListRequest,
+  ObjectReadRequest,
   PrepareT3dbRequest,
   SaveRowRequest,
+  SaveObjectRequest,
   TablePageRequest,
   ThemePreference,
   UpdateProjectRequest,
@@ -74,6 +79,27 @@ export class DesktopApi {
   }
   deleteRow(request: DeleteRowRequest) {
     return this.api.deleteRow(request);
+  }
+  listObjects(request: ObjectListRequest) {
+    return this.api.listObjects(request);
+  }
+  readObject(request: ObjectReadRequest) {
+    return this.api.readObject(request);
+  }
+  saveObject(request: SaveObjectRequest) {
+    return this.api.saveObject(request);
+  }
+  deleteObject(request: ObjectDeleteRequest) {
+    return this.api.deleteObject(request);
+  }
+  getDatabaseObjectSettings(databaseId: string) {
+    return this.api.getDatabaseObjectSettings(databaseId);
+  }
+  saveDatabaseObjectSettings(databaseId: string, settings: DatabaseObjectSettings) {
+    return this.api.saveDatabaseObjectSettings(databaseId, settings);
+  }
+  restoreDatabaseObjectSettings(databaseId: string) {
+    return this.api.restoreDatabaseObjectSettings(databaseId);
   }
   validateDatabase(databaseId: string) {
     return this.api.validateDatabase(databaseId);

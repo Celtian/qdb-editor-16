@@ -8,6 +8,7 @@ import type {
   TableDescriptor,
   ValidationReport,
 } from '../../../shared/contracts';
+import { cloneDefaultDatabaseObjectSettings } from '../../../shared/object-settings';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { AppStore } from './app-store';
 import { DesktopApi } from './desktop-api';
@@ -93,6 +94,23 @@ const makeApi = (): QdbEditorApi => ({
     warnings: [],
   })),
   deleteRow: vi.fn(async () => true),
+  listObjects: vi.fn(async (request) => ({ kind: request.kind, items: [], total: 0 })),
+  readObject: vi.fn(async (request) => ({
+    kind: request.kind,
+    id: request.id,
+    title: 'Object',
+    section: request.section,
+    fields: [],
+    values: {},
+    relationIds: [],
+    related: [],
+    readOnly: false,
+  })),
+  saveObject: vi.fn(async (request) => ({ id: request.id ?? 1, warnings: [] })),
+  deleteObject: vi.fn(async () => ({ deleted: true as const, dependencies: [] as [] })),
+  getDatabaseObjectSettings: vi.fn(async () => cloneDefaultDatabaseObjectSettings()),
+  saveDatabaseObjectSettings: vi.fn(async (_databaseId, settings) => settings),
+  restoreDatabaseObjectSettings: vi.fn(async () => cloneDefaultDatabaseObjectSettings()),
   validateDatabase: vi.fn(async () => report),
   getValidation: vi.fn(async () => report),
   selectExportDirectory: vi.fn(async () => undefined),
@@ -157,6 +175,31 @@ describe('DesktopApi', () => {
       acceptWarnings: false,
     });
     await desktop.deleteRow({ databaseId: database.id, table: 'players', rowId: 1 });
+    await desktop.listObjects({
+      databaseId: database.id,
+      kind: 'players',
+      pageIndex: 0,
+      pageSize: 25,
+      query: '',
+    });
+    await desktop.readObject({
+      databaseId: database.id,
+      kind: 'players',
+      id: 1,
+      section: 'identity',
+    });
+    await desktop.saveObject({
+      databaseId: database.id,
+      kind: 'players',
+      id: 1,
+      section: 'identity',
+      values: {},
+      acceptWarnings: false,
+    });
+    await desktop.deleteObject({ databaseId: database.id, kind: 'teams', id: 1 });
+    const objectSettings = await desktop.getDatabaseObjectSettings(database.id);
+    await desktop.saveDatabaseObjectSettings(database.id, objectSettings);
+    await desktop.restoreDatabaseObjectSettings(database.id);
     await desktop.validateDatabase(database.id);
     await desktop.getValidation(database.id);
     await desktop.selectExportDirectory();

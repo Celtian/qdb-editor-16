@@ -99,6 +99,18 @@ describe('AppNavigation', () => {
             component: EmptyPage,
           },
           {
+            path: 'projects/:projectId/databases/:databaseId/objects/:kind',
+            component: EmptyPage,
+          },
+          {
+            path: 'projects/:projectId/databases/:databaseId/objects/:kind/:id/:section',
+            component: EmptyPage,
+          },
+          {
+            path: 'projects/:projectId/databases/:databaseId/settings',
+            component: EmptyPage,
+          },
+          {
             path: 'projects/:projectId/databases/:databaseId/validation',
             component: EmptyPage,
           },
@@ -245,6 +257,37 @@ describe('AppNavigation', () => {
     expect(
       element.querySelector(`button[aria-label="Expand ${mainDatabase.name} tables"]`),
     ).not.toBeNull();
+  });
+
+  it('exposes object categories and database-scoped settings under each database', async () => {
+    const fixture = TestBed.createComponent(AppNavigation);
+    await fixture.whenStable();
+    const element = fixture.nativeElement as HTMLElement;
+    const loader = TestbedHarnessEnvironment.loader(fixture);
+
+    element
+      .querySelector<HTMLButtonElement>(`button[aria-label="Expand ${project.name} databases"]`)!
+      .click();
+    await fixture.whenStable();
+    element
+      .querySelector<HTMLButtonElement>(`button[aria-label="Expand ${mainDatabase.name} tools"]`)!
+      .click();
+    await fixture.whenStable();
+    element
+      .querySelector<HTMLButtonElement>(`button[aria-label="Expand ${mainDatabase.name} objects"]`)!
+      .click();
+    await fixture.whenStable();
+
+    const teams = await loader.getHarness(TreeItemHarness.with({ text: /Teams/, level: 4 }));
+    await teams.click();
+    await fixture.whenStable();
+    expect(router.url).toBe(`/projects/${project.id}/databases/${mainDatabase.id}/objects/teams`);
+
+    const settings = await loader.getHarness(TreeItemHarness.with({ text: /Settings/, level: 3 }));
+    await settings.click();
+    await fixture.whenStable();
+    expect(router.url).toBe(`/projects/${project.id}/databases/${mainDatabase.id}/settings`);
+    expect((await axe.run(element)).violations).toEqual([]);
   });
 
   it('opens and loads the ancestors of a direct row-editor route', async () => {

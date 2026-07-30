@@ -1,0 +1,52 @@
+<app-page-header icon="tune">
+  <div pageHeaderContent>
+    <h1>Object settings</h1>
+    <p>
+      Database-scoped defaults and weighted generation preferences. These values are not exported as
+      FIFA tables.
+    </p>
+  </div>
+  <div pageHeaderActions class="flex flex-wrap gap-2">
+    <button type="button" matButton (click)="restoreDefaults()">
+      <mat-icon>restart_alt</mat-icon>
+      Restore defaults
+    </button>
+    <button type="button" matButton [disabled]="!dirty()" (click)="reset()">Reset</button>
+    <button type="button" matButton="filled" [disabled]="!dirty()" (click)="save()">
+      <mat-icon>save</mat-icon>
+      Save settings
+    </button>
+  </div>
+</app-page-header>
+
+<section class="page max-w-5xl">
+  @if (store.error()) {
+    <p class="error-banner" role="alert">{{ store.error() }}</p>
+  }
+  @if (settings()) {
+    <mat-tab-group preserveContent>
+      @for (group of groups; track group.id) {
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <mat-icon class="mr-2">{{ group.icon }}</mat-icon>
+            {{ group.label }}
+          </ng-template>
+          <mat-card appearance="outlined" class="mt-4">
+            <mat-card-content class="grid grid-cols-1 gap-3 pt-4 sm:grid-cols-2">
+              @for (entry of groupEntries(group.id); track entry.path.join('.')) {
+                <app-object-value-field
+                  [field]="field"
+                  [label]="entry.label"
+                  [value]="entry.value"
+                  (valueChange)="update(entry.path, $event)"
+                />
+              }
+            </mat-card-content>
+          </mat-card>
+        </mat-tab>
+      }
+    </mat-tab-group>
+  } @else {
+    <p aria-live="polite">Loading object settings…</p>
+  }
+</section>

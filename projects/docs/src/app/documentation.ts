@@ -26,7 +26,31 @@ export const documentationPages: DocumentationPage[] = [
           'Create projects with a name and reference date.',
           'Keep multiple blank or imported databases in each project.',
           'Browse and edit every supported FIFA 16 table.',
+          'Use object views for countries, stadiums, leagues, teams, players, and referees.',
           'Validate and export DB Master-compatible text folders.',
+        ],
+      },
+    ],
+  },
+  {
+    path: 'objects',
+    label: 'Object views',
+    icon: 'category',
+    title: 'Edit connected FIFA objects',
+    summary:
+      'Work with recognizable football objects while QDB Editor updates the same managed SQLite tables.',
+    sections: [
+      {
+        title: 'Tables and objects stay synchronized',
+        paragraphs: [
+          'Object views join related FIFA tables into searchable lists and focused detail sections. Changes made through an object view immediately appear in Tables, validation, and exports.',
+          'Multi-table changes are transactional. If validation or a relationship update fails, the complete object save is rolled back.',
+        ],
+        bullets: [
+          'Countries, leagues, teams, and referees support root create, edit, and dependency-safe delete actions.',
+          'Existing players can be edited through identity, contract, appearance, gear, traits, skills, and behaviour sections.',
+          'Stadiums remain read-only, matching the implemented Quick Editor feature set.',
+          'Object generation settings are stored per database and are not exported into FIFA tables.',
         ],
       },
     ],

@@ -1,4 +1,5 @@
 import type { Routes } from '@angular/router';
+import { objectUnsavedGuard } from './features/objects/object-unsaved.guard';
 
 export const routes: Routes = [
   {
@@ -53,6 +54,20 @@ export const routes: Routes = [
     title: 'Table editor · QDB Editor 16',
     loadComponent: () =>
       import('./features/table-editor/table-editor-page').then((module) => module.TableEditorPage),
+  },
+  {
+    path: 'projects/:projectId/databases/:databaseId/objects',
+    loadChildren: () =>
+      import('./features/objects/objects.routes').then((module) => module.OBJECT_ROUTES),
+  },
+  {
+    path: 'projects/:projectId/databases/:databaseId/settings',
+    title: 'Database object settings · QDB Editor 16',
+    canDeactivate: [objectUnsavedGuard],
+    loadComponent: () =>
+      import('./features/object-settings/object-settings-page').then(
+        (module) => module.ObjectSettingsPage,
+      ),
   },
   {
     path: 'projects/:projectId/databases/:databaseId/validation',

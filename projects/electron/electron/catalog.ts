@@ -3,6 +3,7 @@ import { randomUUID } from 'node:crypto';
 import { join } from 'node:path';
 import type {
   CreateProjectRequest,
+  DatabaseObjectSettings,
   DatabaseDescriptor,
   ProjectDeletionResult,
   ProjectDescriptor,
@@ -11,10 +12,14 @@ import type {
   UpdateProjectRequest,
   ValidationSummary,
 } from '../shared/contracts';
+import {
+  cloneDefaultDatabaseObjectSettings,
+  DEFAULT_DATABASE_OBJECT_SETTINGS,
+} from '../shared/object-settings';
 import { FIFA_TABLES } from '../shared/table-config';
 import { closeDatabase, DatabaseSync } from './runtime-sqlite';
 
-const CATALOG_SCHEMA_VERSION = 1;
+const CATALOG_SCHEMA_VERSION = 2;
 const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const datePattern = /^\d{4}-\d{2}-\d{2}$/;
 
@@ -94,6 +99,35 @@ const validateReferenceDate = (value: string): string => {
   )
     throw new Error('Reference date must use YYYY-MM-DD.');
   return value;
+};
+
+const validSettingsShape = (value: unknown, template: unknown): boolean => {
+  if (typeof template === 'number')
+    return typeof value === 'number' && Number.isFinite(value) && value >= 0;
+  if (typeof template === 'boolean') return typeof value === 'boolean';
+  if (
+    !value ||
+    typeof value !== 'object' ||
+    Array.isArray(value) ||
+    !template ||
+    typeof template !== 'object' ||
+    Array.isArray(template)
+  )
+    return false;
+  const candidate = value as Record<string, unknown>;
+  return Object.entries(template).every(([key, child]) =>
+    validSettingsShape(candidate[key], child),
+  );
+};
+
+const databaseObjectSettings = (value: unknown): DatabaseObjectSettings => {
+  if (!value || typeof value !== 'object' || Array.isArray(value))
+    throw new Error('Invalid database object settings.');
+  const json = JSON.stringify(value);
+  if (json.length > 100_000) throw new Error('Database object settings are too large.');
+  if (!validSettingsShape(value, DEFAULT_DATABASE_OBJECT_SETTINGS))
+    throw new Error('Invalid database object settings.');
+  return JSON.parse(json) as DatabaseObjectSettings;
 };
 
 export class Catalog {
@@ -388,6 +422,55 @@ export class Catalog {
     return theme;
   }
 
+  getDatabaseObjectSettings(databaseId: string): DatabaseObjectSettings {
+    this.databaseDescriptor(databaseId);
+    const settings = cloneDefaultDatabaseObjectSettings();
+    const rows = this.database
+      .prepare('SELECT key, value_json FROM database_settings WHERE database_id = ?')
+      .all(databaseId) as { key: string; value_json: string }[];
+    for (const row of rows) {
+      if (!(row.key in settings)) continue;
+      const key = row.key as keyof DatabaseObjectSettings;
+      try {
+        const value: unknown = JSON.parse(row.value_json);
+        if (validSettingsShape(value, DEFAULT_DATABASE_OBJECT_SETTINGS[key]))
+          settings[key] = value as never;
+      } catch {
+        // Ignore one corrupt group and retain its defaults.
+      }
+    }
+    return settings;
+  }
+
+  saveDatabaseObjectSettings(
+    databaseId: string,
+    settings: DatabaseObjectSettings,
+  ): DatabaseObjectSettings {
+    this.databaseDescriptor(databaseId);
+    const value = databaseObjectSettings(settings);
+    this.database.exec('BEGIN IMMEDIATE');
+    try {
+      this.database.prepare('DELETE FROM database_settings WHERE database_id = ?').run(databaseId);
+      const insert = this.database.prepare(
+        `INSERT INTO database_settings(database_id, key, value_json)
+         VALUES (?, ?, ?)`,
+      );
+      for (const [key, group] of Object.entries(value))
+        insert.run(databaseId, key, JSON.stringify(group));
+      this.database.exec('COMMIT');
+    } catch (error) {
+      this.database.exec('ROLLBACK');
+      throw error;
+    }
+    return value;
+  }
+
+  restoreDatabaseObjectSettings(databaseId: string): DatabaseObjectSettings {
+    this.databaseDescriptor(databaseId);
+    this.database.prepare('DELETE FROM database_settings WHERE database_id = ?').run(databaseId);
+    return cloneDefaultDatabaseObjectSettings();
+  }
+
   private migrate(): void {
     const version = Number(
       this.database.prepare('PRAGMA user_version').get()?.['user_version'] ?? 0,
@@ -423,6 +506,24 @@ export class Catalog {
         CREATE TABLE settings (
           key TEXT PRIMARY KEY,
           value TEXT NOT NULL
+        );
+        CREATE TABLE database_settings (
+          database_id TEXT NOT NULL REFERENCES databases(id) ON DELETE CASCADE,
+          key TEXT NOT NULL,
+          value_json TEXT NOT NULL,
+          PRIMARY KEY(database_id, key)
+        );
+        PRAGMA user_version = ${CATALOG_SCHEMA_VERSION};
+        COMMIT;
+      `);
+    if (version === 1)
+      this.database.exec(`
+        BEGIN;
+        CREATE TABLE database_settings (
+          database_id TEXT NOT NULL REFERENCES databases(id) ON DELETE CASCADE,
+          key TEXT NOT NULL,
+          value_json TEXT NOT NULL,
+          PRIMARY KEY(database_id, key)
         );
         PRAGMA user_version = ${CATALOG_SCHEMA_VERSION};
         COMMIT;
