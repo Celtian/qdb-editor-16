@@ -1,0 +1,61 @@
+<app-page-header [icon]="editing ? 'edit' : 'create_new_folder'">
+  <div pageHeaderContent>
+    <h1>{{ editing ? 'Edit project' : 'New project' }}</h1>
+    <p>
+      {{
+        editing
+          ? 'Update the details shared by this project.'
+          : 'Create a home for your FIFA 16 databases.'
+      }}
+    </p>
+  </div>
+</app-page-header>
+
+<section class="page project-form-page">
+  <mat-card appearance="outlined" aria-labelledby="project-details-title">
+    <mat-card-header>
+      <mat-card-title id="project-details-title">Project details</mat-card-title>
+      <mat-card-subtitle>
+        The reference date is used for readable FIFA dates and player age hints.
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content class="form-card-content">
+      <div class="form-grid">
+        <mat-form-field appearance="outline" class="name-field">
+          <mat-label>Project name</mat-label>
+          <mat-icon matPrefix>folder</mat-icon>
+          <input matInput [formField]="projectForm.name" autocomplete="off" />
+          <mat-hint>Use a short, recognizable name.</mat-hint>
+          @if (projectForm.name().touched() && projectForm.name().errors().length) {
+            <mat-error>{{ projectForm.name().errors()[0].message }}</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="date-field">
+          <mat-label>Reference date</mat-label>
+          <mat-icon matPrefix>event</mat-icon>
+          <input type="date" matInput [formField]="projectForm.referenceDate" />
+          <mat-hint>Used throughout the editor.</mat-hint>
+          @if (
+            projectForm.referenceDate().touched() && projectForm.referenceDate().errors().length
+          ) {
+            <mat-error>{{ projectForm.referenceDate().errors()[0].message }}</mat-error>
+          }
+        </mat-form-field>
+      </div>
+
+      @if (store.error()) {
+        <p class="error-banner" role="alert">{{ store.error() }}</p>
+      }
+    </mat-card-content>
+
+    <mat-card-actions align="end">
+      <a matButton [routerLink]="editing ? ['/projects', projectId] : ['/projects']">Cancel</a>
+      <button type="button" matButton="filled" [disabled]="store.loading()" (click)="save()">
+        <mat-icon>save</mat-icon>
+        Save project
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</section>

@@ -1,0 +1,49 @@
+<app-page-header [icon]="editing ? 'edit' : 'add_circle'">
+  <div pageHeaderContent>
+    <h1>{{ editing ? 'Edit row ' + rowId : 'Add row' }}</h1>
+    <p>All changes remain a draft until this row is explicitly saved.</p>
+  </div>
+  <a pageHeaderActions matButton [routerLink]="tableRoute()">
+    <mat-icon>arrow_back</mat-icon>
+    {{ table }}
+  </a>
+</app-page-header>
+
+<section class="page max-w-6xl">
+  @if (ratingHint(); as rating) {
+    <mat-card appearance="outlined" class="mb-4">
+      <mat-card-content class="flex flex-wrap items-center gap-3 pt-4">
+        <mat-icon>monitoring</mat-icon>
+        <strong>FIFA 16 {{ rating.position }} calculated rating: {{ rating.calculated }}</strong>
+        <span>Stored overall: {{ rating.stored }}</span>
+        @if (rating.calculated !== rating.stored) {
+          <span class="text-amber-700 dark:text-amber-300">
+            Difference {{ rating.calculated - rating.stored }}
+          </span>
+        }
+      </mat-card-content>
+    </mat-card>
+  }
+
+  <mat-card appearance="outlined">
+    <mat-card-content class="grid gap-3 pt-6 sm:grid-cols-2 lg:grid-cols-3">
+      @for (field of fields(); track field.name) {
+        <mat-form-field appearance="outline">
+          <mat-label>{{ field.name }}</mat-label>
+          <input matInput [formField]="rowForm[field.name]" />
+          <mat-hint>{{ fieldHint(field) }}</mat-hint>
+        </mat-form-field>
+      }
+      @if (store.error()) {
+        <p class="error-banner sm:col-span-2 lg:col-span-3" role="alert">{{ store.error() }}</p>
+      }
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <a matButton [routerLink]="tableRoute()">Cancel</a>
+      <button type="button" matButton="filled" [disabled]="store.loading()" (click)="save()">
+        <mat-icon>save</mat-icon>
+        Save row
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</section>

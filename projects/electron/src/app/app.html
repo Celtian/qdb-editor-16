@@ -1,0 +1,32 @@
+<mat-sidenav-container>
+  <mat-sidenav
+    #drawer
+    [mode]="compact() ? 'over' : 'side'"
+    [opened]="!compact()"
+    aria-label="Primary navigation"
+  >
+    <app-navigation />
+  </mat-sidenav>
+  <mat-sidenav-content>
+    @if (compact()) {
+      <mat-toolbar>
+        <button type="button" matIconButton (click)="drawer.toggle()" aria-label="Open navigation">
+          <mat-icon>menu</mat-icon>
+        </button>
+        <span>QDB Editor 16</span>
+      </mat-toolbar>
+    }
+    @if (store.loading()) {
+      <mat-progress-bar mode="indeterminate" aria-label="Operation in progress" />
+    }
+    <main class="app-content">
+      @if (store.progress(); as progress) {
+        <div class="progress-message" aria-live="polite">
+          <span>{{ progress.message }}</span>
+          <button type="button" matButton (click)="store.cancelCurrentOperation()">Cancel</button>
+        </div>
+      }
+      <router-outlet />
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>

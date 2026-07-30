@@ -1,0 +1,28 @@
+<app-page-header icon="settings">
+  <div pageHeaderContent>
+    <h1>Settings</h1>
+    <p>Personalize the local desktop application.</p>
+  </div>
+</app-page-header>
+
+<section class="page max-w-3xl">
+  <mat-card appearance="outlined">
+    <mat-card-header>
+      <mat-icon mat-card-avatar>palette</mat-icon>
+      <mat-card-title>Appearance</mat-card-title>
+      <mat-card-subtitle>Choose a theme or follow Windows.</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content class="pt-4">
+      <mat-radio-group
+        class="grid gap-3"
+        aria-label="Application theme"
+        [value]="theme.preference()"
+        (change)="setTheme($event.value)"
+      >
+        <mat-radio-button value="system">System</mat-radio-button>
+        <mat-radio-button value="light">Light</mat-radio-button>
+        <mat-radio-button value="dark">Dark</mat-radio-button>
+      </mat-radio-group>
+    </mat-card-content>
+  </mat-card>
+</section>

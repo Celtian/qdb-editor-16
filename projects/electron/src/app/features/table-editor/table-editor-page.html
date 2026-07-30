@@ -1,0 +1,148 @@
+<app-page-header icon="table_view">
+  <div pageHeaderContent>
+    <h1>{{ table }}</h1>
+    <p>{{ page()?.total ?? 0 }} rows · explicit row-level save and cancel</p>
+  </div>
+  <div pageHeaderActions class="flex flex-wrap gap-2">
+    <a matButton [routerLink]="['/projects', projectId, 'databases', databaseId, 'tables']">
+      <mat-icon>arrow_back</mat-icon>
+      Tables
+    </a>
+    <button type="button" matButton [matMenuTriggerFor]="columnsMenu">
+      <mat-icon>view_column</mat-icon>
+      Columns
+    </button>
+    <mat-menu #columnsMenu="matMenu">
+      @for (field of page()?.fields ?? []; track field.name) {
+        <mat-checkbox
+          class="block px-4 py-2"
+          [checked]="visibleFields().includes(field.name)"
+          (click)="$event.stopPropagation()"
+          (change)="toggleField(field, $event.checked)"
+        >
+          {{ field.name }}
+        </mat-checkbox>
+      }
+    </mat-menu>
+    <a
+      matButton="filled"
+      [routerLink]="[
+        '/projects',
+        projectId,
+        'databases',
+        databaseId,
+        'tables',
+        table,
+        'rows',
+        'new',
+      ]"
+    >
+      <mat-icon>add</mat-icon>
+      Add row
+    </a>
+  </div>
+</app-page-header>
+
+<section class="page max-w-none">
+  @if (store.error()) {
+    <p class="error-banner" role="alert">{{ store.error() }}</p>
+  }
+
+  <mat-form-field appearance="outline" class="w-full max-w-xl">
+    <mat-label>Search every field</mat-label>
+    <mat-icon matPrefix>search</mat-icon>
+    <input matInput [value]="query()" (input)="queryChanged($any($event.target).value)" />
+  </mat-form-field>
+
+  @if (page(); as data) {
+    <div class="table-container">
+      <table
+        mat-table
+        matSort
+        [dataSource]="data.rows"
+        [matSortActive]="sortField()"
+        [matSortDirection]="sortDirection()"
+        (matSortChange)="sortChanged($event)"
+      >
+        @for (fieldName of visibleFields(); track fieldName) {
+          <ng-container [matColumnDef]="fieldName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ fieldName }}</th>
+            <td mat-cell *matCellDef="let row">
+              @if (editingRowId() === row.rowId) {
+                @if (fieldByName(fieldName); as field) {
+                  <input
+                    matInput
+                    class="min-w-28"
+                    [type]="field.type === 'string' ? 'text' : 'number'"
+                    [value]="draftValue(fieldName)"
+                    (input)="setDraftValue(field, $any($event.target).value)"
+                  />
+                }
+              } @else {
+                <span class="whitespace-nowrap">{{ value(row, fieldName) }}</span>
+              }
+            </td>
+          </ng-container>
+        }
+        <ng-container matColumnDef="__actions" stickyEnd>
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let row">
+            <div class="flex whitespace-nowrap">
+              @if (editingRowId() === row.rowId) {
+                <button
+                  type="button"
+                  matIconButton
+                  aria-label="Cancel row edit"
+                  (click)="cancelInline()"
+                >
+                  <mat-icon>close</mat-icon>
+                </button>
+                <button type="button" matIconButton aria-label="Save row" (click)="saveInline()">
+                  <mat-icon>save</mat-icon>
+                </button>
+              } @else {
+                <button
+                  type="button"
+                  matIconButton
+                  aria-label="Edit row inline"
+                  [disabled]="editingRowId() !== undefined"
+                  (click)="startInline(row)"
+                >
+                  <mat-icon>edit_note</mat-icon>
+                </button>
+                <a
+                  matIconButton
+                  aria-label="Open full row editor"
+                  [routerLink]="[
+                    '/projects',
+                    projectId,
+                    'databases',
+                    databaseId,
+                    'tables',
+                    table,
+                    'rows',
+                    row.rowId,
+                  ]"
+                >
+                  <mat-icon>open_in_full</mat-icon>
+                </a>
+                <button type="button" matIconButton aria-label="Delete row" (click)="remove(row)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              }
+            </div>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns(); sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns()"></tr>
+      </table>
+      <mat-paginator
+        [length]="data.total"
+        [pageIndex]="pageIndex()"
+        [pageSize]="pageSize()"
+        [pageSizeOptions]="[10, 25, 50, 100]"
+        (page)="pageChanged($event)"
+      />
+    </div>
+  }
+</section>

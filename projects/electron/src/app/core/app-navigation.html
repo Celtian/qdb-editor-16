@@ -1,0 +1,62 @@
+<a class="brand" routerLink="/projects" aria-label="QDB Editor 16 projects">
+  <img ngSrc="qdb-editor-16-icon.png" width="30" height="30" alt="" priority />
+  <span>QDB Editor 16</span>
+</a>
+
+<mat-nav-list aria-label="Primary navigation">
+  <a
+    mat-list-item
+    routerLink="/projects"
+    routerLinkActive="active"
+    ariaCurrentWhenActive="page"
+    [routerLinkActiveOptions]="{ exact: true }"
+  >
+    <mat-icon matListItemIcon>folder_copy</mat-icon>
+    <span matListItemTitle>Projects</span>
+  </a>
+  @if (store.activeProject(); as project) {
+    <a
+      mat-list-item
+      [routerLink]="['/projects', project.id]"
+      routerLinkActive="active"
+      ariaCurrentWhenActive="page"
+      [routerLinkActiveOptions]="{ exact: true }"
+    >
+      <mat-icon matListItemIcon>storage</mat-icon>
+      <span matListItemTitle>Databases</span>
+      <span matListItemLine>{{ project.name }}</span>
+    </a>
+  }
+  @if (databaseRoot(); as root) {
+    @if (root) {
+      <mat-divider />
+      <p class="section-label">{{ store.activeDatabase()?.name ?? 'Active database' }}</p>
+      <a mat-list-item [routerLink]="root + '/tables'" routerLinkActive="active">
+        <mat-icon matListItemIcon>table_view</mat-icon>
+        <span matListItemTitle>Tables</span>
+      </a>
+      <a mat-list-item [routerLink]="root + '/validation'" routerLinkActive="active">
+        <mat-icon matListItemIcon>fact_check</mat-icon>
+        <span matListItemTitle>Validation</span>
+      </a>
+      <a mat-list-item [routerLink]="root + '/export'" routerLinkActive="active">
+        <mat-icon matListItemIcon>drive_file_move</mat-icon>
+        <span matListItemTitle>Export</span>
+      </a>
+    }
+  }
+</mat-nav-list>
+
+<div class="utility">
+  <mat-divider />
+  <mat-nav-list aria-label="Application navigation">
+    <a mat-list-item routerLink="/settings" routerLinkActive="active" ariaCurrentWhenActive="page">
+      <mat-icon matListItemIcon>settings</mat-icon>
+      <span matListItemTitle>Settings</span>
+    </a>
+    <button type="button" mat-list-item (click)="openAbout()">
+      <mat-icon matListItemIcon>info</mat-icon>
+      <span matListItemTitle>About</span>
+    </button>
+  </mat-nav-list>
+</div>

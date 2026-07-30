@@ -1,0 +1,61 @@
+<app-page-header icon="drive_file_move">
+  <div pageHeaderContent>
+    <h1>Export database</h1>
+    <p>Write all supported FIFA 16 tables to a new DB Master-compatible text folder.</p>
+  </div>
+</app-page-header>
+
+<section class="page max-w-4xl">
+  <mat-card appearance="outlined">
+    <mat-card-content class="grid gap-4 pt-6">
+      @if (report(); as validation) {
+        <p>
+          Current validation: {{ validation.errorCount }} errors ·
+          {{ validation.warningCount }} warnings
+        </p>
+      }
+      <mat-form-field appearance="outline" class="w-full" subscriptSizing="dynamic">
+        <mat-label>Export parent folder</mat-label>
+        <input matInput readonly [value]="targetPath()" />
+        <button
+          type="button"
+          matIconButton
+          matSuffix
+          aria-label="Select export folder"
+          (click)="chooseFolder()"
+        >
+          <mat-icon>folder_open</mat-icon>
+        </button>
+        <mat-hint>A unique timestamped child folder will be created.</mat-hint>
+      </mat-form-field>
+      <p class="text-sm opacity-70">
+        Every fifatables FIFA 16 table is exported. Empty tables contain their complete header and
+        no data rows.
+      </p>
+      @if (store.error()) {
+        <p class="error-banner" role="alert">{{ store.error() }}</p>
+      }
+      @if (result(); as exported) {
+        <div
+          class="flex flex-wrap items-center gap-3 rounded-xl bg-[var(--mat-sys-primary-container)] p-4"
+          role="status"
+        >
+          <mat-icon>check_circle</mat-icon>
+          <span class="break-all">{{ exported.outputPath }}</span>
+          <button type="button" matButton (click)="reveal()">Reveal in folder</button>
+        </div>
+      }
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <button
+        type="button"
+        matButton="filled"
+        [disabled]="!targetPath() || store.loading()"
+        (click)="export()"
+      >
+        <mat-icon>drive_file_move</mat-icon>
+        Export all tables
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</section>

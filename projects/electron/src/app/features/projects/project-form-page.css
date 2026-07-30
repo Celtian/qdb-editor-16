@@ -1,0 +1,29 @@
+:host {
+  display: block;
+}
+
+.project-form-page {
+  width: min(100%, 54rem);
+}
+
+.form-card-content {
+  display: grid;
+  gap: 1rem;
+  padding-top: 1rem;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(15rem, 1fr);
+  gap: 1rem;
+}
+
+.form-grid mat-form-field {
+  width: 100%;
+}
+
+@media (width <= 800px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}

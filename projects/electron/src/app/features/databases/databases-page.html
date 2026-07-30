@@ -1,0 +1,80 @@
+<app-page-header icon="database">
+  <div pageHeaderContent>
+    <h1>{{ store.activeProject()?.name ?? 'Project databases' }}</h1>
+    <p>
+      FIFA 16 databases · reference date
+      {{ store.activeProject()?.referenceDate | date: 'longDate' }}
+    </p>
+  </div>
+  <div pageHeaderActions class="flex flex-wrap gap-2">
+    <a matButton [routerLink]="['/projects', projectId, 'edit']">
+      <mat-icon>edit</mat-icon>
+      Edit project
+    </a>
+    <a matButton [routerLink]="['/projects', projectId, 'import']">
+      <mat-icon>upload_file</mat-icon>
+      Import
+    </a>
+    <a matButton="filled" [routerLink]="['/projects', projectId, 'databases', 'new']">
+      <mat-icon>add</mat-icon>
+      Blank database
+    </a>
+  </div>
+</app-page-header>
+
+<section class="page">
+  @if (store.error()) {
+    <p class="error-banner" role="alert">{{ store.error() }}</p>
+  }
+
+  <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+    @for (database of store.databases(); track database.id) {
+      <mat-card appearance="outlined">
+        <mat-card-header>
+          <mat-icon mat-card-avatar>{{
+            database.status === 'available' ? 'database' : 'error'
+          }}</mat-icon>
+          <mat-card-title>{{ database.name }}</mat-card-title>
+          <mat-card-subtitle>
+            {{ database.source.kind === 'blank' ? 'Blank database' : database.source.kind }}
+          </mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content class="grid gap-1 pt-4">
+          <p>{{ database.tableCount }} tables · {{ database.rowCount | number }} rows</p>
+          <p>
+            <span class="text-red-700 dark:text-red-300"
+              >{{ database.validation.errorCount }} errors</span
+            >
+            ·
+            <span class="text-amber-700 dark:text-amber-300"
+              >{{ database.validation.warningCount }} warnings</span
+            >
+          </p>
+          <p class="text-sm opacity-70">Updated {{ database.updatedAt | date: 'medium' }}</p>
+          @if (database.error) {
+            <p class="error" role="alert">{{ database.error }}</p>
+          }
+        </mat-card-content>
+        <mat-card-actions align="end">
+          <button type="button" matButton (click)="remove(database)">Delete</button>
+          <button type="button" matButton (click)="rename(database)">Rename</button>
+          <a
+            matButton="filled"
+            [disabled]="database.status !== 'available'"
+            [routerLink]="['/projects', projectId, 'databases', database.id, 'tables']"
+          >
+            Open
+          </a>
+        </mat-card-actions>
+      </mat-card>
+    } @empty {
+      @if (!store.loading()) {
+        <mat-card appearance="outlined" class="empty-state md:col-span-2 xl:col-span-3">
+          <mat-icon>database</mat-icon>
+          <h2>No databases yet</h2>
+          <p>Import a FIFA 16 source or start with all supported tables empty.</p>
+        </mat-card>
+      }
+    }
+  </div>
+</section>

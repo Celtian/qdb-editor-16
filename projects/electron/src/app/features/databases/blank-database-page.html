@@ -1,0 +1,30 @@
+<app-page-header icon="add_circle">
+  <div pageHeaderContent>
+    <h1>Blank FIFA 16 database</h1>
+    <p>Create every table exposed by fifatables with its published fields and defaults.</p>
+  </div>
+</app-page-header>
+
+<section class="page max-w-3xl">
+  <mat-card appearance="outlined">
+    <mat-card-content class="pt-6">
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Database name</mat-label>
+        <input matInput [formField]="databaseForm.name" />
+        @if (databaseForm.name().touched() && databaseForm.name().errors().length) {
+          <mat-error>{{ databaseForm.name().errors()[0].message }}</mat-error>
+        }
+      </mat-form-field>
+      @if (store.error()) {
+        <p class="error-banner" role="alert">{{ store.error() }}</p>
+      }
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <a matButton [routerLink]="['/projects', projectId]">Cancel</a>
+      <button type="button" matButton="filled" [disabled]="store.loading()" (click)="save()">
+        <mat-icon>add</mat-icon>
+        Create database
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</section>

@@ -1,0 +1,65 @@
+<app-page-header icon="table_chart">
+  <div pageHeaderContent>
+    <h1>{{ store.activeDatabase()?.name ?? 'FIFA 16 tables' }}</h1>
+    <p>Every table and field is generated from the installed fifatables FIFA 16 schema.</p>
+  </div>
+  <div pageHeaderActions class="flex flex-wrap gap-2">
+    <a matButton [routerLink]="['/projects', projectId, 'databases', databaseId, 'validation']">
+      <mat-icon>fact_check</mat-icon>
+      Validate
+    </a>
+    <a
+      matButton="filled"
+      [routerLink]="['/projects', projectId, 'databases', databaseId, 'export']"
+    >
+      <mat-icon>drive_file_move</mat-icon>
+      Export
+    </a>
+  </div>
+</app-page-header>
+
+<section class="page">
+  @if (store.error()) {
+    <p class="error-banner" role="alert">{{ store.error() }}</p>
+  }
+
+  <mat-form-field appearance="outline" class="w-full max-w-xl">
+    <mat-label>Find a table</mat-label>
+    <mat-icon matPrefix>search</mat-icon>
+    <input matInput [value]="query()" (input)="query.set($any($event.target).value)" />
+  </mat-form-field>
+
+  <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+    @for (table of filtered(); track table.name) {
+      <mat-card appearance="outlined">
+        <mat-card-header>
+          <mat-icon mat-card-avatar>table_view</mat-icon>
+          <mat-card-title>{{ table.name }}</mat-card-title>
+          <mat-card-subtitle>{{ table.fields.length }} fields</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content class="pt-4">
+          <p>{{ table.rowCount | number }} rows</p>
+          @if (table.errorCount || table.warningCount) {
+            <p>
+              <span class="text-red-700 dark:text-red-300">{{ table.errorCount }} errors</span>
+              ·
+              <span class="text-amber-700 dark:text-amber-300"
+                >{{ table.warningCount }} warnings</span
+              >
+            </p>
+          } @else {
+            <p class="text-green-700 dark:text-green-300">No reported issues</p>
+          }
+        </mat-card-content>
+        <mat-card-actions align="end">
+          <a
+            matButton="filled"
+            [routerLink]="['/projects', projectId, 'databases', databaseId, 'tables', table.name]"
+          >
+            Edit table
+          </a>
+        </mat-card-actions>
+      </mat-card>
+    }
+  </div>
+</section>

@@ -1,0 +1,73 @@
+<app-page-header icon="folder_copy">
+  <div pageHeaderContent>
+    <h1>Projects</h1>
+    <p>Organize FIFA 16 databases around one shared reference date.</p>
+  </div>
+  <a pageHeaderActions matButton="filled" routerLink="/projects/new">
+    <mat-icon>create_new_folder</mat-icon>
+    New project
+  </a>
+</app-page-header>
+
+<section class="page">
+  @if (store.error()) {
+    <p class="error-banner" role="alert">{{ store.error() }}</p>
+  }
+
+  @if (store.projects().length) {
+    <mat-form-field appearance="outline" class="w-full max-w-xl">
+      <mat-label>Find a project</mat-label>
+      <mat-icon matPrefix>search</mat-icon>
+      <input matInput [value]="query()" (input)="query.set($any($event.target).value)" />
+    </mat-form-field>
+    <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+      @for (project of filtered(); track project.id) {
+        <mat-card appearance="outlined">
+          <mat-card-header>
+            <mat-icon mat-card-avatar>folder</mat-icon>
+            <mat-card-title>{{ project.name }}</mat-card-title>
+            <mat-card-subtitle>{{ project.referenceDate | date: 'longDate' }}</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content class="pt-4">
+            <p>
+              {{ project.databaseCount }} managed database{{
+                project.databaseCount === 1 ? '' : 's'
+              }}
+            </p>
+            <p class="text-sm opacity-70">Updated {{ project.updatedAt | date: 'medium' }}</p>
+          </mat-card-content>
+          <mat-card-actions align="end">
+            <button type="button" matButton (click)="remove(project)">
+              <mat-icon>delete</mat-icon>
+              Delete
+            </button>
+            <a matButton [routerLink]="['/projects', project.id, 'edit']">Edit</a>
+            <a matButton="filled" [routerLink]="['/projects', project.id]">Open</a>
+          </mat-card-actions>
+        </mat-card>
+      } @empty {
+        <p>No projects match your search.</p>
+      }
+    </div>
+  } @else if (!store.loading()) {
+    <mat-card appearance="outlined" class="empty-state projects-empty-state">
+      <mat-card-content class="projects-empty-state__content">
+        <div class="projects-empty-state__icon" aria-hidden="true">
+          <mat-icon>create_new_folder</mat-icon>
+        </div>
+        <div class="projects-empty-state__copy">
+          <h2>Create your first project</h2>
+          <p>
+            Keep related FIFA 16 databases together and manage them from one shared reference date.
+          </p>
+        </div>
+      </mat-card-content>
+      <mat-card-actions class="projects-empty-state__actions">
+        <a matButton="filled" class="projects-empty-state__action" routerLink="/projects/new">
+          <mat-icon>add</mat-icon>
+          New project
+        </a>
+      </mat-card-actions>
+    </mat-card>
+  }
+</section>

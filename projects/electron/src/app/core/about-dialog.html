@@ -1,0 +1,52 @@
+<header class="about-header">
+  <div class="identity">
+    <img ngSrc="qdb-editor-16-icon.png" width="64" height="64" alt="" priority />
+    <div>
+      <h2 mat-dialog-title>QDB Editor 16</h2>
+      <p class="version">Version {{ version }}</p>
+    </div>
+  </div>
+  <button
+    class="close-button"
+    type="button"
+    matIconButton
+    mat-dialog-close
+    aria-label="Close About dialog"
+  >
+    <mat-icon aria-hidden="true">close</mat-icon>
+  </button>
+</header>
+
+<mat-dialog-content>
+  <p class="description">
+    A local-first FIFA 16 database project and table editor. Your projects stay in the application
+    data directory. Original imports and external exports are never modified by catalog actions.
+  </p>
+  <p class="legal">© {{ copyrightYear }} {{ author }} · MIT License</p>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button class="close-action" type="button" matButton mat-dialog-close>Close</button>
+  <div class="external-actions">
+    <a
+      matButton
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Documentation (opens in the system browser)"
+      [href]="documentationUrl"
+    >
+      <mat-icon aria-hidden="true">menu_book</mat-icon>
+      <span>Documentation</span>
+    </a>
+    <a
+      matButton="filled"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="GitHub (opens in the system browser)"
+      [href]="repositoryUrl"
+    >
+      <mat-icon aria-hidden="true">code</mat-icon>
+      <span>GitHub</span>
+    </a>
+  </div>
+</mat-dialog-actions>

@@ -1,0 +1,45 @@
+:host,
+mat-sidenav-container,
+mat-sidenav-content {
+  display: block;
+  height: 100%;
+}
+
+mat-sidenav {
+  width: 16rem;
+  border-radius: 0;
+  background: var(--mat-sys-surface-container-low);
+}
+
+mat-sidenav-content {
+  overflow: hidden;
+}
+
+.app-content {
+  height: 100%;
+  min-width: 0;
+  overflow: auto;
+  background: var(--mat-sys-surface);
+}
+
+mat-toolbar + .app-content {
+  height: calc(100% - 64px);
+}
+
+.progress-message {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  margin: 0;
+  padding: 0.5rem 1rem;
+  background: var(--mat-sys-primary-container);
+  color: var(--mat-sys-on-primary-container);
+  text-align: center;
+}
+
+.progress-message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
