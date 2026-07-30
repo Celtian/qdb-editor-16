@@ -42,18 +42,63 @@ describe('responsive application shell', () => {
       ],
     });
     const fixture = TestBed.createComponent(App);
-    fixture.detectChanges();
     await fixture.whenStable();
-    fixture.detectChanges();
     const loader = TestbedHarnessEnvironment.loader(fixture);
     const sidenav = await loader.getHarness(MatSidenavHarness);
     expect(await sidenav.getMode()).toBe('over');
     expect(await sidenav.isOpen()).toBe(false);
+    expect(
+      await loader.getHarnessOrNull(
+        MatButtonHarness.with({ selector: 'button[aria-label="Collapse navigation"]' }),
+      ),
+    ).toBeNull();
     await (
       await loader.getHarness(
         MatButtonHarness.with({ selector: 'button[aria-label="Open navigation"]' }),
       )
     ).click();
     expect(await sidenav.isOpen()).toBe(true);
+  });
+
+  it('keeps the desktop navigation open at its fixed width without a rail control', async () => {
+    TestBed.configureTestingModule({
+      imports: [App],
+      providers: [
+        provideRouter([]),
+        provideNoopAnimations(),
+        AppStore,
+        Theme,
+        {
+          provide: DesktopApi,
+          useValue: {
+            onProgress: () => () => undefined,
+            listProjects: vi.fn(async () => []),
+            getTheme: vi.fn(async () => 'system'),
+          },
+        },
+        {
+          provide: BreakpointObserver,
+          useValue: {
+            observe: () => of({ matches: false, breakpoints: { '(max-width: 800px)': false } }),
+          },
+        },
+        { provide: MatDialog, useValue: { open: vi.fn() } },
+      ],
+    });
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+    const loader = TestbedHarnessEnvironment.loader(fixture);
+    const sidenav = await loader.getHarness(MatSidenavHarness);
+
+    expect(await sidenav.getMode()).toBe('side');
+    expect(await sidenav.isOpen()).toBe(true);
+    expect(
+      await loader.getHarnessOrNull(
+        MatButtonHarness.with({ selector: 'button[aria-label="Collapse navigation"]' }),
+      ),
+    ).toBeNull();
+    expect(
+      (fixture.nativeElement as HTMLElement).querySelector('mat-sidenav')?.classList,
+    ).not.toContain('navigation-rail');
   });
 });

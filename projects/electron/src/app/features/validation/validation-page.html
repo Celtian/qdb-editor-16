@@ -1,6 +1,6 @@
 <app-page-header icon="fact_check">
   <div pageHeaderContent>
-    <h1>Database validation</h1>
+    <h1 id="validation-heading">Database validation</h1>
     <p>Check types, unique fields, published ranges, and declared table relationships.</p>
   </div>
   <button
@@ -15,76 +15,142 @@
   </button>
 </app-page-header>
 
-<section class="page max-w-5xl">
+<section class="page max-w-5xl" aria-labelledby="validation-heading">
   @if (store.error()) {
     <p class="error-banner" role="alert">{{ store.error() }}</p>
   }
 
   @if (report(); as result) {
-    <div class="mb-4 grid gap-3 sm:grid-cols-4">
-      <mat-card appearance="outlined">
-        <mat-card-content class="pt-4"
-          ><strong>{{ result.tablesChecked }}</strong
-          ><br />tables</mat-card-content
-        >
-      </mat-card>
-      <mat-card appearance="outlined">
-        <mat-card-content class="pt-4"
-          ><strong>{{ result.rowsChecked | number }}</strong
-          ><br />rows</mat-card-content
-        >
-      </mat-card>
-      <mat-card appearance="outlined">
-        <mat-card-content class="pt-4 text-red-700 dark:text-red-300">
-          <strong>{{ result.errorCount | number }}</strong
-          ><br />errors
+    <div class="metrics">
+      <mat-card appearance="outlined" class="metric">
+        <mat-card-content>
+          <span class="metric__icon" aria-hidden="true">
+            <mat-icon>table_view</mat-icon>
+          </span>
+          <span class="metric__copy">
+            <strong>{{ result.tablesChecked | number }}</strong>
+            <span>Tables checked</span>
+          </span>
         </mat-card-content>
       </mat-card>
-      <mat-card appearance="outlined">
-        <mat-card-content class="pt-4 text-amber-700 dark:text-amber-300">
-          <strong>{{ result.warningCount | number }}</strong
-          ><br />warnings
+      <mat-card appearance="outlined" class="metric">
+        <mat-card-content>
+          <span class="metric__icon" aria-hidden="true">
+            <mat-icon>view_list</mat-icon>
+          </span>
+          <span class="metric__copy">
+            <strong>{{ result.rowsChecked | number }}</strong>
+            <span>Rows checked</span>
+          </span>
+        </mat-card-content>
+      </mat-card>
+      <mat-card appearance="outlined" class="metric metric--error">
+        <mat-card-content>
+          <span class="metric__icon" aria-hidden="true">
+            <mat-icon>error_outline</mat-icon>
+          </span>
+          <span class="metric__copy">
+            <strong>{{ result.errorCount | number }}</strong>
+            <span>Errors</span>
+          </span>
+        </mat-card-content>
+      </mat-card>
+      <mat-card appearance="outlined" class="metric metric--warning">
+        <mat-card-content>
+          <span class="metric__icon" aria-hidden="true">
+            <mat-icon>warning_amber</mat-icon>
+          </span>
+          <span class="metric__copy">
+            <strong>{{ result.warningCount | number }}</strong>
+            <span>Warnings</span>
+          </span>
         </mat-card-content>
       </mat-card>
     </div>
+
     @if (result.validatedAt) {
-      <p class="text-sm opacity-70">Last validated {{ result.validatedAt | date: 'medium' }}</p>
+      <p class="validation-time">
+        <mat-icon aria-hidden="true">schedule</mat-icon>
+        <span>
+          Last validated
+          <time [attr.datetime]="result.validatedAt">
+            {{ result.validatedAt | date: 'medium' }}
+          </time>
+        </span>
+      </p>
     }
-    <mat-accordion multi>
+
+    <div class="issues" aria-label="Validation issues">
       @for (
         issue of result.issues;
         track issue.severity + issue.table + issue.field + issue.message
       ) {
-        <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              <mat-icon>{{ issue.severity === 'error' ? 'error' : 'warning' }}</mat-icon>
-              {{ issue.table }}{{ issue.field ? '.' + issue.field : '' }}
-            </mat-panel-title>
-            <mat-panel-description>{{ issue.occurrences }} occurrences</mat-panel-description>
-          </mat-expansion-panel-header>
-          <p>{{ issue.message }}</p>
-          @if (issue.samples.length) {
-            <ul>
-              @for (sample of issue.samples; track sample.rowId) {
-                <li>Row {{ sample.rowId }}: {{ sample.value }}</li>
-              }
-            </ul>
-          }
-          <a
-            matButton
-            [routerLink]="['/projects', projectId, 'databases', databaseId, 'tables', issue.table]"
-          >
-            Open table
-          </a>
-        </mat-expansion-panel>
+        <details
+          class="issue"
+          [class.issue--error]="issue.severity === 'error'"
+          [class.issue--warning]="issue.severity === 'warning'"
+        >
+          <summary>
+            <span class="issue__icon" aria-hidden="true">
+              <mat-icon>{{
+                issue.severity === 'error' ? 'error_outline' : 'warning_amber'
+              }}</mat-icon>
+            </span>
+            <span class="issue__heading">
+              <strong>
+                {{ issue.table }}
+                @if (issue.field) {
+                  <span class="issue__separator">.</span>{{ issue.field }}
+                }
+              </strong>
+              <span>{{ issue.message }}</span>
+            </span>
+            <span class="issue__count">
+              {{ issue.occurrences | number }}
+              {{ issue.occurrences === 1 ? 'occurrence' : 'occurrences' }}
+            </span>
+            <mat-icon class="issue__chevron" aria-hidden="true">expand_more</mat-icon>
+          </summary>
+
+          <div class="issue__details">
+            @if (issue.samples.length) {
+              <p class="issue__label">Sample rows</p>
+              <ul class="samples">
+                @for (sample of issue.samples; track sample.rowId) {
+                  <li>
+                    <span>Row {{ sample.rowId | number }}</span>
+                    <code>{{ sample.value }}</code>
+                  </li>
+                }
+              </ul>
+            }
+            <div class="issue__actions">
+              <a
+                matButton
+                [routerLink]="[
+                  '/projects',
+                  projectId(),
+                  'databases',
+                  databaseId(),
+                  'tables',
+                  issue.table,
+                ]"
+              >
+                Open table
+                <mat-icon>arrow_forward</mat-icon>
+              </a>
+            </div>
+          </div>
+        </details>
       } @empty {
-        <mat-card appearance="outlined" class="empty-state">
-          <mat-icon>check_circle</mat-icon>
+        <mat-card appearance="outlined" class="empty-state validation-empty-state">
+          <span class="validation-empty-state__icon" aria-hidden="true">
+            <mat-icon>check_circle</mat-icon>
+          </span>
           <h2>No issues found</h2>
           <p>The current supported FIFA 16 data passes validation.</p>
         </mat-card>
       }
-    </mat-accordion>
+    </div>
   }
 </section>

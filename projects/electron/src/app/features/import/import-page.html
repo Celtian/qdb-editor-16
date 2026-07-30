@@ -60,7 +60,7 @@
             </mat-radio-group>
 
             <div class="step-actions">
-              <a matButton [routerLink]="['/projects', projectId]">Cancel</a>
+              <a matButton [routerLink]="['/projects', projectId()]">Cancel</a>
               <button type="button" matButton="filled" matStepperNext>Next</button>
             </div>
           </div>
@@ -227,7 +227,7 @@
               <button type="button" matButton matStepperPrevious [disabled]="store.loading()">
                 Back
               </button>
-              <a matButton [routerLink]="['/projects', projectId]">Cancel</a>
+              <a matButton [routerLink]="['/projects', projectId()]">Cancel</a>
               <button
                 type="button"
                 matButton="filled"

@@ -4,13 +4,13 @@
     <p>Every table and field is generated from the installed fifatables FIFA 16 schema.</p>
   </div>
   <div pageHeaderActions class="flex flex-wrap gap-2">
-    <a matButton [routerLink]="['/projects', projectId, 'databases', databaseId, 'validation']">
+    <a matButton [routerLink]="['/projects', projectId(), 'databases', databaseId(), 'validation']">
       <mat-icon>fact_check</mat-icon>
       Validate
     </a>
     <a
       matButton="filled"
-      [routerLink]="['/projects', projectId, 'databases', databaseId, 'export']"
+      [routerLink]="['/projects', projectId(), 'databases', databaseId(), 'export']"
     >
       <mat-icon>drive_file_move</mat-icon>
       Export
@@ -54,7 +54,14 @@
         <mat-card-actions align="end">
           <a
             matButton="filled"
-            [routerLink]="['/projects', projectId, 'databases', databaseId, 'tables', table.name]"
+            [routerLink]="[
+              '/projects',
+              projectId(),
+              'databases',
+              databaseId(),
+              'tables',
+              table.name,
+            ]"
           >
             Edit table
           </a>

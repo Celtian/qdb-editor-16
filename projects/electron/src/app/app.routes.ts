@@ -55,18 +55,6 @@ export const routes: Routes = [
       import('./features/table-editor/table-editor-page').then((module) => module.TableEditorPage),
   },
   {
-    path: 'projects/:projectId/databases/:databaseId/tables/:table/rows/new',
-    title: 'New row · QDB Editor 16',
-    loadComponent: () =>
-      import('./features/row-editor/row-editor-page').then((module) => module.RowEditorPage),
-  },
-  {
-    path: 'projects/:projectId/databases/:databaseId/tables/:table/rows/:rowId',
-    title: 'Edit row · QDB Editor 16',
-    loadComponent: () =>
-      import('./features/row-editor/row-editor-page').then((module) => module.RowEditorPage),
-  },
-  {
     path: 'projects/:projectId/databases/:databaseId/validation',
     title: 'Validation · QDB Editor 16',
     loadComponent: () =>

@@ -1,9 +1,9 @@
-<app-page-header [icon]="editing ? 'edit' : 'create_new_folder'">
+<app-page-header [icon]="editing() ? 'edit' : 'create_new_folder'">
   <div pageHeaderContent>
-    <h1>{{ editing ? 'Edit project' : 'New project' }}</h1>
+    <h1>{{ editing() ? 'Edit project' : 'New project' }}</h1>
     <p>
       {{
-        editing
+        editing()
           ? 'Update the details shared by this project.'
           : 'Create a home for your FIFA 16 databases.'
       }}
@@ -51,7 +51,7 @@
     </mat-card-content>
 
     <mat-card-actions align="end">
-      <a matButton [routerLink]="editing ? ['/projects', projectId] : ['/projects']">Cancel</a>
+      <a matButton [routerLink]="editing() ? ['/projects', projectId()] : ['/projects']">Cancel</a>
       <button type="button" matButton="filled" [disabled]="store.loading()" (click)="save()">
         <mat-icon>save</mat-icon>
         Save project

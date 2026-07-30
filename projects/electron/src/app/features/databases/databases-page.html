@@ -1,4 +1,4 @@
-<app-page-header icon="database">
+<app-page-header icon="storage">
   <div pageHeaderContent>
     <h1>{{ store.activeProject()?.name ?? 'Project databases' }}</h1>
     <p>
@@ -7,15 +7,15 @@
     </p>
   </div>
   <div pageHeaderActions class="flex flex-wrap gap-2">
-    <a matButton [routerLink]="['/projects', projectId, 'edit']">
+    <a matButton [routerLink]="['/projects', projectId(), 'edit']">
       <mat-icon>edit</mat-icon>
       Edit project
     </a>
-    <a matButton [routerLink]="['/projects', projectId, 'import']">
+    <a matButton [routerLink]="['/projects', projectId(), 'import']">
       <mat-icon>upload_file</mat-icon>
       Import
     </a>
-    <a matButton="filled" [routerLink]="['/projects', projectId, 'databases', 'new']">
+    <a matButton="filled" [routerLink]="['/projects', projectId(), 'databases', 'new']">
       <mat-icon>add</mat-icon>
       Blank database
     </a>
@@ -32,7 +32,7 @@
       <mat-card appearance="outlined">
         <mat-card-header>
           <mat-icon mat-card-avatar>{{
-            database.status === 'available' ? 'database' : 'error'
+            database.status === 'available' ? 'storage' : 'error'
           }}</mat-icon>
           <mat-card-title>{{ database.name }}</mat-card-title>
           <mat-card-subtitle>
@@ -61,7 +61,7 @@
           <a
             matButton="filled"
             [disabled]="database.status !== 'available'"
-            [routerLink]="['/projects', projectId, 'databases', database.id, 'tables']"
+            [routerLink]="['/projects', projectId(), 'databases', database.id, 'tables']"
           >
             Open
           </a>
@@ -70,7 +70,7 @@
     } @empty {
       @if (!store.loading()) {
         <mat-card appearance="outlined" class="empty-state md:col-span-2 xl:col-span-3">
-          <mat-icon>database</mat-icon>
+          <mat-icon>storage</mat-icon>
           <h2>No databases yet</h2>
           <p>Import a FIFA 16 source or start with all supported tables empty.</p>
         </mat-card>

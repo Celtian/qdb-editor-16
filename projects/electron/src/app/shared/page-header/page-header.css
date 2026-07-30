@@ -5,7 +5,7 @@
 .page-header {
   position: sticky;
   top: 0;
-  z-index: 4;
+  z-index: 101;
   width: 100%;
   display: grid;
   grid-template-columns: 4rem minmax(0, 1fr) auto;

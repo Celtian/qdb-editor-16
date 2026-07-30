@@ -1,0 +1,68 @@
+<form
+  class="row-form"
+  aria-labelledby="row-editor-title"
+  aria-describedby="row-editor-description"
+  (submit)="save(); $event.preventDefault()"
+>
+  <header>
+    <div>
+      <h2 id="row-editor-title">
+        {{ editing ? 'Edit row ' + data.row?.rowId : 'Add row' }}
+      </h2>
+      <p id="row-editor-description">Changes remain a draft until this row is saved.</p>
+    </div>
+    <button type="button" matIconButton aria-label="Close row editor" (click)="cancel()">
+      <mat-icon aria-hidden="true">close</mat-icon>
+    </button>
+  </header>
+
+  <div class="row-fields" cdkScrollable>
+    @if (ratingHint(); as rating) {
+      <section class="rating-summary" aria-label="Calculated player rating">
+        <mat-icon aria-hidden="true">bar_chart</mat-icon>
+        <div>
+          <strong>FIFA 16 {{ rating.position }} rating: {{ rating.calculated }}</strong>
+          <span>Stored overall: {{ rating.stored }}</span>
+          @if (rating.calculated !== rating.stored) {
+            <span>Difference {{ rating.calculated - rating.stored }}</span>
+          }
+        </div>
+      </section>
+    }
+
+    @for (field of data.fields; track field.name; let first = $first) {
+      <mat-form-field appearance="outline">
+        <mat-label>{{ field.name }}</mat-label>
+        <input
+          matInput
+          [formField]="rowForm[field.name]"
+          [type]="field.type === 'string' ? 'text' : 'number'"
+          [attr.step]="field.type === 'int' ? '1' : field.type === 'float' ? 'any' : null"
+          [attr.inputmode]="
+            field.type === 'int' ? 'numeric' : field.type === 'float' ? 'decimal' : null
+          "
+          [attr.data-row-editor-primary-field]="first ? '' : null"
+        />
+        <mat-hint>{{ fieldHint(field) }}</mat-hint>
+        @if (rowForm[field.name]().touched()) {
+          @for (error of rowForm[field.name]().errors(); track $index) {
+            <mat-error>{{ error.message }}</mat-error>
+          }
+        }
+      </mat-form-field>
+    }
+
+    @if (store.error()) {
+      <p class="error-banner" role="alert">{{ store.error() }}</p>
+    }
+  </div>
+
+  <footer>
+    <span></span>
+    <button type="button" matButton (click)="cancel()">Cancel</button>
+    <button type="submit" matButton="filled" [disabled]="store.loading() || rowForm().invalid()">
+      <mat-icon aria-hidden="true">save</mat-icon>
+      Save row
+    </button>
+  </footer>
+</form>

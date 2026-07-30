@@ -219,6 +219,68 @@ describe('AppStore', () => {
     store.selectContext(project.id, database.id);
     expect(store.activeProjectId()).toBe(project.id);
   });
+
+  it('caches databases and tables per branch without changing active collections', async () => {
+    const otherProject: ProjectDescriptor = {
+      ...project,
+      id: '44444444-4444-4444-8444-444444444444',
+      name: 'Tournament',
+    };
+    const otherDatabase: DatabaseDescriptor = {
+      ...database,
+      id: '55555555-5555-4555-8555-555555555555',
+      projectId: otherProject.id,
+      name: 'Cup',
+    };
+    const api = makeApi();
+    api.listProjects = vi.fn(async () => [project, otherProject]);
+    api.listDatabases = vi.fn(async (projectId) =>
+      projectId === project.id ? [database] : [otherDatabase],
+    );
+    api.listTables = vi.fn(async (databaseId) =>
+      databaseId === database.id ? [table] : [{ ...table, name: 'competition' }],
+    );
+    TestBed.configureTestingModule({
+      providers: [AppStore, { provide: DesktopApi, useValue: api }],
+    });
+    const store = TestBed.inject(AppStore);
+
+    await store.refreshProjects();
+    await store.refreshDatabases(project.id);
+    await store.refreshTables(database.id);
+    await store.ensureDatabases(otherProject.id);
+    await store.ensureDatabases(otherProject.id);
+    await store.ensureTables(otherDatabase.id);
+
+    expect(store.databases()).toEqual([database]);
+    expect(store.tables()).toEqual([table]);
+    expect(store.databasesFor(otherProject.id)).toEqual([otherDatabase]);
+    expect(store.tablesFor(otherDatabase.id)[0]?.name).toBe('competition');
+    expect(api.listDatabases).toHaveBeenCalledTimes(2);
+    expect(api.listTables).toHaveBeenCalledTimes(2);
+  });
+
+  it('exposes branch errors and retries failed lazy loads', async () => {
+    const api = makeApi();
+    api.listDatabases = vi
+      .fn()
+      .mockRejectedValueOnce(new Error('Catalog unavailable'))
+      .mockResolvedValueOnce([database]);
+    TestBed.configureTestingModule({
+      providers: [AppStore, { provide: DesktopApi, useValue: api }],
+    });
+    const store = TestBed.inject(AppStore);
+
+    await store.ensureDatabases(project.id);
+    expect(store.databaseLoadState(project.id)).toEqual({
+      status: 'error',
+      error: 'Catalog unavailable',
+    });
+
+    await store.ensureDatabases(project.id, true);
+    expect(store.databaseLoadState(project.id).status).toBe('loaded');
+    expect(store.databasesFor(project.id)).toEqual([database]);
+  });
 });
 
 describe('Theme', () => {

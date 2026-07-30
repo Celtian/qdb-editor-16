@@ -1,10 +1,11 @@
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { TestBed } from '@angular/core/testing';
 import { MatButtonHarness } from '@angular/material/button/testing';
+import { MatDialogHarness } from '@angular/material/dialog/testing';
 import { MatInputHarness } from '@angular/material/input/testing';
-import { MatDialog } from '@angular/material/dialog';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
-import { ActivatedRoute, convertToParamMap, provideRouter } from '@angular/router';
+import { provideRouter, withComponentInputBinding } from '@angular/router';
+import { RouterTestingHarness } from '@angular/router/testing';
 import axe from 'axe-core';
 import type {
   DatabaseDescriptor,
@@ -16,10 +17,10 @@ import type {
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { AppStore } from '../core/app-store';
 import { DesktopApi } from '../core/desktop-api';
+import { DatabasesPage } from './databases/databases-page';
 import { ExportPage } from './export/export-page';
 import { ImportPage } from './import/import-page';
 import { ProjectFormPage } from './projects/project-form-page';
-import { RowEditorPage } from './row-editor/row-editor-page';
 import { TableEditorPage } from './table-editor/table-editor-page';
 import { ValidationPage } from './validation/validation-page';
 
@@ -60,36 +61,49 @@ const database: DatabaseDescriptor = {
   validation: report,
 };
 
-const route = (parameters: Record<string, string>) => ({
-  snapshot: { paramMap: convertToParamMap(parameters) },
-});
-
-const providers = (api: Partial<DesktopApi>, parameters: Record<string, string>) => [
+const providers = (api: Partial<DesktopApi>) => [
   provideRouter([]),
   provideNoopAnimations(),
   AppStore,
   { provide: DesktopApi, useValue: { onProgress: () => () => undefined, ...api } },
-  { provide: ActivatedRoute, useValue: route(parameters) },
-  {
-    provide: MatDialog,
-    useValue: { open: vi.fn() },
-  },
 ];
 
 afterEach(() => TestBed.resetTestingModule());
 
 describe('project and import flows', () => {
+  it('renders supported storage icons for available databases', async () => {
+    TestBed.configureTestingModule({
+      imports: [DatabasesPage],
+      providers: providers({
+        listProjects: vi.fn(async () => [project]),
+        listDatabases: vi.fn(async () => [database]),
+      }),
+    });
+    const fixture = TestBed.createComponent(DatabasesPage);
+    fixture.componentRef.setInput('projectId', projectId);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    let icons: (string | undefined)[] = [];
+    await vi.waitFor(() => {
+      fixture.detectChanges();
+      icons = [
+        ...(fixture.nativeElement as HTMLElement).querySelectorAll<HTMLElement>('mat-icon'),
+      ].map((icon) => icon.textContent?.trim());
+      expect(icons.filter((icon) => icon === 'storage')).toHaveLength(2);
+    });
+
+    expect(icons).not.toContain('database');
+    expect((await axe.run(fixture.nativeElement as HTMLElement)).violations).toEqual([]);
+  });
+
   it('creates a dated project through Material form controls', async () => {
     const createProject = vi.fn(async () => project);
     TestBed.configureTestingModule({
       imports: [ProjectFormPage],
-      providers: providers(
-        {
-          createProject,
-          listProjects: vi.fn(async () => [project]),
-        },
-        {},
-      ),
+      providers: providers({
+        createProject,
+        listProjects: vi.fn(async () => [project]),
+      }),
     });
     const fixture = TestBed.createComponent(ProjectFormPage);
     fixture.detectChanges();
@@ -120,16 +134,14 @@ describe('project and import flows', () => {
     const importDatabase = vi.fn(async () => ({ database, validation: report }));
     TestBed.configureTestingModule({
       imports: [ImportPage],
-      providers: providers(
-        {
-          selectTextSource: vi.fn(async () => candidate),
-          importDatabase,
-          listDatabases: vi.fn(async () => [database]),
-        },
-        { projectId },
-      ),
+      providers: providers({
+        selectTextSource: vi.fn(async () => candidate),
+        importDatabase,
+        listDatabases: vi.fn(async () => [database]),
+      }),
     });
     const fixture = TestBed.createComponent(ImportPage);
+    fixture.componentRef.setInput('projectId', projectId);
     fixture.detectChanges();
     const loader = TestbedHarnessEnvironment.loader(fixture);
     const element = fixture.nativeElement as HTMLElement;
@@ -163,25 +175,35 @@ describe('project and import flows', () => {
 });
 
 describe('editing and validation flows', () => {
-  it('keeps one inline row draft and saves it explicitly', async () => {
+  it('creates and edits rows through an accessible right drawer', async () => {
     const page: TablePage = {
       table: 'players',
-      fields: [{ name: 'playerid', type: 'int', defaultValue: 0, unique: true }],
-      rows: [{ rowId: 7, rowOrder: 0, values: { playerid: 7 } }],
+      fields: [
+        { name: 'playerid', type: 'int', defaultValue: 0, unique: true },
+        { name: 'height', type: 'float', defaultValue: 1.75, unique: false },
+        { name: 'lastname', type: 'string', defaultValue: '', unique: false },
+      ],
+      rows: [
+        {
+          rowId: 7,
+          rowOrder: 0,
+          values: { playerid: 7, height: 1.8, lastname: 'Smith' },
+        },
+      ],
       total: 1,
     };
     const saveRow = vi.fn(async () => ({ row: page.rows[0]!, warnings: [] }));
     TestBed.configureTestingModule({
       imports: [TableEditorPage],
-      providers: providers(
-        {
-          readTable: vi.fn(async () => page),
-          saveRow,
-        },
-        { projectId, databaseId, table: 'players' },
-      ),
+      providers: providers({
+        readTable: vi.fn(async () => page),
+        saveRow,
+      }),
     });
     const fixture = TestBed.createComponent(TableEditorPage);
+    fixture.componentRef.setInput('projectId', projectId);
+    fixture.componentRef.setInput('databaseId', databaseId);
+    fixture.componentRef.setInput('table', 'players');
     fixture.detectChanges();
     await fixture.whenStable();
     fixture.detectChanges();
@@ -190,73 +212,133 @@ describe('editing and validation flows', () => {
       fixture.detectChanges();
       expect(fixture.nativeElement.textContent).toContain('playerid');
     });
+    const table = fixture.nativeElement.querySelector('table') as HTMLTableElement;
+    expect(table.querySelector('td input')).toBeNull();
+    expect(table.querySelector('button[aria-label="Edit row inline"]')).toBeNull();
+    expect(table.querySelector('th:last-child')?.classList).toContain('text-right');
+    expect(table.querySelector('td:last-child > div')?.classList).toContain('justify-end');
     const loader = TestbedHarnessEnvironment.loader(fixture);
-    await (
-      await loader.getHarness(
-        MatButtonHarness.with({ selector: 'button[aria-label="Edit row inline"]' }),
-      )
-    ).click();
-    fixture.detectChanges();
-    await (await loader.getHarness(MatInputHarness.with({ selector: 'td input' }))).setValue('9');
-    await (
-      await loader.getHarness(MatButtonHarness.with({ selector: 'button[aria-label="Save row"]' }))
-    ).click();
-    await fixture.whenStable();
+    const documentLoader = TestbedHarnessEnvironment.documentRootLoader(fixture);
 
-    expect(saveRow).toHaveBeenCalledWith(
-      expect.objectContaining({ rowId: 7, values: { playerid: 9 } }),
+    await (
+      await loader.getHarness(MatButtonHarness.with({ selector: 'button[aria-label="Edit row"]' }))
+    ).click();
+
+    const drawer = await documentLoader.getHarness(MatDialogHarness);
+    expect(await drawer.getRole()).toBe('dialog');
+    expect(await drawer.getAriaLabelledby()).toBe('row-editor-title');
+    const panel = document.querySelector<HTMLElement>('.row-editor-drawer-panel')!;
+    expect(panel.style.height).toBe('100vh');
+    expect(panel.parentElement?.style.justifyContent).toBe('flex-end');
+    expect(panel.querySelector('button[aria-label="Close row editor"]')).toBeTruthy();
+    expect((await axe.run(panel)).violations).toEqual([]);
+
+    const editInput = await documentLoader.getHarness(
+      MatInputHarness.with({ selector: '.row-editor-drawer-panel input[type="number"][step="1"]' }),
     );
-    expect((await axe.run(fixture.nativeElement as HTMLElement)).violations).toEqual([]);
-  });
-
-  it('creates a row through the responsive full-row form', async () => {
-    const saveRow = vi.fn(async () => ({
-      row: { rowId: 8, rowOrder: 1, values: { playerid: 8 } },
-      warnings: [],
-    }));
-    TestBed.configureTestingModule({
-      imports: [RowEditorPage],
-      providers: providers(
-        {
-          listProjects: vi.fn(async () => [project]),
-          listTables: vi.fn(async () => [
-            {
-              name: 'players',
-              fields: [{ name: 'playerid', type: 'int' as const, defaultValue: 0, unique: true }],
-              rowCount: 1,
-              errorCount: 0,
-              warningCount: 0,
-            },
-          ]),
-          saveRow,
-        },
-        { projectId, databaseId, table: 'players' },
-      ),
-    });
-    const fixture = TestBed.createComponent(RowEditorPage);
-    fixture.detectChanges();
-    await fixture.whenStable();
-    fixture.detectChanges();
-    await fixture.whenRenderingDone();
-    await vi.waitFor(() => {
-      fixture.detectChanges();
-      expect(fixture.nativeElement.textContent).toContain('playerid');
-    });
-    const loader = TestbedHarnessEnvironment.loader(fixture);
-    const input = await loader.getHarness(MatInputHarness);
-    await input.setValue('8');
-    await (await loader.getHarness(MatButtonHarness.with({ text: /Save row/ }))).click();
+    expect(await editInput.getValue()).toBe('7');
+    expect(panel.querySelector<HTMLInputElement>('input[type="number"][step="any"]')?.value).toBe(
+      '1.8',
+    );
+    expect(panel.querySelector<HTMLInputElement>('input[type="text"]')?.value).toBe('Smith');
+    await editInput.setValue('4sadsa');
+    expect(await editInput.getValue()).toBe('');
+    expect(
+      await (
+        await documentLoader.getHarness(MatButtonHarness.with({ text: /Save row/ }))
+      ).isDisabled(),
+    ).toBe(true);
+    await editInput.setValue('4.2');
+    expect(
+      await (
+        await documentLoader.getHarness(MatButtonHarness.with({ text: /Save row/ }))
+      ).isDisabled(),
+    ).toBe(true);
+    await editInput.setValue('9');
+    await (await documentLoader.getHarness(MatButtonHarness.with({ text: /Save row/ }))).click();
     await fixture.whenStable();
 
-    expect(saveRow).toHaveBeenCalledWith(
+    expect(saveRow).toHaveBeenNthCalledWith(
+      1,
       expect.objectContaining({
         databaseId,
         table: 'players',
-        values: { playerid: '8' },
+        rowId: 7,
+        values: { playerid: 9, height: 1.8, lastname: 'Smith' },
+        acceptWarnings: false,
+      }),
+    );
+    await vi.waitFor(() => expect(document.querySelector('.row-editor-drawer-panel')).toBeNull());
+
+    await (await loader.getHarness(MatButtonHarness.with({ text: /Add row/ }))).click();
+    const addInput = await documentLoader.getHarness(
+      MatInputHarness.with({ selector: '.row-editor-drawer-panel input[type="number"][step="1"]' }),
+    );
+    expect(await addInput.getValue()).toBe('0');
+    await addInput.setValue('8');
+    await (await documentLoader.getHarness(MatButtonHarness.with({ text: /Save row/ }))).click();
+    await fixture.whenStable();
+
+    expect(saveRow).toHaveBeenNthCalledWith(
+      2,
+      expect.objectContaining({
+        databaseId,
+        table: 'players',
+        values: { playerid: 8, height: 1.75, lastname: '' },
         acceptWarnings: false,
       }),
     );
     expect((await axe.run(fixture.nativeElement as HTMLElement)).violations).toEqual([]);
+  });
+
+  it('loads the selected table when Angular reuses the editor for a new route parameter', async () => {
+    const pages: Record<string, TablePage> = {
+      players: {
+        table: 'players',
+        fields: [{ name: 'playerid', type: 'int', defaultValue: 0, unique: true }],
+        rows: [],
+        total: 0,
+      },
+      leagues: {
+        table: 'leagues',
+        fields: [{ name: 'leaguename', type: 'string', defaultValue: '', unique: true }],
+        rows: [],
+        total: 0,
+      },
+    };
+    const readTable = vi.fn(async ({ table }: { table: string }) => pages[table]!);
+    TestBed.configureTestingModule({
+      providers: [
+        provideNoopAnimations(),
+        provideRouter(
+          [
+            {
+              path: 'projects/:projectId/databases/:databaseId/tables/:table',
+              component: TableEditorPage,
+            },
+          ],
+          withComponentInputBinding(),
+        ),
+        AppStore,
+        {
+          provide: DesktopApi,
+          useValue: { onProgress: () => () => undefined, readTable },
+        },
+      ],
+    });
+    const harness = await RouterTestingHarness.create();
+    const routeRoot = `/projects/${projectId}/databases/${databaseId}/tables`;
+    const playersEditor = await harness.navigateByUrl(`${routeRoot}/players`, TableEditorPage);
+    await vi.waitFor(() => expect(harness.routeNativeElement?.textContent).toContain('playerid'));
+
+    const leaguesEditor = await harness.navigateByUrl(`${routeRoot}/leagues`, TableEditorPage);
+    await vi.waitFor(() => expect(harness.routeNativeElement?.textContent).toContain('leaguename'));
+
+    expect(leaguesEditor).toBe(playersEditor);
+    expect(harness.routeNativeElement?.querySelector('h1')?.textContent).toContain('leagues');
+    expect(readTable).toHaveBeenLastCalledWith(
+      expect.objectContaining({ databaseId, table: 'leagues' }),
+    );
   });
 
   it('renders and refreshes a full validation report', async () => {
@@ -276,16 +358,15 @@ describe('editing and validation flows', () => {
     }));
     TestBed.configureTestingModule({
       imports: [ValidationPage],
-      providers: providers(
-        {
-          getValidation: vi.fn(async () => report),
-          validateDatabase,
-          listTables: vi.fn(async () => []),
-        },
-        { projectId, databaseId },
-      ),
+      providers: providers({
+        getValidation: vi.fn(async () => report),
+        validateDatabase,
+        listTables: vi.fn(async () => []),
+      }),
     });
     const fixture = TestBed.createComponent(ValidationPage);
+    fixture.componentRef.setInput('projectId', projectId);
+    fixture.componentRef.setInput('databaseId', databaseId);
     fixture.detectChanges();
     await fixture.whenStable();
     const loader = TestbedHarnessEnvironment.loader(fixture);
@@ -308,17 +389,16 @@ describe('export flow', () => {
     const revealExport = vi.fn(async () => true);
     TestBed.configureTestingModule({
       imports: [ExportPage],
-      providers: providers(
-        {
-          getValidation: vi.fn(async () => report),
-          selectExportDirectory: vi.fn(async () => 'C:\\exports'),
-          exportDatabase,
-          revealExport,
-        },
-        { projectId, databaseId },
-      ),
+      providers: providers({
+        getValidation: vi.fn(async () => report),
+        selectExportDirectory: vi.fn(async () => 'C:\\exports'),
+        exportDatabase,
+        revealExport,
+      }),
     });
     const fixture = TestBed.createComponent(ExportPage);
+    fixture.componentRef.setInput('projectId', projectId);
+    fixture.componentRef.setInput('databaseId', databaseId);
     fixture.detectChanges();
     await fixture.whenStable();
     const loader = TestbedHarnessEnvironment.loader(fixture);

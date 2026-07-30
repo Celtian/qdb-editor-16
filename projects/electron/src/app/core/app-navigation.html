@@ -1,62 +1,268 @@
-<a class="brand" routerLink="/projects" aria-label="QDB Editor 16 projects">
+<a
+  class="brand"
+  routerLink="/projects"
+  routerLinkActive="active"
+  ariaCurrentWhenActive="page"
+  aria-label="QDB Editor 16 projects"
+  [routerLinkActiveOptions]="{ exact: true }"
+>
   <img ngSrc="qdb-editor-16-icon.png" width="30" height="30" alt="" priority />
   <span>QDB Editor 16</span>
 </a>
 
-<mat-nav-list aria-label="Primary navigation">
-  <a
-    mat-list-item
-    routerLink="/projects"
-    routerLinkActive="active"
-    ariaCurrentWhenActive="page"
-    [routerLinkActiveOptions]="{ exact: true }"
+<nav class="primary-navigation" aria-label="Projects and databases">
+  <ul
+    ngTree
+    #tree="ngTree"
+    nav
+    focusMode="roving"
+    selectionMode="explicit"
+    currentType="page"
+    class="navigation-tree"
+    [value]="currentNodes()"
+    (valueChange)="navigateToNode($event)"
   >
-    <mat-icon matListItemIcon>folder_copy</mat-icon>
-    <span matListItemTitle>Projects</span>
-  </a>
-  @if (store.activeProject(); as project) {
-    <a
-      mat-list-item
-      [routerLink]="['/projects', project.id]"
-      routerLinkActive="active"
-      ariaCurrentWhenActive="page"
-      [routerLinkActiveOptions]="{ exact: true }"
-    >
-      <mat-icon matListItemIcon>storage</mat-icon>
-      <span matListItemTitle>Databases</span>
-      <span matListItemLine>{{ project.name }}</span>
-    </a>
-  }
-  @if (databaseRoot(); as root) {
-    @if (root) {
-      <mat-divider />
-      <p class="section-label">{{ store.activeDatabase()?.name ?? 'Active database' }}</p>
-      <a mat-list-item [routerLink]="root + '/tables'" routerLinkActive="active">
-        <mat-icon matListItemIcon>table_view</mat-icon>
-        <span matListItemTitle>Tables</span>
-      </a>
-      <a mat-list-item [routerLink]="root + '/validation'" routerLinkActive="active">
-        <mat-icon matListItemIcon>fact_check</mat-icon>
-        <span matListItemTitle>Validation</span>
-      </a>
-      <a mat-list-item [routerLink]="root + '/export'" routerLinkActive="active">
-        <mat-icon matListItemIcon>drive_file_move</mat-icon>
-        <span matListItemTitle>Export</span>
-      </a>
+    @for (project of store.projects(); track project.id) {
+      <li
+        ngTreeItem
+        #projectItem="ngTreeItem"
+        class="tree-item"
+        [parent]="tree"
+        [value]="projectNode(project.id)"
+        [label]="project.name"
+        [expanded]="isExpanded(projectNode(project.id))"
+        (expandedChange)="projectExpanded(project.id, $event)"
+      >
+        <div class="tree-row">
+          <mat-icon>folder</mat-icon>
+          <span class="item-label">{{ project.name }}</span>
+          <button
+            type="button"
+            matIconButton
+            tabindex="-1"
+            class="disclosure"
+            [attr.aria-label]="
+              (isExpanded(projectNode(project.id)) ? 'Collapse ' : 'Expand ') +
+              project.name +
+              ' databases'
+            "
+            (click)="toggleProject($event, project.id)"
+          >
+            <mat-icon>
+              {{ isExpanded(projectNode(project.id)) ? 'expand_more' : 'chevron_right' }}
+            </mat-icon>
+          </button>
+        </div>
+
+        <ul role="group" class="tree-group">
+          <ng-template ngTreeItemGroup #projectGroup="ngTreeItemGroup" [ownedBy]="projectItem">
+            @switch (store.databaseLoadState(project.id).status) {
+              @case ('loading') {
+                <li role="none" class="branch-message" aria-live="polite">
+                  <mat-icon>hourglass_empty</mat-icon>
+                  <span>Loading databases…</span>
+                </li>
+              }
+              @case ('error') {
+                <li role="none" class="branch-message error-message">
+                  <span>{{ store.databaseLoadState(project.id).error }}</span>
+                  <button type="button" matButton (click)="retryDatabases($event, project.id)">
+                    Retry
+                  </button>
+                </li>
+              }
+              @case ('loaded') {
+                @for (database of store.databasesFor(project.id); track database.id) {
+                  <li
+                    ngTreeItem
+                    #databaseItem="ngTreeItem"
+                    class="tree-item"
+                    [parent]="projectGroup"
+                    [value]="databaseNode(project.id, database.id)"
+                    [label]="database.name"
+                    [expanded]="isExpanded(databaseNode(project.id, database.id))"
+                    (expandedChange)="databaseExpanded(project.id, database.id, $event)"
+                  >
+                    <div class="tree-row">
+                      <mat-icon>storage</mat-icon>
+                      <span class="item-label">{{ database.name }}</span>
+                      <button
+                        type="button"
+                        matIconButton
+                        tabindex="-1"
+                        class="disclosure"
+                        [attr.aria-label]="
+                          (isExpanded(databaseNode(project.id, database.id))
+                            ? 'Collapse '
+                            : 'Expand ') +
+                          database.name +
+                          ' tools'
+                        "
+                        (click)="toggleDatabase($event, project.id, database.id)"
+                      >
+                        <mat-icon>
+                          {{
+                            isExpanded(databaseNode(project.id, database.id))
+                              ? 'expand_more'
+                              : 'chevron_right'
+                          }}
+                        </mat-icon>
+                      </button>
+                    </div>
+
+                    <ul role="group" class="tree-group">
+                      <ng-template
+                        ngTreeItemGroup
+                        #databaseGroup="ngTreeItemGroup"
+                        [ownedBy]="databaseItem"
+                      >
+                        <li
+                          ngTreeItem
+                          #tablesItem="ngTreeItem"
+                          class="tree-item"
+                          [parent]="databaseGroup"
+                          [value]="tablesNode(project.id, database.id)"
+                          label="Tables"
+                          [expanded]="isExpanded(tablesNode(project.id, database.id))"
+                          (expandedChange)="tablesExpanded(project.id, database.id, $event)"
+                        >
+                          <div class="tree-row">
+                            <mat-icon>table_view</mat-icon>
+                            <span class="item-label">Tables</span>
+                            <button
+                              type="button"
+                              matIconButton
+                              tabindex="-1"
+                              class="disclosure"
+                              [attr.aria-label]="
+                                (isExpanded(tablesNode(project.id, database.id))
+                                  ? 'Collapse '
+                                  : 'Expand ') +
+                                database.name +
+                                ' tables'
+                              "
+                              (click)="toggleTables($event, project.id, database.id)"
+                            >
+                              <mat-icon>
+                                {{
+                                  isExpanded(tablesNode(project.id, database.id))
+                                    ? 'expand_more'
+                                    : 'chevron_right'
+                                }}
+                              </mat-icon>
+                            </button>
+                          </div>
+
+                          <ul role="group" class="tree-group">
+                            <ng-template
+                              ngTreeItemGroup
+                              #tableGroup="ngTreeItemGroup"
+                              [ownedBy]="tablesItem"
+                            >
+                              @switch (store.tableLoadState(database.id).status) {
+                                @case ('loading') {
+                                  <li role="none" class="branch-message" aria-live="polite">
+                                    <mat-icon>hourglass_empty</mat-icon>
+                                    <span>Loading tables…</span>
+                                  </li>
+                                }
+                                @case ('error') {
+                                  <li role="none" class="branch-message error-message">
+                                    <span>{{ store.tableLoadState(database.id).error }}</span>
+                                    <button
+                                      type="button"
+                                      matButton
+                                      (click)="retryTables($event, database.id)"
+                                    >
+                                      Retry
+                                    </button>
+                                  </li>
+                                }
+                                @case ('loaded') {
+                                  @for (table of store.tablesFor(database.id); track table.name) {
+                                    <li
+                                      ngTreeItem
+                                      class="tree-item table-item"
+                                      [parent]="tableGroup"
+                                      [value]="tableNode(project.id, database.id, table.name)"
+                                      [label]="table.name"
+                                    >
+                                      <div class="tree-row">
+                                        <mat-icon>table_rows</mat-icon>
+                                        <span class="item-label">{{ table.name }}</span>
+                                      </div>
+                                    </li>
+                                  } @empty {
+                                    <li role="none" class="branch-message">No tables available.</li>
+                                  }
+                                }
+                              }
+                            </ng-template>
+                          </ul>
+                        </li>
+
+                        <li
+                          ngTreeItem
+                          class="tree-item"
+                          [parent]="databaseGroup"
+                          [value]="validationNode(project.id, database.id)"
+                          label="Validation"
+                        >
+                          <div class="tree-row">
+                            <mat-icon>fact_check</mat-icon>
+                            <span class="item-label">Validation</span>
+                          </div>
+                        </li>
+                        <li
+                          ngTreeItem
+                          class="tree-item"
+                          [parent]="databaseGroup"
+                          [value]="exportNode(project.id, database.id)"
+                          label="Export"
+                        >
+                          <div class="tree-row">
+                            <mat-icon>drive_file_move</mat-icon>
+                            <span class="item-label">Export</span>
+                          </div>
+                        </li>
+                      </ng-template>
+                    </ul>
+                  </li>
+                } @empty {
+                  <li role="none" class="branch-message">No databases in this project.</li>
+                }
+              }
+            }
+          </ng-template>
+        </ul>
+      </li>
+    } @empty {
+      <li role="none" class="branch-message">No projects yet.</li>
     }
-  }
-</mat-nav-list>
+  </ul>
+</nav>
 
 <div class="utility">
   <mat-divider />
-  <mat-nav-list aria-label="Application navigation">
-    <a mat-list-item routerLink="/settings" routerLinkActive="active" ariaCurrentWhenActive="page">
-      <mat-icon matListItemIcon>settings</mat-icon>
-      <span matListItemTitle>Settings</span>
-    </a>
-    <button type="button" mat-list-item (click)="openAbout()">
-      <mat-icon matListItemIcon>info</mat-icon>
-      <span matListItemTitle>About</span>
-    </button>
-  </mat-nav-list>
+  <nav aria-label="Application navigation">
+    <ul class="utility-list">
+      <li>
+        <a
+          class="utility-item"
+          routerLink="/settings"
+          routerLinkActive="active"
+          ariaCurrentWhenActive="page"
+        >
+          <mat-icon>settings</mat-icon>
+          <span class="item-label">Settings</span>
+        </a>
+      </li>
+      <li>
+        <button type="button" class="utility-item" (click)="openAbout()">
+          <mat-icon>info</mat-icon>
+          <span class="item-label">About</span>
+        </button>
+      </li>
+    </ul>
+  </nav>
 </div>

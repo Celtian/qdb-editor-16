@@ -20,7 +20,7 @@
       }
     </mat-card-content>
     <mat-card-actions align="end">
-      <a matButton [routerLink]="['/projects', projectId]">Cancel</a>
+      <a matButton [routerLink]="['/projects', projectId()]">Cancel</a>
       <button type="button" matButton="filled" [disabled]="store.loading()" (click)="save()">
         <mat-icon>add</mat-icon>
         Create database

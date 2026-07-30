@@ -1,11 +1,19 @@
 import { DecimalPipe } from '@angular/common';
-import { Component, computed, inject, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  inject,
+  input,
+  type OnChanges,
+  signal,
+  type SimpleChanges,
+} from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { AppStore } from '../../core/app-store';
 import { PageHeader } from '../../shared/page-header/page-header';
 
@@ -23,11 +31,10 @@ import { PageHeader } from '../../shared/page-header/page-header';
   ],
   templateUrl: './tables-page.html',
 })
-export class TablesPage {
-  private readonly route = inject(ActivatedRoute);
+export class TablesPage implements OnChanges {
   protected readonly store = inject(AppStore);
-  protected readonly projectId = this.route.snapshot.paramMap.get('projectId')!;
-  protected readonly databaseId = this.route.snapshot.paramMap.get('databaseId')!;
+  protected readonly projectId = input.required<string>();
+  protected readonly databaseId = input.required<string>();
   protected readonly query = signal('');
   protected readonly filtered = computed(() => {
     const query = this.query().trim().toLocaleLowerCase('en');
@@ -35,14 +42,20 @@ export class TablesPage {
       ? this.store.tables().filter((table) => table.name.includes(query))
       : this.store.tables();
   });
+  private initializeSequence = 0;
 
-  constructor() {
-    void this.initialize();
+  ngOnChanges(changes: SimpleChanges): void {
+    if (!changes['projectId'] && !changes['databaseId']) return;
+    const sequence = ++this.initializeSequence;
+    this.query.set('');
+    void this.initialize(this.projectId(), this.databaseId(), sequence);
   }
 
-  private async initialize(): Promise<void> {
+  private async initialize(projectId: string, databaseId: string, sequence: number): Promise<void> {
     if (!this.store.projects().length) await this.store.refreshProjects();
-    await this.store.refreshDatabases(this.projectId);
-    await this.store.refreshTables(this.databaseId);
+    if (sequence !== this.initializeSequence) return;
+    await this.store.refreshDatabases(projectId);
+    if (sequence !== this.initializeSequence) return;
+    await this.store.refreshTables(databaseId);
   }
 }

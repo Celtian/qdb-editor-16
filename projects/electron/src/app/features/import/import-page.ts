@@ -1,4 +1,13 @@
-import { Component, computed, inject, signal, viewChild } from '@angular/core';
+import {
+  Component,
+  computed,
+  inject,
+  input,
+  type OnChanges,
+  signal,
+  type SimpleChanges,
+  viewChild,
+} from '@angular/core';
 import { FormField, form, maxLength, required, submit } from '@angular/forms/signals';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -8,7 +17,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import type { ImportCandidate, SourceFileSelection } from '../../../../shared/contracts';
 import { AppStore } from '../../core/app-store';
 import { DesktopApi } from '../../core/desktop-api';
@@ -33,13 +42,12 @@ import { PageHeader } from '../../shared/page-header/page-header';
   templateUrl: './import-page.html',
   styleUrl: './import-page.css',
 })
-export class ImportPage {
-  private readonly route = inject(ActivatedRoute);
+export class ImportPage implements OnChanges {
   private readonly router = inject(Router);
   private readonly desktop = inject(DesktopApi);
   private readonly stepper = viewChild(MatStepper);
   protected readonly store = inject(AppStore);
-  protected readonly projectId = this.route.snapshot.paramMap.get('projectId')!;
+  protected readonly projectId = input.required<string>();
   protected readonly sourceKind = signal<'text-folder' | 't3db'>('text-folder');
   protected readonly candidate = signal<ImportCandidate | undefined>(undefined);
   protected readonly databaseFile = signal<SourceFileSelection | undefined>(undefined);
@@ -57,6 +65,16 @@ export class ImportPage {
     required(schema.name, { message: 'Database name is required.' });
     maxLength(schema.name, 80, { message: 'Use 80 characters or fewer.' });
   });
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (!changes['projectId']) return;
+    this.sourceKind.set('text-folder');
+    this.candidate.set(undefined);
+    this.databaseFile.set(undefined);
+    this.metadataFile.set(undefined);
+    this.model.set({ name: '' });
+    this.stepper()?.reset();
+  }
 
   protected changeKind(kind: 'text-folder' | 't3db'): void {
     if (this.sourceKind() === kind) return;
@@ -127,18 +145,19 @@ export class ImportPage {
     const candidate = this.candidate();
     if (!candidate) return;
     void submit(this.importForm, async () => {
+      const projectId = this.projectId();
       try {
         const result = await this.store.operation(() =>
           this.desktop.importDatabase({
-            projectId: this.projectId,
+            projectId,
             selectionId: candidate.selectionId,
             name: this.model().name,
           }),
         );
-        await this.store.refreshDatabases(this.projectId);
+        await this.store.refreshDatabases(projectId);
         await this.router.navigate([
           '/projects',
-          this.projectId,
+          projectId,
           'databases',
           result.database.id,
           'validation',

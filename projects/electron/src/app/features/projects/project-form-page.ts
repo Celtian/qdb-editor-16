@@ -1,11 +1,19 @@
-import { Component, inject, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  inject,
+  input,
+  type OnChanges,
+  signal,
+  type SimpleChanges,
+} from '@angular/core';
 import { FormField, form, maxLength, pattern, required, submit } from '@angular/forms/signals';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AppStore } from '../../core/app-store';
 import { DesktopApi } from '../../core/desktop-api';
 import { PageHeader } from '../../shared/page-header/page-header';
@@ -25,13 +33,12 @@ import { PageHeader } from '../../shared/page-header/page-header';
   templateUrl: './project-form-page.html',
   styleUrl: './project-form-page.css',
 })
-export class ProjectFormPage {
-  private readonly route = inject(ActivatedRoute);
+export class ProjectFormPage implements OnChanges {
   private readonly router = inject(Router);
   private readonly desktop = inject(DesktopApi);
   protected readonly store = inject(AppStore);
-  protected readonly projectId = this.route.snapshot.paramMap.get('projectId') ?? '';
-  protected readonly editing = Boolean(this.projectId);
+  protected readonly projectId = input<string>();
+  protected readonly editing = computed(() => Boolean(this.projectId()));
   protected readonly model = signal({
     name: '',
     referenceDate: new Date().toISOString().slice(0, 10),
@@ -44,17 +51,26 @@ export class ProjectFormPage {
       message: 'Use a valid date.',
     });
   });
+  private initializeSequence = 0;
 
-  constructor() {
-    void this.initialize();
+  ngOnChanges(changes: SimpleChanges): void {
+    if (!changes['projectId']) return;
+    const projectId = this.projectId();
+    const sequence = ++this.initializeSequence;
+    if (!projectId) {
+      this.model.set({ name: '', referenceDate: new Date().toISOString().slice(0, 10) });
+      return;
+    }
+    void this.initialize(projectId, sequence);
   }
 
   protected save(): void {
     void submit(this.projectForm, async () => {
+      const projectId = this.projectId();
       try {
         const project = await this.store.operation(() =>
-          this.editing
-            ? this.desktop.updateProject({ id: this.projectId, ...this.model() })
+          projectId
+            ? this.desktop.updateProject({ id: projectId, ...this.model() })
             : this.desktop.createProject(this.model()),
         );
         await this.store.refreshProjects();
@@ -65,10 +81,10 @@ export class ProjectFormPage {
     });
   }
 
-  private async initialize(): Promise<void> {
-    if (!this.editing) return;
+  private async initialize(projectId: string, sequence: number): Promise<void> {
     if (!this.store.projects().length) await this.store.refreshProjects();
-    const project = this.store.projects().find((candidate) => candidate.id === this.projectId);
+    if (sequence !== this.initializeSequence) return;
+    const project = this.store.projects().find((candidate) => candidate.id === projectId);
     if (project) this.model.set({ name: project.name, referenceDate: project.referenceDate });
   }
 }

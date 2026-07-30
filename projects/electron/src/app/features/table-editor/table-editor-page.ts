@@ -1,4 +1,12 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  inject,
+  input,
+  type OnChanges,
+  signal,
+  type SimpleChanges,
+} from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDialog } from '@angular/material/dialog';
@@ -9,18 +17,18 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatPaginatorModule, type PageEvent } from '@angular/material/paginator';
 import { MatSortModule, type Sort } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import type {
   FieldDescriptor,
   TablePage,
   TableRow,
-  TableRowValues,
   TableValue,
 } from '../../../../shared/contracts';
 import { AppStore } from '../../core/app-store';
 import { ConfirmDialog } from '../../core/confirm-dialog';
 import { DesktopApi } from '../../core/desktop-api';
 import { PageHeader } from '../../shared/page-header/page-header';
+import { RowEditorDrawer, type RowEditorDrawerData } from '../row-editor/row-editor-drawer';
 
 @Component({
   selector: 'app-table-editor-page',
@@ -39,14 +47,13 @@ import { PageHeader } from '../../shared/page-header/page-header';
   ],
   templateUrl: './table-editor-page.html',
 })
-export class TableEditorPage {
-  private readonly route = inject(ActivatedRoute);
+export class TableEditorPage implements OnChanges {
   private readonly desktop = inject(DesktopApi);
   private readonly dialog = inject(MatDialog);
   protected readonly store = inject(AppStore);
-  protected readonly projectId = this.route.snapshot.paramMap.get('projectId')!;
-  protected readonly databaseId = this.route.snapshot.paramMap.get('databaseId')!;
-  protected readonly table = this.route.snapshot.paramMap.get('table')!;
+  protected readonly projectId = input.required<string>();
+  protected readonly databaseId = input.required<string>();
+  protected readonly table = input.required<string>();
   protected readonly page = signal<TablePage | undefined>(undefined);
   protected readonly pageIndex = signal(0);
   protected readonly pageSize = signal(25);
@@ -54,13 +61,21 @@ export class TableEditorPage {
   protected readonly sortField = signal('');
   protected readonly sortDirection = signal<'asc' | 'desc'>('asc');
   protected readonly visibleFields = signal<string[]>([]);
-  protected readonly editingRowId = signal<number | undefined>(undefined);
-  protected readonly draft = signal<TableRowValues>({});
   protected readonly displayedColumns = computed(() => [...this.visibleFields(), '__actions']);
   private queryTimer: ReturnType<typeof setTimeout> | undefined;
+  private loadSequence = 0;
 
-  constructor() {
-    this.store.selectContext(this.projectId, this.databaseId);
+  ngOnChanges(changes: SimpleChanges): void {
+    if (!changes['projectId'] && !changes['databaseId'] && !changes['table']) return;
+
+    clearTimeout(this.queryTimer);
+    this.page.set(undefined);
+    this.pageIndex.set(0);
+    this.query.set('');
+    this.sortField.set('');
+    this.sortDirection.set('asc');
+    this.visibleFields.set([]);
+    this.store.selectContext(this.projectId(), this.databaseId());
     void this.load();
   }
 
@@ -90,61 +105,42 @@ export class TableEditorPage {
     void this.load();
   }
 
-  protected startInline(row: TableRow): void {
-    this.editingRowId.set(row.rowId);
-    this.draft.set({ ...row.values });
-  }
-
-  protected cancelInline(): void {
-    this.editingRowId.set(undefined);
-    this.draft.set({});
-  }
-
-  protected draftValue(field: string): TableValue {
-    return this.draft()[field] ?? '';
-  }
-
-  protected setDraftValue(field: FieldDescriptor, value: string): void {
-    const normalized: TableValue =
-      field.type === 'string' || value === '' ? value : Number(value.replace(',', '.'));
-    this.draft.update((draft) => ({ ...draft, [field.name]: normalized }));
-  }
-
-  protected async saveInline(acceptWarnings = false): Promise<void> {
-    const rowId = this.editingRowId();
-    if (rowId === undefined) return;
-    try {
-      const result = await this.store.operation(() =>
-        this.desktop.saveRow({
-          databaseId: this.databaseId,
-          table: this.table,
-          rowId,
-          values: this.draft(),
-          acceptWarnings,
-        }),
-      );
-      if (result.warnings.length && !acceptWarnings) {
-        const confirmed = await this.dialog
-          .open(ConfirmDialog, {
-            data: {
-              title: 'Save values outside published ranges?',
-              message: result.warnings.map((warning) => warning.message).join(' '),
-              confirmLabel: 'Save anyway',
-            },
-          })
-          .afterClosed()
-          .toPromise();
-        if (confirmed) await this.saveInline(true);
-        return;
-      }
-      this.cancelInline();
-      await this.load();
-    } catch {
-      // Store exposes the error.
-    }
+  protected openRowEditor(row?: TableRow): void {
+    const fields = this.page()?.fields;
+    if (!fields) return;
+    const databaseId = this.databaseId();
+    const table = this.table();
+    this.dialog
+      .open<RowEditorDrawer, RowEditorDrawerData, boolean>(RowEditorDrawer, {
+        ariaDescribedBy: 'row-editor-description',
+        ariaLabelledBy: 'row-editor-title',
+        ariaModal: true,
+        autoFocus: '[data-row-editor-primary-field]',
+        data: {
+          databaseId,
+          table,
+          fields,
+          ...(row ? { row } : {}),
+        },
+        delayFocusTrap: false,
+        disableClose: false,
+        height: '100vh',
+        maxHeight: '100vh',
+        maxWidth: '100vw',
+        panelClass: 'row-editor-drawer-panel',
+        position: { right: '0', top: '0' },
+        restoreFocus: true,
+        width: '36rem',
+      })
+      .afterClosed()
+      .subscribe((saved) => {
+        if (saved) void this.load();
+      });
   }
 
   protected async remove(row: TableRow): Promise<void> {
+    const databaseId = this.databaseId();
+    const table = this.table();
     const confirmed = await this.dialog
       .open(ConfirmDialog, {
         data: {
@@ -159,8 +155,8 @@ export class TableEditorPage {
     try {
       await this.store.operation(() =>
         this.desktop.deleteRow({
-          databaseId: this.databaseId,
-          table: this.table,
+          databaseId,
+          table,
           rowId: row.rowId,
         }),
       );
@@ -174,16 +170,15 @@ export class TableEditorPage {
     return row.values[field] ?? '';
   }
 
-  protected fieldByName(name: string): FieldDescriptor | undefined {
-    return this.page()?.fields.find((field) => field.name === name);
-  }
-
   private async load(): Promise<void> {
+    const sequence = ++this.loadSequence;
+    const databaseId = this.databaseId();
+    const table = this.table();
     try {
       const page = await this.store.operation(() =>
         this.desktop.readTable({
-          databaseId: this.databaseId,
-          table: this.table,
+          databaseId,
+          table,
           pageIndex: this.pageIndex(),
           pageSize: this.pageSize(),
           query: this.query(),
@@ -192,6 +187,7 @@ export class TableEditorPage {
             : {}),
         }),
       );
+      if (sequence !== this.loadSequence) return;
       this.page.set(page);
       if (!this.visibleFields().length)
         this.visibleFields.set(page.fields.slice(0, 8).map((field) => field.name));

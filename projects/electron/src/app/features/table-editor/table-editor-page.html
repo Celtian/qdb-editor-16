@@ -1,10 +1,10 @@
 <app-page-header icon="table_view">
   <div pageHeaderContent>
-    <h1>{{ table }}</h1>
+    <h1>{{ table() }}</h1>
     <p>{{ page()?.total ?? 0 }} rows · explicit row-level save and cancel</p>
   </div>
   <div pageHeaderActions class="flex flex-wrap gap-2">
-    <a matButton [routerLink]="['/projects', projectId, 'databases', databaseId, 'tables']">
+    <a matButton [routerLink]="['/projects', projectId(), 'databases', databaseId(), 'tables']">
       <mat-icon>arrow_back</mat-icon>
       Tables
     </a>
@@ -24,22 +24,10 @@
         </mat-checkbox>
       }
     </mat-menu>
-    <a
-      matButton="filled"
-      [routerLink]="[
-        '/projects',
-        projectId,
-        'databases',
-        databaseId,
-        'tables',
-        table,
-        'rows',
-        'new',
-      ]"
-    >
+    <button type="button" matButton="filled" [disabled]="!page()" (click)="openRowEditor()">
       <mat-icon>add</mat-icon>
       Add row
-    </a>
+    </button>
   </div>
 </app-page-header>
 
@@ -68,68 +56,25 @@
           <ng-container [matColumnDef]="fieldName">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ fieldName }}</th>
             <td mat-cell *matCellDef="let row">
-              @if (editingRowId() === row.rowId) {
-                @if (fieldByName(fieldName); as field) {
-                  <input
-                    matInput
-                    class="min-w-28"
-                    [type]="field.type === 'string' ? 'text' : 'number'"
-                    [value]="draftValue(fieldName)"
-                    (input)="setDraftValue(field, $any($event.target).value)"
-                  />
-                }
-              } @else {
-                <span class="whitespace-nowrap">{{ value(row, fieldName) }}</span>
-              }
+              <span class="whitespace-nowrap">{{ value(row, fieldName) }}</span>
             </td>
           </ng-container>
         }
         <ng-container matColumnDef="__actions" stickyEnd>
-          <th mat-header-cell *matHeaderCellDef>Actions</th>
-          <td mat-cell *matCellDef="let row">
-            <div class="flex whitespace-nowrap">
-              @if (editingRowId() === row.rowId) {
-                <button
-                  type="button"
-                  matIconButton
-                  aria-label="Cancel row edit"
-                  (click)="cancelInline()"
-                >
-                  <mat-icon>close</mat-icon>
-                </button>
-                <button type="button" matIconButton aria-label="Save row" (click)="saveInline()">
-                  <mat-icon>save</mat-icon>
-                </button>
-              } @else {
-                <button
-                  type="button"
-                  matIconButton
-                  aria-label="Edit row inline"
-                  [disabled]="editingRowId() !== undefined"
-                  (click)="startInline(row)"
-                >
-                  <mat-icon>edit_note</mat-icon>
-                </button>
-                <a
-                  matIconButton
-                  aria-label="Open full row editor"
-                  [routerLink]="[
-                    '/projects',
-                    projectId,
-                    'databases',
-                    databaseId,
-                    'tables',
-                    table,
-                    'rows',
-                    row.rowId,
-                  ]"
-                >
-                  <mat-icon>open_in_full</mat-icon>
-                </a>
-                <button type="button" matIconButton aria-label="Delete row" (click)="remove(row)">
-                  <mat-icon>delete</mat-icon>
-                </button>
-              }
+          <th mat-header-cell *matHeaderCellDef class="text-right">Actions</th>
+          <td mat-cell *matCellDef="let row" class="text-right">
+            <div class="flex justify-end whitespace-nowrap">
+              <button
+                type="button"
+                matIconButton
+                aria-label="Edit row"
+                (click)="openRowEditor(row)"
+              >
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button type="button" matIconButton aria-label="Delete row" (click)="remove(row)">
+                <mat-icon>delete</mat-icon>
+              </button>
             </div>
           </td>
         </ng-container>

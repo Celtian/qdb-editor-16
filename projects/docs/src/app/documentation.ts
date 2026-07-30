@@ -89,12 +89,12 @@ export const documentationPages: DocumentationPage[] = [
     label: 'Editing',
     icon: 'edit_note',
     title: 'Browse and edit tables',
-    summary: 'Search, sort, paginate, choose columns, edit inline, or open a complete row form.',
+    summary: 'Search, sort, paginate, choose columns, or edit through a complete row form.',
     sections: [
       {
         title: 'Explicit row saves',
         paragraphs: [
-          'Inline and full-form changes remain drafts until Save is selected. Cancel discards the draft.',
+          'Changes in the row editor remain drafts until Save is selected. Cancel discards the draft.',
           'Invalid numeric or duplicate unique values are blocked. Values outside published fifatables ranges require explicit confirmation.',
         ],
         bullets: [

@@ -1,57 +1,88 @@
+import { CdkScrollable } from '@angular/cdk/scrolling';
 import { Component, computed, inject, signal } from '@angular/core';
-import { FormField, form, submit } from '@angular/forms/signals';
+import { FormField, form, required, submit, validate } from '@angular/forms/signals';
 import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { registerFifaDatePrototype } from 'fifadate';
 import { Attribute, CalculateUtils, Fifa, Position, type FifaRatingAttributes } from 'fifarating';
-import type { FieldDescriptor, TableValue } from '../../../../shared/contracts';
+import type { FieldDescriptor, TableRow, TableValue } from '../../../../shared/contracts';
 import { AppStore } from '../../core/app-store';
 import { ConfirmDialog } from '../../core/confirm-dialog';
 import { DesktopApi } from '../../core/desktop-api';
-import { PageHeader } from '../../shared/page-header/page-header';
 
 registerFifaDatePrototype();
 
 const dateFields = new Set(['birthdate', 'playerjointeamdate', 'loandateend']);
+type RowEditorValue = TableValue | null;
+
+const editorValue = (field: FieldDescriptor, value: TableValue): TableValue => {
+  if (field.type === 'string') return String(value);
+  if (typeof value === 'number') return value;
+  const normalized = value.replace(',', '.').trim();
+  return normalized === '' ? Number.NaN : Number(normalized);
+};
+
+export interface RowEditorDrawerData {
+  databaseId: string;
+  table: string;
+  fields: readonly FieldDescriptor[];
+  row?: TableRow;
+}
 
 @Component({
-  selector: 'app-row-editor-page',
+  selector: 'app-row-editor-drawer',
   imports: [
+    CdkScrollable,
     FormField,
     MatButtonModule,
-    MatCardModule,
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
-    PageHeader,
-    RouterLink,
   ],
-  templateUrl: './row-editor-page.html',
+  templateUrl: './row-editor-drawer.html',
+  styleUrl: './row-editor-drawer.css',
 })
-export class RowEditorPage {
-  private readonly route = inject(ActivatedRoute);
-  private readonly router = inject(Router);
+export class RowEditorDrawer {
+  protected readonly data = inject<RowEditorDrawerData>(MAT_DIALOG_DATA);
+  private readonly dialogRef = inject(MatDialogRef<RowEditorDrawer, boolean>);
   private readonly desktop = inject(DesktopApi);
   private readonly dialog = inject(MatDialog);
   protected readonly store = inject(AppStore);
-  protected readonly projectId = this.route.snapshot.paramMap.get('projectId')!;
-  protected readonly databaseId = this.route.snapshot.paramMap.get('databaseId')!;
-  protected readonly table = this.route.snapshot.paramMap.get('table')!;
-  protected readonly rowId = Number(this.route.snapshot.paramMap.get('rowId')) || undefined;
-  protected readonly editing = this.rowId !== undefined;
-  protected readonly fields = signal<FieldDescriptor[]>([]);
-  protected readonly model = signal<Record<string, string>>({});
-  protected readonly rowForm = form(this.model);
+  protected readonly editing = this.data.row !== undefined;
+  protected readonly model = signal<Record<string, RowEditorValue>>(
+    Object.fromEntries(
+      this.data.fields.map((field) => [
+        field.name,
+        editorValue(field, this.data.row?.values[field.name] ?? field.defaultValue),
+      ]),
+    ),
+  );
+  protected readonly rowForm = form(this.model, (schema) => {
+    for (const field of this.data.fields) {
+      if (field.type === 'string') continue;
+      const message =
+        field.type === 'int' ? 'Enter a valid integer.' : 'Enter a valid decimal number.';
+      required(schema[field.name], { message });
+      validate(schema[field.name], ({ value }) => {
+        const current = value();
+        if (current === null || current === '') return undefined;
+        if (typeof current !== 'number' || !Number.isFinite(current))
+          return { kind: 'number', message };
+        if (field.type === 'int' && !Number.isInteger(current)) return { kind: 'integer', message };
+        return undefined;
+      });
+    }
+  });
   protected readonly ratingHint = computed(() => {
-    if (this.table !== 'players') return undefined;
+    if (this.data.table !== 'players') return undefined;
     const values = this.model();
-    const position = Object.values(Position)[Number(values['preferredposition1'])];
-    const stored = Number(values['overallrating']);
+    const positionValue = values['preferredposition1'];
+    const stored = values['overallrating'];
+    if (typeof positionValue !== 'number' || typeof stored !== 'number') return undefined;
+    const position = Object.values(Position)[positionValue];
     if (!position || !Number.isFinite(stored)) return undefined;
     const attributes = Object.fromEntries(
       Object.values(Attribute).map((attribute) => [attribute, Number(values[attribute]) || 0]),
@@ -61,11 +92,6 @@ export class RowEditorPage {
       ? { calculated: Math.round(calculated), stored: Math.round(stored), position }
       : undefined;
   });
-
-  constructor() {
-    this.store.selectContext(this.projectId, this.databaseId);
-    void this.initialize();
-  }
 
   protected fieldHint(field: FieldDescriptor): string {
     const parts: string[] = [field.type];
@@ -81,10 +107,10 @@ export class RowEditorPage {
       try {
         const result = await this.store.operation(() =>
           this.desktop.saveRow({
-            databaseId: this.databaseId,
-            table: this.table,
-            ...(this.rowId !== undefined ? { rowId: this.rowId } : {}),
-            values: this.model(),
+            databaseId: this.data.databaseId,
+            table: this.data.table,
+            ...(this.data.row ? { rowId: this.data.row.rowId } : {}),
+            values: this.valuesForSave(),
             acceptWarnings,
           }),
         );
@@ -102,47 +128,29 @@ export class RowEditorPage {
           if (confirmed) this.save(true);
           return;
         }
-        await this.router.navigate(this.tableRoute());
+        this.dialogRef.close(true);
       } catch {
         // Store exposes the error.
       }
     });
   }
 
-  protected tableRoute(): unknown[] {
-    return ['/projects', this.projectId, 'databases', this.databaseId, 'tables', this.table];
+  protected cancel(): void {
+    this.dialogRef.close();
   }
 
-  private async initialize(): Promise<void> {
-    try {
-      if (!this.store.projects().length) await this.store.refreshProjects();
-      const tables = await this.store.operation(() => this.desktop.listTables(this.databaseId));
-      const descriptor = tables.find((table) => table.name === this.table);
-      if (!descriptor) throw new Error('Table was not found.');
-      this.fields.set(descriptor.fields);
-      if (this.rowId !== undefined) {
-        const row = await this.store.operation(() =>
-          this.desktop.readRow(this.databaseId, this.table, this.rowId!),
-        );
-        this.model.set(
-          Object.fromEntries(
-            Object.entries(row.values).map(([field, value]) => [field, String(value)]),
-          ),
-        );
-      } else {
-        this.model.set(
-          Object.fromEntries(
-            descriptor.fields.map((field) => [field.name, String(field.defaultValue)]),
-          ),
-        );
-      }
-    } catch {
-      // Store exposes the error.
-    }
+  private valuesForSave(): Record<string, TableValue> {
+    return Object.fromEntries(
+      this.data.fields.map((field) => {
+        const value = this.model()[field.name];
+        return [field.name, value === null ? '' : value];
+      }),
+    );
   }
 
-  private dateHint(field: string, value: TableValue | undefined): string {
+  private dateHint(field: string, value: RowEditorValue | undefined): string {
     if (!dateFields.has(field)) return '';
+    if (value === null) return '';
     const number = Number(value);
     if (!Number.isFinite(number)) return '';
     try {
