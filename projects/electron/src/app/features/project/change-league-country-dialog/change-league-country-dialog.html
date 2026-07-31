@@ -1,0 +1,57 @@
+<h2 mat-dialog-title>Change country for selected {{ data.entity }}</h2>
+<mat-dialog-content>
+  <p>Apply one country to {{ entityLabel }}.</p>
+  @if (data.mixedCountries) {
+    <p class="hint">The selected {{ data.entity }} currently have different countries.</p>
+  }
+  <form id="change-entity-country-form" (submit)="$event.preventDefault(); save()">
+    <mat-form-field appearance="outline">
+      <mat-label>Country</mat-label>
+      @if (selectedCountry(); as country) {
+        <app-country-flag
+          matIconPrefix
+          class="selected-country-flag"
+          decorative
+          [code]="country.flagCode"
+        />
+      }
+      <input
+        matInput
+        class="country-input"
+        type="search"
+        autocomplete="off"
+        [formField]="countryForm.countryName"
+        [matAutocomplete]="countryAutocomplete"
+      />
+      <mat-autocomplete #countryAutocomplete="matAutocomplete" autoActiveFirstOption>
+        @for (country of filteredCountries(); track country.code3) {
+          <mat-option [value]="country.name">
+            <span class="country-option">
+              <app-country-flag decorative [code]="country.flagCode" />
+              <span>{{ country.name }}</span>
+            </span>
+          </mat-option>
+        } @empty {
+          <mat-option disabled>No matching countries</mat-option>
+        }
+      </mat-autocomplete>
+      <mat-hint
+        >Leave empty to clear the country from every selected {{ entitySingular }}.</mat-hint
+      >
+      @if (countryForm.countryName().touched() && countryForm.countryName().invalid()) {
+        <mat-error>{{ countryForm.countryName().errors()[0]?.message }}</mat-error>
+      }
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button matButton mat-dialog-close type="button">Cancel</button>
+  <button
+    matButton="filled"
+    form="change-entity-country-form"
+    type="submit"
+    [disabled]="countryForm().invalid()"
+  >
+    {{ actionLabel() }}
+  </button>
+</mat-dialog-actions>

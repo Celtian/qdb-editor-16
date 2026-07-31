@@ -1,0 +1,336 @@
+<app-page-header icon="drive_file_move">
+  <div pageHeaderContent>
+    <h1 id="export-heading">Export data</h1>
+    <p>Choose exactly what to export, then review everything before creating the files.</p>
+  </div>
+</app-page-header>
+
+<section class="export-page" aria-labelledby="export-heading">
+  @if (error()) {
+    <p class="error" role="alert">{{ error() }}</p>
+  }
+  @if (warning()) {
+    <p class="warning" role="status">{{ warning() }}</p>
+  }
+
+  <mat-card appearance="outlined" class="wizard-card">
+    <mat-stepper class="qdb-wizard" linear aria-label="Export project wizard">
+      <ng-template matStepperIcon="number" let-index="index">
+        <span aria-hidden="true">{{ index + 1 }}</span>
+      </ng-template>
+      <ng-template matStepperIcon="edit" let-index="index">
+        <span aria-hidden="true">{{ index + 1 }}</span>
+      </ng-template>
+      <ng-template matStepperIcon="done" let-index="index">
+        <span aria-hidden="true">{{ index + 1 }}</span>
+      </ng-template>
+
+      <mat-step [completed]="columnsValid()">
+        <ng-template matStepLabel>Dataset</ng-template>
+        <div class="step-content">
+          <div>
+            <h2>{{ dataset() === 'source' ? 'Source DB' : 'Combined DB' }}</h2>
+            <p>
+              {{
+                dataset() === 'source'
+                  ? 'Export the provider-specific records stored in this project.'
+                  : 'Export the canonical records assembled from linked source records.'
+              }}
+            </p>
+          </div>
+          <div class="step-actions">
+            <button matButton="filled" matStepperNext type="button">Next</button>
+          </div>
+        </div>
+      </mat-step>
+
+      <mat-step [completed]="true">
+        <ng-template matStepLabel>Format</ng-template>
+        <div class="step-content">
+          <div>
+            <h2>Choose a format</h2>
+            <p>Choose separate files or one nested JSON snapshot.</p>
+          </div>
+          <mat-radio-group
+            class="format-options"
+            aria-label="Export format"
+            [value]="format()"
+            (change)="selectFormat($event.value)"
+          >
+            <mat-radio-button value="single-json">
+              <span class="option-content">
+                <mat-icon aria-hidden="true">account_tree</mat-icon>
+                <span
+                  ><strong>Single JSON</strong
+                  ><small>One JSON file with players nested under teams</small></span
+                >
+              </span>
+            </mat-radio-button>
+            <mat-radio-button value="json">
+              <span class="option-content">
+                <mat-icon aria-hidden="true">data_object</mat-icon>
+                <span
+                  ><strong>JSON</strong><small>Structured arrays for scripts and APIs</small></span
+                >
+              </span>
+            </mat-radio-button>
+            <mat-radio-button value="csv">
+              <span class="option-content">
+                <mat-icon aria-hidden="true">table_view</mat-icon>
+                <span><strong>CSV</strong><small>UTF-8 tables for spreadsheets</small></span>
+              </span>
+            </mat-radio-button>
+          </mat-radio-group>
+          <div class="step-actions">
+            <button matButton="filled" matStepperNext type="button">Next</button>
+          </div>
+        </div>
+      </mat-step>
+
+      <mat-step [completed]="true">
+        <ng-template matStepLabel>Columns</ng-template>
+        <div class="step-content">
+          <div>
+            <h2>Choose columns</h2>
+            <p>
+              Choose field visibility and exported names independently. Changes here are temporary.
+            </p>
+          </div>
+
+          <div class="preset-pickers">
+            <mat-form-field class="preset-picker" appearance="outline" subscriptSizing="dynamic">
+              <mat-label>Visibility preset</mat-label>
+              <mat-select
+                aria-label="Export visibility preset"
+                [value]="selectedVisibilityPresetId()"
+                (selectionChange)="selectVisibilityPreset($event.value)"
+              >
+                @if (selectedVisibilityPresetId() === 'modified') {
+                  <mat-option value="modified" disabled>Custom (modified)</mat-option>
+                }
+                @for (preset of visibilityPresets(); track preset.id) {
+                  <mat-option [value]="preset.id">{{ preset.name }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="preset-picker" appearance="outline" subscriptSizing="dynamic">
+              <mat-label>Field names preset</mat-label>
+              <mat-select
+                aria-label="Export field-name preset"
+                [value]="selectedFieldNamePresetId()"
+                (selectionChange)="selectFieldNamePreset($event.value)"
+              >
+                @if (selectedFieldNamePresetId() === 'modified') {
+                  <mat-option value="modified" disabled>Custom (modified)</mat-option>
+                }
+                @for (preset of fieldNamePresets(); track preset.id) {
+                  <mat-option [value]="preset.id">{{ preset.name }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <app-export-column-editor
+            [selection]="columns()"
+            [fieldNames]="fieldNames()"
+            (selectionChange)="updateColumns($event)"
+            (fieldNamesChange)="updateFieldNames($event)"
+          />
+
+          <div class="step-actions">
+            <button matButton matStepperPrevious type="button">Back</button>
+            <button matButton="filled" matStepperNext type="button" [disabled]="!columnsValid()">
+              Next
+            </button>
+          </div>
+        </div>
+      </mat-step>
+
+      <mat-step [completed]="!!destination()">
+        <ng-template matStepLabel>Folder</ng-template>
+        <div class="step-content">
+          <div>
+            <h2>Choose a destination folder</h2>
+            <p>A new timestamped folder containing the exported files will be created here.</p>
+          </div>
+          <div class="folder-picker">
+            <mat-icon aria-hidden="true">folder</mat-icon>
+            <span>{{ destination() || 'No folder selected' }}</span>
+            <button
+              matButton="outlined"
+              type="button"
+              [disabled]="choosingFolder()"
+              (click)="chooseFolder()"
+            >
+              {{ destination() ? 'Change folder' : 'Choose folder' }}
+            </button>
+          </div>
+          <div class="step-actions">
+            <button matButton matStepperPrevious type="button">Back</button>
+            <button matButton="filled" matStepperNext type="button" [disabled]="!destination()">
+              Next
+            </button>
+          </div>
+        </div>
+      </mat-step>
+
+      <mat-step [completed]="leagueSelectionValid()">
+        <ng-template matStepLabel>Leagues</ng-template>
+        <div class="step-content">
+          <div>
+            <h2>Choose leagues</h2>
+            <p>
+              Teams and players belonging to the selected leagues will be included automatically.
+            </p>
+          </div>
+          @if (loadingLeagues()) {
+            <mat-progress-bar mode="indeterminate" aria-label="Loading leagues" />
+          } @else if (leagues().length === 0 && !hasTeamsWithoutLeague()) {
+            <p class="empty-state">This project has no leagues to export.</p>
+          } @else {
+            <div class="league-list" role="group" aria-label="Leagues to export">
+              <mat-checkbox
+                class="select-all"
+                [checked]="allLeaguesSelected()"
+                [indeterminate]="someLeaguesSelected()"
+                (change)="toggleAllLeagues($event.checked)"
+                >{{
+                  hasTeamsWithoutLeague() ? 'All leagues and unassigned teams' : 'All leagues'
+                }}</mat-checkbox
+              >
+              <ul class="league-options">
+                @for (league of leagues(); track league.id) {
+                  <li class="league-option">
+                    <mat-checkbox
+                      class="league-checkbox"
+                      [aria-label]="'Select ' + league.name"
+                      [checked]="isLeagueSelected(league.id)"
+                      (change)="toggleLeague(league.id, $event.checked)"
+                    >
+                      <span class="visually-hidden">Select {{ league.name }}</span>
+                    </mat-checkbox>
+                    <span class="league-name">{{ league.name }}</span>
+                    <span class="league-metadata">
+                      <span class="metadata-item country-with-flag">
+                        @if (league.countryCode) {
+                          <app-country-flag decorative [code]="league.countryCode" />
+                        }
+                        <span>{{ league.countryName || 'Country not set' }}</span>
+                      </span>
+                      <span class="metadata-item">{{ providerLabel(league) }}</span>
+                      <span class="metadata-item">{{
+                        league.tier === undefined ? 'Tier not set' : 'Tier ' + league.tier
+                      }}</span>
+                    </span>
+                  </li>
+                }
+              </ul>
+              @if (hasTeamsWithoutLeague()) {
+                <div class="unassigned-option">
+                  <mat-checkbox
+                    [checked]="includeTeamsWithoutLeague()"
+                    (change)="toggleTeamsWithoutLeague($event.checked)"
+                    >Teams without a league</mat-checkbox
+                  >
+                </div>
+              }
+            </div>
+            @if (!leagueSelectionValid()) {
+              <p class="validation" role="alert">Choose at least one league or unassigned team.</p>
+            }
+          }
+          <div class="step-actions">
+            <button matButton matStepperPrevious type="button">Back</button>
+            <button
+              matButton="filled"
+              matStepperNext
+              type="button"
+              [disabled]="!leagueSelectionValid()"
+            >
+              Review
+            </button>
+          </div>
+        </div>
+      </mat-step>
+
+      <mat-step>
+        <ng-template matStepLabel>Summary</ng-template>
+        <div class="step-content">
+          <div>
+            <h2>Review export</h2>
+            <p>Confirm your choices before creating the files.</p>
+          </div>
+          <dl class="summary-list">
+            <div>
+              <dt>Dataset</dt>
+              <dd>{{ dataset() === 'source' ? 'Source data' : 'Combined data' }}</dd>
+            </div>
+            <div>
+              <dt>Format</dt>
+              <dd>{{ formatLabel() }}</dd>
+            </div>
+            <div>
+              <dt>Folder</dt>
+              <dd>{{ destination() }}</dd>
+            </div>
+            <div>
+              <dt>Leagues</dt>
+              <dd>{{ leagueSummary() }}</dd>
+            </div>
+            <div>
+              <dt>Visibility preset</dt>
+              <dd>{{ visibilityPresetLabel() }}</dd>
+            </div>
+            <div>
+              <dt>Field names preset</dt>
+              <dd>{{ fieldNamePresetLabel() }}</dd>
+            </div>
+            <div>
+              <dt>League columns</dt>
+              <dd>{{ columnSummary('leagues') }}</dd>
+            </div>
+            <div>
+              <dt>Team columns</dt>
+              <dd>{{ columnSummary('teams') }}</dd>
+            </div>
+            <div>
+              <dt>Player columns</dt>
+              <dd>{{ columnSummary('players') }}</dd>
+            </div>
+          </dl>
+
+          @if (busy()) {
+            <mat-progress-bar mode="indeterminate" aria-label="Export in progress" />
+          }
+
+          @if (result(); as exportResult) {
+            <div class="success" aria-live="polite">
+              <mat-icon aria-hidden="true">check_circle</mat-icon>
+              <div>
+                <strong>Export complete</strong
+                ><span>{{ fileCountLabel(exportResult.files.length) }}</span>
+              </div>
+              <button matButton="outlined" type="button" (click)="openDirectory()">
+                <mat-icon aria-hidden="true">folder_open</mat-icon>Open directory
+              </button>
+            </div>
+          }
+
+          <div class="step-actions">
+            <button matButton matStepperPrevious type="button" [disabled]="busy()">Back</button>
+            <button
+              matButton="filled"
+              type="button"
+              [disabled]="busy() || !columnsValid()"
+              (click)="export()"
+            >
+              <mat-icon aria-hidden="true">file_download</mat-icon>
+              {{ result() ? 'Export again' : 'Export files' }}
+            </button>
+          </div>
+        </div>
+      </mat-step>
+    </mat-stepper>
+  </mat-card>
+</section>

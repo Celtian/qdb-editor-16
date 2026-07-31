@@ -1,3 +1,55 @@
+import type { QdbDesktopApi as DownloaderDesktopApi, SourceName } from './downloader/contracts.js';
+
+export type {
+  AppError,
+  CombinedEntity,
+  CombinedEntityFilterOptions,
+  CombinedEntityFilterOptionsRequest,
+  CombinedEntityKind,
+  CombinedLeague,
+  CombinedPageRequest,
+  CombinedPlayer,
+  CombinedTeam,
+  CommitImportRequest,
+  CommitTeamCombinationRequest,
+  Entity,
+  EntityFilterOptions,
+  EntityFilterOptionsRequest,
+  EntityKind,
+  ExportColumnSelection,
+  ExportConfigurationPreference,
+  ExportDataset,
+  ExportFieldNameConfiguration,
+  ExportFormat,
+  ExportRequest,
+  ExportResult,
+  FieldResolution,
+  FieldResolutions,
+  ImportOperation,
+  ImportPreview,
+  ImportResult,
+  League,
+  MergeImportOptions,
+  Page,
+  PageRequest,
+  Player,
+  PreviewTeamCombinationRequest,
+  Result,
+  SourceName,
+  Team,
+  TeamCombinationPreview,
+  TeamCombinationResult,
+} from './downloader/contracts.js';
+export type {
+  CustomBadge,
+  CustomBadgeColor,
+  CustomBadgeSummary,
+} from './downloader/custom-badge.js';
+export type {
+  CombinedCustomBadge,
+  CombinedCustomBadgeSummary,
+} from './downloader/combined-custom-badge.js';
+
 export type ThemePreference = 'system' | 'light' | 'dark';
 export type DatabaseSourceKind = 'blank' | 'text-folder' | 't3db';
 export type DatabaseStatus = 'available' | 'corrupt';
@@ -31,6 +83,13 @@ export interface ProjectDescriptor {
   createdAt: string;
   updatedAt: string;
   databaseCount: number;
+  sourceLeagueCount: number;
+  sourceTeamCount: number;
+  sourcePlayerCount: number;
+  combinedLeagueCount: number;
+  combinedTeamCount: number;
+  combinedPlayerCount: number;
+  sourceNames: SourceName[];
 }
 
 export interface CreateProjectRequest {
@@ -46,6 +105,47 @@ export interface ProjectDeletionResult {
   projectId: string;
   removed: boolean;
   databasesRemoved: number;
+  deletedExportCount: number;
+  failedExportDirectories: string[];
+}
+
+export interface LegacyMigrationCounts {
+  leagues: number;
+  teams: number;
+  players: number;
+  combinedLeagues: number;
+  combinedTeams: number;
+  combinedPlayers: number;
+}
+
+export interface LegacyMigrationProjectPreview {
+  legacyProjectId: string;
+  name: string;
+  referenceDate: string;
+  action: 'merge' | 'create';
+  targetProjectId?: string;
+  targetName: string;
+  counts: LegacyMigrationCounts;
+}
+
+export interface LegacyMigrationPreview {
+  sourcePath: string;
+  sourceIdentity: string;
+  alreadyMigrated: boolean;
+  projects: LegacyMigrationProjectPreview[];
+  totals: LegacyMigrationCounts;
+}
+
+export interface LegacyMigrationRequest {
+  sourcePath: string;
+  sourceIdentity: string;
+}
+
+export interface LegacyMigrationResult {
+  sourceIdentity: string;
+  projectsMerged: number;
+  projectsCreated: number;
+  totals: LegacyMigrationCounts;
 }
 
 export interface SourceProvenance {
@@ -327,10 +427,15 @@ export interface OperationProgress {
 export type OperationKind = OperationProgress['operation'];
 
 export interface QdbEditorApi {
+  downloader: DownloaderDesktopApi;
   listProjects(): Promise<ProjectDescriptor[]>;
   createProject(request: CreateProjectRequest): Promise<ProjectDescriptor>;
   updateProject(request: UpdateProjectRequest): Promise<ProjectDescriptor>;
   removeProject(id: string): Promise<ProjectDeletionResult>;
+  detectLegacyDownloaderDatabase(): Promise<string | undefined>;
+  selectLegacyDownloaderDatabase(): Promise<string | undefined>;
+  previewLegacyDownloaderMigration(sourcePath: string): Promise<LegacyMigrationPreview>;
+  migrateLegacyDownloader(request: LegacyMigrationRequest): Promise<LegacyMigrationResult>;
   listDatabases(projectId: string): Promise<DatabaseDescriptor[]>;
   createBlankDatabase(request: CreateBlankDatabaseRequest): Promise<DatabaseDescriptor>;
   renameDatabase(id: string, name: string): Promise<DatabaseDescriptor>;

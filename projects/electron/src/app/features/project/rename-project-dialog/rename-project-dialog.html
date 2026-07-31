@@ -1,0 +1,17 @@
+<h2 mat-dialog-title>Rename project</h2>
+<mat-dialog-content>
+  <p class="hint">Choose a clear name for this snapshot project.</p>
+  <form id="rename-project-form" (submit)="$event.preventDefault(); save()">
+    <mat-form-field appearance="outline">
+      <mat-label>Project name</mat-label>
+      <input matInput autocomplete="off" [formField]="renameForm.name" />
+      @if (renameForm.name().touched() && renameForm.name().invalid()) {
+        <mat-error>{{ renameForm.name().errors()[0]?.message }}</mat-error>
+      }
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button matButton mat-dialog-close type="button">Cancel</button>
+  <button matButton="filled" form="rename-project-form" type="submit">Rename</button>
+</mat-dialog-actions>

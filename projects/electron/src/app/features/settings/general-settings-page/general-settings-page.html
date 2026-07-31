@@ -1,0 +1,75 @@
+<app-page-header icon="tune">
+  <div pageHeaderContent>
+    <h1 id="settings-title">General</h1>
+    <p>Customize QDB Downloader across every project.</p>
+  </div>
+</app-page-header>
+
+<section class="settings-page" aria-labelledby="settings-title">
+  <mat-card appearance="outlined">
+    <mat-card-content>
+      <fieldset>
+        <legend>Theme</legend>
+        <p class="setting-description">Choose the appearance used throughout the application.</p>
+        <mat-radio-group aria-label="Theme" [value]="theme.preference()">
+          @for (option of themeOptions; track option.value) {
+            <mat-radio-button
+              [class.selected]="theme.preference() === option.value"
+              [value]="option.value"
+              (change)="selectTheme(option.value)"
+            >
+              <span class="theme-option">
+                <mat-icon aria-hidden="true">{{ option.icon }}</mat-icon>
+                <span>
+                  <strong>{{ option.label }}</strong>
+                  <small>{{ option.description }}</small>
+                </span>
+              </span>
+            </mat-radio-button>
+          }
+        </mat-radio-group>
+      </fieldset>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="project-data settings-card" appearance="outlined">
+    <mat-card-header>
+      <div class="project-data-icon" mat-card-avatar>
+        <mat-icon aria-hidden="true">delete_forever</mat-icon>
+      </div>
+      <mat-card-title>Projects</mat-card-title>
+      <mat-card-subtitle>Permanently remove every stored project.</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <p>
+        Clear all projects, including every source and project league, team, and player they
+        contain. Theme, badge settings and custom badge definitions, finder layouts, and saved
+        finder filters are not affected.
+      </p>
+      @if (loadingProjects()) {
+        <p class="project-count-status" role="status">Checking stored projects…</p>
+      } @else if (projectCountError()) {
+        <p class="project-count-status error" role="alert">
+          Project count could not be loaded. {{ projectCountError() }}
+        </p>
+      } @else {
+        <p class="project-count-status">
+          {{ projectCount() | number }}
+          {{ projectCount() === 1 ? 'project is' : 'projects are' }} currently stored.
+        </p>
+      }
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <button
+        class="clear-projects-button"
+        matButton="filled"
+        type="button"
+        [disabled]="!canClearProjects()"
+        (click)="confirmClearProjects()"
+      >
+        <mat-icon aria-hidden="true">delete_forever</mat-icon>
+        {{ clearingProjects() ? 'Clearing projects…' : 'Clear all projects' }}
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</section>

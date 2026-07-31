@@ -158,7 +158,7 @@ export class ImportPage implements OnChanges {
         await this.router.navigate([
           '/projects',
           projectId,
-          'databases',
+          'fifa',
           result.database.id,
           'validation',
         ]);

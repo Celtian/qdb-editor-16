@@ -1,0 +1,243 @@
+<section class="summary" aria-labelledby="import-summary-heading">
+  <div>
+    <h2 id="import-summary-heading">Review import</h2>
+    <p>Confirm the source, selection, policies, and database changes.</p>
+  </div>
+
+  <dl class="summary-list">
+    <div>
+      <dt>Operation</dt>
+      <dd>{{ details().operation }}</dd>
+    </div>
+    <div>
+      <dt>Type</dt>
+      <dd>{{ details().entity }}</dd>
+    </div>
+    <div>
+      <dt>Source</dt>
+      <dd>{{ sourceLabel() }} · {{ details().identifier }} — {{ details().name }}</dd>
+    </div>
+    <div>
+      <dt>Season</dt>
+      <dd>
+        {{
+          sourceSupportsSeason[details().sourceName] ? details().season || 'Current' : 'Not used'
+        }}
+      </dd>
+    </div>
+    <div>
+      <dt>Selection</dt>
+      <dd>
+        {{ details().teamCount | number }} teams · {{ details().playerCount | number }} players
+      </dd>
+    </div>
+  </dl>
+
+  @if (isMerge()) {
+    @if (preview().conflicts.existingRecords.length) {
+      <section class="review-section" aria-labelledby="existing-records-heading">
+        <div>
+          <h3 id="existing-records-heading">Existing records</h3>
+          <span>{{ preview().conflicts.existingRecords.length | number }}</span>
+        </div>
+        <ul>
+          @for (
+            conflict of preview().conflicts.existingRecords;
+            track conflict.entity + ':' + conflict.sourceId
+          ) {
+            <li>
+              <strong>{{ conflict.incomingName }}</strong>
+              <span>
+                {{ sourceLabels[conflict.sourceName] }} · {{ conflict.entity }} ·
+                {{ conflict.sourceId }}
+                @if (conflict.season) {
+                  · {{ conflict.season }}
+                }
+                @if (conflict.storedName !== conflict.incomingName) {
+                  · stored as {{ conflict.storedName }}
+                }
+              </span>
+            </li>
+          }
+        </ul>
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <mat-label>Matching record data</mat-label>
+          <mat-select
+            class="existing-record-policy"
+            [disabled]="busy()"
+            [value]="mergeOptions().existingRecords"
+            (selectionChange)="changeExistingRecords($event.value)"
+          >
+            <mat-option value="refresh">Refresh from {{ sourceLabel() }}</mat-option>
+            <mat-option value="keep">Keep stored data</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </section>
+    }
+
+    @if (preview().conflicts.teamLeagueConflicts.length) {
+      <section class="review-section" aria-labelledby="team-ownership-heading">
+        <div>
+          <h3 id="team-ownership-heading">Teams in another league</h3>
+          <span>{{ preview().conflicts.teamLeagueConflicts.length | number }}</span>
+        </div>
+        <ul>
+          @for (conflict of preview().conflicts.teamLeagueConflicts; track conflict.sourceId) {
+            <li>
+              <strong>{{ conflict.name }}</strong
+              ><span
+                >{{ sourceLabels[conflict.sourceName] }} ·
+                {{ conflict.currentParents.join(', ') }} → {{ conflict.incomingParent }}</span
+              >
+            </li>
+          }
+        </ul>
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <mat-label>Team league conflicts</mat-label>
+          <mat-select
+            class="team-league-policy"
+            [disabled]="busy()"
+            [value]="mergeOptions().teamLeagueConflicts"
+            (selectionChange)="changeTeamOwnership($event.value)"
+          >
+            <mat-option value="move">Move to imported league</mat-option>
+            <mat-option value="keep">Keep current league</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </section>
+    }
+
+    @if (preview().conflicts.playerTeamConflicts.length) {
+      <section class="review-section" aria-labelledby="player-ownership-heading">
+        <div>
+          <h3 id="player-ownership-heading">Players in another team</h3>
+          <span>{{ preview().conflicts.playerTeamConflicts.length | number }}</span>
+        </div>
+        <ul>
+          @for (conflict of preview().conflicts.playerTeamConflicts; track conflict.sourceId) {
+            <li>
+              <strong>{{ conflict.name }}</strong
+              ><span
+                >{{ sourceLabels[conflict.sourceName] }} ·
+                {{ conflict.currentParents.join(', ') }} → {{ conflict.incomingParent }}</span
+              >
+            </li>
+          }
+        </ul>
+        @if (hasLegacyCopies()) {
+          <p class="warning" role="status">
+            <mat-icon aria-hidden="true">warning</mat-icon>
+            Historical duplicate player copies must be consolidated into the imported team.
+          </p>
+        }
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <mat-label>Player team conflicts</mat-label>
+          <mat-select
+            class="player-team-policy"
+            [disabled]="busy() || hasLegacyCopies()"
+            [value]="mergeOptions().playerTeamConflicts"
+            (selectionChange)="changePlayerOwnership($event.value)"
+          >
+            <mat-option value="move">Move to imported team</mat-option>
+            <mat-option value="keep">Keep current team</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </section>
+    }
+  } @else {
+    <section class="review-section" aria-labelledby="selected-policies-heading">
+      <h3 id="selected-policies-heading">Selected update behavior</h3>
+      <ul class="policies">
+        @for (policy of synchronizationPolicies(); track policy) {
+          <li>{{ policy }}</li>
+        }
+      </ul>
+    </section>
+  }
+
+  <div class="table-wrapper">
+    <table>
+      <caption>
+        Records affected
+      </caption>
+      <thead>
+        <tr>
+          <th scope="col">Type</th>
+          <th scope="col">Add</th>
+          <th scope="col">Update</th>
+          <th scope="col">Preserve</th>
+          <th scope="col">Move</th>
+          <th scope="col">Detach</th>
+          <th scope="col">Deduplicate</th>
+          <th scope="col">Delete</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of rows(); track row.label) {
+          <tr>
+            <th scope="row">{{ row.label }}</th>
+            <td>{{ row.counts.added | number }}</td>
+            <td>{{ row.counts.updated | number }}</td>
+            <td>{{ row.counts.preserved | number }}</td>
+            <td>{{ row.counts.moved | number }}</td>
+            <td>{{ row.counts.detached | number }}</td>
+            <td>{{ row.counts.deduplicated | number }}</td>
+            <td [class.destructive]="row.counts.deleted > 0">{{ row.counts.deleted | number }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  @if (hasOwnershipConflicts() && !isMerge()) {
+    <section class="review-section" aria-labelledby="ownership-conflicts-heading">
+      <h3 id="ownership-conflicts-heading">Ownership conflicts</h3>
+      <ul>
+        @for (conflict of preview().conflicts.teamLeagueConflicts; track conflict.sourceId) {
+          <li>
+            <strong>{{ conflict.name }}</strong
+            ><span
+              >{{ sourceLabels[conflict.sourceName] }} · {{ conflict.currentParents.join(', ') }} →
+              {{ conflict.incomingParent }}</span
+            >
+          </li>
+        }
+        @for (conflict of preview().conflicts.playerTeamConflicts; track conflict.sourceId) {
+          <li>
+            <strong>{{ conflict.name }}</strong
+            ><span
+              >{{ sourceLabels[conflict.sourceName] }} · {{ conflict.currentParents.join(', ') }} →
+              {{ conflict.incomingParent }}</span
+            >
+          </li>
+        }
+      </ul>
+    </section>
+  }
+
+  @if (deletedCount() > 0) {
+    <p class="warning">
+      <mat-icon aria-hidden="true">warning</mat-icon>{{ deletedCount() | number }} stored records
+      will be permanently deleted.
+    </p>
+  }
+  @if (detachedCount() > 0) {
+    <p>
+      {{ detachedCount() | number }} {{ detachedCount() === 1 ? 'team' : 'teams' }} will be removed
+      from this league and otherwise preserved.
+    </p>
+  }
+  @if (deduplicatedCount() > 0) {
+    <p class="warning">
+      <mat-icon aria-hidden="true">warning</mat-icon>{{ deduplicatedCount() | number }} historical
+      player {{ deduplicatedCount() === 1 ? 'copy' : 'copies' }} will be removed during
+      consolidation.
+    </p>
+  }
+  @if (deletedCount() === 0 && detachedCount() === 0 && deduplicatedCount() === 0) {
+    <p class="safe">
+      <mat-icon aria-hidden="true">check_circle</mat-icon>No stored records will be deleted or
+      detached.
+    </p>
+  }
+</section>

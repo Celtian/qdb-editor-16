@@ -1,0 +1,52 @@
+<h2 mat-dialog-title>Create snapshot project</h2>
+<mat-dialog-content>
+  <p class="hint">A project represents football data as it stood on one reference date.</p>
+  <form id="create-project-form" (submit)="$event.preventDefault(); save()">
+    <mat-form-field appearance="outline">
+      <mat-label>Project name</mat-label>
+      <input matInput autocomplete="off" placeholder="2026/1" [formField]="projectForm.name" />
+      <mat-hint>For example, <strong>2026/1</strong> or <strong>Winter 2026</strong></mat-hint>
+      @if (projectForm.name().touched() && projectForm.name().invalid()) {
+        <mat-error>{{ projectForm.name().errors()[0]?.message }}</mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Reference date</mat-label>
+      <input
+        matInput
+        required
+        readonly
+        [matDatepicker]="referenceDatePicker"
+        [matDatepickerFilter]="referenceDateFilter"
+        [value]="selectedReferenceDate()"
+        [errorStateMatcher]="referenceDateErrorStateMatcher"
+        (dateChange)="setReferenceDate($event)"
+        (blur)="touchReferenceDate()"
+      />
+      <button
+        matIconButton
+        matIconSuffix
+        type="button"
+        aria-label="Clear reference date"
+        [disabled]="!model().referenceDate"
+        (click)="clearReferenceDate()"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+      <mat-datepicker-toggle
+        matIconSuffix
+        [for]="referenceDatePicker"
+        aria-label="Choose reference date"
+      />
+      <mat-datepicker #referenceDatePicker />
+      <mat-hint>Choose a date from the calendar</mat-hint>
+      @if (projectForm.referenceDate().touched() && projectForm.referenceDate().invalid()) {
+        <mat-error>{{ projectForm.referenceDate().errors()[0]?.message }}</mat-error>
+      }
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button matButton mat-dialog-close type="button">Cancel</button>
+  <button matButton="filled" form="create-project-form" type="submit">Create project</button>
+</mat-dialog-actions>

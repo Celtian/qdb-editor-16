@@ -1,0 +1,132 @@
+.summary {
+  display: grid;
+  gap: 1.25rem;
+}
+
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+h2 {
+  font-size: 1.35rem;
+}
+
+.summary > div:first-child p,
+.review-section li span,
+.safe {
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.summary-list {
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: 0.75rem;
+  margin: 0;
+}
+
+.summary-list div {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(8rem, 11rem) minmax(0, 1fr);
+  padding: 0.75rem 1rem;
+}
+
+.summary-list div + div {
+  border-top: 1px solid var(--mat-sys-outline-variant);
+}
+
+dt {
+  color: var(--mat-sys-on-surface-variant);
+  font-weight: 600;
+}
+
+dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.review-section {
+  background: var(--mat-sys-surface-container-low);
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: 0.75rem;
+  padding: 1rem;
+}
+
+.review-section > div:first-child {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.review-section > div:first-child > span {
+  background: var(--mat-sys-secondary-container);
+  border-radius: 1rem;
+  padding: 0.15rem 0.55rem;
+}
+
+.review-section ul {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0.75rem 0;
+  padding-inline-start: 1.25rem;
+}
+
+.review-section li span {
+  display: block;
+  font-size: 0.85rem;
+}
+
+.review-section mat-form-field {
+  width: min(28rem, 100%);
+}
+
+.policies {
+  margin-bottom: 0 !important;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+table {
+  border-collapse: collapse;
+  min-width: 44rem;
+  width: 100%;
+}
+
+caption {
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 0 0 0.75rem;
+  text-align: left;
+}
+
+th,
+td {
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+  padding: 0.65rem 0.75rem;
+  text-align: right;
+}
+
+th:first-child {
+  text-align: left;
+}
+
+.destructive,
+.warning {
+  color: var(--mat-sys-error);
+}
+
+.warning,
+.safe {
+  align-items: center;
+  display: flex;
+  gap: 0.5rem;
+}
+
+@media (max-width: 48rem) {
+  .summary-list div {
+    grid-template-columns: 1fr;
+  }
+}

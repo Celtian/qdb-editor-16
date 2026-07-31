@@ -1,0 +1,145 @@
+@if (project(); as snapshot) {
+  <app-page-header icon="folder">
+    <div pageHeaderContent>
+      <h1 id="overview-heading">{{ snapshot.name }}</h1>
+      <p>Football data effective {{ snapshot.referenceDate | referenceDate }}.</p>
+    </div>
+    <a pageHeaderActions matButton [routerLink]="['/projects', projectId, 'edit']">
+      <mat-icon>edit</mat-icon>
+      Edit project
+    </a>
+    <a pageHeaderActions matButton [routerLink]="['/projects', projectId, 'manage']">
+      <mat-icon>tune</mat-icon>
+      Data settings
+    </a>
+    <button pageHeaderActions type="button" matButton (click)="deleteProject(snapshot)">
+      <mat-icon>delete</mat-icon>
+      Delete project
+    </button>
+  </app-page-header>
+
+  <section class="page" aria-labelledby="overview-heading">
+    <div class="dashboard">
+      <section class="dataset-panel source-data" aria-labelledby="source-data-heading">
+        <header class="dataset-header">
+          <span class="dataset-icon">
+            <mat-icon aria-hidden="true">cloud_download</mat-icon>
+          </span>
+          <div>
+            <h2 id="source-data-heading">Source data</h2>
+            <p>Records imported from external sources</p>
+          </div>
+        </header>
+        <dl class="metric-list">
+          <div class="metric">
+            <dt><mat-icon aria-hidden="true">emoji_events</mat-icon><span>Leagues</span></dt>
+            <dd>{{ snapshot.leagueCount | number }}</dd>
+          </div>
+          <div class="metric">
+            <dt><mat-icon aria-hidden="true">shield</mat-icon><span>Teams</span></dt>
+            <dd>{{ snapshot.teamCount | number }}</dd>
+          </div>
+          <div class="metric">
+            <dt><mat-icon aria-hidden="true">groups</mat-icon><span>Players</span></dt>
+            <dd>{{ snapshot.playerCount | number }}</dd>
+          </div>
+        </dl>
+      </section>
+
+      <section class="dataset-panel combined-data" aria-labelledby="combined-data-heading">
+        <header class="dataset-header">
+          <span class="dataset-icon">
+            <mat-icon aria-hidden="true">merge_type</mat-icon>
+          </span>
+          <div>
+            <h2 id="combined-data-heading">Combined data</h2>
+            <p>Canonical records consolidated from source data</p>
+          </div>
+        </header>
+        <dl class="metric-list">
+          <div class="metric">
+            <dt><mat-icon aria-hidden="true">emoji_events</mat-icon><span>Leagues</span></dt>
+            <dd>{{ snapshot.combinedLeagueCount ?? 0 | number }}</dd>
+          </div>
+          <div class="metric">
+            <dt><mat-icon aria-hidden="true">shield</mat-icon><span>Teams</span></dt>
+            <dd>{{ snapshot.combinedTeamCount ?? 0 | number }}</dd>
+          </div>
+          <div class="metric">
+            <dt><mat-icon aria-hidden="true">groups</mat-icon><span>Players</span></dt>
+            <dd>{{ snapshot.combinedPlayerCount ?? 0 | number }}</dd>
+          </div>
+        </dl>
+      </section>
+
+      <section class="dataset-panel fifa-data" aria-labelledby="fifa-data-heading">
+        <header class="dataset-header">
+          <span class="dataset-icon">
+            <mat-icon aria-hidden="true">database</mat-icon>
+          </span>
+          <div>
+            <h2 id="fifa-data-heading">FIFA databases</h2>
+            <p>Managed FIFA 16 database files</p>
+          </div>
+        </header>
+        <dl class="metric-list">
+          <div class="metric">
+            <dt><mat-icon aria-hidden="true">storage</mat-icon><span>Databases</span></dt>
+            <dd>{{ snapshot.databaseCount ?? 0 | number }}</dd>
+          </div>
+        </dl>
+      </section>
+    </div>
+
+    <mat-card
+      appearance="outlined"
+      class="details"
+      role="region"
+      aria-labelledby="snapshot-details-heading"
+    >
+      <mat-card-content>
+        <div class="details-header">
+          <div class="details-heading">
+            <span class="details-icon">
+              <mat-icon aria-hidden="true">calendar_month</mat-icon>
+            </span>
+            <div>
+              <h2 id="snapshot-details-heading">Snapshot details</h2>
+              <p class="details-intro">Key dates and snapshot history</p>
+            </div>
+          </div>
+          <a matButton="filled" [routerLink]="['/projects', projectId, 'source', 'import']">
+            <mat-icon aria-hidden="true">cloud_download</mat-icon>
+            Import data
+          </a>
+        </div>
+        <dl class="details-list">
+          <div>
+            <dt>Reference date</dt>
+            <dd>{{ snapshot.referenceDate | referenceDate }}</dd>
+          </div>
+          <div>
+            <dt>Sources</dt>
+            <dd>{{ sourceText() }}</dd>
+          </div>
+          <div>
+            <dt>Created</dt>
+            <dd>{{ snapshot.createdAt | date: 'medium' }}</dd>
+          </div>
+          <div>
+            <dt>Last updated</dt>
+            <dd>{{ snapshot.updatedAt | date: 'medium' }}</dd>
+          </div>
+        </dl>
+      </mat-card-content>
+    </mat-card>
+  </section>
+} @else if (error()) {
+  <section class="page">
+    <p class="error" role="alert">{{ error() }}</p>
+  </section>
+} @else {
+  <section class="page">
+    <div class="loading"><mat-spinner diameter="36" /><span>Loading snapshot…</span></div>
+  </section>
+}

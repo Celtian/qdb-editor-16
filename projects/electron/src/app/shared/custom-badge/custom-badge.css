@@ -1,0 +1,53 @@
+:host {
+  display: inline-block;
+}
+
+.custom-badge {
+  border-radius: 999px;
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1.5rem;
+  padding: 0 0.625rem;
+  white-space: nowrap;
+}
+
+.custom-badge--red {
+  background: #ffdad6;
+  color: #410002;
+}
+
+.custom-badge--orange {
+  background: #ffdcc2;
+  color: #301400;
+}
+
+.custom-badge--yellow {
+  background: #fbe59a;
+  color: #251a00;
+}
+
+.custom-badge--green {
+  background: #b7f1c2;
+  color: #00210b;
+}
+
+.custom-badge--teal {
+  background: #9cf1df;
+  color: #00201a;
+}
+
+.custom-badge--blue {
+  background: #d6e3ff;
+  color: #001b3d;
+}
+
+.custom-badge--purple {
+  background: #e9ddff;
+  color: #25005a;
+}
+
+.custom-badge--pink {
+  background: #ffd8e4;
+  color: #3f001d;
+}

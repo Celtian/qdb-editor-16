@@ -1,0 +1,109 @@
+<app-page-header icon="move_to_inbox">
+  <div pageHeaderContent>
+    <h1>QDB Downloader migration</h1>
+    <p>Preview and copy projects from the standalone downloader into this application.</p>
+  </div>
+  <a pageHeaderActions matButton routerLink="/settings">
+    <mat-icon>arrow_back</mat-icon>
+    Settings
+  </a>
+</app-page-header>
+
+<section class="page migration-page">
+  @if (loading()) {
+    <mat-progress-bar mode="indeterminate" aria-label="Reading legacy database" />
+  }
+  @if (error()) {
+    <p class="error-banner" role="alert">{{ error() }}</p>
+  }
+  @if (result(); as migrationResult) {
+    <p class="success-banner" role="status">
+      Migration completed: {{ migrationResult.projectsCreated }} projects created and
+      {{ migrationResult.projectsMerged }} merged.
+    </p>
+  }
+
+  <mat-card appearance="outlined">
+    <mat-card-header>
+      <mat-icon mat-card-avatar>database</mat-icon>
+      <mat-card-title>Legacy database</mat-card-title>
+      <mat-card-subtitle>The selected SQLite file is always opened read-only.</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <p class="source-path">{{ sourcePath() || 'No legacy database detected.' }}</p>
+    </mat-card-content>
+    <mat-card-actions align="end">
+      @if (sourcePath()) {
+        <button type="button" matButton [disabled]="loading()" (click)="refreshPreview()">
+          Refresh preview
+        </button>
+      }
+      <button type="button" matButton="filled" [disabled]="loading()" (click)="chooseFile()">
+        <mat-icon>folder_open</mat-icon>
+        Choose database
+      </button>
+    </mat-card-actions>
+  </mat-card>
+
+  @if (preview(); as migrationPreview) {
+    <mat-card appearance="outlined">
+      <mat-card-header>
+        <mat-icon mat-card-avatar>fact_check</mat-icon>
+        <mat-card-title>Migration preview</mat-card-title>
+        <mat-card-subtitle>
+          {{ migrationPreview.projects.length }} project{{
+            migrationPreview.projects.length === 1 ? '' : 's'
+          }}
+        </mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="project-list">
+          @for (project of migrationPreview.projects; track project.legacyProjectId) {
+            <article class="project-preview">
+              <div>
+                <h2>{{ project.name }}</h2>
+                <p>
+                  {{ project.referenceDate }} ·
+                  {{ project.action === 'merge' ? 'Merge into' : 'Create' }}
+                  <strong>{{ project.targetName }}</strong>
+                </p>
+              </div>
+              <dl>
+                <div>
+                  <dt>Source</dt>
+                  <dd>
+                    {{ project.counts.leagues }} / {{ project.counts.teams }} /
+                    {{ project.counts.players }}
+                  </dd>
+                </div>
+                <div>
+                  <dt>Combined</dt>
+                  <dd>
+                    {{ project.counts.combinedLeagues }} / {{ project.counts.combinedTeams }} /
+                    {{ project.counts.combinedPlayers }}
+                  </dd>
+                </div>
+              </dl>
+            </article>
+          }
+        </div>
+        @if (migrationPreview.alreadyMigrated) {
+          <p class="already-migrated" role="status">
+            This exact legacy database has already been migrated.
+          </p>
+        }
+      </mat-card-content>
+      <mat-card-actions align="end">
+        <button
+          type="button"
+          matButton="filled"
+          [disabled]="loading() || migrationPreview.alreadyMigrated"
+          (click)="migrate()"
+        >
+          <mat-icon>move_to_inbox</mat-icon>
+          Migrate projects
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  }
+</section>

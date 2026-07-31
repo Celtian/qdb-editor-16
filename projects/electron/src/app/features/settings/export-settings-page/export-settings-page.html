@@ -1,0 +1,188 @@
+<app-page-header icon="drive_file_move">
+  <div pageHeaderContent>
+    <h1 id="export-settings-title">Export</h1>
+    <p>Manage reusable visibility and field-name presets for every project export.</p>
+  </div>
+</app-page-header>
+
+<section class="settings-page" aria-labelledby="export-settings-title">
+  @if (presetError()) {
+    <p class="settings-error" role="alert">{{ presetError() }}</p>
+  }
+
+  <mat-card class="export-presets" appearance="outlined" aria-labelledby="visibility-presets-title">
+    <mat-card-header>
+      <div class="export-presets-icon" mat-card-avatar>
+        <mat-icon aria-hidden="true">visibility</mat-icon>
+      </div>
+      <mat-card-title id="visibility-presets-title">Visibility presets</mat-card-title>
+      <mat-card-subtitle>
+        Choose which league, team, and player fields are included.
+      </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="preset-toolbar">
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <mat-label>Visibility preset</mat-label>
+          <mat-select
+            aria-label="Visibility preset to manage"
+            [disabled]="loading()"
+            [value]="selectedVisibilityPresetId()"
+            (selectionChange)="selectVisibilityPreset($event.value)"
+          >
+            @if (creatingVisibilityPreset()) {
+              <mat-option [value]="selectedVisibilityPresetId()">New preset</mat-option>
+            }
+            @for (preset of visibilityPresets(); track preset.id) {
+              <mat-option [value]="preset.id">
+                {{ preset.name }}{{ preset.builtIn ? ' (built-in)' : '' }}
+              </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+        <button
+          matButton="outlined"
+          type="button"
+          [disabled]="loading()"
+          (click)="startNewVisibilityPreset()"
+        >
+          <mat-icon aria-hidden="true">add</mat-icon>
+          New preset
+        </button>
+      </div>
+
+      @if (visibilityPresetIsBuiltIn()) {
+        <p class="preset-note">
+          This built-in preset is always available and cannot be changed or deleted.
+        </p>
+      }
+
+      <form (submit)="saveVisibilityPreset(); $event.preventDefault()">
+        @if (!visibilityPresetIsBuiltIn()) {
+          <mat-form-field class="preset-name" appearance="outline">
+            <mat-label>Visibility preset name</mat-label>
+            <input matInput autocomplete="off" [formField]="visibilityNameForm.name" />
+            @if (visibilityNameForm.name().touched() && visibilityNameForm.name().errors().length) {
+              <mat-error>{{ visibilityNameForm.name().errors()[0]?.message }}</mat-error>
+            }
+          </mat-form-field>
+        }
+
+        <app-export-column-editor
+          mode="visibility"
+          [disabled]="visibilityPresetIsBuiltIn()"
+          [selection]="exportColumns()"
+          (selectionChange)="exportColumns.set($event)"
+        />
+
+        @if (!visibilityPresetIsBuiltIn()) {
+          <div class="preset-actions">
+            @if (!creatingVisibilityPreset()) {
+              <button matButton="outlined" type="button" (click)="deleteVisibilityPreset()">
+                Delete preset
+              </button>
+            }
+            <button
+              matButton="filled"
+              type="submit"
+              [disabled]="
+                visibilityNameForm().invalid() ||
+                visibilityNameForm().pending() ||
+                !exportColumnsValid()
+              "
+            >
+              {{ creatingVisibilityPreset() ? 'Create preset' : 'Save preset' }}
+            </button>
+          </div>
+        }
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="export-presets" appearance="outlined" aria-labelledby="field-name-presets-title">
+    <mat-card-header>
+      <div class="export-presets-icon names-icon" mat-card-avatar>
+        <mat-icon aria-hidden="true">text_fields</mat-icon>
+      </div>
+      <mat-card-title id="field-name-presets-title">Field-name presets</mat-card-title>
+      <mat-card-subtitle>
+        Set exported names for every league, team, and player field.
+      </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="preset-toolbar">
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <mat-label>Field names preset</mat-label>
+          <mat-select
+            aria-label="Field-name preset to manage"
+            [disabled]="loading()"
+            [value]="selectedFieldNamePresetId()"
+            (selectionChange)="selectFieldNamePreset($event.value)"
+          >
+            @if (creatingFieldNamePreset()) {
+              <mat-option [value]="selectedFieldNamePresetId()">New preset</mat-option>
+            }
+            @for (preset of fieldNamePresets(); track preset.id) {
+              <mat-option [value]="preset.id">
+                {{ preset.name }}{{ preset.builtIn ? ' (built-in)' : '' }}
+              </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+        <button
+          matButton="outlined"
+          type="button"
+          [disabled]="loading()"
+          (click)="startNewFieldNamePreset()"
+        >
+          <mat-icon aria-hidden="true">add</mat-icon>
+          New preset
+        </button>
+      </div>
+
+      @if (fieldNamePresetIsBuiltIn()) {
+        <p class="preset-note">
+          This built-in preset is always available and cannot be changed or deleted.
+        </p>
+      }
+
+      <form (submit)="saveFieldNamePreset(); $event.preventDefault()">
+        @if (!fieldNamePresetIsBuiltIn()) {
+          <mat-form-field class="preset-name" appearance="outline">
+            <mat-label>Field-name preset name</mat-label>
+            <input matInput autocomplete="off" [formField]="fieldNameForm.name" />
+            @if (fieldNameForm.name().touched() && fieldNameForm.name().errors().length) {
+              <mat-error>{{ fieldNameForm.name().errors()[0]?.message }}</mat-error>
+            }
+          </mat-form-field>
+        }
+
+        <app-export-column-editor
+          mode="fieldNames"
+          [disabled]="fieldNamePresetIsBuiltIn()"
+          [fieldNames]="exportFieldNames()"
+          (fieldNamesChange)="exportFieldNames.set($event)"
+        />
+
+        @if (!fieldNamePresetIsBuiltIn()) {
+          <div class="preset-actions">
+            @if (!creatingFieldNamePreset()) {
+              <button matButton="outlined" type="button" (click)="deleteFieldNamePreset()">
+                Delete preset
+              </button>
+            }
+            <button
+              matButton="filled"
+              type="submit"
+              [disabled]="
+                fieldNameForm().invalid() || fieldNameForm().pending() || !exportFieldNamesValid()
+              "
+            >
+              {{ creatingFieldNamePreset() ? 'Create preset' : 'Save preset' }}
+            </button>
+          </div>
+        }
+      </form>
+    </mat-card-content>
+  </mat-card>
+</section>

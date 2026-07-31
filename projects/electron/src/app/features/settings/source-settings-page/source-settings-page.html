@@ -1,0 +1,74 @@
+<app-page-header icon="swap_vert">
+  <div pageHeaderContent>
+    <h1 id="source-settings-title">Sources</h1>
+    <p>Set which provider wins when project records are automatically resolved.</p>
+  </div>
+</app-page-header>
+
+<section class="settings-page" aria-labelledby="source-settings-title">
+  @if (error()) {
+    <p class="error" role="alert">{{ error() }}</p>
+  }
+
+  <mat-card appearance="outlined">
+    <mat-card-header>
+      <mat-card-title>Provider priority</mat-card-title>
+      <mat-card-subtitle>
+        Drag providers or use the arrow buttons. The first non-empty value wins.
+      </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      @if (loading()) {
+        <mat-progress-bar mode="indeterminate" aria-label="Loading source priority" />
+      } @else {
+        <ol
+          cdkDropList
+          class="priority-list"
+          aria-label="Source priority"
+          [cdkDropListData]="priority()"
+          (cdkDropListDropped)="drop($event)"
+        >
+          @for (sourceName of priority(); track sourceName; let index = $index) {
+            <li cdkDrag>
+              <button
+                cdkDragHandle
+                matIconButton
+                type="button"
+                [attr.aria-label]="'Drag ' + sourceLabels[sourceName]"
+              >
+                <mat-icon aria-hidden="true">drag_indicator</mat-icon>
+              </button>
+              <span class="rank" aria-hidden="true">{{ index + 1 }}</span>
+              <strong>{{ sourceLabels[sourceName] }}</strong>
+              <span class="spacer"></span>
+              <button
+                matIconButton
+                type="button"
+                [disabled]="index === 0 || saving()"
+                [attr.aria-label]="'Move ' + sourceLabels[sourceName] + ' up'"
+                (click)="move(sourceName, -1)"
+              >
+                <mat-icon aria-hidden="true">arrow_upward</mat-icon>
+              </button>
+              <button
+                matIconButton
+                type="button"
+                [disabled]="index === priority().length - 1 || saving()"
+                [attr.aria-label]="'Move ' + sourceLabels[sourceName] + ' down'"
+                (click)="move(sourceName, 1)"
+              >
+                <mat-icon aria-hidden="true">arrow_downward</mat-icon>
+              </button>
+            </li>
+          }
+        </ol>
+      }
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <button matButton type="button" [disabled]="loading() || saving()" (click)="reset()">
+        <mat-icon aria-hidden="true">restart_alt</mat-icon>
+        Reset default
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</section>

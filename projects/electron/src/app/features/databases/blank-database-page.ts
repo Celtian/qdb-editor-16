@@ -54,7 +54,7 @@ export class BlankDatabasePage implements OnChanges {
           this.desktop.createBlankDatabase({ projectId, name: this.model().name }),
         );
         await this.store.refreshDatabases(projectId);
-        await this.router.navigate(['/projects', projectId, 'databases', database.id, 'tables']);
+        await this.router.navigate(['/projects', projectId, 'fifa', database.id, 'tables']);
       } catch {
         // Store exposes the error.
       }

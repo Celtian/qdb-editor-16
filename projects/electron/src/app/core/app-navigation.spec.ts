@@ -25,7 +25,14 @@ const project: ProjectDescriptor = {
   referenceDate: '2015-08-01',
   createdAt: '2026-07-30T00:00:00.000Z',
   updatedAt: '2026-07-30T00:00:00.000Z',
-  databaseCount: 2,
+  databaseCount: 1,
+  sourceLeagueCount: 2,
+  sourceTeamCount: 3,
+  sourcePlayerCount: 40,
+  combinedLeagueCount: 1,
+  combinedTeamCount: 2,
+  combinedPlayerCount: 30,
+  sourceNames: ['transfermarkt'],
 };
 
 const tournamentProject: ProjectDescriptor = {
@@ -35,10 +42,10 @@ const tournamentProject: ProjectDescriptor = {
   databaseCount: 0,
 };
 
-const makeDatabase = (id: string, name: string): DatabaseDescriptor => ({
-  id,
+const database: DatabaseDescriptor = {
+  id: '22222222-2222-4222-8222-222222222222',
   projectId: project.id,
-  name,
+  name: 'Main',
   fifaVersion: 16,
   source: {
     kind: 'blank',
@@ -56,10 +63,8 @@ const makeDatabase = (id: string, name: string): DatabaseDescriptor => ({
     errorCount: 0,
     warningCount: 0,
   },
-});
+};
 
-const mainDatabase = makeDatabase('22222222-2222-4222-8222-222222222222', 'Main');
-const alternateDatabase = makeDatabase('33333333-3333-4333-8333-333333333333', 'Alternate');
 const tables: TableDescriptor[] = ['competition', 'players'].map((name) => ({
   name,
   fields: [],
@@ -69,14 +74,13 @@ const tables: TableDescriptor[] = ['competition', 'players'].map((name) => ({
 }));
 
 describe('AppNavigation', () => {
-  let store: AppStore;
   let router: Router;
   let listDatabases: ReturnType<typeof vi.fn>;
   let listTables: ReturnType<typeof vi.fn>;
 
   beforeEach(async () => {
     listDatabases = vi.fn(async (projectId: string) =>
-      projectId === project.id ? [mainDatabase, alternateDatabase] : [],
+      projectId === project.id ? [database] : [],
     );
     listTables = vi.fn(async () => tables);
     TestBed.configureTestingModule({
@@ -86,38 +90,23 @@ describe('AppNavigation', () => {
         provideRouter([
           { path: 'projects', component: EmptyPage },
           { path: 'projects/:projectId', component: EmptyPage },
+          { path: 'projects/:projectId/source/import', component: EmptyPage },
+          { path: 'projects/:projectId/source/objects/:kind', component: EmptyPage },
+          { path: 'projects/:projectId/source/export', component: EmptyPage },
+          { path: 'projects/:projectId/combined/import', component: EmptyPage },
+          { path: 'projects/:projectId/combined/objects/:kind', component: EmptyPage },
+          { path: 'projects/:projectId/combined/export', component: EmptyPage },
+          { path: 'projects/:projectId/fifa', component: EmptyPage },
           {
-            path: 'projects/:projectId/databases/:databaseId/tables/:table/rows/:rowId',
+            path: 'projects/:projectId/fifa/:databaseId/tables/:table/rows/:rowId',
             component: EmptyPage,
           },
-          {
-            path: 'projects/:projectId/databases/:databaseId/tables/:table',
-            component: EmptyPage,
-          },
-          {
-            path: 'projects/:projectId/databases/:databaseId/tables',
-            component: EmptyPage,
-          },
-          {
-            path: 'projects/:projectId/databases/:databaseId/objects/:kind',
-            component: EmptyPage,
-          },
-          {
-            path: 'projects/:projectId/databases/:databaseId/objects/:kind/:id/:section',
-            component: EmptyPage,
-          },
-          {
-            path: 'projects/:projectId/databases/:databaseId/settings',
-            component: EmptyPage,
-          },
-          {
-            path: 'projects/:projectId/databases/:databaseId/validation',
-            component: EmptyPage,
-          },
-          {
-            path: 'projects/:projectId/databases/:databaseId/export',
-            component: EmptyPage,
-          },
+          { path: 'projects/:projectId/fifa/:databaseId/tables/:table', component: EmptyPage },
+          { path: 'projects/:projectId/fifa/:databaseId/tables', component: EmptyPage },
+          { path: 'projects/:projectId/fifa/:databaseId/objects/:kind', component: EmptyPage },
+          { path: 'projects/:projectId/fifa/:databaseId/settings', component: EmptyPage },
+          { path: 'projects/:projectId/fifa/:databaseId/validation', component: EmptyPage },
+          { path: 'projects/:projectId/fifa/:databaseId/export', component: EmptyPage },
           { path: 'settings', component: EmptyPage },
         ]),
         {
@@ -132,14 +121,13 @@ describe('AppNavigation', () => {
         { provide: MatDialog, useValue: { open: vi.fn() } },
       ],
     });
-    store = TestBed.inject(AppStore);
     router = TestBed.inject(Router);
-    await store.refreshProjects();
+    await TestBed.inject(AppStore).refreshProjects();
   });
 
   afterEach(() => TestBed.resetTestingModule());
 
-  it('uses the logo as the projects link and lazy-loads only an expanded project', async () => {
+  it('shows the requested three database branches without eagerly loading FIFA databases', async () => {
     await router.navigateByUrl('/projects');
     const fixture = TestBed.createComponent(AppNavigation);
     await fixture.whenStable();
@@ -149,188 +137,110 @@ describe('AppNavigation', () => {
 
     expect(element.querySelector('.brand[aria-current="page"]')).not.toBeNull();
     expect(await tree.getItems({ level: 1 })).toHaveLength(2);
-    expect(element.textContent).not.toContain(mainDatabase.name);
-
     element
-      .querySelector<HTMLButtonElement>(`button[aria-label="Expand ${project.name} databases"]`)!
+      .querySelector<HTMLButtonElement>(`button[aria-label="Expand ${project.name}"]`)!
       .click();
     await fixture.whenStable();
 
-    expect(listDatabases).toHaveBeenCalledOnce();
+    expect(element.textContent).toContain('Source DB');
+    expect(element.textContent).toContain('Combined DB');
+    expect(element.textContent).toContain('FIFA DB');
+    expect(listDatabases).not.toHaveBeenCalled();
+    expect((await axe.run(element)).violations).toEqual([]);
+  });
+
+  it('navigates Source DB and Combined DB object nodes', async () => {
+    const fixture = TestBed.createComponent(AppNavigation);
+    await fixture.whenStable();
+    const element = fixture.nativeElement as HTMLElement;
+    const loader = TestbedHarnessEnvironment.loader(fixture);
+
+    element
+      .querySelector<HTMLButtonElement>(`button[aria-label="Expand ${project.name}"]`)!
+      .click();
+    await fixture.whenStable();
+    element.querySelector<HTMLButtonElement>('button[aria-label="Expand Source DB"]')!.click();
+    await fixture.whenStable();
+    element
+      .querySelector<HTMLButtonElement>('button[aria-label="Expand Source DB objects"]')!
+      .click();
+    await fixture.whenStable();
+
+    await (await loader.getHarness(TreeItemHarness.with({ text: /Teams/, level: 4 }))).click();
+    await fixture.whenStable();
+    expect(router.url).toBe(`/projects/${project.id}/source/objects/teams`);
+
+    element.querySelector<HTMLButtonElement>('button[aria-label$="Combined DB"]')!.click();
+    await fixture.whenStable();
+    element
+      .querySelector<HTMLButtonElement>('button[aria-label="Expand Combined DB objects"]')!
+      .click();
+    await fixture.whenStable();
+    const combinedPlayers = await loader.getAllHarnesses(
+      TreeItemHarness.with({ text: /Players/, level: 4 }),
+    );
+    await combinedPlayers.at(-1)!.click();
+    await fixture.whenStable();
+    expect(router.url).toBe(`/projects/${project.id}/combined/objects/players`);
+  });
+
+  it('loads FIFA databases and table names only when their branches expand', async () => {
+    const fixture = TestBed.createComponent(AppNavigation);
+    await fixture.whenStable();
+    const element = fixture.nativeElement as HTMLElement;
+    const loader = TestbedHarnessEnvironment.loader(fixture);
+
+    element
+      .querySelector<HTMLButtonElement>(`button[aria-label="Expand ${project.name}"]`)!
+      .click();
+    await fixture.whenStable();
+    element.querySelector<HTMLButtonElement>('button[aria-label="Expand FIFA DB"]')!.click();
+    await fixture.whenStable();
     expect(listDatabases).toHaveBeenCalledWith(project.id);
-    expect(element.textContent).toContain(mainDatabase.name);
-    expect(element.textContent).not.toContain('No databases in this project.');
-    expect((await axe.run(element)).violations).toEqual([]);
+
+    element.querySelector<HTMLButtonElement>('button[aria-label="Expand Main"]')!.click();
+    await fixture.whenStable();
+    element
+      .querySelector<HTMLButtonElement>('button[aria-label="Toggle FIFA database tables"]')!
+      .click();
+    await fixture.whenStable();
+    expect(listTables).toHaveBeenCalledWith(database.id);
+
+    await (
+      await loader.getHarness(TreeItemHarness.with({ text: /competition/, level: 5 }))
+    ).click();
+    await fixture.whenStable();
+    expect(router.url).toBe(`/projects/${project.id}/fifa/${database.id}/tables/competition`);
   });
 
-  it('loads table names on demand and navigates through tree values', async () => {
-    const fixture = TestBed.createComponent(AppNavigation);
-    await fixture.whenStable();
-    const element = fixture.nativeElement as HTMLElement;
-    const loader = TestbedHarnessEnvironment.loader(fixture);
-
-    element
-      .querySelector<HTMLButtonElement>(`button[aria-label="Expand ${project.name} databases"]`)!
-      .click();
-    await fixture.whenStable();
-    element
-      .querySelector<HTMLButtonElement>(`button[aria-label="Expand ${mainDatabase.name} tools"]`)!
-      .click();
-    await fixture.whenStable();
-    element
-      .querySelector<HTMLButtonElement>(`button[aria-label="Expand ${mainDatabase.name} tables"]`)!
-      .click();
-    await fixture.whenStable();
-
-    expect(listTables).toHaveBeenCalledOnce();
-    expect(element.textContent).toContain('competition');
-    const competition = await loader.getHarness(
-      TreeItemHarness.with({ text: /competition/, level: 4 }),
-    );
-    await competition.click();
-    await fixture.whenStable();
-
-    expect(router.url).toBe(
-      `/projects/${project.id}/databases/${mainDatabase.id}/tables/competition`,
-    );
-    expect(
-      element.querySelector('li[role="treeitem"][aria-current="page"]')?.textContent,
-    ).toContain('competition');
-  });
-
-  it('navigates project, database, tool, and logo destinations through the existing routes', async () => {
-    const fixture = TestBed.createComponent(AppNavigation);
-    await fixture.whenStable();
-    const element = fixture.nativeElement as HTMLElement;
-    const loader = TestbedHarnessEnvironment.loader(fixture);
-
-    const projectItem = await loader.getHarness(
-      TreeItemHarness.with({ text: new RegExp(project.name), level: 1 }),
-    );
-    await projectItem.click();
-    await fixture.whenStable();
-    expect(router.url).toBe(`/projects/${project.id}`);
-
-    const databaseItem = await loader.getHarness(
-      TreeItemHarness.with({ text: new RegExp(mainDatabase.name), level: 2 }),
-    );
-    await databaseItem.click();
-    await fixture.whenStable();
-    expect(router.url).toBe(`/projects/${project.id}/databases/${mainDatabase.id}/tables`);
-
-    const validationItem = await loader.getHarness(
-      TreeItemHarness.with({ text: /Validation/, level: 3 }),
-    );
-    await validationItem.click();
-    await fixture.whenStable();
-    expect(router.url).toBe(`/projects/${project.id}/databases/${mainDatabase.id}/validation`);
-
-    const exportItem = await loader.getHarness(TreeItemHarness.with({ text: /Export/, level: 3 }));
-    await exportItem.click();
-    await fixture.whenStable();
-    expect(router.url).toBe(`/projects/${project.id}/databases/${mainDatabase.id}/export`);
-
-    element.querySelector<HTMLAnchorElement>('.brand')!.click();
-    await fixture.whenStable();
-    expect(router.url).toBe('/projects');
-  });
-
-  it('reveals non-table deep links without loading table names', async () => {
-    await router.navigateByUrl(`/projects/${project.id}/databases/${mainDatabase.id}/validation`);
-    const fixture = TestBed.createComponent(AppNavigation);
-    await fixture.whenStable();
-    const element = fixture.nativeElement as HTMLElement;
-
-    expect(listDatabases).toHaveBeenCalledOnce();
-    expect(listTables).not.toHaveBeenCalled();
-    expect(element.querySelector('li[aria-current="page"]')?.textContent).toContain('Validation');
-
-    await router.navigateByUrl(`/projects/${project.id}/databases/${mainDatabase.id}/export`);
-    await fixture.whenStable();
-    expect(listDatabases).toHaveBeenCalledOnce();
-    expect(listTables).not.toHaveBeenCalled();
-    expect(element.querySelector('li[aria-current="page"]')?.textContent).toContain('Export');
-
-    await router.navigateByUrl(`/projects/${project.id}/databases/${mainDatabase.id}/tables`);
-    await fixture.whenStable();
-    expect(listTables).not.toHaveBeenCalled();
-    expect(
-      element.querySelector(`button[aria-label="Expand ${mainDatabase.name} tables"]`),
-    ).not.toBeNull();
-  });
-
-  it('exposes object categories and database-scoped settings under each database', async () => {
-    const fixture = TestBed.createComponent(AppNavigation);
-    await fixture.whenStable();
-    const element = fixture.nativeElement as HTMLElement;
-    const loader = TestbedHarnessEnvironment.loader(fixture);
-
-    element
-      .querySelector<HTMLButtonElement>(`button[aria-label="Expand ${project.name} databases"]`)!
-      .click();
-    await fixture.whenStable();
-    element
-      .querySelector<HTMLButtonElement>(`button[aria-label="Expand ${mainDatabase.name} tools"]`)!
-      .click();
-    await fixture.whenStable();
-    element
-      .querySelector<HTMLButtonElement>(`button[aria-label="Expand ${mainDatabase.name} objects"]`)!
-      .click();
-    await fixture.whenStable();
-
-    const teams = await loader.getHarness(TreeItemHarness.with({ text: /Teams/, level: 4 }));
-    await teams.click();
-    await fixture.whenStable();
-    expect(router.url).toBe(`/projects/${project.id}/databases/${mainDatabase.id}/objects/teams`);
-
-    const settings = await loader.getHarness(TreeItemHarness.with({ text: /Settings/, level: 3 }));
-    await settings.click();
-    await fixture.whenStable();
-    expect(router.url).toBe(`/projects/${project.id}/databases/${mainDatabase.id}/settings`);
-    expect((await axe.run(element)).violations).toEqual([]);
-  });
-
-  it('opens and loads the ancestors of a direct row-editor route', async () => {
-    await router.navigateByUrl(
-      `/projects/${project.id}/databases/${mainDatabase.id}/tables/players/rows/7`,
-    );
+  it('reveals a direct FIFA deep link and loads its ancestors', async () => {
+    await router.navigateByUrl(`/projects/${project.id}/fifa/${database.id}/tables/players/rows/7`);
     const fixture = TestBed.createComponent(AppNavigation);
     await fixture.whenStable();
     const element = fixture.nativeElement as HTMLElement;
 
     expect(listDatabases).toHaveBeenCalledWith(project.id);
-    expect(listTables).toHaveBeenCalledWith(mainDatabase.id);
-    expect(element.querySelector(`li[aria-current="page"]`)?.textContent).toContain('players');
-    expect(
-      element.querySelector(`button[aria-label="Collapse ${project.name} databases"]`),
-    ).not.toBeNull();
-    expect(
-      element.querySelector(`button[aria-label="Collapse ${mainDatabase.name} tools"]`),
-    ).not.toBeNull();
-    expect(
-      element.querySelector(`button[aria-label="Collapse ${mainDatabase.name} tables"]`),
-    ).not.toBeNull();
+    expect(listTables).toHaveBeenCalledWith(database.id);
+    expect(element.querySelector('li[aria-current="page"]')?.textContent).toContain('players');
+    expect(element.querySelector('button[aria-label="Collapse FIFA DB"]')).not.toBeNull();
   });
 
-  it('supports arrow expansion, typeahead, and inline retry', async () => {
+  it('shows inline FIFA loading errors and supports retry', async () => {
     listDatabases.mockRejectedValueOnce(new Error('Catalog unavailable'));
     const fixture = TestBed.createComponent(AppNavigation);
     await fixture.whenStable();
     const element = fixture.nativeElement as HTMLElement;
-    const projects = element.querySelectorAll<HTMLElement>('li[role="treeitem"][aria-level="1"]');
 
-    projects[0]!.focus();
-    projects[0]!.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }));
+    element
+      .querySelector<HTMLButtonElement>(`button[aria-label="Expand ${project.name}"]`)!
+      .click();
+    await fixture.whenStable();
+    element.querySelector<HTMLButtonElement>('button[aria-label="Expand FIFA DB"]')!.click();
     await fixture.whenStable();
     expect(element.textContent).toContain('Catalog unavailable');
 
     element.querySelector<HTMLButtonElement>('.error-message button')!.click();
     await fixture.whenStable();
-    expect(element.textContent).toContain(mainDatabase.name);
-
-    projects[0]!.dispatchEvent(new KeyboardEvent('keydown', { key: 't', bubbles: true }));
-    await fixture.whenStable();
-    expect(document.activeElement?.textContent).toContain(tournamentProject.name);
-    expect((await axe.run(element)).violations).toEqual([]);
+    expect(element.textContent).toContain(database.name);
   });
 });

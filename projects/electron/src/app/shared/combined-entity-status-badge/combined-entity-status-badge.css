@@ -1,0 +1,36 @@
+:host {
+  display: inline-flex;
+}
+
+.record-status-badge {
+  align-items: center;
+  border-radius: 999px;
+  display: inline-flex;
+  font-size: 0.75rem;
+  font-weight: 700;
+  gap: 0.3rem;
+  line-height: 1.5rem;
+  padding: 0 0.625rem;
+  white-space: nowrap;
+}
+
+.record-status-badge--ready {
+  background: var(--mat-sys-tertiary-container);
+  color: var(--mat-sys-on-tertiary-container);
+}
+
+.record-status-badge--needs-review {
+  background: var(--mat-sys-error-container);
+  color: var(--mat-sys-on-error-container);
+}
+
+.record-status-badge:focus-visible {
+  outline: 0.125rem solid var(--mat-sys-primary);
+  outline-offset: 0.125rem;
+}
+
+.record-status-badge mat-icon {
+  font-size: 1rem;
+  height: 1rem;
+  width: 1rem;
+}

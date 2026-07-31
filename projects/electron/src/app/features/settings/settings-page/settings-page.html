@@ -1,0 +1,97 @@
+<app-page-header icon="settings">
+  <div pageHeaderContent>
+    <h1 id="settings-title">Project settings</h1>
+    <p>Manage preferences and stored data for this project.</p>
+  </div>
+</app-page-header>
+
+<section class="settings-page" aria-labelledby="settings-title">
+  <mat-card class="finder-preferences" appearance="outlined">
+    <mat-card-header>
+      <div class="finder-icon" mat-card-avatar>
+        <mat-icon aria-hidden="true">filter_alt_off</mat-icon>
+      </div>
+      <mat-card-title>Finder filters</mat-card-title>
+      <mat-card-subtitle>
+        Clear saved source and combined finder filters for this project.
+      </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <fieldset>
+        <legend>Clear filters for</legend>
+        <p class="setting-description">
+          Each option resets saved selections in its league, team, and player finders. Search text,
+          column layouts, and filters in other projects are not affected.
+        </p>
+        <div class="filter-reset-options">
+          <mat-checkbox [formField]="filterResetForm.source">Source data</mat-checkbox>
+          <mat-checkbox [formField]="filterResetForm.combined">Combined data</mat-checkbox>
+        </div>
+      </fieldset>
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <button
+        matButton="outlined"
+        type="button"
+        [disabled]="!canResetFinderFilters()"
+        (click)="resetFinderFilters()"
+      >
+        Reset selected filters
+      </button>
+    </mat-card-actions>
+  </mat-card>
+
+  <mat-card class="source-data" appearance="outlined">
+    <mat-card-header>
+      <div class="source-data-icon" mat-card-avatar>
+        <mat-icon aria-hidden="true">delete_sweep</mat-icon>
+      </div>
+      <mat-card-title>Stored source data</mat-card-title>
+      <mat-card-subtitle>Remove imported records from this project.</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <fieldset>
+        <legend>Delete data by source</legend>
+        <p class="setting-description">
+          Choose one or more sources. The project itself, exports, global settings, and finder
+          filters are not affected.
+        </p>
+        <div class="source-options">
+          @for (option of sourceOptions; track option.value) {
+            <mat-checkbox [formField]="sourceForm[option.value]">
+              {{ option.label }}
+            </mat-checkbox>
+          }
+        </div>
+      </fieldset>
+      <p
+        class="deletion-preview"
+        [class.error]="sourceDataDeletionPreviewError()"
+        aria-live="polite"
+        aria-atomic="true"
+      >
+        @if (selectedSourceNames().length === 0) {
+          Select at least one source to preview affected records.
+        } @else if (sourceDataDeletionPreview.isLoading()) {
+          Calculating affected records…
+        } @else if (sourceDataDeletionCounts()) {
+          {{ sourceDataDeletionPreviewText() }}
+        } @else {
+          {{ sourceDataDeletionPreviewFailureText() }}
+        }
+      </p>
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <button
+        class="delete-button"
+        matButton="filled"
+        type="button"
+        [disabled]="!canDeleteSourceData()"
+        (click)="confirmSourceDataDeletion()"
+      >
+        <mat-icon aria-hidden="true">delete_forever</mat-icon>
+        {{ deletingSourceData() ? 'Deleting…' : 'Delete selected data' }}
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</section>

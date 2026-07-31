@@ -4,10 +4,7 @@
     <p>{{ config().singular }} #{{ id() }} · {{ section().replaceAll('-', ' ') }}</p>
   </div>
   <div pageHeaderActions>
-    <a
-      matButton
-      [routerLink]="['/projects', projectId(), 'databases', databaseId(), 'objects', kind()]"
-    >
+    <a matButton [routerLink]="['/projects', projectId(), 'fifa', databaseId(), 'objects', kind()]">
       <mat-icon>arrow_back</mat-icon>
       {{ config().label }}
     </a>
@@ -22,7 +19,7 @@
         [routerLink]="[
           '/projects',
           projectId(),
-          'databases',
+          'fifa',
           databaseId(),
           'objects',
           kind(),
@@ -134,7 +131,7 @@
                       [routerLink]="[
                         '/projects',
                         projectId(),
-                        'databases',
+                        'fifa',
                         databaseId(),
                         'objects',
                         destination,

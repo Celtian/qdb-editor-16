@@ -13,6 +13,19 @@ import { AppStore } from './app-store';
 import { OBJECT_CONFIG, OBJECT_KINDS } from '../features/objects/object-config';
 
 const projectNode = (projectId: string): string => `project:${projectId}`;
+const sourceNode = (projectId: string): string => `source:${projectId}`;
+const sourceImportNode = (projectId: string): string => `source-import:${projectId}`;
+const sourceObjectsNode = (projectId: string): string => `source-objects:${projectId}`;
+const sourceObjectNode = (projectId: string, kind: string): string =>
+  `source-object:${projectId}:${kind}`;
+const sourceExportNode = (projectId: string): string => `source-export:${projectId}`;
+const combinedNode = (projectId: string): string => `combined:${projectId}`;
+const combinedImportNode = (projectId: string): string => `combined-import:${projectId}`;
+const combinedObjectsNode = (projectId: string): string => `combined-objects:${projectId}`;
+const combinedObjectNode = (projectId: string, kind: string): string =>
+  `combined-object:${projectId}:${kind}`;
+const combinedExportNode = (projectId: string): string => `combined-export:${projectId}`;
+const fifaNode = (projectId: string): string => `fifa:${projectId}`;
 const databaseNode = (projectId: string, databaseId: string): string =>
   `database:${projectId}:${databaseId}`;
 const tablesNode = (projectId: string, databaseId: string): string =>
@@ -55,6 +68,17 @@ export class AppNavigation {
   protected readonly currentNodes = signal<string[]>([]);
 
   protected readonly projectNode = projectNode;
+  protected readonly sourceNode = sourceNode;
+  protected readonly sourceImportNode = sourceImportNode;
+  protected readonly sourceObjectsNode = sourceObjectsNode;
+  protected readonly sourceObjectNode = sourceObjectNode;
+  protected readonly sourceExportNode = sourceExportNode;
+  protected readonly combinedNode = combinedNode;
+  protected readonly combinedImportNode = combinedImportNode;
+  protected readonly combinedObjectsNode = combinedObjectsNode;
+  protected readonly combinedObjectNode = combinedObjectNode;
+  protected readonly combinedExportNode = combinedExportNode;
+  protected readonly fifaNode = fifaNode;
   protected readonly databaseNode = databaseNode;
   protected readonly tablesNode = tablesNode;
   protected readonly tableNode = tableNode;
@@ -65,6 +89,11 @@ export class AppNavigation {
   protected readonly objectConfig = OBJECT_CONFIG;
   protected readonly validationNode = validationNode;
   protected readonly exportNode = exportNode;
+  protected readonly sourceObjectKinds = [
+    { kind: 'leagues', label: 'Leagues', icon: 'emoji_events' },
+    { kind: 'teams', label: 'Teams', icon: 'shield' },
+    { kind: 'players', label: 'Players', icon: 'groups' },
+  ] as const;
 
   constructor() {
     this.router.events
@@ -80,9 +109,16 @@ export class AppNavigation {
     return this.expandedNodes().has(node);
   }
 
-  protected projectExpanded(projectId: string, expanded: boolean): void {
-    const node = projectNode(projectId);
+  protected nodeExpanded(node: string, expanded: boolean): void {
     this.setExpanded(node, expanded);
+  }
+
+  protected projectExpanded(projectId: string, expanded: boolean): void {
+    this.setExpanded(projectNode(projectId), expanded);
+  }
+
+  protected fifaExpanded(projectId: string, expanded: boolean): void {
+    this.setExpanded(fifaNode(projectId), expanded);
     if (expanded) void this.store.ensureDatabases(projectId);
   }
 
@@ -102,6 +138,16 @@ export class AppNavigation {
   protected toggleProject(event: Event, projectId: string): void {
     event.stopPropagation();
     this.projectExpanded(projectId, !this.isExpanded(projectNode(projectId)));
+  }
+
+  protected toggleNode(event: Event, node: string): void {
+    event.stopPropagation();
+    this.setExpanded(node, !this.isExpanded(node));
+  }
+
+  protected toggleFifa(event: Event, projectId: string): void {
+    event.stopPropagation();
+    this.fifaExpanded(projectId, !this.isExpanded(fifaNode(projectId)));
   }
 
   protected toggleDatabase(event: Event, projectId: string, databaseId: string): void {
@@ -141,34 +187,44 @@ export class AppNavigation {
     const [kind, projectId, databaseId, value] = node.split(':');
 
     if (kind === 'project') void this.router.navigate(['/projects', projectId]);
+    else if (kind === 'source' || kind === 'source-objects')
+      void this.router.navigate(['/projects', projectId, 'source', 'objects', 'leagues']);
+    else if (kind === 'source-import')
+      void this.router.navigate(['/projects', projectId, 'source', 'import']);
+    else if (kind === 'source-object')
+      void this.router.navigate(['/projects', projectId, 'source', 'objects', databaseId]);
+    else if (kind === 'source-export')
+      void this.router.navigate(['/projects', projectId, 'source', 'export']);
+    else if (kind === 'combined' || kind === 'combined-objects')
+      void this.router.navigate(['/projects', projectId, 'combined', 'objects', 'leagues']);
+    else if (kind === 'combined-import')
+      void this.router.navigate(['/projects', projectId, 'combined', 'import']);
+    else if (kind === 'combined-object')
+      void this.router.navigate(['/projects', projectId, 'combined', 'objects', databaseId]);
+    else if (kind === 'combined-export')
+      void this.router.navigate(['/projects', projectId, 'combined', 'export']);
+    else if (kind === 'fifa') void this.router.navigate(['/projects', projectId, 'fifa']);
     else if (kind === 'database' || kind === 'tables')
-      void this.router.navigate(['/projects', projectId, 'databases', databaseId, 'tables']);
+      void this.router.navigate(['/projects', projectId, 'fifa', databaseId, 'tables']);
     else if (kind === 'table')
-      void this.router.navigate(['/projects', projectId, 'databases', databaseId, 'tables', value]);
+      void this.router.navigate(['/projects', projectId, 'fifa', databaseId, 'tables', value]);
     else if (kind === 'objects')
       void this.router.navigate([
         '/projects',
         projectId,
-        'databases',
+        'fifa',
         databaseId,
         'objects',
         'countries',
       ]);
     else if (kind === 'object')
-      void this.router.navigate([
-        '/projects',
-        projectId,
-        'databases',
-        databaseId,
-        'objects',
-        value,
-      ]);
+      void this.router.navigate(['/projects', projectId, 'fifa', databaseId, 'objects', value]);
     else if (kind === 'database-settings')
-      void this.router.navigate(['/projects', projectId, 'databases', databaseId, 'settings']);
+      void this.router.navigate(['/projects', projectId, 'fifa', databaseId, 'settings']);
     else if (kind === 'validation')
-      void this.router.navigate(['/projects', projectId, 'databases', databaseId, 'validation']);
+      void this.router.navigate(['/projects', projectId, 'fifa', databaseId, 'validation']);
     else if (kind === 'export')
-      void this.router.navigate(['/projects', projectId, 'databases', databaseId, 'export']);
+      void this.router.navigate(['/projects', projectId, 'fifa', databaseId, 'export']);
   }
 
   protected openAbout(): void {
@@ -207,12 +263,48 @@ export class AppNavigation {
       return;
     }
 
-    if (!databaseId) {
+    this.setExpanded(projectNode(projectId), true);
+
+    if (url.includes('/source/')) {
+      this.setExpanded(sourceNode(projectId), true);
+      let current = sourceNode(projectId);
+      if (url.endsWith('/source/import')) current = sourceImportNode(projectId);
+      else if (url.endsWith('/source/export')) current = sourceExportNode(projectId);
+      else if (url.includes('/source/objects/')) {
+        const kind = url.match(/\/source\/objects\/([^/]+)/)?.[1] ?? 'leagues';
+        current = sourceObjectNode(projectId, kind);
+        this.setExpanded(sourceObjectsNode(projectId), true);
+      }
+      this.currentNodes.set([current]);
+      return;
+    }
+
+    if (url.includes('/combined/')) {
+      this.setExpanded(combinedNode(projectId), true);
+      let current = combinedNode(projectId);
+      if (url.endsWith('/combined/import')) current = combinedImportNode(projectId);
+      else if (url.endsWith('/combined/export')) current = combinedExportNode(projectId);
+      else if (url.includes('/combined/objects/')) {
+        const kind = url.match(/\/combined\/objects\/([^/]+)/)?.[1] ?? 'leagues';
+        current = combinedObjectNode(projectId, kind);
+        this.setExpanded(combinedObjectsNode(projectId), true);
+      }
+      this.currentNodes.set([current]);
+      return;
+    }
+
+    if (!url.includes('/fifa')) {
       this.currentNodes.set([projectNode(projectId)]);
       return;
     }
 
-    this.setExpanded(projectNode(projectId), true);
+    this.setExpanded(fifaNode(projectId), true);
+    await this.store.ensureDatabases(projectId);
+    if (!databaseId) {
+      this.currentNodes.set([fifaNode(projectId)]);
+      return;
+    }
+
     this.setExpanded(databaseNode(projectId, databaseId), true);
 
     let current = tablesNode(projectId, databaseId);
@@ -229,7 +321,6 @@ export class AppNavigation {
     }
     this.currentNodes.set([current]);
 
-    await this.store.ensureDatabases(projectId);
     if (table) await this.store.ensureTables(databaseId);
   }
 }

@@ -10,6 +10,7 @@ import {
 } from 'electron';
 import { randomUUID } from 'node:crypto';
 import { existsSync, renameSync, rmSync } from 'node:fs';
+import { rm, stat } from 'node:fs/promises';
 import { isAbsolute, join, resolve } from 'node:path';
 import { Worker } from 'node:worker_threads';
 import { updateElectronApp } from 'update-electron-app';
@@ -41,13 +42,21 @@ import type {
 import { tableForName } from '../../shared/table-config';
 import { Catalog, validateId } from '../catalog';
 import { createBlankDatabase, type ImportedDatabase } from '../database-importer';
+import { SnapshotDatabase } from '../downloader/database';
+import { SnapshotExporter } from '../downloader/exporter';
+import { registerIpcHandlers as registerDownloaderHandlers } from '../downloader/ipc';
+import { LegacyDownloaderMigration } from '../downloader/legacy-migration';
+import { SoccerbotScraper } from '../downloader/scraper';
 import { FifaDatabase } from '../fifa-database';
 import { inspectT3dbSource, inspectTextSource } from '../source-inspection';
 import { SourceSelections } from '../source-selections';
 
 const selections = new SourceSelections();
 const activeOperations = new Map<OperationKind, Int32Array>();
+const downloaderExportDirectories = new Map<string, string>();
 let catalog: Catalog;
+let snapshotDatabase: SnapshotDatabase;
+let legacyMigration: LegacyDownloaderMigration;
 
 const progress = (operation: OperationProgress['operation'], message: string): void => {
   for (const window of BrowserWindow.getAllWindows())
@@ -214,9 +223,25 @@ const registerHandlers = (): void => {
   ipcMain.handle('qdb-editor:update-project', (_event, request: UpdateProjectRequest) =>
     catalog.updateProject(request),
   );
-  ipcMain.handle('qdb-editor:remove-project', (_event, id: string) =>
-    catalog.removeProject(validateId(id)),
-  );
+  ipcMain.handle('qdb-editor:remove-project', async (_event, id: string) => {
+    const projectId = validateId(id);
+    const exportDirectories = [...downloaderExportDirectories.entries()].filter(
+      ([, exportedProjectId]) => exportedProjectId === projectId,
+    );
+    const result = catalog.removeProject(projectId);
+    let deletedExportCount = 0;
+    const failedExportDirectories: string[] = [];
+    for (const [directory] of exportDirectories) {
+      try {
+        await rm(directory, { recursive: true, force: true });
+        downloaderExportDirectories.delete(directory);
+        deletedExportCount += 1;
+      } catch {
+        failedExportDirectories.push(directory);
+      }
+    }
+    return { ...result, deletedExportCount, failedExportDirectories };
+  });
   ipcMain.handle('qdb-editor:list-databases', (_event, projectId: string) =>
     catalog.listDatabases(validateId(projectId)),
   );
@@ -431,6 +456,26 @@ const registerHandlers = (): void => {
     nativeTheme.themeSource = value;
     return value;
   });
+  ipcMain.handle('qdb-editor:detect-legacy-downloader', () => {
+    const path = join(app.getPath('appData'), 'QDB Downloader', 'qdb-downloader.sqlite');
+    return existsSync(path) ? path : undefined;
+  });
+  ipcMain.handle('qdb-editor:select-legacy-downloader', async () => {
+    const result = await dialog.showOpenDialog({
+      title: 'Select the legacy QDB Downloader database',
+      properties: ['openFile'],
+      filters: [{ name: 'SQLite database', extensions: ['sqlite', 'db'] }],
+    });
+    return result.filePaths[0];
+  });
+  ipcMain.handle('qdb-editor:preview-legacy-downloader', (_event, sourcePath: string) =>
+    legacyMigration.preview(sourcePath),
+  );
+  ipcMain.handle(
+    'qdb-editor:migrate-legacy-downloader',
+    (_event, request: Parameters<LegacyDownloaderMigration['migrate']>[0]) =>
+      legacyMigration.migrate(request),
+  );
 };
 
 const createWindow = (): BrowserWindow => {
@@ -460,11 +505,83 @@ const createWindow = (): BrowserWindow => {
   return window;
 };
 
-void app.whenReady().then(() => {
+const runPreloadSmoke = async (): Promise<void> => {
+  const window = new BrowserWindow({
+    show: false,
+    webPreferences: {
+      preload: join(__dirname, '..', 'preload.js'),
+      contextIsolation: true,
+      nodeIntegration: false,
+      sandbox: true,
+    },
+  });
+  await window.loadURL('data:text/html;charset=utf-8,<title>QDB preload smoke test</title>');
+  const bridge = (await window.webContents.executeJavaScript(`({
+    editor: typeof window.qdbEditor?.listProjects === 'function',
+    downloader: typeof window.qdbEditor?.downloader?.listProjects === 'function'
+  })`)) as {
+    editor: boolean;
+    downloader: boolean;
+  };
+  if (!bridge.editor || !bridge.downloader)
+    throw new Error(`Desktop bridge smoke test failed: ${JSON.stringify(bridge)}`);
+  console.log('Desktop bridge smoke test passed.');
+  window.destroy();
+};
+
+void app.whenReady().then(async () => {
+  if (process.env['QDB_PRELOAD_SMOKE'] === '1') {
+    try {
+      await runPreloadSmoke();
+      app.exit(0);
+    } catch (error) {
+      console.error(error);
+      app.exit(1);
+    }
+    return;
+  }
   Menu.setApplicationMenu(null);
-  catalog = new Catalog(join(app.getPath('userData'), 'library'));
+  const libraryPath = join(app.getPath('userData'), 'library');
+  catalog = new Catalog(libraryPath);
+  snapshotDatabase = new SnapshotDatabase(join(libraryPath, 'catalog.sqlite'));
+  legacyMigration = new LegacyDownloaderMigration(
+    join(libraryPath, 'catalog.sqlite'),
+    catalog.projectsDirectory,
+  );
   nativeTheme.themeSource = catalog.getTheme();
   registerHandlers();
+  registerDownloaderHandlers({
+    database: snapshotDatabase,
+    scraper: new SoccerbotScraper(),
+    exporter: new SnapshotExporter(snapshotDatabase),
+    shell,
+    directoryExists: async (directory) => (await stat(directory)).isDirectory(),
+    removeExportDirectory: (directory) => rm(directory, { recursive: true, force: true }),
+    exportedDirectories: downloaderExportDirectories,
+    projectLifecycle: {
+      createProject: (request) => {
+        const project = catalog.createProject(request);
+        return snapshotDatabase.getProjectSummary(project.id);
+      },
+      renameProject: (request) => {
+        const project = catalog.project(request.projectId);
+        catalog.updateProject({
+          id: project.id,
+          name: request.name,
+          referenceDate: project.referenceDate,
+        });
+        return snapshotDatabase.getProjectSummary(project.id);
+      },
+      deleteProject: (projectId) => {
+        catalog.removeProject(projectId);
+      },
+      deleteAllProjects: () => {
+        const projectIds = catalog.listProjects().map(({ id }) => id);
+        for (const projectId of projectIds) catalog.removeProject(projectId);
+        return projectIds;
+      },
+    },
+  });
   createWindow();
   if (app.isPackaged)
     updateElectronApp({
@@ -477,6 +594,7 @@ void app.whenReady().then(() => {
 });
 
 app.on('window-all-closed', () => {
+  snapshotDatabase?.close();
   catalog?.close();
   if (process.platform !== 'darwin') app.quit();
 });

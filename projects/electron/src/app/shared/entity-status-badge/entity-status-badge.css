@@ -1,0 +1,23 @@
+:host {
+  display: inline-block;
+}
+
+.entity-status-badge {
+  border-radius: 999px;
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1.5rem;
+  padding: 0 0.625rem;
+  white-space: nowrap;
+}
+
+.entity-status-badge--new {
+  background: #d8f3dc;
+  color: #124f2c;
+}
+
+.entity-status-badge--old {
+  background: #ffe1a8;
+  color: #5c3600;
+}

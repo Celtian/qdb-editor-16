@@ -1,0 +1,71 @@
+:host {
+  display: block;
+}
+
+.settings-page {
+  display: grid;
+  gap: 1.5rem;
+  margin: 0 auto;
+  max-width: 64rem;
+  padding: 2.5rem clamp(1rem, 4vw, 3.5rem);
+}
+
+.export-presets {
+  max-width: 64rem;
+}
+
+.settings-error {
+  color: var(--mat-sys-error);
+  margin: 0;
+}
+
+mat-card-header {
+  padding: 1rem 1rem 0;
+}
+
+mat-card-content {
+  color: var(--mat-sys-on-surface-variant);
+  padding: 1.5rem;
+}
+
+.export-presets-icon {
+  align-items: center;
+  background: var(--mat-sys-tertiary-container);
+  color: var(--mat-sys-on-tertiary-container);
+  display: flex;
+  justify-content: center;
+}
+
+.names-icon {
+  background: var(--mat-sys-secondary-container);
+  color: var(--mat-sys-on-secondary-container);
+}
+
+.preset-toolbar {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.preset-toolbar mat-form-field {
+  flex: 1 1 16rem;
+}
+
+.preset-note {
+  margin: 0 0 1rem;
+}
+
+.preset-name {
+  width: min(100%, 24rem);
+}
+
+.preset-actions {
+  border-top: 1px solid var(--mat-sys-outline-variant);
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+  margin-top: 1rem;
+  padding-top: 1rem;
+}

@@ -1,11 +1,19 @@
 import { contextBridge, ipcRenderer } from 'electron';
 import type { QdbEditorApi } from '../shared/contracts';
+import { downloaderApi } from './downloader/preload-api';
 
 const api: QdbEditorApi = {
+  downloader: downloaderApi,
   listProjects: () => ipcRenderer.invoke('qdb-editor:list-projects'),
   createProject: (request) => ipcRenderer.invoke('qdb-editor:create-project', request),
   updateProject: (request) => ipcRenderer.invoke('qdb-editor:update-project', request),
   removeProject: (id) => ipcRenderer.invoke('qdb-editor:remove-project', id),
+  detectLegacyDownloaderDatabase: () => ipcRenderer.invoke('qdb-editor:detect-legacy-downloader'),
+  selectLegacyDownloaderDatabase: () => ipcRenderer.invoke('qdb-editor:select-legacy-downloader'),
+  previewLegacyDownloaderMigration: (sourcePath) =>
+    ipcRenderer.invoke('qdb-editor:preview-legacy-downloader', sourcePath),
+  migrateLegacyDownloader: (request) =>
+    ipcRenderer.invoke('qdb-editor:migrate-legacy-downloader', request),
   listDatabases: (projectId) => ipcRenderer.invoke('qdb-editor:list-databases', projectId),
   createBlankDatabase: (request) => ipcRenderer.invoke('qdb-editor:create-blank-database', request),
   renameDatabase: (id, name) => ipcRenderer.invoke('qdb-editor:rename-database', id, name),

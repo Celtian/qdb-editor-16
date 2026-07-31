@@ -11,13 +11,21 @@
 
 </div>
 
-QDB Editor 16 organizes work into projects. Each project has a reference date and may contain
-multiple independently named FIFA 16 databases. Databases can start blank or be imported from a DB
-Master text folder or paired PC t3db `.db` and `.xml` files.
+QDB Editor 16 organizes work into projects with one reference date. Each project contains a Source
+DB for provider snapshots, a canonical Combined DB, and any number of independently named FIFA 16
+databases. FIFA databases can start blank or be imported from a DB Master text folder or paired PC
+t3db `.db` and `.xml` files.
 
 ## Features
 
-- Create, rename, and remove projects and their managed FIFA 16 databases.
+- Import Transfermarkt, Soccerway, WorldFootball, and Eurofotbal league or team data with previews,
+  conflict policies, progress, and cancellation.
+- Browse, edit, filter, bulk-update, badge, refresh, and safely delete Source DB records.
+- Match providers into reusable Combined DB leagues, teams, and players with field resolution and
+  review status.
+- Export Source or Combined data as JSON, nested single JSON, or CSV with reusable column and field
+  name presets.
+- Create, rename, and remove projects and their Source, Combined, and managed FIFA 16 data.
 - Import DB Master-compatible UTF-16LE text folders and paired PC t3db sources.
 - Initialize all FIFA 16 tables exposed by `fifatables`, including tables missing from a source.
 - Browse, search, sort, paginate, and configure visible columns in every supported table.
@@ -32,8 +40,10 @@ Master text folder or paired PC t3db `.db` and `.xml` files.
 ## Architecture
 
 - `projects/electron/src` — standalone, zoneless Angular renderer.
-- `projects/electron/electron` — Electron main/preload code, SQLite services, and worker operations.
-- `projects/electron/shared` — serializable IPC contracts and trusted FIFA 16 table configuration.
+- `projects/electron/electron` — Electron main/preload code, catalog and downloader repositories,
+  scraper/export services, and worker operations.
+- `projects/electron/shared` — serializable typed IPC contracts, Source/Combined domain helpers, and
+  trusted FIFA 16 table configuration.
 - `projects/docs` — statically prerendered Angular documentation for GitHub Pages.
 - `tools` — Node-runtime test configuration and development tooling.
 
@@ -41,9 +51,15 @@ The renderer is sandboxed with context isolation and has no Node.js access. A na
 API delegates filesystem and SQLite work to Electron. Imports, exports, and full validation run in
 worker threads.
 
-The catalog database is stored below Electron's `userData` directory. Each FIFA database is a
-separate SQLite file below its project directory. Original imports and external export folders are
-never modified by project or database deletion.
+`catalog.sqlite` below Electron's `userData` directory is authoritative for projects, Source and
+Combined records, badges, and downloader preferences. Each FIFA database remains a separate SQLite
+file below its project directory. Original import sources are never modified. A project deletion
+also attempts to remove export folders created by that running application session and reports any
+folder it could not clean up.
+
+Existing QDB Downloader v0.0.22 data can be migrated from Settings. The app previews exact project
+merges and renamed imports before copying records transactionally; the legacy database remains
+untouched and a failed migration can be retried.
 
 ## Getting started
 

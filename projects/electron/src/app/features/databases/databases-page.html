@@ -11,11 +11,11 @@
       <mat-icon>edit</mat-icon>
       Edit project
     </a>
-    <a matButton [routerLink]="['/projects', projectId(), 'import']">
+    <a matButton [routerLink]="['/projects', projectId(), 'fifa', 'import']">
       <mat-icon>upload_file</mat-icon>
       Import
     </a>
-    <a matButton="filled" [routerLink]="['/projects', projectId(), 'databases', 'new']">
+    <a matButton="filled" [routerLink]="['/projects', projectId(), 'fifa', 'new']">
       <mat-icon>add</mat-icon>
       Blank database
     </a>
@@ -61,7 +61,7 @@
           <a
             matButton="filled"
             [disabled]="database.status !== 'available'"
-            [routerLink]="['/projects', projectId(), 'databases', database.id, 'tables']"
+            [routerLink]="['/projects', projectId(), 'fifa', database.id, 'tables']"
           >
             Open
           </a>

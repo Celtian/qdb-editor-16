@@ -21,6 +21,13 @@ const project: ProjectDescriptor = {
   createdAt: '2026-07-30T00:00:00.000Z',
   updatedAt: '2026-07-30T00:00:00.000Z',
   databaseCount: 1,
+  sourceLeagueCount: 0,
+  sourceTeamCount: 0,
+  sourcePlayerCount: 0,
+  combinedLeagueCount: 0,
+  combinedTeamCount: 0,
+  combinedPlayerCount: 0,
+  sourceNames: [],
 };
 
 const report: ValidationReport = {
@@ -61,6 +68,7 @@ const table: TableDescriptor = {
 };
 
 const makeApi = (): QdbEditorApi => ({
+  downloader: {} as QdbEditorApi['downloader'],
   listProjects: vi.fn(async () => [project]),
   createProject: vi.fn(async () => project),
   updateProject: vi.fn(async () => project),
@@ -68,7 +76,13 @@ const makeApi = (): QdbEditorApi => ({
     projectId: project.id,
     removed: true,
     databasesRemoved: 1,
+    deletedExportCount: 0,
+    failedExportDirectories: [],
   })),
+  detectLegacyDownloaderDatabase: vi.fn(async () => undefined),
+  selectLegacyDownloaderDatabase: vi.fn(async () => undefined),
+  previewLegacyDownloaderMigration: vi.fn(),
+  migrateLegacyDownloader: vi.fn(),
   listDatabases: vi.fn(async () => [database]),
   createBlankDatabase: vi.fn(async () => database),
   renameDatabase: vi.fn(async () => database),

@@ -28,6 +28,13 @@ const project: ProjectDescriptor = {
   createdAt: now,
   updatedAt: now,
   databaseCount: 1,
+  sourceLeagueCount: 0,
+  sourceTeamCount: 0,
+  sourcePlayerCount: 0,
+  combinedLeagueCount: 0,
+  combinedTeamCount: 0,
+  combinedPlayerCount: 0,
+  sourceNames: [],
 };
 const database: DatabaseDescriptor = {
   id: databaseId,

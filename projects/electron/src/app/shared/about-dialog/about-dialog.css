@@ -1,0 +1,106 @@
+:host {
+  --mat-dialog-actions-padding: 1rem 2rem 1.5rem;
+  --mat-dialog-with-actions-content-padding: 1rem 2rem 0;
+  display: block;
+}
+
+.dialog-header {
+  align-items: center;
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: 4.5rem minmax(0, 1fr) 3rem;
+  padding: 2.25rem 2rem 0.75rem;
+}
+
+.dialog-header img {
+  background: #102b4e;
+  border-radius: 1rem;
+  display: block;
+}
+
+.product-heading {
+  min-width: 0;
+}
+
+.product-heading h2 {
+  font-size: 2rem;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  margin: 0;
+  padding: 0;
+}
+
+.product-heading h2::before {
+  display: none;
+}
+
+.version {
+  color: var(--muted-text);
+  font-size: 1.1rem;
+  margin: 0.35rem 0 0;
+}
+
+.dialog-header button {
+  align-self: start;
+}
+
+.description {
+  color: var(--mat-sys-on-surface);
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.copyright {
+  color: var(--muted-text);
+  margin: 1.25rem 0 0;
+}
+
+mat-dialog-actions {
+  justify-content: space-between;
+}
+
+.external-actions {
+  align-items: center;
+  display: flex;
+  gap: 0.5rem;
+}
+
+@media (max-width: 480px) {
+  :host {
+    --mat-dialog-actions-padding: 1rem 1.25rem 1.25rem;
+    --mat-dialog-with-actions-content-padding: 0.75rem 1.25rem 0;
+  }
+
+  .dialog-header {
+    gap: 0.9rem;
+    grid-template-columns: 3.75rem minmax(0, 1fr) 3rem;
+    padding: 1.5rem 1.25rem 0.75rem;
+  }
+
+  .dialog-header img {
+    height: 3.75rem;
+    width: 3.75rem;
+  }
+
+  .product-heading h2 {
+    font-size: 1.5rem;
+  }
+
+  .version {
+    font-size: 1rem;
+  }
+
+  mat-dialog-actions,
+  .external-actions {
+    align-items: stretch;
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  mat-dialog-actions > button,
+  .external-actions a {
+    justify-content: center;
+    width: 100%;
+  }
+}

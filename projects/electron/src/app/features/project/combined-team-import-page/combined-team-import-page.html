@@ -1,0 +1,738 @@
+<app-page-header icon="download">
+  <div pageHeaderContent>
+    <h1 id="import-heading">{{ combinedTeamId() ? 'Recombine team' : 'Import teams' }}</h1>
+    <p>Import one or more stored provider teams into a canonical project team.</p>
+  </div>
+</app-page-header>
+
+<section class="page" aria-labelledby="import-heading">
+  @if (error()) {
+    <p class="error" role="alert">{{ error() }}</p>
+  }
+  @if (loading()) {
+    <mat-progress-bar mode="indeterminate" aria-label="Loading source teams" />
+  } @else {
+    <mat-card appearance="outlined" class="wizard-card">
+      <mat-stepper class="qdb-wizard" linear aria-label="Import team wizard">
+        <ng-template matStepperIcon="number" let-index="index">
+          <span aria-hidden="true">{{ index + 1 }}</span>
+        </ng-template>
+        <ng-template matStepperIcon="edit" let-index="index">
+          <span aria-hidden="true">{{ index + 1 }}</span>
+        </ng-template>
+        <ng-template matStepperIcon="done" let-index="index">
+          <span aria-hidden="true">{{ index + 1 }}</span>
+        </ng-template>
+
+        <mat-step data-step-id="source-teams" [completed]="!!preview()">
+          <ng-template matStepLabel>Source teams</ng-template>
+          <div class="step-content">
+            <div>
+              <h2>Select one or more source teams</h2>
+              <p>
+                {{
+                  combinedTeamId()
+                    ? 'Existing linked teams are preselected. Valid manual player groups and field choices are preserved when possible.'
+                    : 'Choose no more than one stored team from each provider. Source records remain unchanged.'
+                }}
+              </p>
+              <p>
+                Choose a team once. Unique exact-name records from other providers are selected
+                automatically.
+              </p>
+            </div>
+            <div class="provider-groups">
+              @for (sourceName of orderedSources(); track sourceName) {
+                <fieldset class="provider-group">
+                  <legend>{{ sourceLabels[sourceName] }}</legend>
+
+                  <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                    <mat-label>Source league</mat-label>
+                    @if (!selectedLeague(sourceName)) {
+                      <mat-icon matPrefix aria-hidden="true">search</mat-icon>
+                    }
+                    <div class="autocomplete-control">
+                      @if (selectedLeague(sourceName); as league) {
+                        @if (league.countryCode2) {
+                          <app-country-flag decorative [code]="league.countryCode2" />
+                        }
+                      }
+                      <input
+                        #leagueInput
+                        matInput
+                        type="search"
+                        autocomplete="off"
+                        [attr.aria-label]="'Search ' + sourceLabels[sourceName] + ' leagues'"
+                        [value]="leagueSearches()[sourceName]"
+                        [matAutocomplete]="leagueAutocomplete"
+                        (input)="searchLeagues(sourceName, leagueInput.value)"
+                      />
+                    </div>
+                    @if (selectedLeague(sourceName); as league) {
+                      <span matTextSuffix class="selected-tier">
+                        {{ league.tier ? 'Tier ' + league.tier : 'Tier not set' }}
+                      </span>
+                    }
+                    @if (selectedLeagueIds()[sourceName]) {
+                      <button
+                        matIconButton
+                        matSuffix
+                        type="button"
+                        [attr.aria-label]="'Clear ' + sourceLabels[sourceName] + ' league'"
+                        (click)="clearLeague(sourceName)"
+                      >
+                        <mat-icon aria-hidden="true">close</mat-icon>
+                      </button>
+                    }
+                    <mat-autocomplete
+                      #leagueAutocomplete="matAutocomplete"
+                      [displayWith]="displayLeague"
+                      (optionSelected)="selectLeague(sourceName, $event)"
+                    >
+                      @for (league of leagueCandidates()[sourceName]; track league.id) {
+                        <mat-option [value]="league">
+                          <span class="autocomplete-option">
+                            @if (league.countryCode2) {
+                              <app-country-flag decorative [code]="league.countryCode2" />
+                            }
+                            <span class="option-name">{{ league.name }}</span>
+                            <span class="option-metadata">
+                              {{ league.tier ? 'Tier ' + league.tier : 'Tier not set' }}
+                            </span>
+                          </span>
+                        </mat-option>
+                      } @empty {
+                        <mat-option disabled>No matching leagues</mat-option>
+                      }
+                    </mat-autocomplete>
+                    <mat-hint>Type a league name, Source ID, or country</mat-hint>
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                    <mat-label>Source team</mat-label>
+                    @if (!selectedCandidate(sourceName)) {
+                      <mat-icon matPrefix aria-hidden="true">search</mat-icon>
+                    }
+                    <div class="autocomplete-control">
+                      @if (selectedCandidate(sourceName); as candidate) {
+                        @if (candidate.countryCode2) {
+                          <app-country-flag decorative [code]="candidate.countryCode2" />
+                        }
+                      }
+                      <input
+                        #teamInput
+                        matInput
+                        type="search"
+                        autocomplete="off"
+                        [attr.aria-label]="'Search ' + sourceLabels[sourceName] + ' teams'"
+                        [value]="teamSearches()[sourceName]"
+                        [matAutocomplete]="teamAutocomplete"
+                        (input)="searchTeams(sourceName, teamInput.value)"
+                      />
+                    </div>
+                    @if (selectedCandidate(sourceName)) {
+                      <button
+                        matIconButton
+                        matSuffix
+                        type="button"
+                        [attr.aria-label]="'Clear ' + sourceLabels[sourceName] + ' team'"
+                        (click)="clearTeam(sourceName)"
+                      >
+                        <mat-icon aria-hidden="true">close</mat-icon>
+                      </button>
+                    }
+                    <mat-autocomplete
+                      #teamAutocomplete="matAutocomplete"
+                      [displayWith]="displayCandidate"
+                      (optionSelected)="selectTeam(sourceName, $event)"
+                    >
+                      @for (candidate of candidates()[sourceName]; track candidate.id) {
+                        <mat-option [value]="candidate" [disabled]="candidateDisabled(candidate)">
+                          <span class="autocomplete-option">
+                            @if (candidate.countryCode2) {
+                              <app-country-flag decorative [code]="candidate.countryCode2" />
+                            }
+                            <span class="option-name">{{ candidate.name }}</span>
+                            @if (candidate.combinedTeamName) {
+                              <span class="option-metadata">
+                                Already linked to {{ candidate.combinedTeamName }}
+                              </span>
+                            } @else {
+                              <span class="option-metadata">
+                                {{ candidate.playerCount ?? 0 | number }} players
+                              </span>
+                            }
+                          </span>
+                        </mat-option>
+                      } @empty {
+                        <mat-option disabled>No matching teams</mat-option>
+                      }
+                    </mat-autocomplete>
+                    @if (automaticMatchLabel(sourceName); as matchLabel) {
+                      <mat-hint class="automatic-match-hint">{{ matchLabel }}</mat-hint>
+                    } @else if (selectedLeague(sourceName); as league) {
+                      <mat-hint>Showing teams in {{ league.name }}</mat-hint>
+                    } @else {
+                      <mat-hint>Type a team name or Source ID</mat-hint>
+                    }
+                  </mat-form-field>
+                </fieldset>
+              }
+            </div>
+            <p class="selection-summary">
+              {{ selectedTeamCount() | number }} providers selected
+              @if (automaticTeamCount()) {
+                <span>· {{ automaticTeamCount() | number }} matched automatically</span>
+              }
+            </p>
+            @if (autoMatching()) {
+              <div class="matching-progress" role="status" aria-live="polite">
+                <span>Finding matching teams in other providers…</span>
+                <mat-progress-bar
+                  mode="indeterminate"
+                  aria-label="Finding matching teams in other providers"
+                />
+              </div>
+            }
+            @if (busy()) {
+              <mat-progress-bar mode="indeterminate" aria-label="Identifying source players" />
+            }
+            <div class="step-actions">
+              <button
+                matButton="filled"
+                type="button"
+                [disabled]="busy() || autoMatching() || !selectedTeamCount()"
+                (click)="prepare()"
+              >
+                Prepare import
+              </button>
+            </div>
+          </div>
+        </mat-step>
+
+        <mat-step data-step-id="league" [completed]="true">
+          <ng-template matStepLabel>League</ng-template>
+          <div class="step-content">
+            <h2>Choose the project league</h2>
+            <mat-radio-group
+              class="league-options"
+              aria-label="Project league behavior"
+              [value]="leagueMode()"
+              (change)="setLeagueMode($event.value)"
+            >
+              <mat-radio-button value="none">Leave the project team unassigned</mat-radio-button>
+              <mat-radio-button value="existing">Use an existing project league</mat-radio-button>
+              <mat-radio-button value="create" [disabled]="!preview()?.sourceLeagues?.length">
+                Create a project league from source parents
+              </mat-radio-button>
+            </mat-radio-group>
+            @if (leagueMode() === 'existing') {
+              <mat-form-field appearance="outline">
+                <mat-label>Project league</mat-label>
+                <mat-select
+                  [value]="combinedLeagueId()"
+                  (selectionChange)="combinedLeagueId.set($event.value)"
+                >
+                  @if (selectedCombinedLeague(); as league) {
+                    <mat-select-trigger>
+                      <span class="combined-league-option">
+                        @if (league.countryCode2) {
+                          <app-country-flag decorative [code]="league.countryCode2" />
+                        }
+                        <span class="option-name">{{ league.name }}</span>
+                        <span class="option-metadata">
+                          {{ league.tier === undefined ? 'Tier not set' : 'Tier ' + league.tier }}
+                        </span>
+                      </span>
+                    </mat-select-trigger>
+                  }
+                  @for (league of preview()?.combinedLeagues ?? []; track league.id) {
+                    <mat-option [value]="league.id">
+                      <span class="combined-league-option">
+                        @if (league.countryCode2) {
+                          <app-country-flag decorative [code]="league.countryCode2" />
+                        }
+                        <span class="option-name">{{ league.name }}</span>
+                        <span class="option-metadata">
+                          {{ league.tier === undefined ? 'Tier not set' : 'Tier ' + league.tier }}
+                        </span>
+                      </span>
+                    </mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            } @else if (leagueMode() === 'create') {
+              <div class="source-leagues" role="group" aria-label="Source leagues">
+                @for (league of preview()?.sourceLeagues ?? []; track league.id) {
+                  <mat-checkbox
+                    [checked]="sourceLeagueIds().includes(league.id)"
+                    (change)="
+                      sourceLeagueIds.set(
+                        $event.checked
+                          ? [...sourceLeagueIds(), league.id]
+                          : sourceLeagueIds().filter((id) => id !== league.id)
+                      )
+                    "
+                  >
+                    {{ sourceLabels[league.sourceName] }} · {{ league.name }}
+                  </mat-checkbox>
+                }
+              </div>
+            }
+            <div class="step-actions">
+              <button matButton matStepperPrevious type="button">Back</button>
+              <button matButton="filled" matStepperNext type="button">
+                {{
+                  showPlayerMatches()
+                    ? 'Review matches'
+                    : showConflicts()
+                      ? 'Resolve fields'
+                      : 'Review summary'
+                }}
+              </button>
+            </div>
+          </div>
+        </mat-step>
+
+        @if (showPlayerMatches()) {
+          <mat-step data-step-id="player-matches" [completed]="true">
+            <ng-template matStepLabel>Player matches</ng-template>
+            <div class="step-content">
+              <div>
+                <h2>Review player identification</h2>
+                <p id="player-alignment-help">
+                  Players in the same row will be combined as one person. Drag players vertically or
+                  use the arrow buttons to align them.
+                </p>
+                <p class="match-summary">
+                  {{ automaticGroupCount() | number }} automatic matches ·
+                  {{ unmatchedGroupCount() | number }} single-source players
+                </p>
+              </div>
+              <div
+                class="alignment-scroll"
+                role="region"
+                tabindex="0"
+                aria-label="Player matching table"
+                aria-describedby="player-alignment-help"
+              >
+                <div
+                  cdkDropListGroup
+                  class="alignment-board"
+                  role="table"
+                  aria-label="Players grouped by provider and canonical identity"
+                  [style.--provider-count]="activeSources().length"
+                >
+                  <div class="alignment-header" role="row">
+                    @for (sourceName of activeSources(); track sourceName) {
+                      <div role="columnheader">
+                        {{ sourceLabels[sourceName] }}
+                      </div>
+                    }
+                  </div>
+
+                  @for (
+                    group of matchGroups();
+                    track group.id;
+                    let rowIndex = $index, rowCount = $count
+                  ) {
+                    <div
+                      class="alignment-row"
+                      role="row"
+                      [attr.aria-label]="'Player match row ' + (rowIndex + 1)"
+                      [attr.data-group-id]="group.id"
+                    >
+                      <div class="row-status">
+                        <span
+                          class="status-badge"
+                          [class.automatic]="group.automatic"
+                          [class.single-source]="group.players.length === 1"
+                        >
+                          Row {{ rowIndex + 1 }} · {{ matchStatus(group) }}
+                        </span>
+                      </div>
+                      @for (sourceName of activeSources(); track sourceName) {
+                        <div
+                          cdkDropList
+                          class="player-cell"
+                          role="cell"
+                          [class.empty-cell]="!playerFor(group, sourceName)"
+                          [attr.aria-label]="
+                            sourceLabels[sourceName] +
+                            ', row ' +
+                            (rowIndex + 1) +
+                            (playerFor(group, sourceName) ? '' : ', empty')
+                          "
+                          [attr.data-cell-group-id]="group.id"
+                          [attr.data-source-name]="sourceName"
+                          [cdkDropListData]="dropCellData(sourceName, group.id)"
+                          [cdkDropListEnterPredicate]="canEnterPlayerCell"
+                          [cdkDropListSortingDisabled]="true"
+                          (cdkDropListDropped)="dropPlayer($event)"
+                        >
+                          @if (playerFor(group, sourceName); as player) {
+                            <article
+                              cdkDrag
+                              cdkDragLockAxis="y"
+                              class="player-tile"
+                              [attr.data-player-id]="player.id"
+                              [cdkDragData]="dragData(group, player)"
+                            >
+                              <div class="player-details">
+                                <div class="player-heading">
+                                  <strong>{{ player.name }}</strong>
+                                  @if (player.position) {
+                                    <app-position-badge [position]="player.position" />
+                                  }
+                                </div>
+                                <div class="player-metadata">
+                                  <span class="player-birthdate">
+                                    {{
+                                      player.birthdate
+                                        ? (player.birthdate | referenceDate)
+                                        : 'Birthdate unknown'
+                                    }}
+                                  </span>
+                                  @if (player.countryName || player.countryCode2) {
+                                    <span class="player-country">
+                                      @if (player.countryCode2) {
+                                        <app-country-flag decorative [code]="player.countryCode2" />
+                                      }
+                                      <span class="player-country-name">
+                                        {{ countryLabel(player) }}
+                                      </span>
+                                    </span>
+                                  }
+                                </div>
+                              </div>
+                              <div class="player-actions" aria-label="Player row controls">
+                                <span
+                                  matTooltip="Drag to align this player with another row"
+                                  matTooltipPosition="above"
+                                  matTooltipTouchGestures="off"
+                                  class="player-action-tooltip"
+                                  [attr.data-player-action]="'drag-' + player.id"
+                                >
+                                  <button
+                                    cdkDragHandle
+                                    matIconButton
+                                    class="player-action-button player-drag-handle"
+                                    type="button"
+                                    [attr.aria-label]="
+                                      'Drag ' +
+                                      player.name +
+                                      ' within the ' +
+                                      sourceLabels[sourceName] +
+                                      ' column'
+                                    "
+                                  >
+                                    <mat-icon aria-hidden="true">drag_indicator</mat-icon>
+                                  </button>
+                                </span>
+                                <span
+                                  matTooltip="Move this player up one row"
+                                  matTooltipPosition="above"
+                                  class="player-action-tooltip"
+                                  [attr.data-player-action]="'up-' + player.id"
+                                >
+                                  <button
+                                    matIconButton
+                                    class="player-action-button"
+                                    type="button"
+                                    [disabled]="rowIndex === 0"
+                                    [attr.aria-label]="'Move ' + player.name + ' up one row'"
+                                    (click)="movePlayer(group.id, player.id, -1)"
+                                  >
+                                    <mat-icon aria-hidden="true">arrow_upward</mat-icon>
+                                  </button>
+                                </span>
+                                <span
+                                  matTooltip="Move this player down one row"
+                                  matTooltipPosition="above"
+                                  class="player-action-tooltip"
+                                  [attr.data-player-action]="'down-' + player.id"
+                                >
+                                  <button
+                                    matIconButton
+                                    class="player-action-button"
+                                    type="button"
+                                    [disabled]="rowIndex === rowCount - 1"
+                                    [attr.aria-label]="'Move ' + player.name + ' down one row'"
+                                    (click)="movePlayer(group.id, player.id, 1)"
+                                  >
+                                    <mat-icon aria-hidden="true">arrow_downward</mat-icon>
+                                  </button>
+                                </span>
+                                <span
+                                  matTooltip="Separate this player into a new unmatched row"
+                                  matTooltipPosition="above"
+                                  class="player-action-tooltip"
+                                  [attr.data-player-action]="'separate-' + player.id"
+                                >
+                                  <button
+                                    matIconButton
+                                    class="player-action-button"
+                                    type="button"
+                                    [disabled]="group.players.length === 1"
+                                    [attr.aria-label]="
+                                      'Separate ' + player.name + ' into a new row'
+                                    "
+                                    (click)="separatePlayer(group.id, player.id)"
+                                  >
+                                    <mat-icon aria-hidden="true">call_split</mat-icon>
+                                  </button>
+                                </span>
+                              </div>
+                            </article>
+                          } @else {
+                            <span class="empty-label" aria-hidden="true">Empty</span>
+                          }
+                        </div>
+                      }
+                    </div>
+                  }
+
+                  <div class="alignment-row new-row" role="row" aria-label="New unmatched row">
+                    <div class="row-status">
+                      <span class="status-badge single-source">New unmatched row</span>
+                    </div>
+                    @for (sourceName of activeSources(); track sourceName) {
+                      <div
+                        cdkDropList
+                        class="player-cell new-row-cell"
+                        role="cell"
+                        [attr.aria-label]="
+                          'Drop a ' + sourceLabels[sourceName] + ' player here to separate them'
+                        "
+                        [attr.data-source-name]="sourceName"
+                        data-new-row="true"
+                        [cdkDropListData]="dropCellData(sourceName, undefined, true)"
+                        [cdkDropListEnterPredicate]="canEnterPlayerCell"
+                        [cdkDropListSortingDisabled]="true"
+                        (cdkDropListDropped)="dropPlayer($event)"
+                      >
+                        <mat-icon aria-hidden="true">add</mat-icon>
+                        <span>Drop player here to separate</span>
+                      </div>
+                    }
+                  </div>
+                </div>
+              </div>
+              <div class="step-actions">
+                <button matButton matStepperPrevious type="button">Back</button>
+                <button matButton="filled" type="button" (click)="continueMatches()">
+                  {{ showConflicts() ? 'Resolve fields' : 'Review summary' }}
+                </button>
+              </div>
+            </div>
+          </mat-step>
+        }
+
+        @if (showConflicts()) {
+          <mat-step data-step-id="conflicts" [completed]="true">
+            <ng-template matStepLabel>Conflicts</ng-template>
+            <div class="step-content">
+              <h2>Resolve conflicting information</h2>
+              <p>
+                Only team and player fields with conflicting values are shown below. Names prefer
+                equivalent variants with diacritics; other values follow the global source priority.
+              </p>
+              @if (reviewCards().length) {
+                <div class="review-cards">
+                  @for (card of reviewCards(); track card.id) {
+                    <mat-card
+                      appearance="outlined"
+                      class="review-card player-tile"
+                      [attr.data-review-card]="card.id"
+                      [attr.aria-labelledby]="card.headingId"
+                    >
+                      <mat-card-header class="review-card-heading">
+                        <mat-card-title>
+                          <span [id]="card.headingId">{{ card.name }}</span>
+                        </mat-card-title>
+                        <mat-card-subtitle class="player-metadata review-card-metadata">
+                          @if (card.kind === 'player') {
+                            <span class="player-birthdate">
+                              {{
+                                card.birthdate
+                                  ? (card.birthdate | referenceDate)
+                                  : 'Birthdate unknown'
+                              }}
+                            </span>
+                          }
+                          @if (card.countryName || card.countryCode2 || card.kind === 'team') {
+                            <span class="player-country">
+                              @if (card.countryCode2) {
+                                <app-country-flag decorative [code]="card.countryCode2" />
+                              }
+                              <span class="player-country-name">
+                                {{ countryLabel(card) || 'Country unknown' }}
+                              </span>
+                            </span>
+                          }
+                        </mat-card-subtitle>
+                        @if (card.position) {
+                          <app-position-badge [position]="card.position" />
+                        }
+                      </mat-card-header>
+                      <mat-card-content>
+                        <dl class="review-fields">
+                          @for (field of card.fields; track field.key) {
+                            <div
+                              class="review-field conflicting"
+                              [attr.data-review-field]="field.key"
+                            >
+                              <dt>{{ field.label }}</dt>
+                              <dd>
+                                <mat-button-toggle-group
+                                  class="resolution-options"
+                                  hideSingleSelectionIndicator
+                                  [attr.aria-label]="'Choose ' + field.label + ' for ' + card.name"
+                                  [value]="field.selectedOptionKey"
+                                  (change)="selectReviewOption(field, $event.value)"
+                                >
+                                  @for (option of field.options; track option.key) {
+                                    <mat-button-toggle [value]="option.key">
+                                      <span class="resolution-value">{{
+                                        option.displayValue
+                                      }}</span>
+                                    </mat-button-toggle>
+                                  }
+                                </mat-button-toggle-group>
+                              </dd>
+                            </div>
+                          }
+                        </dl>
+                      </mat-card-content>
+                    </mat-card>
+                  }
+                </div>
+              } @else {
+                <p class="empty-state" role="status">No conflicts to resolve.</p>
+              }
+              <div class="step-actions">
+                <button matButton matStepperPrevious type="button">Back</button>
+                <button matButton="filled" type="button" (click)="continueConflicts()">
+                  Review summary
+                </button>
+              </div>
+            </div>
+          </mat-step>
+        }
+
+        <mat-step data-step-id="summary">
+          <ng-template matStepLabel>Summary</ng-template>
+          <div class="step-content">
+            <h2>{{ combinedTeamId() ? 'Apply team recombination' : 'Import project team' }}</h2>
+            <dl class="summary">
+              <div>
+                <dt>Source teams</dt>
+                <dd>{{ selectedTeamCount() | number }}</dd>
+              </div>
+              <div>
+                <dt>Selected players</dt>
+                <dd>
+                  {{ selectedPlayerCount() | number }} of {{ summaryPlayers().length | number }}
+                </dd>
+              </div>
+              <div>
+                <dt>Field conflicts</dt>
+                <dd>{{ conflicts().length | number }}</dd>
+              </div>
+              <div>
+                <dt>League</dt>
+                <dd>{{ leagueMode() === 'none' ? 'Unassigned' : leagueMode() }}</dd>
+              </div>
+            </dl>
+            <p>
+              Source leagues, teams, and players will not be modified. The canonical update is
+              committed in one database transaction.
+            </p>
+            <section class="summary-player-section" aria-labelledby="summary-player-heading">
+              <div class="summary-player-heading">
+                <div>
+                  <h3 id="summary-player-heading">Select project players</h3>
+                  <p>Choose the resolved players included in the project team.</p>
+                </div>
+                <span aria-live="polite">
+                  {{ selectedPlayerCount() | number }} of
+                  {{ summaryPlayers().length | number }} selected
+                </span>
+              </div>
+              <button
+                matButton="outlined"
+                type="button"
+                [disabled]="selectedPlayersWithoutBirthdateCount() === 0"
+                (click)="deselectPlayersWithoutBirthdate()"
+              >
+                Deselect players without birthdate
+              </button>
+              <div
+                class="summary-player-list"
+                role="group"
+                aria-labelledby="summary-player-heading"
+              >
+                @for (player of summaryPlayers(); track player.groupId) {
+                  <mat-checkbox
+                    class="summary-player-option"
+                    [checked]="selectedPlayerGroupIds().has(player.groupId)"
+                    [attr.data-summary-player-group-id]="player.groupId"
+                    (change)="toggleSummaryPlayer(player.groupId, $event.checked)"
+                  >
+                    <span class="summary-player-label">
+                      <span class="player-heading">
+                        <strong>{{ player.name }}</strong>
+                        @if (player.position) {
+                          <app-position-badge [position]="player.position" />
+                        }
+                      </span>
+                      <span class="player-metadata">
+                        <span class="player-birthdate">
+                          {{
+                            player.birthdate
+                              ? (player.birthdate | referenceDate)
+                              : 'Birthdate unknown'
+                          }}
+                        </span>
+                        @if (player.countryName || player.countryCode2) {
+                          <span class="player-country">
+                            @if (player.countryCode2) {
+                              <app-country-flag decorative [code]="player.countryCode2" />
+                            }
+                            <span class="player-country-name">{{ countryLabel(player) }}</span>
+                          </span>
+                        }
+                      </span>
+                    </span>
+                  </mat-checkbox>
+                }
+              </div>
+              @if (!selectedPlayerCount()) {
+                <p class="summary-player-error" role="status">
+                  Select at least one project player to continue.
+                </p>
+              }
+            </section>
+            @if (busy()) {
+              <mat-progress-bar mode="indeterminate" aria-label="Saving project team" />
+            }
+            <div class="step-actions">
+              <button matButton matStepperPrevious type="button" [disabled]="busy()">Back</button>
+              <button
+                matButton="filled"
+                type="button"
+                [disabled]="busy() || !selectedPlayerCount()"
+                (click)="commit()"
+              >
+                <mat-icon aria-hidden="true">
+                  {{ combinedTeamId() ? 'merge' : 'cloud_download' }}
+                </mat-icon>
+                {{ combinedTeamId() ? 'Apply recombination' : 'Import project team' }}
+              </button>
+            </div>
+          </div>
+        </mat-step>
+      </mat-stepper>
+    </mat-card>
+  }
+</section>

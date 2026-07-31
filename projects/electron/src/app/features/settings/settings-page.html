@@ -5,7 +5,7 @@
   </div>
 </app-page-header>
 
-<section class="page max-w-3xl">
+<section class="page grid max-w-5xl gap-4">
   <mat-card appearance="outlined">
     <mat-card-header>
       <mat-icon mat-card-avatar>palette</mat-icon>
@@ -24,5 +24,44 @@
         <mat-radio-button value="dark">Dark</mat-radio-button>
       </mat-radio-group>
     </mat-card-content>
+  </mat-card>
+
+  <mat-card appearance="outlined">
+    <mat-card-header>
+      <mat-icon mat-card-avatar>cloud_download</mat-icon>
+      <mat-card-title>Source DB</mat-card-title>
+      <mat-card-subtitle>Providers, badges, columns, and export presets.</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-actions class="flex flex-wrap gap-2">
+      <a matButton routerLink="/settings/sources">Providers</a>
+      <a matButton routerLink="/settings/badges">Badges</a>
+      <a matButton routerLink="/settings/columns">Columns</a>
+      <a matButton routerLink="/settings/export">Export presets</a>
+    </mat-card-actions>
+  </mat-card>
+
+  <mat-card appearance="outlined">
+    <mat-card-header>
+      <mat-icon mat-card-avatar>merge</mat-icon>
+      <mat-card-title>Combined DB</mat-card-title>
+      <mat-card-subtitle>Canonical-record badges and table layouts.</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-actions class="flex flex-wrap gap-2">
+      <a matButton routerLink="/settings/combined/badges">Badges</a>
+      <a matButton routerLink="/settings/combined/columns">Columns</a>
+    </mat-card-actions>
+  </mat-card>
+
+  <mat-card appearance="outlined">
+    <mat-card-header>
+      <mat-icon mat-card-avatar>move_to_inbox</mat-icon>
+      <mat-card-title>Legacy QDB Downloader</mat-card-title>
+      <mat-card-subtitle>
+        Preview and migrate projects from the standalone application.
+      </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-actions>
+      <a matButton="filled" routerLink="/settings/migration">Open migration</a>
+    </mat-card-actions>
   </mat-card>
 </section>

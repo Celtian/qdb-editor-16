@@ -1,0 +1,175 @@
+:host {
+  display: block;
+}
+
+.settings-page {
+  display: grid;
+  gap: 1.5rem;
+  margin: 0 auto;
+  max-width: 64rem;
+  padding: 2.5rem clamp(1rem, 4vw, 3.5rem);
+}
+
+mat-card {
+  max-width: 42rem;
+}
+
+mat-card-header {
+  padding: 1rem 1rem 0;
+}
+
+mat-card-content {
+  color: var(--mat-sys-on-surface-variant);
+  padding: 1.5rem;
+}
+
+mat-card-content p {
+  margin: 0;
+}
+
+.badge-age-icon {
+  align-items: center;
+  background: var(--mat-sys-tertiary-container);
+  color: var(--mat-sys-on-tertiary-container);
+  display: flex;
+  justify-content: center;
+}
+
+.built-in-badges-icon {
+  align-items: center;
+  background: var(--mat-sys-tertiary-container);
+  color: var(--mat-sys-on-tertiary-container);
+  display: flex;
+  justify-content: center;
+}
+
+.built-in-badge-list {
+  display: grid;
+  gap: 1rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.built-in-badge-list li {
+  align-items: center;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: auto minmax(0, 1fr);
+}
+
+.custom-badges-card {
+  max-width: 64rem;
+}
+
+.custom-badges-icon {
+  align-items: center;
+  background: var(--mat-sys-secondary-container);
+  color: var(--mat-sys-on-secondary-container);
+  display: flex;
+  justify-content: center;
+}
+
+.custom-badges-heading {
+  align-items: center;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+.custom-badges-heading p {
+  max-width: 34rem;
+}
+
+.custom-badge-list {
+  display: grid;
+  list-style: none;
+  margin: 1.25rem 0 0;
+  padding: 0;
+}
+
+.custom-badge-list li {
+  align-items: center;
+  border-top: 1px solid var(--mat-sys-outline-variant);
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  padding: 1rem 0;
+}
+
+.custom-badge-details {
+  align-items: center;
+  display: grid;
+  gap: 0.25rem 0.75rem;
+  grid-template-columns: auto minmax(0, 1fr);
+}
+
+.custom-badge-details app-custom-badge {
+  grid-row: 1 / span 2;
+}
+
+.custom-badge-details small {
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.custom-badge-actions {
+  display: flex;
+}
+
+.custom-badge-actions button:last-child {
+  color: var(--mat-sys-error);
+}
+
+.custom-badges-error {
+  background: var(--mat-sys-error-container);
+  color: var(--mat-sys-on-error-container);
+  padding: 1rem;
+}
+
+.empty-custom-badges {
+  margin-top: 1.25rem;
+}
+
+.badge-age-form {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.badge-age-setting {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.badge-age-heading {
+  align-items: baseline;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+.badge-age-heading label {
+  color: var(--mat-sys-on-surface);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.badge-age-heading output {
+  color: var(--mat-sys-primary);
+  font-weight: 600;
+}
+
+.badge-age-setting mat-slider {
+  width: 100%;
+}
+
+@media (max-width: 640px) {
+  .custom-badges-heading,
+  .custom-badge-list li {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .custom-badge-actions {
+    justify-content: flex-end;
+  }
+}

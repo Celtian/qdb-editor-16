@@ -1,4 +1,4 @@
-import { computed, inject, Service, signal } from '@angular/core';
+import { computed, effect, inject, Service, signal } from '@angular/core';
 import type {
   DatabaseDescriptor,
   OperationProgress,
@@ -6,6 +6,7 @@ import type {
   TableDescriptor,
 } from '../../../shared/contracts';
 import { DesktopApi } from './desktop-api';
+import { DesktopApi as DownloaderApi } from './downloader-api';
 
 export interface BranchLoadState {
   status: 'idle' | 'loading' | 'loaded' | 'error';
@@ -17,6 +18,7 @@ const idleBranchState: BranchLoadState = { status: 'idle', error: '' };
 @Service()
 export class AppStore {
   private readonly desktop = inject(DesktopApi);
+  private readonly downloader = inject(DownloaderApi);
   private readonly projectState = signal<ProjectDescriptor[]>([]);
   private readonly databaseState = signal<ReadonlyMap<string, DatabaseDescriptor[]>>(new Map());
   private readonly tableState = signal<ReadonlyMap<string, TableDescriptor[]>>(new Map());
@@ -46,6 +48,20 @@ export class AppStore {
     } catch {
       // The bridge is attached when Electron loads the renderer.
     }
+    effect(() => {
+      const scrape = this.downloader.scrapeProgress();
+      if (!scrape) {
+        if (this.progress()?.message.startsWith('Importing provider data')) {
+          this.progress.set(undefined);
+        }
+        return;
+      }
+      const detail = scrape.currentTeam ? `: ${scrape.currentTeam}` : '';
+      this.progress.set({
+        operation: 'import',
+        message: `Importing provider data ${scrape.completed}/${scrape.total}${detail}`,
+      });
+    });
   }
 
   async refreshProjects(): Promise<void> {
@@ -118,6 +134,11 @@ export class AppStore {
   }
 
   async cancelCurrentOperation(): Promise<void> {
+    const scrape = this.downloader.scrapeProgress();
+    if (scrape) {
+      await this.downloader.cancelScrape(scrape.jobId);
+      return;
+    }
     const operation = this.progress()?.operation;
     if (operation) await this.desktop.cancelOperation(operation);
   }

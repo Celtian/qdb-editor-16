@@ -1,0 +1,65 @@
+<div class="project-layout">
+  <aside class="sidebar">
+    <div class="sidebar-content">
+      <a class="brand" routerLink="/" aria-label="QDB Downloader projects">
+        <mat-icon aria-hidden="true">storage</mat-icon>
+        <span>QDB Downloader</span>
+      </a>
+
+      <nav aria-label="Project navigation">
+        @for (group of linkGroups; track group.id) {
+          <div class="nav-group">
+            <span class="nav-group-label">{{ group.label }}</span>
+            @for (link of group.links; track link.path) {
+              <a
+                matButton
+                routerLinkActive="active"
+                [routerLink]="link.path"
+                [routerLinkActiveOptions]="{ exact: true }"
+                [attr.aria-label]="link.label"
+              >
+                <mat-icon aria-hidden="true">{{ link.icon }}</mat-icon>
+                <span>{{ link.label }}</span>
+              </a>
+            }
+          </div>
+        }
+      </nav>
+
+      <div class="sidebar-footer">
+        <button
+          class="sidebar-action"
+          matButton
+          type="button"
+          aria-label="About"
+          (click)="openAbout()"
+        >
+          <mat-icon aria-hidden="true">info</mat-icon>
+          <span>About</span>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <div class="project-content">
+    <mat-toolbar>
+      @if (project(); as activeProject) {
+        <div>
+          <strong>{{ activeProject.name }}</strong>
+          <span>{{ activeProject.referenceDate | referenceDate }}</span>
+        </div>
+      } @else if (error()) {
+        <span class="error" role="alert">{{ error() }}</span>
+      } @else {
+        <mat-progress-bar mode="indeterminate" aria-label="Loading project" />
+      }
+      <span class="spacer"></span>
+      <a matButton routerLink="/settings" [queryParams]="{ redirectUrl: router.url }">
+        <mat-icon aria-hidden="true">settings</mat-icon>
+        Global settings
+      </a>
+      <a matButton routerLink="/"><mat-icon aria-hidden="true">arrow_back</mat-icon>Projects</a>
+    </mat-toolbar>
+    <main id="main-content" tabindex="-1"><router-outlet /></main>
+  </div>
+</div>

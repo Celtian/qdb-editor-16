@@ -1,0 +1,128 @@
+<h2 mat-dialog-title>Edit {{ data.kind === 'leagues' ? 'league' : 'team' }}</h2>
+<mat-dialog-content>
+  <p class="hint">Source identity changes keep this record’s internal links intact.</p>
+  <form id="edit-entity-form" (submit)="$event.preventDefault(); save()">
+    <mat-form-field appearance="outline">
+      <mat-label>Name</mat-label>
+      <input matInput autocomplete="off" [formField]="metadataForm.name" />
+      @if (metadataForm.name().touched() && metadataForm.name().invalid()) {
+        <mat-error>{{ metadataForm.name().errors()[0]?.message }}</mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Country</mat-label>
+      @if (selectedCountry(); as country) {
+        <app-country-flag
+          matIconPrefix
+          class="selected-country-flag"
+          decorative
+          [code]="country.flagCode"
+        />
+      }
+      <input
+        matInput
+        class="country-input"
+        type="search"
+        autocomplete="off"
+        [formField]="metadataForm.countryName"
+        [matAutocomplete]="countryAutocomplete"
+      />
+      <mat-autocomplete #countryAutocomplete="matAutocomplete" autoActiveFirstOption>
+        @for (country of filteredCountries(); track country.code3) {
+          <mat-option [value]="country.name">
+            <span class="country-option">
+              <app-country-flag decorative [code]="country.flagCode" />
+              <span>{{ country.name }}</span>
+            </span>
+          </mat-option>
+        } @empty {
+          <mat-option disabled>No matching countries</mat-option>
+        }
+      </mat-autocomplete>
+      <mat-hint>Optional; type a country or football association.</mat-hint>
+      @if (metadataForm.countryName().touched() && metadataForm.countryName().invalid()) {
+        <mat-error>{{ metadataForm.countryName().errors()[0]?.message }}</mat-error>
+      }
+    </mat-form-field>
+    @if (data.kind === 'teams') {
+      <mat-form-field appearance="outline">
+        <mat-label>League</mat-label>
+        <mat-select class="league-select" [formField]="metadataForm.leagueId">
+          <mat-option value="">No league</mat-option>
+          @for (league of availableLeagues; track league.id) {
+            <mat-option [value]="league.id">{{ league.name }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    }
+    @if (data.kind === 'leagues') {
+      <mat-form-field appearance="outline">
+        <mat-label>Tier</mat-label>
+        <mat-select [formField]="metadataForm.tier" aria-label="League tier">
+          <mat-option [value]="0">No tier</mat-option>
+          @for (tier of tierOptions; track tier) {
+            <mat-option [value]="tier">Tier {{ tier }}</mat-option>
+          }
+        </mat-select>
+        <mat-hint>Optional ranking from 1 to 10.</mat-hint>
+      </mat-form-field>
+    }
+    <mat-form-field appearance="outline">
+      <mat-label>Provider</mat-label>
+      <input matInput readonly [value]="sourceLabel" />
+      <mat-hint>The provider is part of this record’s identity and cannot be changed.</mat-hint>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>{{ sourceLabel }} source ID</mat-label>
+      <input matInput autocomplete="off" [formField]="metadataForm.sourceId" />
+      <mat-hint
+        >Enter only the Source ID, e.g. <strong>{{ sourceIdExample }}</strong
+        >.</mat-hint
+      >
+      @if (metadataForm.sourceId().touched() && metadataForm.sourceId().invalid()) {
+        <mat-error>{{ metadataForm.sourceId().errors()[0]?.message }}</mat-error>
+      }
+    </mat-form-field>
+    @if (supportsSeason) {
+      <mat-form-field appearance="outline">
+        <mat-label>Season</mat-label>
+        <input matInput inputmode="numeric" placeholder="2026" [formField]="metadataForm.season" />
+        <mat-hint>Four-digit starting year, e.g. <strong>2026</strong></mat-hint>
+        @if (metadataForm.season().touched() && metadataForm.season().invalid()) {
+          <mat-error>{{ metadataForm.season().errors()[0]?.message }}</mat-error>
+        }
+      </mat-form-field>
+    }
+    <aside class="source-note" aria-labelledby="source-note-title">
+      <mat-icon aria-hidden="true">link</mat-icon>
+      <div class="source-note-content">
+        <h3 id="source-note-title">How Soccerbot builds source links</h3>
+        <p class="source-note-intro">Soccerbot combines the Source ID with the provider’s URL.</p>
+        <div class="source-examples">
+          @for (example of sourceUrlGuidance.examples; track example.url) {
+            <a
+              class="source-example"
+              [href]="example.url"
+              target="_blank"
+              rel="noopener noreferrer"
+              [attr.aria-label]="'Open example ' + example.label + ' URL in the system browser'"
+            >
+              <span class="source-example-copy">
+                <strong>{{ example.label }}</strong>
+                <code>{{ example.url }}</code>
+              </span>
+              <mat-icon aria-hidden="true">open_in_new</mat-icon>
+            </a>
+          }
+        </div>
+        @if (sourceUrlGuidance.detail; as detail) {
+          <p class="source-note-detail">{{ detail }}</p>
+        }
+      </div>
+    </aside>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button matButton mat-dialog-close type="button">Cancel</button>
+  <button matButton="filled" form="edit-entity-form" type="submit">Save changes</button>
+</mat-dialog-actions>

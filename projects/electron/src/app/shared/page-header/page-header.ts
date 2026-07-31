@@ -10,7 +10,12 @@ import { MatIconModule } from '@angular/material/icon';
         <mat-icon>{{ icon() }}</mat-icon>
       </div>
       <div class="page-header__content">
-        <ng-content select="[pageHeaderContent]" />
+        <div class="page-header__copy">
+          <ng-content select="[pageHeaderContent]" />
+        </div>
+        <div class="page-header__title-action">
+          <ng-content select="[pageHeaderTitleAction]" />
+        </div>
       </div>
       <div class="page-header__actions">
         <ng-content select="[pageHeaderActions]" />
@@ -20,5 +25,5 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrl: './page-header.css',
 })
 export class PageHeader {
-  readonly icon = input.required<string>();
+  readonly icon = input('');
 }

@@ -30,7 +30,17 @@
           </mat-card-header>
           <mat-card-content class="pt-4">
             <p>
-              {{ project.databaseCount }} managed database{{
+              Source DB: {{ project.sourceLeagueCount | number }} leagues ·
+              {{ project.sourceTeamCount | number }} teams ·
+              {{ project.sourcePlayerCount | number }} players
+            </p>
+            <p>
+              Combined DB: {{ project.combinedLeagueCount | number }} leagues ·
+              {{ project.combinedTeamCount | number }} teams ·
+              {{ project.combinedPlayerCount | number }} players
+            </p>
+            <p>
+              FIFA DB: {{ project.databaseCount }} database{{
                 project.databaseCount === 1 ? '' : 's'
               }}
             </p>

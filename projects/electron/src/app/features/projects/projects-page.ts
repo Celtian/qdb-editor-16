@@ -1,4 +1,4 @@
-import { DatePipe } from '@angular/common';
+import { DatePipe, DecimalPipe } from '@angular/common';
 import { Component, computed, inject, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -6,6 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { RouterLink } from '@angular/router';
 import type { ProjectDescriptor } from '../../../../shared/contracts';
 import { AppStore } from '../../core/app-store';
@@ -17,6 +18,7 @@ import { PageHeader } from '../../shared/page-header/page-header';
   selector: 'app-projects-page',
   imports: [
     DatePipe,
+    DecimalPipe,
     MatButtonModule,
     MatCardModule,
     MatFormFieldModule,
@@ -32,6 +34,7 @@ export class ProjectsPage {
   protected readonly store = inject(AppStore);
   private readonly desktop = inject(DesktopApi);
   private readonly dialog = inject(MatDialog);
+  private readonly snackBar = inject(MatSnackBar);
   protected readonly query = signal('');
   protected readonly filtered = computed(() => {
     const query = this.query().trim().toLocaleLowerCase('en');
@@ -42,12 +45,16 @@ export class ProjectsPage {
       : this.store.projects();
   });
 
+  constructor() {
+    void this.store.refreshProjects();
+  }
+
   protected async remove(project: ProjectDescriptor): Promise<void> {
     const confirmed = await this.dialog
       .open(ConfirmDialog, {
         data: {
           title: `Delete ${project.name}?`,
-          message: `This permanently removes the project and its ${project.databaseCount} managed database files. Original imports and external exports are not affected.`,
+          message: `This permanently removes the project, all Source DB and Combined DB records, and its ${project.databaseCount} managed FIFA database files. Original imports remain untouched. Export folders created during this application session will also be cleaned up where possible.`,
           confirmLabel: 'Delete project',
         },
       })
@@ -55,8 +62,15 @@ export class ProjectsPage {
       .toPromise();
     if (!confirmed) return;
     try {
-      await this.store.operation(() => this.desktop.removeProject(project.id));
+      const result = await this.store.operation(() => this.desktop.removeProject(project.id));
       await this.store.refreshProjects();
+      if (result.failedExportDirectories.length) {
+        this.snackBar.open(
+          `Project deleted, but ${result.failedExportDirectories.length} export folder${result.failedExportDirectories.length === 1 ? '' : 's'} could not be removed: ${result.failedExportDirectories.join(', ')}`,
+          'Dismiss',
+          { duration: 10_000 },
+        );
+      }
     } catch {
       // Store exposes the error.
     }

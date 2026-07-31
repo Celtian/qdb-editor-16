@@ -4,6 +4,7 @@ import { join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 import { Catalog } from './catalog';
 import { createBlankDatabase } from './database-importer';
+import { SnapshotDatabase } from './downloader/database';
 import { closeDatabase, DatabaseSync } from './runtime-sqlite';
 
 const roots: string[] = [];
@@ -38,6 +39,8 @@ describe('Catalog', () => {
       projectId: project.id,
       removed: true,
       databasesRemoved: 0,
+      deletedExportCount: 0,
+      failedExportDirectories: [],
     });
     expect(catalog.listProjects()).toEqual([]);
     catalog.close();
@@ -74,6 +77,112 @@ describe('Catalog', () => {
     expect(catalog.restoreDatabaseObjectSettings(id).ids.team).toBe(1);
     expect(catalog.removeDatabase(id)).toBe(true);
     catalog.close();
+  });
+
+  it('summarizes and cascade-deletes Source, Combined, and managed FIFA data', () => {
+    const root = mkdtempSync(join(tmpdir(), 'qdb-editor-unified-catalog-'));
+    roots.push(root);
+    const catalog = new Catalog(root);
+    const project = catalog.createProject({ name: 'Unified', referenceDate: '2026-07-01' });
+    const snapshot = new SnapshotDatabase(join(root, 'catalog.sqlite'));
+    snapshot.commitImport({
+      projectId: project.id,
+      sourceName: 'transfermarkt',
+      operation: {
+        kind: 'merge',
+        options: {
+          existingRecords: 'refresh',
+          teamLeagueConflicts: 'move',
+          playerTeamConflicts: 'move',
+        },
+      },
+      league: {
+        sourceId: 'league',
+        name: 'League',
+        sourceUrl: 'https://example.test/league',
+      },
+      teams: [
+        {
+          sourceId: 'team',
+          name: 'Team',
+          sourceUrl: 'https://example.test/team',
+          players: [{ sourceId: 'player', name: 'Player' }],
+        },
+      ],
+    });
+    const candidates = snapshot.listCombineTeamCandidates({
+      projectId: project.id,
+      search: '',
+    });
+    const preview = snapshot.previewTeamCombination({
+      projectId: project.id,
+      sourceTeamIds: candidates.map(({ id }) => id),
+    });
+    snapshot.commitTeamCombination({
+      projectId: project.id,
+      sourceTeamIds: candidates.map(({ id }) => id),
+      league: {
+        kind: 'create',
+        sourceLeagueIds: preview.sourceLeagues.map(({ id }) => id),
+        resolutions: {},
+      },
+      matchGroups: preview.matchGroups,
+      selectedPlayerGroupIds: preview.matchGroups.map(({ id }) => id),
+      teamResolutions: {},
+      playerResolutions: {},
+    });
+    snapshot.close();
+
+    const databaseId = crypto.randomUUID();
+    const temporary = catalog.temporaryDatabasePath(project.id, databaseId);
+    const created = createBlankDatabase(databaseId, project.id, 'FIFA', temporary);
+    renameSync(temporary, catalog.finalDatabasePath(project.id, databaseId));
+    catalog.createDatabaseRecord(databaseId, project.id, 'FIFA', created.source, 0, created.report);
+
+    expect(catalog.project(project.id)).toMatchObject({
+      databaseCount: 1,
+      sourceLeagueCount: 1,
+      sourceTeamCount: 1,
+      sourcePlayerCount: 1,
+      combinedLeagueCount: 1,
+      combinedTeamCount: 1,
+      combinedPlayerCount: 1,
+      sourceNames: ['transfermarkt'],
+    });
+    const summarizedSnapshot = new SnapshotDatabase(join(root, 'catalog.sqlite'));
+    expect(summarizedSnapshot.getProjectSummary(project.id).databaseCount).toBe(1);
+    summarizedSnapshot.close();
+    expect(catalog.removeProject(project.id)).toMatchObject({
+      removed: true,
+      databasesRemoved: 1,
+    });
+    expect(existsSync(join(root, 'projects', project.id))).toBe(false);
+    catalog.close();
+
+    const inspected = new DatabaseSync(join(root, 'catalog.sqlite'), { readOnly: true });
+    expect(
+      inspected
+        .prepare(
+          "SELECT name FROM sqlite_master WHERE type = 'table' AND name LIKE '%schema_migrations'",
+        )
+        .all(),
+    ).toEqual([{ name: 'downloader_schema_migrations' }]);
+    for (const table of [
+      'projects',
+      'databases',
+      'leagues',
+      'teams',
+      'players',
+      'combined_leagues',
+      'combined_teams',
+      'combined_players',
+    ]) {
+      expect(
+        inspected.prepare(`SELECT count(*) AS count FROM ${table}`).get(),
+        table,
+      ).toMatchObject({ count: 0 });
+    }
+    closeDatabase(inspected);
   });
 
   it('removes interrupted import sidecars and staged deletion directories on startup', () => {

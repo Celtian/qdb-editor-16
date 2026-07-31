@@ -34,7 +34,22 @@
 }
 
 .page-header__content {
+  align-items: center;
+  display: flex;
+  gap: 0.75rem;
   min-width: 0;
+}
+
+.page-header__copy {
+  min-width: 0;
+}
+
+.page-header__title-action {
+  flex: none;
+}
+
+.page-header__title-action:empty {
+  display: none;
 }
 
 .page-header__actions {

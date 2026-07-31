@@ -1,0 +1,118 @@
+:host {
+  display: block;
+}
+
+.settings-page {
+  display: grid;
+  gap: 1.5rem;
+  margin: 0 auto;
+  max-width: 64rem;
+  padding: 2.5rem clamp(1rem, 4vw, 3.5rem);
+}
+
+.setting-description,
+.theme-option small,
+.settings-card mat-card-content {
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.setting-description,
+.settings-card mat-card-content p {
+  margin: 0;
+}
+
+mat-card {
+  max-width: 42rem;
+}
+
+mat-card-content {
+  padding: 1.5rem;
+}
+
+fieldset {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+legend {
+  font-size: 1.5rem;
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+}
+
+mat-radio-group {
+  display: grid;
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+}
+
+mat-radio-button {
+  border-radius: 0.75rem;
+  padding: 0.75rem;
+}
+
+mat-radio-button.selected {
+  background: var(--mat-sys-secondary-container);
+}
+
+.theme-option {
+  align-items: center;
+  display: flex;
+  gap: 0.75rem;
+  padding: 0.25rem 0;
+}
+
+.theme-option > span {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.theme-option small {
+  font-size: 0.85rem;
+}
+
+.settings-card mat-card-header {
+  padding: 1rem 1rem 0;
+}
+
+.project-data-icon {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+
+.project-data-icon {
+  background: var(--mat-sys-error-container);
+  color: var(--mat-sys-on-error-container);
+}
+
+.project-data {
+  --mat-card-outlined-outline-color: var(--mat-sys-error);
+}
+
+.settings-card mat-card-content {
+  padding-bottom: 0.5rem;
+}
+
+.settings-card mat-card-actions {
+  padding: 0.5rem 1rem 1rem;
+}
+
+.project-data mat-card-content {
+  display: grid;
+  gap: 1rem;
+}
+
+.project-count-status {
+  font-weight: 500;
+}
+
+.project-count-status.error {
+  color: var(--mat-sys-error);
+}
+
+.clear-projects-button:not(:disabled) {
+  background-color: var(--mat-sys-error);
+  color: var(--mat-sys-on-error);
+}

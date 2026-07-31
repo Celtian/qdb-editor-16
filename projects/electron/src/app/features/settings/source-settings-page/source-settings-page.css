@@ -1,0 +1,53 @@
+:host {
+  display: block;
+}
+
+.settings-page {
+  display: grid;
+  gap: 1.25rem;
+  margin: 0 auto;
+  max-width: 64rem;
+  padding: 2.5rem clamp(1rem, 4vw, 3.5rem);
+}
+
+.priority-list {
+  display: grid;
+  gap: 0.5rem;
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.priority-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 3.5rem;
+  padding: 0.35rem 0.65rem;
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: 0.75rem;
+  background: var(--mat-sys-surface);
+}
+
+.rank {
+  display: grid;
+  width: 2rem;
+  height: 2rem;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--mat-sys-secondary-container);
+}
+
+.spacer {
+  flex: 1;
+}
+
+.error {
+  color: var(--mat-sys-error);
+}
+
+.cdk-drag-preview {
+  box-sizing: border-box;
+  border-radius: 0.75rem;
+  box-shadow: var(--mat-sys-level3);
+}

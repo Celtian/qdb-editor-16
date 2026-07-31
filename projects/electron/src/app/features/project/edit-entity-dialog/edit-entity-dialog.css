@@ -1,0 +1,118 @@
+:host {
+  display: block;
+}
+
+.hint {
+  color: var(--muted-text);
+  margin: 0 0 1.5rem;
+}
+
+form {
+  display: grid;
+  gap: 0.25rem;
+  min-width: min(30rem, 76vw);
+  padding-top: 0.25rem;
+}
+
+.country-option {
+  align-items: center;
+  display: inline-flex;
+  gap: 0.5rem;
+}
+
+.selected-country-flag {
+  margin-inline: 0.75rem 0.5rem;
+}
+
+.source-note {
+  align-items: start;
+  background: var(--mat-sys-secondary-container);
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: 0.75rem;
+  color: var(--mat-sys-on-secondary-container);
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: auto minmax(0, 1fr);
+  margin: 0.75rem 0 1.25rem;
+  padding: 0.875rem 1rem;
+}
+
+.source-note > mat-icon {
+  color: var(--mat-sys-primary);
+  margin-top: 0.125rem;
+}
+
+.source-note-content {
+  min-width: 0;
+}
+
+.source-note h3 {
+  font-size: 1rem;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.source-note-intro,
+.source-note-detail {
+  color: inherit;
+  font-size: 0.875rem;
+  line-height: 1.45;
+}
+
+.source-note-intro {
+  margin: 0.125rem 0 0.75rem;
+}
+
+.source-examples {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.source-example {
+  align-items: center;
+  background: var(--mat-sys-surface-container-low);
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: 0.5rem;
+  color: var(--mat-sys-on-surface);
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: minmax(0, 1fr) auto;
+  padding: 0.625rem 0.75rem;
+  text-decoration: none;
+}
+
+.source-example:hover {
+  background: var(--mat-sys-surface-container);
+}
+
+.source-example:focus-visible {
+  outline: 0.1875rem solid var(--mat-sys-primary);
+  outline-offset: 0.125rem;
+}
+
+.source-example-copy {
+  display: grid;
+  gap: 0.125rem;
+  min-width: 0;
+}
+
+.source-example-copy strong {
+  color: var(--mat-sys-primary);
+  font-size: 0.8125rem;
+}
+
+.source-example code {
+  font-family: ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace;
+  font-size: 0.75rem;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+.source-example > mat-icon {
+  color: var(--mat-sys-primary);
+}
+
+.source-note-detail {
+  margin: 0.75rem 0 0;
+}

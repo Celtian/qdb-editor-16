@@ -1,0 +1,102 @@
+<mat-tab-group
+  class="export-column-tabs"
+  animationDuration="0ms"
+  aria-label="Export fields by entity"
+  [preserveContent]="true"
+>
+  @for (entity of entities; track entity) {
+    <mat-tab [label]="entityLabels[entity]">
+      <div class="column-tab-content">
+        @if (showsVisibility()) {
+          <div class="column-tab-actions">
+            <button
+              matButton
+              type="button"
+              [attr.aria-label]="
+                'Select all ' + entityLabels[entity].toLowerCase() + ' export fields'
+              "
+              [disabled]="disabled()"
+              (click)="selectAll(entity)"
+            >
+              Select all
+            </button>
+          </div>
+        }
+        <div
+          class="column-grid"
+          role="group"
+          [attr.aria-label]="entityLabels[entity] + ' export fields'"
+        >
+          @for (column of columnDefinitions[entity]; track column.key) {
+            <div
+              class="column-row"
+              [class.names-only]="mode() === 'fieldNames'"
+              [class.visibility-only]="mode() === 'visibility'"
+            >
+              @if (showsVisibility()) {
+                <mat-checkbox
+                  [checked]="isSelected(entity, column.key)"
+                  [disabled]="disabled() || isLastSelected(entity, column.key)"
+                  (change)="toggle(entity, column.key, $event.checked)"
+                >
+                  {{ column.label }}
+                </mat-checkbox>
+              } @else {
+                <span class="column-label">{{ column.label }}</span>
+              }
+              @if (showsFieldNames()) {
+                @let index = fieldNameIndex(entity, column.key);
+                @if (index >= 0) {
+                  @switch (entity) {
+                    @case ('leagues') {
+                      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                        <mat-label>Export name for {{ column.label }}</mat-label>
+                        <input matInput [formField]="fieldNamesForm.leagues[index].outputName" />
+                        @if (
+                          fieldNamesForm.leagues[index].outputName().touched() &&
+                          fieldNamesForm.leagues[index].outputName().errors().length
+                        ) {
+                          <mat-error>
+                            {{ fieldNamesForm.leagues[index].outputName().errors()[0]?.message }}
+                          </mat-error>
+                        }
+                      </mat-form-field>
+                    }
+                    @case ('teams') {
+                      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                        <mat-label>Export name for {{ column.label }}</mat-label>
+                        <input matInput [formField]="fieldNamesForm.teams[index].outputName" />
+                        @if (
+                          fieldNamesForm.teams[index].outputName().touched() &&
+                          fieldNamesForm.teams[index].outputName().errors().length
+                        ) {
+                          <mat-error>
+                            {{ fieldNamesForm.teams[index].outputName().errors()[0]?.message }}
+                          </mat-error>
+                        }
+                      </mat-form-field>
+                    }
+                    @case ('players') {
+                      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                        <mat-label>Export name for {{ column.label }}</mat-label>
+                        <input matInput [formField]="fieldNamesForm.players[index].outputName" />
+                        @if (
+                          fieldNamesForm.players[index].outputName().touched() &&
+                          fieldNamesForm.players[index].outputName().errors().length
+                        ) {
+                          <mat-error>
+                            {{ fieldNamesForm.players[index].outputName().errors()[0]?.message }}
+                          </mat-error>
+                        }
+                      </mat-form-field>
+                    }
+                  }
+                }
+              }
+            </div>
+          }
+        </div>
+      </div>
+    </mat-tab>
+  }
+</mat-tab-group>

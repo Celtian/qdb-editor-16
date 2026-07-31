@@ -35,6 +35,13 @@ const project: ProjectDescriptor = {
   createdAt: now,
   updatedAt: now,
   databaseCount: 1,
+  sourceLeagueCount: 0,
+  sourceTeamCount: 0,
+  sourcePlayerCount: 0,
+  combinedLeagueCount: 0,
+  combinedTeamCount: 0,
+  combinedPlayerCount: 0,
+  sourceNames: [],
 };
 
 const report: ValidationReport = {
@@ -313,7 +320,7 @@ describe('editing and validation flows', () => {
         provideRouter(
           [
             {
-              path: 'projects/:projectId/databases/:databaseId/tables/:table',
+              path: 'projects/:projectId/fifa/:databaseId/tables/:table',
               component: TableEditorPage,
             },
           ],
@@ -327,7 +334,7 @@ describe('editing and validation flows', () => {
       ],
     });
     const harness = await RouterTestingHarness.create();
-    const routeRoot = `/projects/${projectId}/databases/${databaseId}/tables`;
+    const routeRoot = `/projects/${projectId}/fifa/${databaseId}/tables`;
     const playersEditor = await harness.navigateByUrl(`${routeRoot}/players`, TableEditorPage);
     await vi.waitFor(() => expect(harness.routeNativeElement?.textContent).toContain('playerid'));
 

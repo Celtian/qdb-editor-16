@@ -30,6 +30,13 @@ interface ProjectRow {
   created_at: string;
   updated_at: string;
   database_count: number;
+  source_league_count?: number;
+  source_team_count?: number;
+  source_player_count?: number;
+  combined_league_count?: number;
+  combined_team_count?: number;
+  combined_player_count?: number;
+  source_names?: string;
 }
 
 interface DatabaseRow {
@@ -55,6 +62,14 @@ const asProject = (row: ProjectRow): ProjectDescriptor => ({
   createdAt: row.created_at,
   updatedAt: row.updated_at,
   databaseCount: Number(row.database_count),
+  sourceLeagueCount: Number(row.source_league_count ?? 0),
+  sourceTeamCount: Number(row.source_team_count ?? 0),
+  sourcePlayerCount: Number(row.source_player_count ?? 0),
+  combinedLeagueCount: Number(row.combined_league_count ?? 0),
+  combinedTeamCount: Number(row.combined_team_count ?? 0),
+  combinedPlayerCount: Number(row.combined_player_count ?? 0),
+  sourceNames: (row.source_names?.split(',').filter(Boolean) ??
+    []) as ProjectDescriptor['sourceNames'],
 });
 
 const asDatabase = (row: DatabaseRow): DatabaseDescriptor => ({
@@ -149,10 +164,11 @@ export class Catalog {
   }
 
   listProjects(): ProjectDescriptor[] {
+    const snapshotColumns = this.snapshotSummaryColumns();
     return (
       this.database
         .prepare(
-          `SELECT p.*, count(d.id) AS database_count
+          `SELECT p.*, count(d.id) AS database_count${snapshotColumns}
            FROM projects p
            LEFT JOIN databases d ON d.project_id = p.id
            GROUP BY p.id
@@ -164,9 +180,10 @@ export class Catalog {
 
   project(id: string): ProjectDescriptor {
     validateId(id);
+    const snapshotColumns = this.snapshotSummaryColumns();
     const row = this.database
       .prepare(
-        `SELECT p.*, count(d.id) AS database_count
+        `SELECT p.*, count(d.id) AS database_count${snapshotColumns}
          FROM projects p
          LEFT JOIN databases d ON d.project_id = p.id
          WHERE p.id = ?
@@ -231,7 +248,13 @@ export class Catalog {
       const removed =
         this.database.prepare('DELETE FROM projects WHERE id = ?').run(id).changes === 1;
       if (existsSync(staged)) rmSync(staged, { recursive: true, force: true });
-      return { projectId: id, removed, databasesRemoved: project.databaseCount };
+      return {
+        projectId: id,
+        removed,
+        databasesRemoved: project.databaseCount,
+        deletedExportCount: 0,
+        failedExportDirectories: [],
+      };
     } catch (error) {
       if (existsSync(staged)) renameSync(staged, directory);
       throw error;
@@ -534,6 +557,37 @@ export class Catalog {
     this.database
       .prepare('UPDATE projects SET updated_at = ? WHERE id = ?')
       .run(new Date().toISOString(), projectId);
+  }
+
+  private snapshotSummaryColumns(): string {
+    const snapshotSchemaAvailable = this.database
+      .prepare("SELECT 1 FROM sqlite_master WHERE type = 'table' AND name = 'combined_players'")
+      .get();
+    if (!snapshotSchemaAvailable) return '';
+    return `,
+      (SELECT count(*) FROM leagues WHERE project_id = p.id) AS source_league_count,
+      (SELECT count(*) FROM teams WHERE project_id = p.id) AS source_team_count,
+      (SELECT count(*) FROM players WHERE project_id = p.id) AS source_player_count,
+      (SELECT count(*) FROM combined_leagues WHERE project_id = p.id) AS combined_league_count,
+      (SELECT count(*) FROM combined_teams WHERE project_id = p.id) AS combined_team_count,
+      (SELECT count(*) FROM combined_players WHERE project_id = p.id) AS combined_player_count,
+      COALESCE((
+        SELECT group_concat(source_name)
+        FROM (
+          SELECT DISTINCT source_name
+          FROM leagues
+          WHERE project_id = p.id
+          UNION
+          SELECT DISTINCT source_name
+          FROM teams
+          WHERE project_id = p.id
+          UNION
+          SELECT DISTINCT source_name
+          FROM players
+          WHERE project_id = p.id
+          ORDER BY source_name
+        )
+      ), '') AS source_names`;
   }
 
   private cleanupStagedFiles(): void {

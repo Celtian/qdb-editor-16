@@ -12,9 +12,9 @@ export const documentationPages: DocumentationPage[] = [
     path: '',
     label: 'Overview',
     icon: 'home',
-    title: 'Edit FIFA 16 databases locally',
+    title: 'Build and edit football databases locally',
     summary:
-      'QDB Editor 16 organizes independent FIFA 16 databases into dated projects and exposes every table published by fifatables.',
+      'QDB Editor 16 brings provider snapshots, canonical combined data, and independent FIFA 16 databases into one dated project.',
     sections: [
       {
         title: 'Local-first desktop editing',
@@ -24,10 +24,51 @@ export const documentationPages: DocumentationPage[] = [
         ],
         bullets: [
           'Create projects with a name and reference date.',
-          'Keep multiple blank or imported databases in each project.',
+          'Import provider records into Source DB and resolve them into Combined DB.',
+          'Keep multiple blank or imported FIFA databases in each project.',
           'Browse and edit every supported FIFA 16 table.',
           'Use object views for countries, stadiums, leagues, teams, players, and referees.',
           'Validate and export DB Master-compatible text folders.',
+        ],
+      },
+    ],
+  },
+  {
+    path: 'source-db',
+    label: 'Source DB',
+    icon: 'cloud_download',
+    title: 'Import and maintain provider data',
+    summary:
+      'Preview and import Transfermarkt, Soccerway, WorldFootball, or Eurofotbal records without losing provider provenance.',
+    sections: [
+      {
+        title: 'Provider snapshots',
+        paragraphs: [
+          'Import a league or team, choose included squads and players, review changes and conflicts, then commit the complete operation transactionally.',
+          'Merge and synchronize policies control existing records, team-to-league conflicts, and player-to-team conflicts. Long-running scraping can be canceled.',
+        ],
+        bullets: [
+          'Search, sort, paginate, and filter leagues, teams, and players.',
+          'Edit source metadata or refresh a record from its provider.',
+          'Apply countries, league tiers, and custom badges in bulk.',
+          'Preview the impact of cleanup and deletion before changing linked data.',
+        ],
+      },
+    ],
+  },
+  {
+    path: 'combined-db',
+    label: 'Combined DB',
+    icon: 'merge',
+    title: 'Resolve canonical football data',
+    summary:
+      'Group records from multiple providers, select canonical values, and retain links back to every source.',
+    sections: [
+      {
+        title: 'Matching and review',
+        paragraphs: [
+          'The import workflow uses source priority and normalized matching to group teams and players. Conflicting fields stay explicit until you resolve them.',
+          'Combined records keep provider provenance, review status, reusable badges, filtering, bulk actions, and safe re-combination.',
         ],
       },
     ],
@@ -76,13 +117,37 @@ export const documentationPages: DocumentationPage[] = [
     label: 'Projects',
     icon: 'folder_copy',
     title: 'Projects and reference dates',
-    summary: 'A project gives multiple databases one reference date for readable FIFA date hints.',
+    summary:
+      'A project gives Source, Combined, and all FIFA databases one authoritative reference date.',
     sections: [
       {
         title: 'Project library',
         paragraphs: [
           'Project names are unique. The reference date is stored as a calendar date and is used to calculate player ages without changing raw FIFA values.',
-          'Deleting a project removes its managed SQLite databases but never removes original import folders or previous external exports.',
+          'Deleting a project cascades Source and Combined records, removes managed FIFA files, and reports export folders that could not be cleaned up.',
+        ],
+      },
+    ],
+  },
+  {
+    path: 'downloader-migration',
+    label: 'Downloader migration',
+    icon: 'move_down',
+    title: 'Migrate QDB Downloader data',
+    summary:
+      'Preview and transactionally copy a standalone QDB Downloader v0.0.22 library into the unified catalog.',
+    sections: [
+      {
+        title: 'Non-destructive migration',
+        paragraphs: [
+          'Settings detects the platform-default legacy database and also provides a file picker. The preview shows records, exact project merges, and projects that will be created.',
+          'Projects merge only when normalized names and reference dates match. Other name conflicts receive a “(Downloader)” suffix. The legacy file is opened read-only and remains unchanged.',
+        ],
+        bullets: [
+          'Source and Combined entities, relationships, badges, and downloader preferences are copied.',
+          'Identifier collisions are remapped.',
+          'A failure rolls back the complete catalog transaction and permits retry.',
+          'Successful source-file identities are remembered so the same migration is not offered repeatedly.',
         ],
       },
     ],
@@ -172,7 +237,7 @@ export const documentationPages: DocumentationPage[] = [
       {
         title: 'Safe boundaries',
         paragraphs: [
-          'A catalog SQLite database tracks project metadata while every FIFA database is stored in a separate managed SQLite file.',
+          'The catalog SQLite database stores projects, Source and Combined records, badges, downloader preferences, and FIFA database metadata. Every FIFA database is stored in a separate managed SQLite file.',
           'Imports are copied into temporary managed databases and atomically installed. Exports are created in new timestamped folders.',
         ],
       },

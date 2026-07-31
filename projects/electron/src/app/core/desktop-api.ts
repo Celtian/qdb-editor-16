@@ -38,6 +38,20 @@ export class DesktopApi {
   removeProject(id: string) {
     return this.api.removeProject(id);
   }
+  detectLegacyDownloaderDatabase() {
+    return this.api.detectLegacyDownloaderDatabase();
+  }
+  selectLegacyDownloaderDatabase() {
+    return this.api.selectLegacyDownloaderDatabase();
+  }
+  previewLegacyDownloaderMigration(sourcePath: string) {
+    return this.api.previewLegacyDownloaderMigration(sourcePath);
+  }
+  migrateLegacyDownloader(
+    request: Parameters<NonNullable<typeof window.qdbEditor>['migrateLegacyDownloader']>[0],
+  ) {
+    return this.api.migrateLegacyDownloader(request);
+  }
   listDatabases(projectId: string) {
     return this.api.listDatabases(projectId);
   }

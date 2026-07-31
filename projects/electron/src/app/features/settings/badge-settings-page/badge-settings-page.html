@@ -1,0 +1,149 @@
+<app-page-header icon="sell">
+  <div pageHeaderContent>
+    <h1 id="badges-title">Badges</h1>
+    <p>Customize status timing and reusable badges across every project.</p>
+  </div>
+</app-page-header>
+
+<section class="settings-page" aria-labelledby="badges-title">
+  <mat-card class="badge-age" appearance="outlined">
+    <mat-card-header>
+      <div class="badge-age-icon" mat-card-avatar>
+        <mat-icon aria-hidden="true">schedule</mat-icon>
+      </div>
+      <mat-card-title id="badge-age-title">Time-based badges</mat-card-title>
+      <mat-card-subtitle>Choose when New and Old badges appear.</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <form class="badge-age-form" aria-labelledby="badge-age-title">
+        <div class="badge-age-setting">
+          <div class="badge-age-heading">
+            <label for="new-days-slider">New</label>
+            <output for="new-days-slider">
+              {{ badgeSettingsModel().newDays | number }}
+              {{ dayUnit(badgeSettingsModel().newDays) }}
+            </output>
+          </div>
+          <p id="new-days-description">
+            Created within the selected number of days, relative to the current time.
+          </p>
+          <mat-slider
+            discrete
+            [displayWith]="formatUiNumber"
+            [min]="badgeSettingLimits.newDays.min"
+            [max]="badgeSettingLimits.newDays.max"
+            step="1"
+          >
+            <input
+              id="new-days-slider"
+              matSliderThumb
+              [formField]="badgeSettingsForm.newDays"
+              aria-describedby="new-days-description"
+              (valueChange)="setNewDays($event)"
+            />
+          </mat-slider>
+        </div>
+
+        <div class="badge-age-setting">
+          <div class="badge-age-heading">
+            <label for="old-months-slider">Old</label>
+            <output for="old-months-slider">
+              {{ badgeSettingsModel().oldMonths | number }}
+              {{ monthUnit(badgeSettingsModel().oldMonths) }}
+            </output>
+          </div>
+          <p id="old-months-description">
+            Not updated within the selected number of months before each project reference date.
+          </p>
+          <mat-slider
+            discrete
+            showTickMarks
+            [displayWith]="formatUiNumber"
+            [min]="badgeSettingLimits.oldMonths.min"
+            [max]="badgeSettingLimits.oldMonths.max"
+            step="1"
+          >
+            <input
+              id="old-months-slider"
+              matSliderThumb
+              [formField]="badgeSettingsForm.oldMonths"
+              aria-describedby="old-months-description"
+              (valueChange)="setOldMonths($event)"
+            />
+          </mat-slider>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card
+    class="custom-badges-card"
+    appearance="outlined"
+    aria-labelledby="custom-badges-title"
+    [attr.aria-busy]="customBadgesLoading()"
+  >
+    <mat-card-header>
+      <div class="custom-badges-icon" mat-card-avatar>
+        <mat-icon aria-hidden="true">label</mat-icon>
+      </div>
+      <mat-card-title id="custom-badges-title">Custom badges</mat-card-title>
+      <mat-card-subtitle>
+        Create classifications that can be assigned and filtered in every finder.
+      </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      @if (customBadgesLoading()) {
+        <mat-progress-bar mode="indeterminate" aria-label="Loading custom badges" />
+      } @else if (customBadgesError()) {
+        <div class="custom-badges-error" role="alert">
+          <p>Custom badges could not be loaded: {{ customBadgesError() }}</p>
+          <button matButton type="button" (click)="retryCustomBadges()">Retry</button>
+        </div>
+      } @else {
+        <div class="custom-badges-heading">
+          <p>Names are shown in the Badge column. Descriptions appear as tooltips.</p>
+          <button matButton="filled" type="button" (click)="createCustomBadge()">
+            <mat-icon aria-hidden="true">add</mat-icon>
+            Create badge
+          </button>
+        </div>
+        @if (customBadges().length) {
+          <ul class="custom-badge-list">
+            @for (badge of customBadges(); track badge.id) {
+              <li>
+                <div class="custom-badge-details">
+                  <app-custom-badge [badge]="badge" />
+                  <span>{{ badge.description }}</span>
+                  <small>
+                    {{ badge.assignmentCount | number }}
+                    {{ badge.assignmentCount === 1 ? 'assignment' : 'assignments' }}
+                  </small>
+                </div>
+                <div class="custom-badge-actions">
+                  <button
+                    matIconButton
+                    type="button"
+                    [attr.aria-label]="'Edit ' + badge.name"
+                    (click)="editCustomBadge(badge)"
+                  >
+                    <mat-icon aria-hidden="true">edit</mat-icon>
+                  </button>
+                  <button
+                    matIconButton
+                    type="button"
+                    [attr.aria-label]="'Delete ' + badge.name"
+                    (click)="confirmDeleteCustomBadge(badge)"
+                  >
+                    <mat-icon aria-hidden="true">delete</mat-icon>
+                  </button>
+                </div>
+              </li>
+            }
+          </ul>
+        } @else {
+          <p class="empty-custom-badges">No custom badges yet.</p>
+        }
+      }
+    </mat-card-content>
+  </mat-card>
+</section>
