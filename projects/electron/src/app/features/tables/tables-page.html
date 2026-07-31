@@ -30,7 +30,7 @@
     @for (table of filtered(); track table.name) {
       <mat-card appearance="outlined">
         <mat-card-header>
-          <mat-icon mat-card-avatar>table_view</mat-icon>
+          <mat-icon class="table-card-icon" mat-card-avatar aria-hidden="true">table_view</mat-icon>
           <mat-card-title>{{ table.name }}</mat-card-title>
           <mat-card-subtitle>{{ table.fields.length }} fields</mat-card-subtitle>
         </mat-card-header>

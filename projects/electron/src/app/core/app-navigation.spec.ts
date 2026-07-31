@@ -145,6 +145,12 @@ describe('AppNavigation', () => {
     expect(element.textContent).toContain('Source DB');
     expect(element.textContent).toContain('Combined DB');
     expect(element.textContent).toContain('FIFA DB');
+    const fifaDisclosure = element.querySelector<HTMLButtonElement>(
+      'button[aria-label="Expand FIFA DB"]',
+    );
+    expect(
+      fifaDisclosure?.parentElement?.querySelector<HTMLElement>(':scope > mat-icon')?.textContent,
+    ).toContain('storage');
     expect(listDatabases).not.toHaveBeenCalled();
     expect((await axe.run(element)).violations).toEqual([]);
   });

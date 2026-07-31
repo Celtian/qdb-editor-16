@@ -30,6 +30,7 @@ import { PageHeader } from '../../shared/page-header/page-header';
     RouterLink,
   ],
   templateUrl: './tables-page.html',
+  styleUrl: './tables-page.css',
 })
 export class TablesPage implements OnChanges {
   protected readonly store = inject(AppStore);

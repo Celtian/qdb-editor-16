@@ -24,6 +24,7 @@ import { PageHeader } from '../../shared/page-header/page-header';
     RouterLink,
   ],
   templateUrl: './databases-page.html',
+  styleUrl: './databases-page.css',
 })
 export class DatabasesPage implements OnChanges {
   private readonly desktop = inject(DesktopApi);

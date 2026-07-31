@@ -11,6 +11,7 @@ import type {
   DatabaseDescriptor,
   ImportCandidate,
   ProjectDescriptor,
+  TableDescriptor,
   TablePage,
   ValidationReport,
 } from '../../../shared/contracts';
@@ -22,6 +23,7 @@ import { ExportPage } from './export/export-page';
 import { ImportPage } from './import/import-page';
 import { ProjectFormPage } from './projects/project-form-page';
 import { TableEditorPage } from './table-editor/table-editor-page';
+import { TablesPage } from './tables/tables-page';
 import { ValidationPage } from './validation/validation-page';
 
 const projectId = '11111111-1111-4111-8111-111111111111';
@@ -68,6 +70,42 @@ const database: DatabaseDescriptor = {
   validation: report,
 };
 
+const corruptDatabase: DatabaseDescriptor = {
+  ...database,
+  id: '33333333-3333-4333-8333-333333333333',
+  name: 'Unreadable',
+  status: 'corrupt',
+  error: 'The database could not be opened.',
+  validation: {
+    validatedAt: now,
+    errorCount: 1,
+    warningCount: 0,
+  },
+};
+
+const tables: TableDescriptor[] = [
+  {
+    name: 'competition',
+    fields: [
+      { name: 'competitionid', type: 'int', defaultValue: 0, unique: true },
+      { name: 'competitionname', type: 'string', defaultValue: '', unique: false },
+    ],
+    rowCount: 72,
+    errorCount: 0,
+    warningCount: 0,
+  },
+  {
+    name: 'dcplayernames',
+    fields: [
+      { name: 'nameid', type: 'int', defaultValue: 0, unique: true },
+      { name: 'playername', type: 'string', defaultValue: '', unique: false },
+    ],
+    rowCount: 0,
+    errorCount: 1,
+    warningCount: 0,
+  },
+];
+
 const providers = (api: Partial<DesktopApi>) => [
   provideRouter([]),
   provideNoopAnimations(),
@@ -78,12 +116,12 @@ const providers = (api: Partial<DesktopApi>) => [
 afterEach(() => TestBed.resetTestingModule());
 
 describe('project and import flows', () => {
-  it('renders supported storage icons for available databases', async () => {
+  it('renders centered status icons for database cards', async () => {
     TestBed.configureTestingModule({
       imports: [DatabasesPage],
       providers: providers({
         listProjects: vi.fn(async () => [project]),
-        listDatabases: vi.fn(async () => [database]),
+        listDatabases: vi.fn(async () => [database, corruptDatabase]),
       }),
     });
     const fixture = TestBed.createComponent(DatabasesPage);
@@ -99,7 +137,48 @@ describe('project and import flows', () => {
       expect(icons.filter((icon) => icon === 'storage')).toHaveLength(2);
     });
 
+    const cardIcons = [
+      ...(fixture.nativeElement as HTMLElement).querySelectorAll<HTMLElement>(
+        'mat-card-header .database-card-icon',
+      ),
+    ];
+    expect(cardIcons.map((icon) => icon.textContent?.trim())).toEqual(['storage', 'error']);
+    expect(cardIcons.every((icon) => icon.getAttribute('aria-hidden') === 'true')).toBe(true);
+    expect(getComputedStyle(cardIcons[0]).alignItems).toBe('center');
+    expect(getComputedStyle(cardIcons[0]).justifyContent).toBe('center');
     expect(icons).not.toContain('database');
+    expect((await axe.run(fixture.nativeElement as HTMLElement)).violations).toEqual([]);
+  });
+
+  it('renders centered icons for table cards', async () => {
+    TestBed.configureTestingModule({
+      imports: [TablesPage],
+      providers: providers({
+        listProjects: vi.fn(async () => [project]),
+        listDatabases: vi.fn(async () => [database]),
+        listTables: vi.fn(async () => tables),
+      }),
+    });
+    const fixture = TestBed.createComponent(TablesPage);
+    fixture.componentRef.setInput('projectId', projectId);
+    fixture.componentRef.setInput('databaseId', databaseId);
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    let cardIcons: HTMLElement[] = [];
+    await vi.waitFor(() => {
+      fixture.detectChanges();
+      cardIcons = [
+        ...(fixture.nativeElement as HTMLElement).querySelectorAll<HTMLElement>(
+          'mat-card-header .table-card-icon',
+        ),
+      ];
+      expect(cardIcons).toHaveLength(2);
+    });
+    expect(cardIcons.map((icon) => icon.textContent?.trim())).toEqual(['table_view', 'table_view']);
+    expect(cardIcons.every((icon) => icon.getAttribute('aria-hidden') === 'true')).toBe(true);
+    expect(getComputedStyle(cardIcons[0]).alignItems).toBe('center');
+    expect(getComputedStyle(cardIcons[0]).justifyContent).toBe('center');
     expect((await axe.run(fixture.nativeElement as HTMLElement)).violations).toEqual([]);
   });
 

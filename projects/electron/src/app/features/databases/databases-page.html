@@ -31,7 +31,7 @@
     @for (database of store.databases(); track database.id) {
       <mat-card appearance="outlined">
         <mat-card-header>
-          <mat-icon mat-card-avatar>{{
+          <mat-icon class="database-card-icon" mat-card-avatar aria-hidden="true">{{
             database.status === 'available' ? 'storage' : 'error'
           }}</mat-icon>
           <mat-card-title>{{ database.name }}</mat-card-title>
