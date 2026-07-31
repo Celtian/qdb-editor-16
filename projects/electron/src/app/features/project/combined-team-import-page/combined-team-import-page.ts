@@ -60,6 +60,7 @@ import {
   resolvePlayer,
   resolveValue,
 } from '../../../../../shared/downloader/combined-data';
+import { findFootballCountryByCode3 } from '../../../../../shared/downloader/football-countries';
 import { formatReferenceDate } from '../../../../../shared/downloader/reference-date';
 import { formatEuroCurrency, formatUiNumber } from '../../../../../shared/downloader/ui-format';
 import { DesktopApi } from '../../../core/downloader-api';
@@ -111,6 +112,11 @@ interface SummaryPlayer {
   birthdate?: string;
   countryName?: string;
   countryCode2?: string;
+}
+
+interface FootballFlagSource {
+  readonly countryCode2?: string;
+  readonly countryCode3?: string;
 }
 
 const teamFieldDefinitions = [
@@ -449,6 +455,12 @@ export class CombinedTeamImportPage {
   protected selectedLeague(sourceName: SourceName): League | undefined {
     const id = this.selectedLeagueIds()[sourceName];
     return this.leagueCandidates()[sourceName].find((league) => league.id === id);
+  }
+
+  protected countryFlagCode(record: FootballFlagSource): string | undefined {
+    return record.countryCode3
+      ? (findFootballCountryByCode3(record.countryCode3)?.flagCode ?? record.countryCode2)
+      : record.countryCode2;
   }
 
   protected searchTeams(sourceName: SourceName, value: string): void {

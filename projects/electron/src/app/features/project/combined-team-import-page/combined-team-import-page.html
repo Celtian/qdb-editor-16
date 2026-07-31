@@ -53,8 +53,8 @@
                     }
                     <div class="autocomplete-control">
                       @if (selectedLeague(sourceName); as league) {
-                        @if (league.countryCode2) {
-                          <app-country-flag decorative [code]="league.countryCode2" />
+                        @if (countryFlagCode(league); as flagCode) {
+                          <app-country-flag decorative [code]="flagCode" />
                         }
                       }
                       <input
@@ -92,8 +92,8 @@
                       @for (league of leagueCandidates()[sourceName]; track league.id) {
                         <mat-option [value]="league">
                           <span class="autocomplete-option">
-                            @if (league.countryCode2) {
-                              <app-country-flag decorative [code]="league.countryCode2" />
+                            @if (countryFlagCode(league); as flagCode) {
+                              <app-country-flag decorative [code]="flagCode" />
                             }
                             <span class="option-name">{{ league.name }}</span>
                             <span class="option-metadata">
@@ -115,8 +115,8 @@
                     }
                     <div class="autocomplete-control">
                       @if (selectedCandidate(sourceName); as candidate) {
-                        @if (candidate.countryCode2) {
-                          <app-country-flag decorative [code]="candidate.countryCode2" />
+                        @if (countryFlagCode(candidate); as flagCode) {
+                          <app-country-flag decorative [code]="flagCode" />
                         }
                       }
                       <input
@@ -149,8 +149,8 @@
                       @for (candidate of candidates()[sourceName]; track candidate.id) {
                         <mat-option [value]="candidate" [disabled]="candidateDisabled(candidate)">
                           <span class="autocomplete-option">
-                            @if (candidate.countryCode2) {
-                              <app-country-flag decorative [code]="candidate.countryCode2" />
+                            @if (countryFlagCode(candidate); as flagCode) {
+                              <app-country-flag decorative [code]="flagCode" />
                             }
                             <span class="option-name">{{ candidate.name }}</span>
                             @if (candidate.combinedTeamName) {
@@ -236,8 +236,8 @@
                   @if (selectedCombinedLeague(); as league) {
                     <mat-select-trigger>
                       <span class="combined-league-option">
-                        @if (league.countryCode2) {
-                          <app-country-flag decorative [code]="league.countryCode2" />
+                        @if (countryFlagCode(league); as flagCode) {
+                          <app-country-flag decorative [code]="flagCode" />
                         }
                         <span class="option-name">{{ league.name }}</span>
                         <span class="option-metadata">
@@ -249,8 +249,8 @@
                   @for (league of preview()?.combinedLeagues ?? []; track league.id) {
                     <mat-option [value]="league.id">
                       <span class="combined-league-option">
-                        @if (league.countryCode2) {
-                          <app-country-flag decorative [code]="league.countryCode2" />
+                        @if (countryFlagCode(league); as flagCode) {
+                          <app-country-flag decorative [code]="flagCode" />
                         }
                         <span class="option-name">{{ league.name }}</span>
                         <span class="option-metadata">

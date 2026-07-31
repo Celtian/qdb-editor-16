@@ -207,6 +207,12 @@ describe('CombinedTeamImportPage', () => {
         tier: 2,
       },
     );
+    const premierLeague = league('tm-premier-league', 'transfermarkt', 'Premier League', {
+      countryName: 'England',
+      countryCode2: 'GB',
+      countryCode3: 'ENG',
+      tier: 1,
+    });
     const soccerwayLeague = league('sw-league', 'soccerway', 'Czech First League', {
       countryName: 'Czechia',
       countryCode2: 'CZ',
@@ -233,7 +239,7 @@ describe('CombinedTeamImportPage', () => {
       countryCode2: 'CZ',
     });
     const leagues: Record<SourceName, League[]> = {
-      transfermarkt: [transfermarktLeague, transfermarktSecondLeague],
+      transfermarkt: [transfermarktLeague, transfermarktSecondLeague, premierLeague],
       soccerway: [soccerwayLeague],
       worldfootball: [],
       eurofotbal: [],
@@ -388,6 +394,14 @@ describe('CombinedTeamImportPage', () => {
       }),
     );
 
+    await transfermarktLeagueAutocomplete.enterText('Premier');
+    await new Promise((resolve) => setTimeout(resolve, 300));
+    await fixture.whenStable();
+    expect(
+      document.querySelector<HTMLImageElement>('.mat-mdc-option app-country-flag img')?.src,
+    ).toContain('/flags/20x15/gb-eng.png');
+
+    await transfermarktLeagueAutocomplete.clear();
     await transfermarktLeagueAutocomplete.enterText('Czech');
     await new Promise((resolve) => setTimeout(resolve, 300));
     await fixture.whenStable();
