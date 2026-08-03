@@ -1,18 +1,20 @@
 import {
   Component,
+  type OnChanges,
+  type SimpleChanges,
   computed,
   inject,
   input,
-  type OnChanges,
   signal,
-  type SimpleChanges,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
+
 import { firstValueFrom } from 'rxjs';
+
 import type {
   DatabaseObjectSettings,
   FieldDescriptor,
@@ -22,8 +24,8 @@ import { AppStore } from '../../core/app-store';
 import { ConfirmDialog } from '../../core/confirm-dialog';
 import { DesktopApi } from '../../core/desktop-api';
 import { PageHeader } from '../../shared/page-header/page-header';
-import { ObjectValueField } from '../objects/object-value-field';
 import type { ObjectDirtyComponent } from '../objects/object-unsaved.guard';
+import { ObjectValueField } from '../objects/object-value-field';
 
 type SettingsGroup = keyof DatabaseObjectSettings;
 

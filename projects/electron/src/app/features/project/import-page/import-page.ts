@@ -3,15 +3,15 @@ import { DecimalPipe } from '@angular/common';
 import {
   ChangeDetectorRef,
   Component,
-  computed,
   DestroyRef,
+  computed,
   inject,
   signal,
   viewChild,
 } from '@angular/core';
 import {
-  form,
   FormField,
+  form,
   pattern,
   readonly as readonlyField,
   required,
@@ -34,9 +34,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { ActivatedRoute, Router } from '@angular/router';
+
 import {
-  sourceLabels,
-  sourceSupportsSeason,
   type AbsentPlayerPolicy,
   type AbsentTeamPolicy,
   type CommitImportRequest,
@@ -52,6 +51,8 @@ import {
   type SourceName,
   type SynchronizeImportOperation,
   type TeamPreview,
+  sourceLabels,
+  sourceSupportsSeason,
 } from '../../../../../shared/downloader/contracts';
 import { DesktopApi } from '../../../core/downloader-api';
 import { ConfettiService } from '../../../shared/confetti/confetti.service';

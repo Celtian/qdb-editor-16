@@ -1,6 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import { mkdir, readdir, rename, rm, writeFile } from 'node:fs/promises';
 import { basename, join } from 'node:path';
+
 import { FIFA_TABLES, fieldsFor } from '../shared/table-config';
 import { encodeFifaText } from '../shared/text-format';
 import { FifaDatabase } from './fifa-database';

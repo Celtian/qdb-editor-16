@@ -1,6 +1,7 @@
 import { createHash, randomUUID } from 'node:crypto';
 import { existsSync, mkdirSync, rmSync, statSync } from 'node:fs';
 import { join, resolve } from 'node:path';
+
 import type {
   LegacyMigrationCounts,
   LegacyMigrationPreview,
@@ -8,7 +9,7 @@ import type {
   LegacyMigrationRequest,
   LegacyMigrationResult,
 } from '../../shared/contracts.js';
-import { closeDatabase, DatabaseSync, type SQLInputValue } from '../runtime-sqlite.js';
+import { DatabaseSync, type SQLInputValue, closeDatabase } from '../runtime-sqlite.js';
 
 type Row = Record<string, SQLInputValue>;
 

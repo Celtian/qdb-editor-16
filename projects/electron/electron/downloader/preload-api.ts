@@ -1,4 +1,5 @@
 import { ipcRenderer } from 'electron';
+
 import type { QdbDesktopApi } from '../../shared/downloader/contracts.js';
 
 const channels = {

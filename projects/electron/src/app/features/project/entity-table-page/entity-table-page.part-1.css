@@ -1,0 +1,124 @@
+:host {
+  display: block;
+}
+
+.qdb-page {
+  margin: 0 auto;
+  max-width: 88rem;
+  padding: 2.5rem clamp(1rem, 4vw, 3.5rem);
+}
+
+.qdb-page.has-selection {
+  padding-bottom: 8rem;
+}
+
+mat-card {
+  overflow: hidden;
+}
+
+.qdb-table-toolbar {
+  align-items: center;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  padding: 1rem;
+}
+
+.qdb-table-controls {
+  align-items: center;
+  display: flex;
+  flex: 1;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.qdb-search-field {
+  width: min(28rem, 70%);
+}
+
+.qdb-filter-button,
+.qdb-column-button {
+  min-height: 3.5rem;
+}
+
+.qdb-filter-count,
+.qdb-column-count {
+  align-items: center;
+  background: var(--mat-sys-on-primary);
+  border-radius: 999px;
+  color: var(--mat-sys-primary);
+  display: inline-flex;
+  font-size: 0.75rem;
+  font-weight: 700;
+  height: 1.25rem;
+  justify-content: center;
+  min-width: 1.25rem;
+  padding: 0 0.25rem;
+}
+
+.qdb-record-count {
+  color: var(--muted-text);
+  white-space: nowrap;
+}
+
+.qdb-table-scroll {
+  overflow: auto;
+}
+
+table {
+  min-width: 72rem;
+  width: 100%;
+}
+
+.player-table {
+  min-width: 92rem;
+}
+
+.player-table th,
+.player-table td {
+  white-space: nowrap;
+}
+
+.player-table .mat-column-name {
+  min-width: 14rem;
+}
+
+.qdb-country-with-flag {
+  align-items: center;
+  display: inline-flex;
+  gap: 0.45rem;
+  min-width: max-content;
+  white-space: nowrap;
+}
+
+.qdb-source-link mat-icon {
+  font-size: 1rem;
+  height: 1rem;
+  width: 1rem;
+}
+
+.mat-column-actions {
+  text-align: center;
+  width: 4rem;
+}
+
+.mat-column-select {
+  overflow: initial;
+  text-align: center;
+  width: 4rem;
+}
+
+.selected-row {
+  background: var(--mat-sys-secondary-container);
+}
+
+td a {
+  color: var(--mat-sys-tertiary);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+td a:hover {
+  text-decoration: underline;
+}

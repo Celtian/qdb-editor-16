@@ -3,15 +3,16 @@ import { Component, computed, input, output } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
+
 import {
-  sourceLabels,
-  sourceSupportsSeason,
   type CommitImportRequest,
   type ImportPreview,
   type LeagueSynchronizeImportOperation,
   type MergeImportOptions,
   type SourceName,
   type SynchronizeImportOperation,
+  sourceLabels,
+  sourceSupportsSeason,
 } from '../../../../../shared/downloader/contracts';
 
 export interface ImportSummaryDetails {

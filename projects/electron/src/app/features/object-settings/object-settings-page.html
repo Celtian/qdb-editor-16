@@ -19,9 +19,9 @@
   </div>
 </app-page-header>
 
-<section class="page max-w-5xl">
+<section class="qdb-page max-w-5xl">
   @if (store.error()) {
-    <p class="error-banner" role="alert">{{ store.error() }}</p>
+    <p class="qdb-error-banner" role="alert">{{ store.error() }}</p>
   }
   @if (settings()) {
     <mat-tab-group preserveContent>

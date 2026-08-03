@@ -1,6 +1,5 @@
 import { DatePipe, DecimalPipe } from '@angular/common';
-import { Component, computed, inject, signal, viewChild, type ElementRef } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Component, type ElementRef, computed, inject, signal, viewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
@@ -10,6 +9,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { RouterLink } from '@angular/router';
+
 import type { ProjectSummary } from '../../../../../shared/downloader/contracts';
 import { DesktopApi } from '../../../core/downloader-api';
 import {
@@ -20,13 +21,13 @@ import {
 } from '../../../shared/delete-project-dialog/delete-project-dialog';
 import { ReferenceDatePipe } from '../../../shared/reference-date-pipe';
 import {
-  CreateProjectDialog,
-  type CreateProjectValue,
-} from '../create-project-dialog/create-project-dialog';
-import {
   RenameProjectDialog,
   type RenameProjectValue,
 } from '../../project/rename-project-dialog/rename-project-dialog';
+import {
+  CreateProjectDialog,
+  type CreateProjectValue,
+} from '../create-project-dialog/create-project-dialog';
 
 @Component({
   selector: 'app-projects-page',

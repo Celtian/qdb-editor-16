@@ -2,7 +2,7 @@
   display: block;
 }
 
-.settings-page {
+.qdb-settings-page {
   display: grid;
   gap: 1.5rem;
   margin: 0 auto;
@@ -23,32 +23,15 @@ mat-card-content {
   padding: 1.5rem;
 }
 
-.column-layouts mat-card-content {
+.qdb-column-layouts mat-card-content {
   padding: 1rem 0 0;
 }
 
-.column-layouts-icon,
-.reset-layouts-icon {
-  align-items: center;
-  display: flex;
-  justify-content: center;
-}
-
-.column-layouts-icon {
-  background: var(--mat-sys-primary-container);
-  color: var(--mat-sys-on-primary-container);
-}
-
-.reset-layouts-icon {
-  background: var(--mat-sys-secondary-container);
-  color: var(--mat-sys-on-secondary-container);
-}
-
-.column-tab-content {
+.qdb-column-tab-content {
   padding: 1.25rem 1rem 1rem;
 }
 
-.column-tab-actions {
+.qdb-column-tab-actions {
   border-top: 1px solid var(--mat-sys-outline-variant);
   display: flex;
   justify-content: flex-end;
@@ -56,14 +39,14 @@ mat-card-content {
   padding-top: 1rem;
 }
 
-.settings-card mat-card-content {
+.qdb-settings-card mat-card-content {
   padding-bottom: 0.5rem;
 }
 
-.settings-card mat-card-content p {
+.qdb-settings-card mat-card-content p {
   margin: 0;
 }
 
-.settings-card mat-card-actions {
+.qdb-settings-card mat-card-actions {
   padding: 0.5rem 1rem 1rem;
 }

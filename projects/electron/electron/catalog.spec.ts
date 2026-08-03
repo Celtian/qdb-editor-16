@@ -2,10 +2,11 @@ import { existsSync, mkdirSync, mkdtempSync, renameSync, writeFileSync } from 'n
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
+
 import { Catalog } from './catalog';
 import { createBlankDatabase } from './database-importer';
 import { SnapshotDatabase } from './downloader/database';
-import { closeDatabase, DatabaseSync } from './runtime-sqlite';
+import { DatabaseSync, closeDatabase } from './runtime-sqlite';
 
 const roots: string[] = [];
 

@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
-import { entityFilterPreferenceKey } from '../entity-table-page/entity-filter-preferences';
+
 import { emptyCombinedEntityFilters } from '../combined-entity-filter-drawer/combined-entity-filter-drawer';
+import { entityFilterPreferenceKey } from '../entity-table-page/entity-filter-preferences';
 import {
   CombinedEntityFilterPreferences,
   combinedEntityFilterPreferenceKey,

@@ -1,4 +1,5 @@
 import { Datatype, type Field } from 'fifatables';
+
 import type {
   ObjectDeleteRequest,
   ObjectDeleteResult,
@@ -17,8 +18,8 @@ import type {
   ValidationIssue,
 } from '../shared/contracts';
 import { defaultValueFor, fieldDescriptor, fieldsFor, tableForName } from '../shared/table-config';
-import { validateRows } from './validation';
 import type { DatabaseSync, SQLInputValue } from './runtime-sqlite';
+import { validateRows } from './validation';
 
 type SqlRow = Record<string, SQLInputValue>;
 

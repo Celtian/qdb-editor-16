@@ -1,9 +1,11 @@
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
+
 import axe from 'axe-core';
 import { describe, expect, it } from 'vitest';
-import { DocumentationPageComponent } from './documentation-page';
+
 import { documentationPages } from './documentation';
+import { DocumentationPageComponent } from './documentation-page';
 
 describe('documentation', () => {
   it('covers every primary desktop workflow and safety topic', () => {

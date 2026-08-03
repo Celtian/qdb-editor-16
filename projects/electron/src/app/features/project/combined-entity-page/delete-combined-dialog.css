@@ -1,0 +1,30 @@
+mat-radio-group {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+mat-radio-button {
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: 0.75rem;
+  padding: 0.75rem;
+}
+
+.qdb-option-title,
+.qdb-option-description {
+  display: block;
+}
+
+.qdb-option-title {
+  font-weight: 500;
+}
+
+.qdb-option-description {
+  color: var(--mat-sys-on-surface-variant);
+  margin-top: 0.25rem;
+}
+
+.qdb-delete-button:not(:disabled) {
+  background-color: var(--mat-sys-error);
+  color: var(--mat-sys-on-error);
+}

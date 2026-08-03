@@ -11,7 +11,7 @@
   </div>
 </app-page-header>
 
-<section class="page project-form-page">
+<section class="qdb-page qdb-project-form-page">
   <mat-card appearance="outlined" aria-labelledby="project-details-title">
     <mat-card-header>
       <mat-card-title id="project-details-title">Project details</mat-card-title>
@@ -20,19 +20,19 @@
       </mat-card-subtitle>
     </mat-card-header>
 
-    <mat-card-content class="form-card-content">
-      <div class="form-grid">
-        <mat-form-field appearance="outline" class="name-field">
+    <mat-card-content class="grid gap-4 pt-4">
+      <div class="qdb-form-grid grid gap-4 max-nav:grid-cols-1">
+        <mat-form-field appearance="outline" class="qdb-name-field">
           <mat-label>Project name</mat-label>
           <mat-icon matPrefix>folder</mat-icon>
-          <input matInput [formField]="projectForm.name" autocomplete="off" />
+          <input matInput autocomplete="off" [formField]="projectForm.name" />
           <mat-hint>Use a short, recognizable name.</mat-hint>
           @if (projectForm.name().touched() && projectForm.name().errors().length) {
             <mat-error>{{ projectForm.name().errors()[0].message }}</mat-error>
           }
         </mat-form-field>
 
-        <mat-form-field appearance="outline" class="date-field">
+        <mat-form-field appearance="outline" class="qdb-date-field">
           <mat-label>Reference date</mat-label>
           <mat-icon matPrefix>event</mat-icon>
           <input type="date" matInput [formField]="projectForm.referenceDate" />
@@ -46,7 +46,7 @@
       </div>
 
       @if (store.error()) {
-        <p class="error-banner" role="alert">{{ store.error() }}</p>
+        <p class="qdb-error-banner" role="alert">{{ store.error() }}</p>
       }
     </mat-card-content>
 

@@ -1,11 +1,11 @@
 import {
   Component,
+  type OnChanges,
+  type SimpleChanges,
   computed,
   inject,
   input,
-  type OnChanges,
   signal,
-  type SimpleChanges,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -18,6 +18,7 @@ import { MatPaginatorModule, type PageEvent } from '@angular/material/paginator'
 import { MatSortModule, type Sort } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { RouterLink } from '@angular/router';
+
 import type {
   FieldDescriptor,
   TablePage,
@@ -90,6 +91,10 @@ export class TableEditorPage implements OnChanges {
     this.pageIndex.set(0);
     clearTimeout(this.queryTimer);
     this.queryTimer = setTimeout(() => void this.load(), 250);
+  }
+
+  protected queryInput(event: Event): void {
+    if (event.target instanceof HTMLInputElement) this.queryChanged(event.target.value);
   }
 
   protected pageChanged(event: PageEvent): void {

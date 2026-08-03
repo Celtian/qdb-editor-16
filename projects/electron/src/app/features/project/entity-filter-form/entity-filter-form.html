@@ -1,5 +1,5 @@
 <form
-  class="filter-form"
+  class="qdb-filter-form"
   aria-labelledby="entity-filter-title"
   [attr.aria-busy]="loading()"
   (submit)="applyFilters(); $event.preventDefault()"
@@ -15,13 +15,13 @@
     <mat-progress-bar mode="indeterminate" aria-label="Loading filter options" />
   }
   @if (error()) {
-    <div class="filter-error" role="alert">
+    <div class="qdb-filter-error" role="alert">
       <p>Filters could not be loaded: {{ error() }}</p>
       <button matButton type="button" (click)="retryRequested.emit()">Retry</button>
     </div>
   }
 
-  <div class="filter-fields">
+  <div class="qdb-filter-fields">
     <mat-form-field appearance="outline" subscriptSizing="dynamic">
       <mat-label>Sources</mat-label>
       <mat-select
@@ -45,7 +45,7 @@
         (selectionChange)="setSelectedBadges($event)"
       >
         <mat-select-trigger>
-          <span class="filter-badges">
+          <span class="qdb-filter-badges">
             @for (status of selectedStatuses(); track status) {
               <app-entity-status-badge [status]="status" />
             }
@@ -78,13 +78,13 @@
         <mat-label>Countries</mat-label>
         <mat-chip-grid
           #countryChipGrid
-          class="country-chip-grid"
+          class="qdb-country-chip-grid"
           [attr.aria-label]="selectedCountryOptions().length ? 'Selected countries' : null"
           [disabled]="controlsDisabled()"
         >
           @for (country of selectedCountryOptions(); track country.name) {
             <mat-chip-row (removed)="removeCountry(country.name)">
-              <span class="country-option">
+              <span class="qdb-country-option">
                 @if (country.code) {
                   <app-country-flag decorative [code]="country.code" />
                 }
@@ -101,8 +101,8 @@
           matInput
           type="search"
           autocomplete="off"
-          [attr.aria-label]="'Filter ' + entity() + ' by countries'"
           placeholder="Search countries"
+          [attr.aria-label]="'Filter ' + entity() + ' by countries'"
           [disabled]="controlsDisabled()"
           [value]="countrySearch()"
           [matChipInputFor]="countryChipGrid"
@@ -115,7 +115,7 @@
         >
           @for (country of filteredCountryOptions(); track country.name) {
             <mat-option [value]="country">
-              <span class="country-option">
+              <span class="qdb-country-option">
                 @if (country.code) {
                   <app-country-flag decorative [code]="country.code" />
                 }
@@ -150,7 +150,7 @@
         <mat-label>{{ parentFilterDetails().label }}</mat-label>
         <mat-chip-grid
           #parentChipGrid
-          class="parent-chip-grid"
+          class="qdb-parent-chip-grid"
           [attr.aria-label]="
             selectedParentOptions().length ? parentFilterDetails().selectedAriaLabel : null
           "
@@ -216,13 +216,13 @@
         <mat-label>Nationalities</mat-label>
         <mat-chip-grid
           #nationalityChipGrid
-          class="nationality-chip-grid"
+          class="qdb-nationality-chip-grid"
           [attr.aria-label]="selectedNationalityOptions().length ? 'Selected nationalities' : null"
           [disabled]="controlsDisabled()"
         >
           @for (nationality of selectedNationalityOptions(); track nationality.name) {
             <mat-chip-row (removed)="removeNationality(nationality.name)">
-              <span class="nationality-option">
+              <span class="qdb-nationality-option">
                 @if (nationality.code) {
                   <app-country-flag decorative [code]="nationality.code" />
                 }
@@ -253,7 +253,7 @@
         >
           @for (nationality of filteredNationalityOptions(); track nationality.name) {
             <mat-option [value]="nationality">
-              <span class="nationality-option">
+              <span class="qdb-nationality-option">
                 @if (nationality.code) {
                   <app-country-flag decorative [code]="nationality.code" />
                 }
@@ -273,7 +273,7 @@
           [formField]="filtersForm.positions"
         >
           <mat-select-trigger>
-            <span class="position-badges">
+            <span class="qdb-position-badges">
               @for (position of selectedPositions(); track position) {
                 <app-position-badge [position]="position" />
               }
@@ -294,7 +294,7 @@
           [formField]="filtersForm.positionDetails"
         >
           <mat-select-trigger>
-            <span class="position-badges">
+            <span class="qdb-position-badges">
               @for (positionDetail of selectedPositionDetails(); track positionDetail) {
                 <app-position-detail-badge [positionDetail]="positionDetail" />
               }

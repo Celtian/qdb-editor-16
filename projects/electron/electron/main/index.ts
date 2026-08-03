@@ -1,12 +1,12 @@
 import {
-  app,
   BrowserWindow,
+  Menu,
+  type OpenDialogOptions,
+  app,
   dialog,
   ipcMain,
-  Menu,
   nativeTheme,
   shell,
-  type OpenDialogOptions,
 } from 'electron';
 import { randomUUID } from 'node:crypto';
 import { existsSync, renameSync, rmSync } from 'node:fs';
@@ -14,22 +14,23 @@ import { rm, stat } from 'node:fs/promises';
 import { isAbsolute, join, resolve } from 'node:path';
 import { Worker } from 'node:worker_threads';
 import { updateElectronApp } from 'update-electron-app';
+
 import type {
   CreateBlankDatabaseRequest,
   CreateProjectRequest,
-  DatabaseObjectSettings,
   DatabaseDescriptor,
+  DatabaseObjectSettings,
   DeleteRowRequest,
   ExportDatabaseRequest,
   ImportDatabaseRequest,
   ImportDatabaseResult,
-  OperationKind,
-  OperationProgress,
   ObjectDeleteRequest,
   ObjectKind,
   ObjectListRequest,
   ObjectReadRequest,
   ObjectSection,
+  OperationKind,
+  OperationProgress,
   PrepareT3dbRequest,
   SaveObjectRequest,
   SaveRowRequest,
@@ -41,7 +42,7 @@ import type {
 } from '../../shared/contracts';
 import { tableForName } from '../../shared/table-config';
 import { Catalog, validateId } from '../catalog';
-import { createBlankDatabase, type ImportedDatabase } from '../database-importer';
+import { type ImportedDatabase, createBlankDatabase } from '../database-importer';
 import { SnapshotDatabase } from '../downloader/database';
 import { SnapshotExporter } from '../downloader/exporter';
 import { registerIpcHandlers as registerDownloaderHandlers } from '../downloader/ipc';

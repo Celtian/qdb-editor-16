@@ -1,0 +1,24 @@
+<article>
+  <header class="qdb-hero">
+    <p class="qdb-eyebrow">QDB Editor 16 documentation</p>
+    <h1>{{ page.title }}</h1>
+    <p class="qdb-summary">{{ page.summary }}</p>
+  </header>
+  @for (section of page.sections; track section.title) {
+    <mat-card appearance="outlined">
+      <mat-card-content>
+        <h2>{{ section.title }}</h2>
+        @for (paragraph of section.paragraphs; track paragraph) {
+          <p>{{ paragraph }}</p>
+        }
+        @if (section.bullets) {
+          <ul>
+            @for (bullet of section.bullets; track bullet) {
+              <li>{{ bullet }}</li>
+            }
+          </ul>
+        }
+      </mat-card-content>
+    </mat-card>
+  }
+</article>

@@ -1,5 +1,5 @@
 import { Component, computed, effect, input, output, signal } from '@angular/core';
-import { disabled, form, FormField, submit } from '@angular/forms/signals';
+import { FormField, disabled, form, submit } from '@angular/forms/signals';
 import {
   MatAutocompleteModule,
   type MatAutocompleteSelectedEvent,
@@ -11,7 +11,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { MatSelectModule, type MatSelectChange } from '@angular/material/select';
+import { type MatSelectChange, MatSelectModule } from '@angular/material/select';
+
 import type {
   CountryFilterOption,
   EntityFilterOption,
@@ -23,9 +24,9 @@ import type {
   PlayerPositionDetail,
   SourceName,
 } from '../../../../../shared/downloader/contracts';
-import type { CustomBadge } from '../../../../../shared/downloader/custom-badge';
 import { sourceLabels } from '../../../../../shared/downloader/contracts';
-import { entityStatuses, type EntityStatus } from '../../../../../shared/downloader/entity-status';
+import type { CustomBadge } from '../../../../../shared/downloader/custom-badge';
+import { type EntityStatus, entityStatuses } from '../../../../../shared/downloader/entity-status';
 import { CountryFlag } from '../../../shared/country-flag/country-flag';
 import { CustomBadge as CustomBadgeView } from '../../../shared/custom-badge/custom-badge';
 import {

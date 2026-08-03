@@ -5,10 +5,13 @@
   </div>
 </app-page-header>
 
-<section class="settings-page" aria-labelledby="columns-title">
-  <mat-card class="column-layouts" appearance="outlined">
+<section class="qdb-settings-page" aria-labelledby="columns-title">
+  <mat-card class="qdb-column-layouts" appearance="outlined">
     <mat-card-header>
-      <div class="column-layouts-icon" mat-card-avatar>
+      <div
+        class="flex items-center justify-center bg-primary-container text-on-primary-container"
+        mat-card-avatar
+      >
         <mat-icon aria-hidden="true">view_column</mat-icon>
       </div>
       <mat-card-title id="column-layouts-title">Finder column layouts</mat-card-title>
@@ -16,14 +19,14 @@
     </mat-card-header>
     <mat-card-content>
       <mat-tab-group
-        class="finder-column-tabs"
+        class="qdb-finder-column-tabs"
         animationDuration="0ms"
         aria-labelledby="column-layouts-title"
         [preserveContent]="true"
       >
         @for (entity of entities; track entity) {
           <mat-tab [label]="entityLabels[entity]">
-            <div class="column-tab-content">
+            <div class="qdb-column-tab-content">
               <app-entity-column-editor
                 [columns]="columns[entity]"
                 [defaultPreference]="defaultPreference(entity)"
@@ -31,7 +34,7 @@
                 [preference]="layouts[entity]()"
                 (preferenceChange)="save(entity, $event)"
               />
-              <div class="column-tab-actions">
+              <div class="qdb-column-tab-actions">
                 <button matButton="outlined" type="button" (click)="reset(entity)">
                   Reset {{ entitySingularLabels[entity] }} columns
                 </button>
@@ -43,9 +46,12 @@
     </mat-card-content>
   </mat-card>
 
-  <mat-card class="reset-layouts settings-card" appearance="outlined">
+  <mat-card class="qdb-reset-layouts qdb-settings-card" appearance="outlined">
     <mat-card-header>
-      <div class="reset-layouts-icon" mat-card-avatar>
+      <div
+        class="flex items-center justify-center bg-secondary-container text-on-secondary-container"
+        mat-card-avatar
+      >
         <mat-icon aria-hidden="true">restart_alt</mat-icon>
       </div>
       <mat-card-title>Original layouts</mat-card-title>

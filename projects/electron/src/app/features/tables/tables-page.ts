@@ -1,12 +1,12 @@
 import { DecimalPipe } from '@angular/common';
 import {
   Component,
+  type OnChanges,
+  type SimpleChanges,
   computed,
   inject,
   input,
-  type OnChanges,
   signal,
-  type SimpleChanges,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -14,6 +14,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { RouterLink } from '@angular/router';
+
 import { AppStore } from '../../core/app-store';
 import { PageHeader } from '../../shared/page-header/page-header';
 
@@ -50,6 +51,10 @@ export class TablesPage implements OnChanges {
     const sequence = ++this.initializeSequence;
     this.query.set('');
     void this.initialize(this.projectId(), this.databaseId(), sequence);
+  }
+
+  protected queryChanged(event: Event): void {
+    if (event.target instanceof HTMLInputElement) this.query.set(event.target.value);
   }
 
   private async initialize(projectId: string, databaseId: string, sequence: number): Promise<void> {

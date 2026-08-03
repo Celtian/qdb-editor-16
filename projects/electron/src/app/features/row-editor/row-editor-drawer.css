@@ -4,16 +4,6 @@
   overflow: hidden;
 }
 
-.row-form {
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  min-height: 0;
-  overflow: hidden;
-  width: 100%;
-}
-
 header {
   align-items: flex-start;
   border-bottom: 1px solid var(--mat-sys-outline-variant);
@@ -34,30 +24,11 @@ header p {
   margin: 0.25rem 0 0;
 }
 
-.row-fields {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  gap: 0.75rem;
-  overflow: auto;
-  padding: 1.25rem 1rem;
-}
-
 mat-form-field {
   width: 100%;
 }
 
-.rating-summary {
-  align-items: flex-start;
-  background: var(--mat-sys-secondary-container);
-  border-radius: 0.75rem;
-  color: var(--mat-sys-on-secondary-container);
-  display: flex;
-  gap: 0.75rem;
-  padding: 1rem;
-}
-
-.rating-summary div {
+.qdb-rating-summary div {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;

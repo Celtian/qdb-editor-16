@@ -1,4 +1,5 @@
 import { contextBridge, ipcRenderer } from 'electron';
+
 import type { QdbEditorApi } from '../shared/contracts';
 import { downloaderApi } from './downloader/preload-api';
 

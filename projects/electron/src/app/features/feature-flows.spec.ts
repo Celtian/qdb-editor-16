@@ -6,7 +6,10 @@ import { MatInputHarness } from '@angular/material/input/testing';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { RouterTestingHarness } from '@angular/router/testing';
+
 import axe from 'axe-core';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+
 import type {
   DatabaseDescriptor,
   ImportCandidate,
@@ -15,7 +18,6 @@ import type {
   TablePage,
   ValidationReport,
 } from '../../../shared/contracts';
-import { afterEach, describe, expect, it, vi } from 'vitest';
 import { AppStore } from '../core/app-store';
 import { DesktopApi } from '../core/desktop-api';
 import { DatabasesPage } from './databases/databases-page';
@@ -139,13 +141,13 @@ describe('project and import flows', () => {
 
     const cardIcons = [
       ...(fixture.nativeElement as HTMLElement).querySelectorAll<HTMLElement>(
-        'mat-card-header .database-card-icon',
+        'mat-card-header .qdb-database-card-icon',
       ),
     ];
     expect(cardIcons.map((icon) => icon.textContent?.trim())).toEqual(['storage', 'error']);
     expect(cardIcons.every((icon) => icon.getAttribute('aria-hidden') === 'true')).toBe(true);
-    expect(getComputedStyle(cardIcons[0]).alignItems).toBe('center');
-    expect(getComputedStyle(cardIcons[0]).justifyContent).toBe('center');
+    expect(cardIcons[0].classList).toContain('items-center');
+    expect(cardIcons[0].classList).toContain('justify-center');
     expect(icons).not.toContain('database');
     expect((await axe.run(fixture.nativeElement as HTMLElement)).violations).toEqual([]);
   });
@@ -170,15 +172,15 @@ describe('project and import flows', () => {
       fixture.detectChanges();
       cardIcons = [
         ...(fixture.nativeElement as HTMLElement).querySelectorAll<HTMLElement>(
-          'mat-card-header .table-card-icon',
+          'mat-card-header .qdb-table-card-icon',
         ),
       ];
       expect(cardIcons).toHaveLength(2);
     });
     expect(cardIcons.map((icon) => icon.textContent?.trim())).toEqual(['table_view', 'table_view']);
     expect(cardIcons.every((icon) => icon.getAttribute('aria-hidden') === 'true')).toBe(true);
-    expect(getComputedStyle(cardIcons[0]).alignItems).toBe('center');
-    expect(getComputedStyle(cardIcons[0]).justifyContent).toBe('center');
+    expect(cardIcons[0].classList).toContain('items-center');
+    expect(cardIcons[0].classList).toContain('justify-center');
     expect((await axe.run(fixture.nativeElement as HTMLElement)).violations).toEqual([]);
   });
 
@@ -246,7 +248,9 @@ describe('project and import flows', () => {
     await fixture.whenStable();
     fixture.detectChanges();
     await (await loader.getHarness(MatButtonHarness.with({ text: /Review import/ }))).click();
-    const input = await loader.getHarness(MatInputHarness.with({ selector: '.name-field input' }));
+    const input = await loader.getHarness(
+      MatInputHarness.with({ selector: '.qdb-name-field input' }),
+    );
     expect(await input.getValue()).toBe('Imported career');
     await (await loader.getHarness(MatButtonHarness.with({ text: /Import database/ }))).click();
     await fixture.whenStable();

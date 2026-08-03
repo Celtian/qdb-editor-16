@@ -1,0 +1,8 @@
+.qdb-badge-options {
+  min-width: min(24rem, 70vw);
+}
+
+.qdb-hint {
+  color: var(--mat-sys-on-surface-variant);
+  max-width: 32rem;
+}

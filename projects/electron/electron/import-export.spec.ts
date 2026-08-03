@@ -3,7 +3,8 @@ import { mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
-import { fieldsFor, FIFA_TABLES } from '../shared/table-config';
+
+import { FIFA_TABLES, fieldsFor } from '../shared/table-config';
 import { encodeFifaText, parseTextTable } from '../shared/text-format';
 import { exportDatabase } from './database-exporter';
 import { importDatabase } from './database-importer';

@@ -9,17 +9,18 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatStepperModule } from '@angular/material/stepper';
 import { ActivatedRoute } from '@angular/router';
+
 import {
-  sourceLabels,
   type EntityFilterOption,
   type EntityKind,
-  type ExportConfigurationPreference,
-  type ExportColumnSelection,
   type ExportColumnMapping,
+  type ExportColumnSelection,
+  type ExportConfigurationPreference,
   type ExportDataset,
   type ExportFieldNameConfiguration,
   type ExportFormat,
   type ExportResult,
+  sourceLabels,
 } from '../../../../../shared/downloader/contracts';
 import {
   camelCaseExportFieldNames,
@@ -35,12 +36,12 @@ import {
 import { findFootballCountryByName } from '../../../../../shared/downloader/football-countries';
 import { formatUiCount } from '../../../../../shared/downloader/ui-format';
 import { DesktopApi } from '../../../core/downloader-api';
-import { ConfettiService } from '../../../shared/confetti/confetti.service';
 import {
+  ExportColumnPresetsService,
   camelCaseExportFieldNamePresetId,
   defaultExportVisibilityPresetId,
-  ExportColumnPresetsService,
 } from '../../../core/export-column-presets.service';
+import { ConfettiService } from '../../../shared/confetti/confetti.service';
 import { CountryFlag } from '../../../shared/country-flag/country-flag';
 import { ExportColumnEditor } from '../../../shared/export-column-editor/export-column-editor';
 import { PageHeader } from '../../../shared/page-header/page-header';

@@ -1,4 +1,5 @@
-import { Datatype, Fifa, fifaTableConfig, sortByOrder, Table, type Field } from 'fifatables';
+import { Datatype, type Field, Fifa, Table, fifaTableConfig, sortByOrder } from 'fifatables';
+
 import type { FieldDescriptor, TableValue } from './contracts';
 
 export const FIFA_VERSION = 16 as const;

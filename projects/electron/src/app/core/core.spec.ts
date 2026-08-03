@@ -1,5 +1,8 @@
 import { DOCUMENT } from '@angular/common';
 import { TestBed } from '@angular/core/testing';
+
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+
 import type {
   DatabaseDescriptor,
   OperationProgress,
@@ -9,7 +12,6 @@ import type {
   ValidationReport,
 } from '../../../shared/contracts';
 import { cloneDefaultDatabaseObjectSettings } from '../../../shared/object-settings';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { AppStore } from './app-store';
 import { DesktopApi } from './desktop-api';
 import { Theme } from './theme';
@@ -272,6 +274,20 @@ describe('AppStore', () => {
     expect(store.error()).toBe('Expected failure');
     store.clearError();
     expect(store.error()).toBe('');
+
+    await expect(
+      store.operation(async () => {
+        throw 'Plain failure';
+      }),
+    ).rejects.toBe('Plain failure');
+    expect(store.error()).toBe('Plain failure');
+
+    vi.mocked(api.listDatabases).mockRejectedValueOnce('Catalog unavailable');
+    await store.refreshDatabases(project.id);
+    expect(store.databaseLoadState(project.id)).toEqual({
+      status: 'error',
+      error: 'Catalog unavailable',
+    });
 
     store.selectContext(project.id, database.id);
     expect(store.activeProjectId()).toBe(project.id);

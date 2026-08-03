@@ -4,9 +4,8 @@ import type {
   SoccerBotResponse,
   SoccerBotTeam,
 } from 'soccerbot/es5/shared/interfaces.js';
+
 import {
-  sourceLabels,
-  sourceSupportsSeason,
   type ExternalTeam,
   type LeaguePreview,
   type PlayerInput,
@@ -15,6 +14,8 @@ import {
   type ScrapeProgress,
   type SourceName,
   type TeamPreview,
+  sourceLabels,
+  sourceSupportsSeason,
 } from '../../shared/downloader/contracts.js';
 import { ApplicationError } from './errors.js';
 import { buildSourceUrl } from './source-url.js';

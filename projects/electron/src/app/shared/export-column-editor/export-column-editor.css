@@ -2,44 +2,43 @@
   display: block;
 }
 
-.column-tab-content {
+.qdb-column-tab-content {
   display: grid;
   gap: 0.5rem;
   padding: 1.25rem 1rem 1rem;
 }
 
-.column-tab-actions {
+.qdb-column-tab-actions {
   display: flex;
   justify-content: flex-end;
 }
 
-.column-grid {
-  display: grid;
+.qdb-column-grid {
   gap: 0.75rem 1rem;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 21rem), 1fr));
 }
 
-.column-row {
+.qdb-column-row {
   align-items: center;
   display: grid;
   gap: 0.5rem;
   grid-template-columns: minmax(8rem, 0.8fr) minmax(10rem, 1.2fr);
 }
 
-.column-row mat-form-field {
+.qdb-column-row mat-form-field {
   min-width: 0;
 }
 
-.column-row.visibility-only {
+.qdb-column-row.visibility-only {
   grid-template-columns: 1fr;
 }
 
-.column-label {
+.qdb-column-label {
   padding-inline-start: 0.75rem;
 }
 
-@media (max-width: 36rem) {
-  .column-row {
+@media (width <= 36rem) {
+  .qdb-column-row {
     align-items: stretch;
     grid-template-columns: 1fr;
   }

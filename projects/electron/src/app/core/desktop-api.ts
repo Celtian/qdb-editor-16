@@ -1,18 +1,19 @@
 import { Service } from '@angular/core';
+
 import type {
   CreateBlankDatabaseRequest,
   CreateProjectRequest,
-  DeleteRowRequest,
   DatabaseObjectSettings,
+  DeleteRowRequest,
   ExportDatabaseRequest,
   ImportDatabaseRequest,
-  OperationKind,
   ObjectDeleteRequest,
   ObjectListRequest,
   ObjectReadRequest,
+  OperationKind,
   PrepareT3dbRequest,
-  SaveRowRequest,
   SaveObjectRequest,
+  SaveRowRequest,
   TablePageRequest,
   ThemePreference,
   UpdateProjectRequest,

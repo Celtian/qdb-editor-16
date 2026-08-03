@@ -1,11 +1,11 @@
 import {
   Component,
+  type OnChanges,
+  type SimpleChanges,
   computed,
   inject,
   input,
-  type OnChanges,
   signal,
-  type SimpleChanges,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
@@ -17,7 +17,9 @@ import { MatPaginatorModule, type PageEvent } from '@angular/material/paginator'
 import { MatSortModule, type Sort } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { RouterLink } from '@angular/router';
+
 import { firstValueFrom } from 'rxjs';
+
 import type {
   ObjectKind,
   ObjectListPage as ObjectListPageData,

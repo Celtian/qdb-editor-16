@@ -1,10 +1,10 @@
 import {
   Component,
+  type OnChanges,
+  type SimpleChanges,
   inject,
   input,
-  type OnChanges,
   signal,
-  type SimpleChanges,
 } from '@angular/core';
 import { FormField, form, maxLength, required, submit } from '@angular/forms/signals';
 import { MatButtonModule } from '@angular/material/button';
@@ -13,6 +13,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { Router, RouterLink } from '@angular/router';
+
 import { AppStore } from '../../core/app-store';
 import { DesktopApi } from '../../core/desktop-api';
 import { PageHeader } from '../../shared/page-header/page-header';

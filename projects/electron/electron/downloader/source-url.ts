@@ -1,4 +1,5 @@
 import { eurofotbal, soccerway, transfermarkt, worldfootball } from 'soccerbot';
+
 import type { EntityKind, SourceName } from '../../shared/downloader/contracts.js';
 
 export const buildSourceUrl = (

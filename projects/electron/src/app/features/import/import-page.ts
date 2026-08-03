@@ -1,11 +1,11 @@
 import {
   Component,
+  type OnChanges,
+  type SimpleChanges,
   computed,
   inject,
   input,
-  type OnChanges,
   signal,
-  type SimpleChanges,
   viewChild,
 } from '@angular/core';
 import { FormField, form, maxLength, required, submit } from '@angular/forms/signals';
@@ -18,6 +18,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { Router, RouterLink } from '@angular/router';
+
 import type { ImportCandidate, SourceFileSelection } from '../../../../shared/contracts';
 import { AppStore } from '../../core/app-store';
 import { DesktopApi } from '../../core/desktop-api';
@@ -45,8 +46,8 @@ import { PageHeader } from '../../shared/page-header/page-header';
 export class ImportPage implements OnChanges {
   private readonly router = inject(Router);
   private readonly desktop = inject(DesktopApi);
-  private readonly stepper = viewChild(MatStepper);
   protected readonly store = inject(AppStore);
+  private readonly stepper = viewChild(MatStepper);
   protected readonly projectId = input.required<string>();
   protected readonly sourceKind = signal<'text-folder' | 't3db'>('text-folder');
   protected readonly candidate = signal<ImportCandidate | undefined>(undefined);

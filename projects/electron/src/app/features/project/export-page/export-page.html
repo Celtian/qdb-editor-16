@@ -5,29 +5,32 @@
   </div>
 </app-page-header>
 
-<section class="export-page" aria-labelledby="export-heading">
+<section
+  class="qdb-export-page grid gap-6 max-md:px-4 max-md:py-6"
+  aria-labelledby="export-heading"
+>
   @if (error()) {
-    <p class="error" role="alert">{{ error() }}</p>
+    <p class="qdb-error" role="alert">{{ error() }}</p>
   }
   @if (warning()) {
-    <p class="warning" role="status">{{ warning() }}</p>
+    <p class="qdb-warning" role="status">{{ warning() }}</p>
   }
 
-  <mat-card appearance="outlined" class="wizard-card">
+  <mat-card appearance="outlined" class="qdb-wizard-card">
     <mat-stepper class="qdb-wizard" linear aria-label="Export project wizard">
-      <ng-template matStepperIcon="number" let-index="index">
+      <ng-template let-index="index" matStepperIcon="number">
         <span aria-hidden="true">{{ index + 1 }}</span>
       </ng-template>
-      <ng-template matStepperIcon="edit" let-index="index">
+      <ng-template let-index="index" matStepperIcon="edit">
         <span aria-hidden="true">{{ index + 1 }}</span>
       </ng-template>
-      <ng-template matStepperIcon="done" let-index="index">
+      <ng-template let-index="index" matStepperIcon="done">
         <span aria-hidden="true">{{ index + 1 }}</span>
       </ng-template>
 
       <mat-step [completed]="columnsValid()">
         <ng-template matStepLabel>Dataset</ng-template>
-        <div class="step-content">
+        <div class="qdb-step-content">
           <div>
             <h2>{{ dataset() === 'source' ? 'Source DB' : 'Combined DB' }}</h2>
             <p>
@@ -38,7 +41,7 @@
               }}
             </p>
           </div>
-          <div class="step-actions">
+          <div class="qdb-step-actions">
             <button matButton="filled" matStepperNext type="button">Next</button>
           </div>
         </div>
@@ -46,19 +49,19 @@
 
       <mat-step [completed]="true">
         <ng-template matStepLabel>Format</ng-template>
-        <div class="step-content">
+        <div class="qdb-step-content">
           <div>
             <h2>Choose a format</h2>
             <p>Choose separate files or one nested JSON snapshot.</p>
           </div>
           <mat-radio-group
-            class="format-options"
+            class="qdb-format-options"
             aria-label="Export format"
             [value]="format()"
             (change)="selectFormat($event.value)"
           >
             <mat-radio-button value="single-json">
-              <span class="option-content">
+              <span class="qdb-option-content flex items-center gap-3">
                 <mat-icon aria-hidden="true">account_tree</mat-icon>
                 <span
                   ><strong>Single JSON</strong
@@ -67,7 +70,7 @@
               </span>
             </mat-radio-button>
             <mat-radio-button value="json">
-              <span class="option-content">
+              <span class="qdb-option-content flex items-center gap-3">
                 <mat-icon aria-hidden="true">data_object</mat-icon>
                 <span
                   ><strong>JSON</strong><small>Structured arrays for scripts and APIs</small></span
@@ -75,13 +78,13 @@
               </span>
             </mat-radio-button>
             <mat-radio-button value="csv">
-              <span class="option-content">
+              <span class="qdb-option-content flex items-center gap-3">
                 <mat-icon aria-hidden="true">table_view</mat-icon>
                 <span><strong>CSV</strong><small>UTF-8 tables for spreadsheets</small></span>
               </span>
             </mat-radio-button>
           </mat-radio-group>
-          <div class="step-actions">
+          <div class="qdb-step-actions">
             <button matButton="filled" matStepperNext type="button">Next</button>
           </div>
         </div>
@@ -89,7 +92,7 @@
 
       <mat-step [completed]="true">
         <ng-template matStepLabel>Columns</ng-template>
-        <div class="step-content">
+        <div class="qdb-step-content">
           <div>
             <h2>Choose columns</h2>
             <p>
@@ -97,8 +100,12 @@
             </p>
           </div>
 
-          <div class="preset-pickers">
-            <mat-form-field class="preset-picker" appearance="outline" subscriptSizing="dynamic">
+          <div class="qdb-preset-pickers flex flex-wrap gap-4">
+            <mat-form-field
+              class="qdb-preset-picker"
+              appearance="outline"
+              subscriptSizing="dynamic"
+            >
               <mat-label>Visibility preset</mat-label>
               <mat-select
                 aria-label="Export visibility preset"
@@ -114,7 +121,11 @@
               </mat-select>
             </mat-form-field>
 
-            <mat-form-field class="preset-picker" appearance="outline" subscriptSizing="dynamic">
+            <mat-form-field
+              class="qdb-preset-picker"
+              appearance="outline"
+              subscriptSizing="dynamic"
+            >
               <mat-label>Field names preset</mat-label>
               <mat-select
                 aria-label="Export field-name preset"
@@ -138,7 +149,7 @@
             (fieldNamesChange)="updateFieldNames($event)"
           />
 
-          <div class="step-actions">
+          <div class="qdb-step-actions">
             <button matButton matStepperPrevious type="button">Back</button>
             <button matButton="filled" matStepperNext type="button" [disabled]="!columnsValid()">
               Next
@@ -149,12 +160,14 @@
 
       <mat-step [completed]="!!destination()">
         <ng-template matStepLabel>Folder</ng-template>
-        <div class="step-content">
+        <div class="qdb-step-content">
           <div>
             <h2>Choose a destination folder</h2>
             <p>A new timestamped folder containing the exported files will be created here.</p>
           </div>
-          <div class="folder-picker">
+          <div
+            class="qdb-folder-picker grid items-center gap-3 rounded-xl border border-outline-variant bg-surface-container-low p-4"
+          >
             <mat-icon aria-hidden="true">folder</mat-icon>
             <span>{{ destination() || 'No folder selected' }}</span>
             <button
@@ -166,7 +179,7 @@
               {{ destination() ? 'Change folder' : 'Choose folder' }}
             </button>
           </div>
-          <div class="step-actions">
+          <div class="qdb-step-actions">
             <button matButton matStepperPrevious type="button">Back</button>
             <button matButton="filled" matStepperNext type="button" [disabled]="!destination()">
               Next
@@ -177,7 +190,7 @@
 
       <mat-step [completed]="leagueSelectionValid()">
         <ng-template matStepLabel>Leagues</ng-template>
-        <div class="step-content">
+        <div class="qdb-step-content">
           <div>
             <h2>Choose leagues</h2>
             <p>
@@ -187,9 +200,13 @@
           @if (loadingLeagues()) {
             <mat-progress-bar mode="indeterminate" aria-label="Loading leagues" />
           } @else if (leagues().length === 0 && !hasTeamsWithoutLeague()) {
-            <p class="empty-state">This project has no leagues to export.</p>
+            <p class="qdb-empty-state">This project has no leagues to export.</p>
           } @else {
-            <div class="league-list" role="group" aria-label="Leagues to export">
+            <div
+              class="max-h-80 overflow-auto rounded-xl border border-outline-variant px-4 py-2"
+              role="group"
+              aria-label="Leagues to export"
+            >
               <mat-checkbox
                 class="select-all"
                 [checked]="allLeaguesSelected()"
@@ -199,27 +216,33 @@
                   hasTeamsWithoutLeague() ? 'All leagues and unassigned teams' : 'All leagues'
                 }}</mat-checkbox
               >
-              <ul class="league-options">
+              <ul class="qdb-league-options">
                 @for (league of leagues(); track league.id) {
-                  <li class="league-option">
+                  <li class="qdb-league-option grid min-h-12 items-center gap-3 px-1 py-2">
                     <mat-checkbox
-                      class="league-checkbox"
+                      class="qdb-league-checkbox"
                       [aria-label]="'Select ' + league.name"
                       [checked]="isLeagueSelected(league.id)"
                       (change)="toggleLeague(league.id, $event.checked)"
                     >
-                      <span class="visually-hidden">Select {{ league.name }}</span>
+                      <span class="qdb-visually-hidden">Select {{ league.name }}</span>
                     </mat-checkbox>
-                    <span class="league-name">{{ league.name }}</span>
-                    <span class="league-metadata">
-                      <span class="metadata-item country-with-flag">
+                    <span class="qdb-league-name min-w-0 font-bold">{{ league.name }}</span>
+                    <span
+                      class="qdb-league-metadata flex min-w-0 flex-wrap items-center justify-end text-sm text-on-surface-variant max-md:justify-start"
+                    >
+                      <span
+                        class="qdb-metadata-item qdb-country-with-flag inline-flex min-w-0 items-center"
+                      >
                         @if (league.countryCode) {
                           <app-country-flag decorative [code]="league.countryCode" />
                         }
                         <span>{{ league.countryName || 'Country not set' }}</span>
                       </span>
-                      <span class="metadata-item">{{ providerLabel(league) }}</span>
-                      <span class="metadata-item">{{
+                      <span class="qdb-metadata-item inline-flex min-w-0 items-center">{{
+                        providerLabel(league)
+                      }}</span>
+                      <span class="qdb-metadata-item inline-flex min-w-0 items-center">{{
                         league.tier === undefined ? 'Tier not set' : 'Tier ' + league.tier
                       }}</span>
                     </span>
@@ -227,7 +250,7 @@
                 }
               </ul>
               @if (hasTeamsWithoutLeague()) {
-                <div class="unassigned-option">
+                <div class="border-t border-outline-variant pt-2">
                   <mat-checkbox
                     [checked]="includeTeamsWithoutLeague()"
                     (change)="toggleTeamsWithoutLeague($event.checked)"
@@ -237,10 +260,12 @@
               }
             </div>
             @if (!leagueSelectionValid()) {
-              <p class="validation" role="alert">Choose at least one league or unassigned team.</p>
+              <p class="qdb-validation" role="alert">
+                Choose at least one league or unassigned team.
+              </p>
             }
           }
-          <div class="step-actions">
+          <div class="qdb-step-actions">
             <button matButton matStepperPrevious type="button">Back</button>
             <button
               matButton="filled"
@@ -256,12 +281,12 @@
 
       <mat-step>
         <ng-template matStepLabel>Summary</ng-template>
-        <div class="step-content">
+        <div class="qdb-step-content">
           <div>
             <h2>Review export</h2>
             <p>Confirm your choices before creating the files.</p>
           </div>
-          <dl class="summary-list">
+          <dl class="qdb-summary-list">
             <div>
               <dt>Dataset</dt>
               <dd>{{ dataset() === 'source' ? 'Source data' : 'Combined data' }}</dd>
@@ -305,7 +330,10 @@
           }
 
           @if (result(); as exportResult) {
-            <div class="success" aria-live="polite">
+            <div
+              class="qdb-success grid items-center gap-3 rounded-xl border border-outline-variant bg-surface-container-low p-4"
+              aria-live="polite"
+            >
               <mat-icon aria-hidden="true">check_circle</mat-icon>
               <div>
                 <strong>Export complete</strong
@@ -317,7 +345,7 @@
             </div>
           }
 
-          <div class="step-actions">
+          <div class="qdb-step-actions">
             <button matButton matStepperPrevious type="button" [disabled]="busy()">Back</button>
             <button
               matButton="filled"

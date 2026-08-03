@@ -1,0 +1,102 @@
+:host,
+.qdb-settings-layout {
+  display: block;
+  height: 100vh;
+}
+
+:host {
+  --settings-sidebar-width: 15.5rem;
+}
+
+.qdb-settings-layout {
+  grid-template-columns: var(--settings-sidebar-width) minmax(0, 1fr);
+}
+
+.qdb-sidebar {
+  background: #102b4e;
+  color: white;
+  min-height: 0;
+  overflow: hidden auto;
+}
+
+.qdb-sidebar-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 1.25rem 0.75rem;
+}
+
+.qdb-brand {
+  align-items: center;
+  color: white;
+  display: flex;
+  font-size: 1.05rem;
+  font-weight: 700;
+  gap: 0.75rem;
+  padding: 0.5rem 0.75rem 1.75rem;
+  text-decoration: none;
+}
+
+.qdb-nav-group,
+.qdb-sidebar-footer {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.qdb-nav-group + .qdb-nav-group {
+  border-top: 1px solid color-mix(in srgb, #dbe9ff 18%, transparent);
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+}
+
+.qdb-nav-group-label {
+  color: #a9c5e8;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 0.35rem 0.75rem 0.15rem;
+  text-transform: uppercase;
+}
+
+nav a,
+.qdb-sidebar-action {
+  --mat-button-text-label-text-color: #dbe9ff;
+  --mat-button-text-ripple-color: color-mix(in srgb, #dbe9ff 12%, transparent);
+  --mat-button-text-state-layer-color: #dbe9ff;
+
+  color: #dbe9ff;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+nav a.active {
+  --mat-button-text-label-text-color: #004e45;
+  --mat-button-text-state-layer-color: #004e45;
+
+  background: #d9f4ee;
+  color: #004e45;
+}
+
+.qdb-sidebar-footer {
+  border-top: 1px solid color-mix(in srgb, #dbe9ff 18%, transparent);
+  margin-top: auto;
+  padding-top: 0.5rem;
+}
+
+mat-toolbar {
+  background: var(--mat-sys-surface);
+  border-bottom: 1px solid var(--border);
+  min-height: 4.5rem;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.qdb-spacer {
+  flex: 1;
+}
+
+main {
+  isolation: isolate;
+  min-height: calc(100vh - 4.5rem);
+}

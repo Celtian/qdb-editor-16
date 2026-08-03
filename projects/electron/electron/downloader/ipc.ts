@@ -1,4 +1,5 @@
-import { BrowserWindow, ipcMain, type IpcMainInvokeEvent, type shell } from 'electron';
+import { BrowserWindow, type IpcMainInvokeEvent, ipcMain, type shell } from 'electron';
+
 import type {
   ExportFormat,
   ExportResult,

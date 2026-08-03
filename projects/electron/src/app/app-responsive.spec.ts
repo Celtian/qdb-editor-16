@@ -6,8 +6,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSidenavHarness } from '@angular/material/sidenav/testing';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { provideRouter } from '@angular/router';
+
 import { of } from 'rxjs';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+
 import { App } from './app';
 import { AppStore } from './core/app-store';
 import { DesktopApi } from './core/desktop-api';

@@ -1,5 +1,5 @@
 <a
-  class="brand"
+  class="qdb-brand"
   routerLink="/projects"
   routerLinkActive="active"
   ariaCurrentWhenActive="page"
@@ -10,37 +10,39 @@
   <span>QDB Editor 16</span>
 </a>
 
-<nav class="primary-navigation" aria-label="Projects and databases">
+<nav class="qdb-primary-navigation" aria-label="Projects and databases">
   <ul
-    ngTree
     #tree="ngTree"
+    ngTree
     nav
     focusMode="roving"
     selectionMode="explicit"
     currentType="page"
-    class="navigation-tree"
+    class="m-0 list-none p-0"
     [value]="currentNodes()"
     (valueChange)="navigateToNode($event)"
   >
     @for (project of store.projects(); track project.id) {
       <li
-        ngTreeItem
         #projectItem="ngTreeItem"
-        class="tree-item"
+        ngTreeItem
+        class="qdb-tree-item rounded-xl outline-none"
         [parent]="tree"
         [value]="projectNode(project.id)"
         [label]="project.name"
         [expanded]="isExpanded(projectNode(project.id))"
         (expandedChange)="projectExpanded(project.id, $event)"
       >
-        <div class="tree-row">
+        <div
+          class="qdb-tree-row flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
+        >
           <mat-icon>folder</mat-icon>
-          <span class="item-label">{{ project.name }}</span>
+          <span class="min-w-0 flex-1 truncate">{{ project.name }}</span>
           <button
             type="button"
             matIconButton
             tabindex="-1"
-            class="disclosure"
+            class="flex-none"
             [attr.aria-label]="
               (isExpanded(projectNode(project.id)) ? 'Collapse ' : 'Expand ') + project.name
             "
@@ -52,26 +54,31 @@
           </button>
         </div>
 
-        <ul role="group" class="tree-group">
-          <ng-template ngTreeItemGroup #projectGroup="ngTreeItemGroup" [ownedBy]="projectItem">
+        <ul
+          role="group"
+          class="qdb-tree-group m-0 ml-4 list-none border-l border-outline-variant p-0"
+        >
+          <ng-template #projectGroup="ngTreeItemGroup" ngTreeItemGroup [ownedBy]="projectItem">
             <li
-              ngTreeItem
               #sourceItem="ngTreeItem"
-              class="tree-item"
+              ngTreeItem
+              class="qdb-tree-item rounded-xl outline-none"
+              label="Source DB"
               [parent]="projectGroup"
               [value]="sourceNode(project.id)"
-              label="Source DB"
               [expanded]="isExpanded(sourceNode(project.id))"
               (expandedChange)="nodeExpanded(sourceNode(project.id), $event)"
             >
-              <div class="tree-row">
+              <div
+                class="qdb-tree-row flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
+              >
                 <mat-icon>cloud_download</mat-icon>
-                <span class="item-label">Source DB</span>
+                <span class="min-w-0 flex-1 truncate">Source DB</span>
                 <button
                   type="button"
                   matIconButton
                   tabindex="-1"
-                  class="disclosure"
+                  class="flex-none"
                   [attr.aria-label]="
                     isExpanded(sourceNode(project.id)) ? 'Collapse Source DB' : 'Expand Source DB'
                   "
@@ -82,38 +89,45 @@
                   </mat-icon>
                 </button>
               </div>
-              <ul role="group" class="tree-group">
-                <ng-template ngTreeItemGroup #sourceGroup="ngTreeItemGroup" [ownedBy]="sourceItem">
+              <ul
+                role="group"
+                class="qdb-tree-group m-0 ml-4 list-none border-l border-outline-variant p-0"
+              >
+                <ng-template #sourceGroup="ngTreeItemGroup" ngTreeItemGroup [ownedBy]="sourceItem">
                   <li
                     ngTreeItem
-                    class="tree-item"
+                    class="qdb-tree-item rounded-xl outline-none"
+                    label="Import"
                     [parent]="sourceGroup"
                     [value]="sourceImportNode(project.id)"
-                    label="Import"
                   >
-                    <div class="tree-row">
+                    <div
+                      class="qdb-tree-row flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
+                    >
                       <mat-icon>download</mat-icon>
-                      <span class="item-label">Import</span>
+                      <span class="min-w-0 flex-1 truncate">Import</span>
                     </div>
                   </li>
                   <li
-                    ngTreeItem
                     #sourceObjectsItem="ngTreeItem"
-                    class="tree-item"
+                    ngTreeItem
+                    class="qdb-tree-item rounded-xl outline-none"
+                    label="Objects"
                     [parent]="sourceGroup"
                     [value]="sourceObjectsNode(project.id)"
-                    label="Objects"
                     [expanded]="isExpanded(sourceObjectsNode(project.id))"
                     (expandedChange)="nodeExpanded(sourceObjectsNode(project.id), $event)"
                   >
-                    <div class="tree-row">
+                    <div
+                      class="qdb-tree-row flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
+                    >
                       <mat-icon>category</mat-icon>
-                      <span class="item-label">Objects</span>
+                      <span class="min-w-0 flex-1 truncate">Objects</span>
                       <button
                         type="button"
                         matIconButton
                         tabindex="-1"
-                        class="disclosure"
+                        class="flex-none"
                         [attr.aria-label]="
                           isExpanded(sourceObjectsNode(project.id))
                             ? 'Collapse Source DB objects'
@@ -130,23 +144,28 @@
                         </mat-icon>
                       </button>
                     </div>
-                    <ul role="group" class="tree-group">
+                    <ul
+                      role="group"
+                      class="qdb-tree-group m-0 ml-4 list-none border-l border-outline-variant p-0"
+                    >
                       <ng-template
-                        ngTreeItemGroup
                         #sourceObjectGroup="ngTreeItemGroup"
+                        ngTreeItemGroup
                         [ownedBy]="sourceObjectsItem"
                       >
                         @for (object of sourceObjectKinds; track object.kind) {
                           <li
                             ngTreeItem
-                            class="tree-item table-item"
+                            class="qdb-tree-item qdb-table-item rounded-xl outline-none"
                             [parent]="sourceObjectGroup"
                             [value]="sourceObjectNode(project.id, object.kind)"
                             [label]="object.label"
                           >
-                            <div class="tree-row">
+                            <div
+                              class="qdb-tree-row flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
+                            >
                               <mat-icon>{{ object.icon }}</mat-icon>
-                              <span class="item-label">{{ object.label }}</span>
+                              <span class="min-w-0 flex-1 truncate">{{ object.label }}</span>
                             </div>
                           </li>
                         }
@@ -155,14 +174,16 @@
                   </li>
                   <li
                     ngTreeItem
-                    class="tree-item"
+                    class="qdb-tree-item rounded-xl outline-none"
+                    label="Export"
                     [parent]="sourceGroup"
                     [value]="sourceExportNode(project.id)"
-                    label="Export"
                   >
-                    <div class="tree-row">
+                    <div
+                      class="qdb-tree-row flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
+                    >
                       <mat-icon>drive_file_move</mat-icon>
-                      <span class="item-label">Export</span>
+                      <span class="min-w-0 flex-1 truncate">Export</span>
                     </div>
                   </li>
                 </ng-template>
@@ -170,23 +191,25 @@
             </li>
 
             <li
-              ngTreeItem
               #combinedItem="ngTreeItem"
-              class="tree-item"
+              ngTreeItem
+              class="qdb-tree-item rounded-xl outline-none"
+              label="Combined DB"
               [parent]="projectGroup"
               [value]="combinedNode(project.id)"
-              label="Combined DB"
               [expanded]="isExpanded(combinedNode(project.id))"
               (expandedChange)="nodeExpanded(combinedNode(project.id), $event)"
             >
-              <div class="tree-row">
+              <div
+                class="qdb-tree-row flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
+              >
                 <mat-icon>merge</mat-icon>
-                <span class="item-label">Combined DB</span>
+                <span class="min-w-0 flex-1 truncate">Combined DB</span>
                 <button
                   type="button"
                   matIconButton
                   tabindex="-1"
-                  class="disclosure"
+                  class="flex-none"
                   [attr.aria-label]="
                     isExpanded(combinedNode(project.id))
                       ? 'Collapse Combined DB'
@@ -199,42 +222,49 @@
                   </mat-icon>
                 </button>
               </div>
-              <ul role="group" class="tree-group">
+              <ul
+                role="group"
+                class="qdb-tree-group m-0 ml-4 list-none border-l border-outline-variant p-0"
+              >
                 <ng-template
-                  ngTreeItemGroup
                   #combinedGroup="ngTreeItemGroup"
+                  ngTreeItemGroup
                   [ownedBy]="combinedItem"
                 >
                   <li
                     ngTreeItem
-                    class="tree-item"
+                    class="qdb-tree-item rounded-xl outline-none"
+                    label="Import"
                     [parent]="combinedGroup"
                     [value]="combinedImportNode(project.id)"
-                    label="Import"
                   >
-                    <div class="tree-row">
+                    <div
+                      class="qdb-tree-row flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
+                    >
                       <mat-icon>download</mat-icon>
-                      <span class="item-label">Import</span>
+                      <span class="min-w-0 flex-1 truncate">Import</span>
                     </div>
                   </li>
                   <li
-                    ngTreeItem
                     #combinedObjectsItem="ngTreeItem"
-                    class="tree-item"
+                    ngTreeItem
+                    class="qdb-tree-item rounded-xl outline-none"
+                    label="Objects"
                     [parent]="combinedGroup"
                     [value]="combinedObjectsNode(project.id)"
-                    label="Objects"
                     [expanded]="isExpanded(combinedObjectsNode(project.id))"
                     (expandedChange)="nodeExpanded(combinedObjectsNode(project.id), $event)"
                   >
-                    <div class="tree-row">
+                    <div
+                      class="qdb-tree-row flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
+                    >
                       <mat-icon>category</mat-icon>
-                      <span class="item-label">Objects</span>
+                      <span class="min-w-0 flex-1 truncate">Objects</span>
                       <button
                         type="button"
                         matIconButton
                         tabindex="-1"
-                        class="disclosure"
+                        class="flex-none"
                         [attr.aria-label]="
                           isExpanded(combinedObjectsNode(project.id))
                             ? 'Collapse Combined DB objects'
@@ -251,23 +281,28 @@
                         </mat-icon>
                       </button>
                     </div>
-                    <ul role="group" class="tree-group">
+                    <ul
+                      role="group"
+                      class="qdb-tree-group m-0 ml-4 list-none border-l border-outline-variant p-0"
+                    >
                       <ng-template
-                        ngTreeItemGroup
                         #combinedObjectGroup="ngTreeItemGroup"
+                        ngTreeItemGroup
                         [ownedBy]="combinedObjectsItem"
                       >
                         @for (object of sourceObjectKinds; track object.kind) {
                           <li
                             ngTreeItem
-                            class="tree-item table-item"
+                            class="qdb-tree-item qdb-table-item rounded-xl outline-none"
                             [parent]="combinedObjectGroup"
                             [value]="combinedObjectNode(project.id, object.kind)"
                             [label]="object.label"
                           >
-                            <div class="tree-row">
+                            <div
+                              class="qdb-tree-row flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
+                            >
                               <mat-icon>{{ object.icon }}</mat-icon>
-                              <span class="item-label">{{ object.label }}</span>
+                              <span class="min-w-0 flex-1 truncate">{{ object.label }}</span>
                             </div>
                           </li>
                         }
@@ -276,14 +311,16 @@
                   </li>
                   <li
                     ngTreeItem
-                    class="tree-item"
+                    class="qdb-tree-item rounded-xl outline-none"
+                    label="Export"
                     [parent]="combinedGroup"
                     [value]="combinedExportNode(project.id)"
-                    label="Export"
                   >
-                    <div class="tree-row">
+                    <div
+                      class="qdb-tree-row flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
+                    >
                       <mat-icon>drive_file_move</mat-icon>
-                      <span class="item-label">Export</span>
+                      <span class="min-w-0 flex-1 truncate">Export</span>
                     </div>
                   </li>
                 </ng-template>
@@ -291,23 +328,25 @@
             </li>
 
             <li
-              ngTreeItem
               #fifaItem="ngTreeItem"
-              class="tree-item"
+              ngTreeItem
+              class="qdb-tree-item rounded-xl outline-none"
+              label="FIFA DB"
               [parent]="projectGroup"
               [value]="fifaNode(project.id)"
-              label="FIFA DB"
               [expanded]="isExpanded(fifaNode(project.id))"
               (expandedChange)="fifaExpanded(project.id, $event)"
             >
-              <div class="tree-row">
+              <div
+                class="qdb-tree-row flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
+              >
                 <mat-icon>storage</mat-icon>
-                <span class="item-label">FIFA DB</span>
+                <span class="min-w-0 flex-1 truncate">FIFA DB</span>
                 <button
                   type="button"
                   matIconButton
                   tabindex="-1"
-                  class="disclosure"
+                  class="flex-none"
                   [attr.aria-label]="
                     isExpanded(fifaNode(project.id)) ? 'Collapse FIFA DB' : 'Expand FIFA DB'
                   "
@@ -318,17 +357,27 @@
                   </mat-icon>
                 </button>
               </div>
-              <ul role="group" class="tree-group">
-                <ng-template ngTreeItemGroup #fifaGroup="ngTreeItemGroup" [ownedBy]="fifaItem">
+              <ul
+                role="group"
+                class="qdb-tree-group m-0 ml-4 list-none border-l border-outline-variant p-0"
+              >
+                <ng-template #fifaGroup="ngTreeItemGroup" ngTreeItemGroup [ownedBy]="fifaItem">
                   @switch (store.databaseLoadState(project.id).status) {
                     @case ('loading') {
-                      <li role="none" class="branch-message" aria-live="polite">
+                      <li
+                        role="none"
+                        class="qdb-branch-message flex items-center gap-2 px-2 py-1.5 text-on-surface-variant"
+                        aria-live="polite"
+                      >
                         <mat-icon>hourglass_empty</mat-icon>
                         <span>Loading databases…</span>
                       </li>
                     }
                     @case ('error') {
-                      <li role="none" class="branch-message error-message">
+                      <li
+                        role="none"
+                        class="qdb-branch-message qdb-error-message flex items-center gap-2 px-2 py-1.5 text-on-surface-variant"
+                      >
                         <span>{{ store.databaseLoadState(project.id).error }}</span>
                         <button
                           type="button"
@@ -342,23 +391,25 @@
                     @case ('loaded') {
                       @for (database of store.databasesFor(project.id); track database.id) {
                         <li
-                          ngTreeItem
                           #databaseItem="ngTreeItem"
-                          class="tree-item"
+                          ngTreeItem
+                          class="qdb-tree-item rounded-xl outline-none"
                           [parent]="fifaGroup"
                           [value]="databaseNode(project.id, database.id)"
                           [label]="database.name"
                           [expanded]="isExpanded(databaseNode(project.id, database.id))"
                           (expandedChange)="databaseExpanded(project.id, database.id, $event)"
                         >
-                          <div class="tree-row">
+                          <div
+                            class="qdb-tree-row flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
+                          >
                             <mat-icon>storage</mat-icon>
-                            <span class="item-label">{{ database.name }}</span>
+                            <span class="min-w-0 flex-1 truncate">{{ database.name }}</span>
                             <button
                               type="button"
                               matIconButton
                               tabindex="-1"
-                              class="disclosure"
+                              class="flex-none"
                               [attr.aria-label]="
                                 (isExpanded(databaseNode(project.id, database.id))
                                   ? 'Collapse '
@@ -375,30 +426,35 @@
                               </mat-icon>
                             </button>
                           </div>
-                          <ul role="group" class="tree-group">
+                          <ul
+                            role="group"
+                            class="qdb-tree-group m-0 ml-4 list-none border-l border-outline-variant p-0"
+                          >
                             <ng-template
-                              ngTreeItemGroup
                               #databaseGroup="ngTreeItemGroup"
+                              ngTreeItemGroup
                               [ownedBy]="databaseItem"
                             >
                               <li
-                                ngTreeItem
                                 #objectsItem="ngTreeItem"
-                                class="tree-item"
+                                ngTreeItem
+                                class="qdb-tree-item rounded-xl outline-none"
+                                label="Objects"
                                 [parent]="databaseGroup"
                                 [value]="objectsNode(project.id, database.id)"
-                                label="Objects"
                                 [expanded]="isExpanded(objectsNode(project.id, database.id))"
                                 (expandedChange)="objectsExpanded(project.id, database.id, $event)"
                               >
-                                <div class="tree-row">
+                                <div
+                                  class="qdb-tree-row flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
+                                >
                                   <mat-icon>category</mat-icon>
-                                  <span class="item-label">Objects</span>
+                                  <span class="min-w-0 flex-1 truncate">Objects</span>
                                   <button
                                     type="button"
                                     matIconButton
                                     tabindex="-1"
-                                    class="disclosure"
+                                    class="flex-none"
                                     aria-label="Toggle FIFA database objects"
                                     (click)="toggleObjects($event, project.id, database.id)"
                                   >
@@ -411,23 +467,28 @@
                                     </mat-icon>
                                   </button>
                                 </div>
-                                <ul role="group" class="tree-group">
+                                <ul
+                                  role="group"
+                                  class="qdb-tree-group m-0 ml-4 list-none border-l border-outline-variant p-0"
+                                >
                                   <ng-template
-                                    ngTreeItemGroup
                                     #objectGroup="ngTreeItemGroup"
+                                    ngTreeItemGroup
                                     [ownedBy]="objectsItem"
                                   >
                                     @for (kind of objectKinds; track kind) {
                                       <li
                                         ngTreeItem
-                                        class="tree-item table-item"
+                                        class="qdb-tree-item qdb-table-item rounded-xl outline-none"
                                         [parent]="objectGroup"
                                         [value]="objectNode(project.id, database.id, kind)"
                                         [label]="objectConfig[kind].label"
                                       >
-                                        <div class="tree-row">
+                                        <div
+                                          class="qdb-tree-row flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
+                                        >
                                           <mat-icon>{{ objectConfig[kind].icon }}</mat-icon>
-                                          <span class="item-label">{{
+                                          <span class="min-w-0 flex-1 truncate">{{
                                             objectConfig[kind].label
                                           }}</span>
                                         </div>
@@ -438,23 +499,25 @@
                               </li>
 
                               <li
-                                ngTreeItem
                                 #tablesItem="ngTreeItem"
-                                class="tree-item"
+                                ngTreeItem
+                                class="qdb-tree-item rounded-xl outline-none"
+                                label="Tables"
                                 [parent]="databaseGroup"
                                 [value]="tablesNode(project.id, database.id)"
-                                label="Tables"
                                 [expanded]="isExpanded(tablesNode(project.id, database.id))"
                                 (expandedChange)="tablesExpanded(project.id, database.id, $event)"
                               >
-                                <div class="tree-row">
+                                <div
+                                  class="qdb-tree-row flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
+                                >
                                   <mat-icon>table_view</mat-icon>
-                                  <span class="item-label">Tables</span>
+                                  <span class="min-w-0 flex-1 truncate">Tables</span>
                                   <button
                                     type="button"
                                     matIconButton
                                     tabindex="-1"
-                                    class="disclosure"
+                                    class="flex-none"
                                     aria-label="Toggle FIFA database tables"
                                     (click)="toggleTables($event, project.id, database.id)"
                                   >
@@ -467,20 +530,30 @@
                                     </mat-icon>
                                   </button>
                                 </div>
-                                <ul role="group" class="tree-group">
+                                <ul
+                                  role="group"
+                                  class="qdb-tree-group m-0 ml-4 list-none border-l border-outline-variant p-0"
+                                >
                                   <ng-template
-                                    ngTreeItemGroup
                                     #tableGroup="ngTreeItemGroup"
+                                    ngTreeItemGroup
                                     [ownedBy]="tablesItem"
                                   >
                                     @switch (store.tableLoadState(database.id).status) {
                                       @case ('loading') {
-                                        <li role="none" class="branch-message" aria-live="polite">
+                                        <li
+                                          role="none"
+                                          class="qdb-branch-message flex items-center gap-2 px-2 py-1.5 text-on-surface-variant"
+                                          aria-live="polite"
+                                        >
                                           <span>Loading tables…</span>
                                         </li>
                                       }
                                       @case ('error') {
-                                        <li role="none" class="branch-message error-message">
+                                        <li
+                                          role="none"
+                                          class="qdb-branch-message qdb-error-message flex items-center gap-2 px-2 py-1.5 text-on-surface-variant"
+                                        >
                                           <span>{{ store.tableLoadState(database.id).error }}</span>
                                           <button
                                             type="button"
@@ -498,18 +571,25 @@
                                         ) {
                                           <li
                                             ngTreeItem
-                                            class="tree-item table-item"
+                                            class="qdb-tree-item qdb-table-item rounded-xl outline-none"
                                             [parent]="tableGroup"
                                             [value]="tableNode(project.id, database.id, table.name)"
                                             [label]="table.name"
                                           >
-                                            <div class="tree-row">
+                                            <div
+                                              class="qdb-tree-row flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
+                                            >
                                               <mat-icon>table_rows</mat-icon>
-                                              <span class="item-label">{{ table.name }}</span>
+                                              <span class="min-w-0 flex-1 truncate">{{
+                                                table.name
+                                              }}</span>
                                             </div>
                                           </li>
                                         } @empty {
-                                          <li role="none" class="branch-message">
+                                          <li
+                                            role="none"
+                                            class="qdb-branch-message flex items-center gap-2 px-2 py-1.5 text-on-surface-variant"
+                                          >
                                             No tables available.
                                           </li>
                                         }
@@ -521,45 +601,56 @@
 
                               <li
                                 ngTreeItem
-                                class="tree-item"
+                                class="qdb-tree-item rounded-xl outline-none"
+                                label="Settings"
                                 [parent]="databaseGroup"
                                 [value]="settingsNode(project.id, database.id)"
-                                label="Settings"
                               >
-                                <div class="tree-row">
+                                <div
+                                  class="qdb-tree-row flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
+                                >
                                   <mat-icon>tune</mat-icon>
-                                  <span class="item-label">Settings</span>
+                                  <span class="min-w-0 flex-1 truncate">Settings</span>
                                 </div>
                               </li>
                               <li
                                 ngTreeItem
-                                class="tree-item"
+                                class="qdb-tree-item rounded-xl outline-none"
+                                label="Validation"
                                 [parent]="databaseGroup"
                                 [value]="validationNode(project.id, database.id)"
-                                label="Validation"
                               >
-                                <div class="tree-row">
+                                <div
+                                  class="qdb-tree-row flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
+                                >
                                   <mat-icon>fact_check</mat-icon>
-                                  <span class="item-label">Validation</span>
+                                  <span class="min-w-0 flex-1 truncate">Validation</span>
                                 </div>
                               </li>
                               <li
                                 ngTreeItem
-                                class="tree-item"
+                                class="qdb-tree-item rounded-xl outline-none"
+                                label="Export"
                                 [parent]="databaseGroup"
                                 [value]="exportNode(project.id, database.id)"
-                                label="Export"
                               >
-                                <div class="tree-row">
+                                <div
+                                  class="qdb-tree-row flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
+                                >
                                   <mat-icon>drive_file_move</mat-icon>
-                                  <span class="item-label">Export</span>
+                                  <span class="min-w-0 flex-1 truncate">Export</span>
                                 </div>
                               </li>
                             </ng-template>
                           </ul>
                         </li>
                       } @empty {
-                        <li role="none" class="branch-message">No FIFA databases.</li>
+                        <li
+                          role="none"
+                          class="qdb-branch-message flex items-center gap-2 px-2 py-1.5 text-on-surface-variant"
+                        >
+                          No FIFA databases.
+                        </li>
                       }
                     }
                   }
@@ -570,30 +661,39 @@
         </ul>
       </li>
     } @empty {
-      <li role="none" class="branch-message">No projects yet.</li>
+      <li
+        role="none"
+        class="qdb-branch-message flex items-center gap-2 px-2 py-1.5 text-on-surface-variant"
+      >
+        No projects yet.
+      </li>
     }
   </ul>
 </nav>
 
-<div class="utility">
+<div class="qdb-utility mt-2 flex-none">
   <mat-divider />
   <nav aria-label="Application navigation">
-    <ul class="utility-list">
+    <ul class="m-0 list-none p-0">
       <li>
         <a
-          class="utility-item"
+          class="qdb-utility-item flex w-full min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
           routerLink="/settings"
           routerLinkActive="active"
           ariaCurrentWhenActive="page"
         >
           <mat-icon>settings</mat-icon>
-          <span class="item-label">Settings</span>
+          <span class="min-w-0 flex-1 truncate">Settings</span>
         </a>
       </li>
       <li>
-        <button type="button" class="utility-item" (click)="openAbout()">
+        <button
+          type="button"
+          class="qdb-utility-item flex w-full min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
+          (click)="openAbout()"
+        >
           <mat-icon>info</mat-icon>
-          <span class="item-label">About</span>
+          <span class="min-w-0 flex-1 truncate">About</span>
         </button>
       </li>
     </ul>

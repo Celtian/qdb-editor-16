@@ -7,7 +7,9 @@ import { MatSelectHarness } from '@angular/material/select/testing';
 import { MatStepperHarness } from '@angular/material/stepper/testing';
 import { MatTabGroupHarness } from '@angular/material/tabs/testing';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
+
 import axe from 'axe-core';
+
 import type {
   ExportConfigurationPreference,
   ExportFieldNamePresetPreference,
@@ -201,7 +203,7 @@ describe('ExportPage', () => {
 
     await stepper.selectStep({ label: 'Columns' });
     const columnTabGroup = await loader.getHarness(
-      MatTabGroupHarness.with({ selector: '.export-column-tabs' }),
+      MatTabGroupHarness.with({ selector: '.qdb-export-column-tabs' }),
     );
     const columnTabs = await columnTabGroup.getTabs();
     const leaguesTab = (await columnTabGroup.getTabs({ label: 'Leagues' }))[0];
@@ -231,7 +233,7 @@ describe('ExportPage', () => {
     ).toEqual(['Camel case', 'Snake case', 'Public feed']);
     await fieldNameSelect.close();
     const leagueInputs = await leaguesTab.getAllHarnesses(MatInputHarness);
-    const columnsContent = [...element.querySelectorAll<HTMLElement>('.step-content')].find(
+    const columnsContent = [...element.querySelectorAll<HTMLElement>('.qdb-step-content')].find(
       (content) => content.querySelector('h2')?.textContent === 'Choose columns',
     );
     const columnsNext = [
@@ -310,16 +312,18 @@ describe('ExportPage', () => {
     const championship = await loader.getHarness(
       MatCheckboxHarness.with({ label: 'Select Championship' }),
     );
-    const leagueList = element.querySelector<HTMLUListElement>('.league-options');
-    const leagueRows = [...(leagueList?.querySelectorAll<HTMLLIElement>('.league-option') ?? [])];
+    const leagueList = element.querySelector<HTMLUListElement>('.qdb-league-options');
+    const leagueRows = [
+      ...(leagueList?.querySelectorAll<HTMLLIElement>('.qdb-league-option') ?? []),
+    ];
     expect(leagueList?.tagName).toBe('UL');
     expect(leagueList?.querySelector('table')).toBeNull();
     expect(leagueRows).toHaveLength(2);
-    expect(leagueRows[0]?.querySelector('.league-name')?.textContent).toBe('Premier League');
-    expect(leagueRows[0]?.querySelector('.league-metadata')?.textContent).toContain(
+    expect(leagueRows[0]?.querySelector('.qdb-league-name')?.textContent).toBe('Premier League');
+    expect(leagueRows[0]?.querySelector('.qdb-league-metadata')?.textContent).toContain(
       'EnglandTransfermarktTier 1',
     );
-    expect(leagueRows[1]?.querySelector('.league-metadata')?.textContent).toContain(
+    expect(leagueRows[1]?.querySelector('.qdb-league-metadata')?.textContent).toContain(
       'Country not setSoccerwayTier not set',
     );
     const flag = leagueRows[0]?.querySelector<HTMLImageElement>('app-country-flag img');
@@ -726,8 +730,9 @@ describe('ExportPage', () => {
       button.textContent.includes('Change folder'),
     );
     const folderNext = [
-      ...(changeFolder?.closest('.step-content')?.querySelectorAll<HTMLButtonElement>('button') ??
-        []),
+      ...(changeFolder
+        ?.closest('.qdb-step-content')
+        ?.querySelectorAll<HTMLButtonElement>('button') ?? []),
     ].find((button) => button.textContent.includes('Next'));
 
     expect(element.textContent).toContain('/remembered/exports');

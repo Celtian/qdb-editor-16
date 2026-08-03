@@ -1,44 +1,22 @@
-.projects-empty-state {
+.qdb-projects-empty-state {
   min-height: 22rem;
-  padding: 0;
 }
 
-.projects-empty-state__content {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 1.5rem;
-  padding-top: 3rem;
-  padding-bottom: 1.5rem;
-  text-align: center;
-}
-
-.projects-empty-state__icon {
-  display: grid;
-  width: 5rem;
-  height: 5rem;
-  place-items: center;
-  border-radius: 1.5rem;
-  background: var(--mat-sys-primary-container);
-  color: var(--mat-sys-on-primary-container);
+.qdb-projects-empty-state-icon {
   box-shadow: 0 0.5rem 1.5rem color-mix(in srgb, var(--mat-sys-primary) 16%, transparent);
 }
 
-.projects-empty-state__icon mat-icon {
+.qdb-projects-empty-state-icon mat-icon {
   width: 2.5rem;
   height: 2.5rem;
   font-size: 2.5rem;
 }
 
-.projects-empty-state__copy {
-  display: grid;
+.qdb-projects-empty-state-copy {
   max-width: 34rem;
-  gap: 0.5rem;
 }
 
-.projects-empty-state__copy h2 {
+.qdb-projects-empty-state-copy h2 {
   margin: 0;
   color: var(--mat-sys-on-surface);
   font-size: 1.5rem;
@@ -47,40 +25,25 @@
   letter-spacing: -0.015em;
 }
 
-.projects-empty-state__copy p {
+.qdb-projects-empty-state-copy p {
   margin: 0;
   color: var(--mat-sys-on-surface-variant);
   font-size: 1rem;
   line-height: 1.5rem;
 }
 
-.projects-empty-state__action {
+.qdb-projects-empty-state-action {
   min-width: 10rem;
 }
 
-.projects-empty-state__actions {
-  justify-content: center;
-  padding-bottom: 3rem;
-}
-
 @media (width <= 600px) {
-  .projects-empty-state {
+  .qdb-projects-empty-state {
     min-height: 19rem;
   }
 
-  .projects-empty-state__content {
-    gap: 1.25rem;
-    padding-top: 2.5rem;
-    padding-bottom: 1.25rem;
-  }
-
-  .projects-empty-state__icon {
+  .qdb-projects-empty-state-icon {
     width: 4.5rem;
     height: 4.5rem;
     border-radius: 1.25rem;
-  }
-
-  .projects-empty-state__actions {
-    padding-bottom: 2.5rem;
   }
 }

@@ -1,0 +1,124 @@
+.qdb-player-cell {
+  min-height: 8.5rem;
+  border: 1px dashed var(--mat-sys-outline-variant);
+  transition:
+    border-color 120ms ease,
+    background-color 120ms ease;
+}
+
+.qdb-player-cell.cdk-drop-list-receiving {
+  border-color: var(--mat-sys-primary);
+  background: var(--mat-sys-primary-container);
+}
+
+.qdb-new-row-cell {
+  min-height: 4.5rem;
+  align-items: center;
+}
+
+.qdb-player-tile {
+  align-content: space-between;
+  box-shadow: var(--mat-sys-level1);
+}
+
+.qdb-player-details strong {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.qdb-player-metadata {
+  gap: 0.25rem 0.625rem;
+  font-size: 0.8125rem;
+}
+
+.qdb-player-actions .qdb-player-action-button {
+  display: inline-grid;
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  place-items: center;
+
+  --mat-icon-button-icon-size: 1.125rem;
+  --mat-icon-button-state-layer-size: 2.25rem;
+  --mat-icon-button-touch-target-display: none;
+}
+
+.qdb-player-action-button mat-icon {
+  display: block;
+  width: 1.125rem;
+  height: 1.125rem;
+  font-size: 1.125rem;
+  line-height: 1.125rem;
+}
+
+.qdb-empty-label {
+  font-size: 0.8125rem;
+}
+
+.qdb-new-row-cell mat-icon {
+  flex: 0 0 auto;
+}
+
+.qdb-player-tile.cdk-drag-preview {
+  box-shadow: var(--mat-sys-level3);
+}
+
+.qdb-player-tile.cdk-drag-placeholder {
+  opacity: 0.2;
+}
+
+.qdb-review-card {
+  align-content: start;
+  gap: 1rem;
+  padding-inline-start: 0;
+}
+
+.qdb-review-card-metadata {
+  min-block-size: 1.25rem;
+}
+
+.qdb-review-card-heading app-position-badge {
+  flex: 0 0 auto;
+}
+
+.qdb-review-field {
+  grid-template-columns: minmax(7.5rem, 0.35fr) minmax(0, 1fr);
+}
+
+.qdb-review-field dt {
+  color: var(--mat-sys-on-surface-variant);
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.qdb-review-field dd {
+  min-width: 0;
+  margin: 0;
+}
+
+.qdb-review-field.qdb-conflicting dd {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.qdb-resolution-options mat-button-toggle {
+  flex: 1 1 auto;
+}
+
+.qdb-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  gap: 0.75rem;
+}
+
+.qdb-summary div {
+  padding: 1rem;
+  border-radius: 0.75rem;
+  background: var(--mat-sys-surface-container);
+}
+
+.qdb-summary dt {
+  color: var(--muted-text);
+}

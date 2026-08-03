@@ -1,0 +1,10 @@
+<span
+  matTooltipPosition="above"
+  tabindex="0"
+  [class]="details().className"
+  [attr.data-status]="status()"
+  [matTooltip]="description()"
+>
+  <mat-icon aria-hidden="true">{{ details().icon }}</mat-icon>
+  {{ details().label }}
+</span>

@@ -4,6 +4,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTabsModule } from '@angular/material/tabs';
+
 import type { EntityKind } from '../../../../../shared/downloader/contracts';
 import { PageHeader } from '../../../shared/page-header/page-header';
 import type { ColumnPreference } from '../../project/entity-column-editor/column-layout';

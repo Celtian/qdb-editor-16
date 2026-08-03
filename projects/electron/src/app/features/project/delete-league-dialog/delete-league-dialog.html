@@ -1,0 +1,58 @@
+<h2 mat-dialog-title>
+  {{ bulk ? 'Delete selected ' + (leagueCount === 1 ? 'league?' : 'leagues?') : 'Delete league?' }}
+</h2>
+<mat-dialog-content>
+  <p class="qdb-warning-heading">
+    <mat-icon aria-hidden="true">warning</mat-icon>
+    <strong>{{ bulk ? formatUiCount(leagueCount, 'selected league') : data.name }}</strong>
+  </p>
+  <p>
+    Choose what should happen to {{ formatUiCount(data.teamCount, 'team') }} and
+    {{ formatUiCount(data.playerCount, 'player') }}
+    {{
+      bulk
+        ? leagueCount === 1
+          ? 'in the selected league'
+          : 'across the selected leagues'
+        : 'in this league'
+    }}.
+  </p>
+  <mat-radio-group
+    aria-label="League deletion scope"
+    [value]="mode()"
+    (change)="selectMode($event.value)"
+  >
+    <mat-radio-button value="league-only">
+      <span class="qdb-option-title">{{
+        bulk
+          ? 'Delete selected ' + (leagueCount === 1 ? 'league only' : 'leagues only')
+          : 'Delete league only'
+      }}</span>
+      <span class="qdb-option-description">
+        Keep {{ formatUiCount(data.teamCount, 'team') }} and
+        {{ formatUiCount(data.playerCount, 'player') }}. The teams will no longer belong to a
+        league.
+      </span>
+    </mat-radio-button>
+    <mat-radio-button value="league-and-teams">
+      <span class="qdb-option-title">{{
+        bulk
+          ? 'Delete selected ' +
+            (leagueCount === 1 ? 'league, teams and players' : 'leagues, teams and players')
+          : 'Delete league, teams and players'
+      }}</span>
+      <span class="qdb-option-description">
+        Permanently delete {{ bulk ? formatUiCount(leagueCount, 'league') : 'the league' }},
+        {{ formatUiCount(data.teamCount, 'team') }}, and
+        {{ formatUiCount(data.playerCount, 'player') }}.
+      </span>
+    </mat-radio-button>
+  </mat-radio-group>
+  <p>This action cannot be undone.</p>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button matButton mat-dialog-close type="button">Cancel</button>
+  <button class="qdb-delete-button" matButton="filled" type="button" [mat-dialog-close]="mode()">
+    {{ bulk ? 'Delete ' + formatUiCount(leagueCount, 'league') : 'Delete league' }}
+  </button>
+</mat-dialog-actions>

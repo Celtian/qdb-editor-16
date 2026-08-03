@@ -1,6 +1,7 @@
 import { Component, computed, input } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
+
 import type { CombinedEntityKind } from '../../../../shared/downloader/contracts';
 
 export const combinedEntityStatuses = ['ready', 'needsReview'] as const;
@@ -19,13 +20,15 @@ export const combinedEntityStatusDetails: Record<
   CombinedEntityStatusDetails
 > = {
   ready: {
-    className: 'record-status-badge record-status-badge--ready',
+    className:
+      'qdb-record-status-badge inline-flex items-center gap-status-gap whitespace-nowrap rounded-full bg-tertiary-container px-2.5 py-0 text-xs font-bold leading-6 text-on-tertiary-container',
     description: 'All linked source records are still available.',
     icon: 'check_circle',
     label: 'Ready',
   },
   needsReview: {
-    className: 'record-status-badge record-status-badge--needs-review',
+    className:
+      'qdb-record-status-badge inline-flex items-center gap-status-gap whitespace-nowrap rounded-full bg-error-container px-2.5 py-0 text-xs font-bold leading-6 text-on-error-container',
     description: 'One or more linked source records are missing. Review this combined record.',
     icon: 'warning',
     label: 'Needs review',
@@ -62,18 +65,9 @@ export function combinedEntityStatusDescription(
 @Component({
   selector: 'app-combined-entity-status-badge',
   imports: [MatIconModule, MatTooltipModule],
-  template: `
-    <span
-      [class]="details().className"
-      [matTooltip]="description()"
-      matTooltipPosition="above"
-      tabindex="0"
-    >
-      <mat-icon aria-hidden="true">{{ details().icon }}</mat-icon>
-      {{ details().label }}
-    </span>
-  `,
+  templateUrl: './combined-entity-status-badge-inline-1.html',
   styleUrl: './combined-entity-status-badge.css',
+  host: { class: 'inline-flex' },
 })
 export class CombinedEntityStatusBadge {
   readonly status = input.required<CombinedEntityStatus>();

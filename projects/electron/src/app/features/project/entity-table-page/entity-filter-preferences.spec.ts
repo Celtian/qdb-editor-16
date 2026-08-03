@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+
 import { THEME_PREFERENCE_STORAGE_KEY } from '../../../core/theme.service';
 import { emptyEntityFilters } from '../entity-filter-form/entity-filter-form';
 import { EntityFilterPreferences, entityFilterPreferenceKey } from './entity-filter-preferences';

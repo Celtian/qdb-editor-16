@@ -1,0 +1,41 @@
+article {
+  display: grid;
+  gap: 1.25rem;
+  width: min(100%, 56rem);
+  margin: 0 auto;
+  padding: 3rem 2rem;
+}
+
+.qdb-hero {
+  padding-bottom: 1rem;
+}
+
+.qdb-eyebrow {
+  color: var(--mat-sys-primary);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(2rem, 6vw, 4rem);
+  line-height: 1.05;
+}
+
+.qdb-summary {
+  max-width: 46rem;
+  color: var(--mat-sys-on-surface-variant);
+  font-size: 1.2rem;
+  line-height: 1.6;
+}
+
+mat-card-content {
+  padding-top: 1.5rem;
+  line-height: 1.7;
+}
+
+@media (width <= 700px) {
+  article {
+    padding: 2rem 1rem;
+  }
+}

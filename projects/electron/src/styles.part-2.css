@@ -1,0 +1,68 @@
+.qdb-error-banner,
+.qdb-error {
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  background: var(--mat-sys-error-container);
+  color: var(--mat-sys-on-error-container);
+}
+
+.row-editor-drawer-panel {
+  --mat-dialog-container-shape: 0;
+
+  animation: row-editor-drawer-enter 250ms ease-out;
+}
+
+.row-editor-drawer-panel .mat-mdc-dialog-container,
+.row-editor-drawer-panel .mat-mdc-dialog-inner-container,
+.row-editor-drawer-panel .mat-mdc-dialog-surface {
+  height: 100%;
+}
+
+.row-editor-drawer-panel .mat-mdc-dialog-surface {
+  overflow: hidden;
+}
+
+@keyframes row-editor-drawer-enter {
+  from {
+    transform: translateX(100%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}
+
+.qdb-table-container table {
+  width: 100%;
+}
+
+.qdb-table-container mat-paginator {
+  border-top: 1px solid var(--mat-sys-outline-variant);
+  background: transparent;
+}
+
+.qdb-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .row-editor-drawer-panel,
+  .entity-filter-drawer-panel,
+  .entity-side-drawer-panel {
+    animation: none;
+  }
+}
+
+@media (width <= 800px) {
+  .qdb-page {
+    padding: 1rem;
+  }
+}

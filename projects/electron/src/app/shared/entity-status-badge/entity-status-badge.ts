@@ -1,4 +1,5 @@
 import { Component, computed, inject, input } from '@angular/core';
+
 import type {
   EntityStatus,
   EntityStatusSettings,
@@ -14,12 +15,14 @@ interface EntityStatusDetails {
 
 export const entityStatusDetails: Record<EntityStatus, EntityStatusDetails> = {
   new: {
-    className: 'entity-status-badge entity-status-badge--new',
+    className:
+      'inline-block whitespace-nowrap rounded-full bg-badge-new px-2.5 py-0 text-xs font-bold leading-6 text-on-badge-new',
     label: 'New',
     description: 'Created within the last 3 days',
   },
   old: {
-    className: 'entity-status-badge entity-status-badge--old',
+    className:
+      'inline-block whitespace-nowrap rounded-full bg-badge-old px-2.5 py-0 text-xs font-bold leading-6 text-on-badge-old',
     label: 'Old',
     description: 'Last updated at least 6 months before the project reference date',
   },
@@ -46,7 +49,7 @@ export function entityStatusDescription(
       {{ details().label }}
     </span>
   `,
-  styleUrl: './entity-status-badge.css',
+  host: { class: 'inline-block' },
 })
 export class EntityStatusBadge {
   private readonly settings = inject(EntityStatusSettingsService);

@@ -1,0 +1,25 @@
+<h2 mat-dialog-title>Delete selected source data?</h2>
+<mat-dialog-content>
+  <p class="qdb-deletion-impact">{{ sourceDataDeletionPreviewMessage(data.counts) }}</p>
+  <p class="qdb-warning-heading">
+    <mat-icon aria-hidden="true">warning</mat-icon>
+    <strong>This action cannot be undone.</strong>
+  </p>
+  <p>The following sources will be removed from the current project:</p>
+  <ul>
+    @for (sourceName of data.sourceNames; track sourceName) {
+      <li>{{ sourceLabels[sourceName] }}</li>
+    }
+  </ul>
+  <p>
+    Deleting a team also permanently deletes every player attached to it, even if that player came
+    from another source. Teams from other sources under a deleted league will be kept without a
+    league.
+  </p>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button matButton mat-dialog-close type="button">Cancel</button>
+  <button class="qdb-delete-button" matButton="filled" type="button" [mat-dialog-close]="true">
+    Delete selected data
+  </button>
+</mat-dialog-actions>

@@ -5,19 +5,22 @@
   </div>
 </app-page-header>
 
-<section class="settings-page" aria-labelledby="badges-title">
-  <mat-card class="badge-age" appearance="outlined">
+<section class="qdb-settings-page" aria-labelledby="badges-title">
+  <mat-card class="qdb-badge-age" appearance="outlined">
     <mat-card-header>
-      <div class="badge-age-icon" mat-card-avatar>
+      <div
+        class="flex items-center justify-center bg-tertiary-container text-on-tertiary-container"
+        mat-card-avatar
+      >
         <mat-icon aria-hidden="true">schedule</mat-icon>
       </div>
       <mat-card-title id="badge-age-title">Time-based badges</mat-card-title>
       <mat-card-subtitle>Choose when New and Old badges appear.</mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
-      <form class="badge-age-form" aria-labelledby="badge-age-title">
-        <div class="badge-age-setting">
-          <div class="badge-age-heading">
+      <form class="grid gap-6" aria-labelledby="badge-age-title">
+        <div class="qdb-badge-age-setting grid gap-1">
+          <div class="qdb-badge-age-heading flex items-baseline justify-between gap-4">
             <label for="new-days-slider">New</label>
             <output for="new-days-slider">
               {{ badgeSettingsModel().newDays | number }}
@@ -29,23 +32,23 @@
           </p>
           <mat-slider
             discrete
+            step="1"
             [displayWith]="formatUiNumber"
             [min]="badgeSettingLimits.newDays.min"
             [max]="badgeSettingLimits.newDays.max"
-            step="1"
           >
             <input
               id="new-days-slider"
               matSliderThumb
-              [formField]="badgeSettingsForm.newDays"
               aria-describedby="new-days-description"
+              [formField]="badgeSettingsForm.newDays"
               (valueChange)="setNewDays($event)"
             />
           </mat-slider>
         </div>
 
-        <div class="badge-age-setting">
-          <div class="badge-age-heading">
+        <div class="qdb-badge-age-setting grid gap-1">
+          <div class="qdb-badge-age-heading flex items-baseline justify-between gap-4">
             <label for="old-months-slider">Old</label>
             <output for="old-months-slider">
               {{ badgeSettingsModel().oldMonths | number }}
@@ -58,16 +61,16 @@
           <mat-slider
             discrete
             showTickMarks
+            step="1"
             [displayWith]="formatUiNumber"
             [min]="badgeSettingLimits.oldMonths.min"
             [max]="badgeSettingLimits.oldMonths.max"
-            step="1"
           >
             <input
               id="old-months-slider"
               matSliderThumb
-              [formField]="badgeSettingsForm.oldMonths"
               aria-describedby="old-months-description"
+              [formField]="badgeSettingsForm.oldMonths"
               (valueChange)="setOldMonths($event)"
             />
           </mat-slider>
@@ -77,13 +80,16 @@
   </mat-card>
 
   <mat-card
-    class="custom-badges-card"
+    class="max-w-6xl"
     appearance="outlined"
     aria-labelledby="custom-badges-title"
     [attr.aria-busy]="customBadgesLoading()"
   >
     <mat-card-header>
-      <div class="custom-badges-icon" mat-card-avatar>
+      <div
+        class="flex items-center justify-center bg-secondary-container text-on-secondary-container"
+        mat-card-avatar
+      >
         <mat-icon aria-hidden="true">label</mat-icon>
       </div>
       <mat-card-title id="custom-badges-title">Custom badges</mat-card-title>
@@ -95,12 +101,12 @@
       @if (customBadgesLoading()) {
         <mat-progress-bar mode="indeterminate" aria-label="Loading custom badges" />
       } @else if (customBadgesError()) {
-        <div class="custom-badges-error" role="alert">
+        <div class="bg-error-container p-4 text-on-error-container" role="alert">
           <p>Custom badges could not be loaded: {{ customBadgesError() }}</p>
           <button matButton type="button" (click)="retryCustomBadges()">Retry</button>
         </div>
       } @else {
-        <div class="custom-badges-heading">
+        <div class="qdb-custom-badges-heading flex items-center justify-between gap-4">
           <p>Names are shown in the Badge column. Descriptions appear as tooltips.</p>
           <button matButton="filled" type="button" (click)="createCustomBadge()">
             <mat-icon aria-hidden="true">add</mat-icon>
@@ -108,10 +114,10 @@
           </button>
         </div>
         @if (customBadges().length) {
-          <ul class="custom-badge-list">
+          <ul class="qdb-custom-badge-list mx-0 mt-5 mb-0 grid list-none p-0">
             @for (badge of customBadges(); track badge.id) {
               <li>
-                <div class="custom-badge-details">
+                <div class="qdb-custom-badge-details grid items-center">
                   <app-custom-badge [badge]="badge" />
                   <span>{{ badge.description }}</span>
                   <small>
@@ -119,7 +125,7 @@
                     {{ badge.assignmentCount === 1 ? 'assignment' : 'assignments' }}
                   </small>
                 </div>
-                <div class="custom-badge-actions">
+                <div class="qdb-custom-badge-actions flex max-sm:justify-end">
                   <button
                     matIconButton
                     type="button"
@@ -141,7 +147,7 @@
             }
           </ul>
         } @else {
-          <p class="empty-custom-badges">No custom badges yet.</p>
+          <p class="mt-5">No custom badges yet.</p>
         }
       }
     </mat-card-content>

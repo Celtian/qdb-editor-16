@@ -4,14 +4,16 @@ import { MatButtonHarness } from '@angular/material/button/testing';
 import { MatInputHarness } from '@angular/material/input/testing';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { provideRouter } from '@angular/router';
+
 import axe from 'axe-core';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+
 import type {
   DatabaseDescriptor,
   ObjectDetail,
   ProjectDescriptor,
 } from '../../../../shared/contracts';
 import { cloneDefaultDatabaseObjectSettings } from '../../../../shared/object-settings';
-import { afterEach, describe, expect, it, vi } from 'vitest';
 import { AppStore } from '../../core/app-store';
 import { DesktopApi } from '../../core/desktop-api';
 import { ObjectSettingsPage } from '../object-settings/object-settings-page';

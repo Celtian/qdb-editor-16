@@ -1,0 +1,4 @@
+.qdb-delete-button {
+  background: var(--mat-sys-error);
+  color: var(--mat-sys-on-error);
+}

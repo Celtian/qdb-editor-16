@@ -1,0 +1,25 @@
+<h2 mat-dialog-title>Change tier for selected leagues</h2>
+<mat-dialog-content>
+  <p>Apply one tier to {{ leagueLabel }}.</p>
+  @if (data.mixedTiers) {
+    <p class="qdb-hint">The selected leagues currently have different tiers.</p>
+  }
+  <form id="change-league-tier-form" (submit)="$event.preventDefault(); save()">
+    <mat-form-field appearance="outline">
+      <mat-label>Tier</mat-label>
+      <mat-select aria-label="Tier for selected leagues" [formField]="tierForm.tier">
+        <mat-option [value]="0">No tier</mat-option>
+        @for (tier of tierOptions; track tier) {
+          <mat-option [value]="tier">Tier {{ tier }}</mat-option>
+        }
+      </mat-select>
+      <mat-hint>Select “No tier” to clear every selected league.</mat-hint>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button matButton mat-dialog-close type="button">Cancel</button>
+  <button matButton="filled" form="change-league-tier-form" type="submit">
+    {{ actionLabel() }}
+  </button>
+</mat-dialog-actions>

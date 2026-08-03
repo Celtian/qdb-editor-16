@@ -1,0 +1,10 @@
+<app-entity-filter-form
+  [entity]="data.entity"
+  [initialFilters]="data.filters"
+  [options]="data.options()"
+  [loading]="data.loading()"
+  [error]="data.error()"
+  (filtersApplied)="apply($event)"
+  (cancelled)="cancel()"
+  (retryRequested)="data.retry()"
+/>

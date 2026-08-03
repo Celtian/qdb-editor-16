@@ -2,35 +2,13 @@ import { Component, effect, input, output, signal } from '@angular/core';
 import { FormField, form, max, min, required } from '@angular/forms/signals';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+
 import type { FieldDescriptor, TableValue } from '../../../../shared/contracts';
 
 @Component({
   selector: 'app-object-value-field',
   imports: [FormField, MatFormFieldModule, MatInputModule],
-  template: `
-    <mat-form-field appearance="outline">
-      <mat-label>{{ displayLabel() }}</mat-label>
-      @if (field().type === 'string') {
-        <input matInput type="text" [formField]="textForm.value" />
-      } @else {
-        <input
-          matInput
-          type="number"
-          [step]="field().type === 'int' ? 1 : 'any'"
-          [formField]="numberForm.value"
-        />
-      }
-      @if (field().type === 'string') {
-        @if (textForm.value().touched() && textForm.value().errors()[0]; as error) {
-          <mat-error>{{ error.message }}</mat-error>
-        }
-      } @else {
-        @if (numberForm.value().touched() && numberForm.value().errors()[0]; as error) {
-          <mat-error>{{ error.message }}</mat-error>
-        }
-      }
-    </mat-form-field>
-  `,
+  templateUrl: './object-value-field.html',
   host: { class: 'contents' },
 })
 export class ObjectValueField {

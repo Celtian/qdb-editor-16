@@ -8,14 +8,17 @@
   </div>
 </app-page-header>
 
-<section class="settings-page" aria-labelledby="combined-badges-title">
+<section class="qdb-settings-page" aria-labelledby="combined-badges-title">
   <mat-card
-    class="built-in-badges-card"
+    class="qdb-built-in-badges-card"
     appearance="outlined"
     aria-labelledby="combined-built-in-badges-title"
   >
     <mat-card-header>
-      <div class="built-in-badges-icon" mat-card-avatar>
+      <div
+        class="flex items-center justify-center bg-tertiary-container text-on-tertiary-container"
+        mat-card-avatar
+      >
         <mat-icon aria-hidden="true">verified</mat-icon>
       </div>
       <mat-card-title id="combined-built-in-badges-title">Built-in badges</mat-card-title>
@@ -24,7 +27,7 @@
       </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
-      <ul class="built-in-badge-list">
+      <ul class="qdb-built-in-badge-list m-0 grid list-none gap-4 p-0">
         @for (status of builtInStatuses; track status) {
           <li>
             <app-combined-entity-status-badge [status]="status" />
@@ -36,13 +39,16 @@
   </mat-card>
 
   <mat-card
-    class="custom-badges-card"
+    class="max-w-6xl"
     appearance="outlined"
     aria-labelledby="combined-custom-badges-title"
     [attr.aria-busy]="customBadgesLoading()"
   >
     <mat-card-header>
-      <div class="custom-badges-icon" mat-card-avatar>
+      <div
+        class="flex items-center justify-center bg-secondary-container text-on-secondary-container"
+        mat-card-avatar
+      >
         <mat-icon aria-hidden="true">label</mat-icon>
       </div>
       <mat-card-title id="combined-custom-badges-title">Custom badges</mat-card-title>
@@ -54,12 +60,12 @@
       @if (customBadgesLoading()) {
         <mat-progress-bar mode="indeterminate" aria-label="Loading combined custom badges" />
       } @else if (customBadgesError()) {
-        <div class="custom-badges-error" role="alert">
+        <div class="bg-error-container p-4 text-on-error-container" role="alert">
           <p>Combined custom badges could not be loaded: {{ customBadgesError() }}</p>
           <button matButton type="button" (click)="retryCustomBadges()">Retry</button>
         </div>
       } @else {
-        <div class="custom-badges-heading">
+        <div class="qdb-custom-badges-heading flex items-center justify-between gap-4">
           <p>Names are shown in the Badges column. Descriptions appear as tooltips.</p>
           <button matButton="filled" type="button" (click)="createCustomBadge()">
             <mat-icon aria-hidden="true">add</mat-icon>
@@ -67,10 +73,10 @@
           </button>
         </div>
         @if (customBadges().length) {
-          <ul class="custom-badge-list">
+          <ul class="qdb-custom-badge-list mx-0 mt-5 mb-0 grid list-none p-0">
             @for (badge of customBadges(); track badge.id) {
               <li>
-                <div class="custom-badge-details">
+                <div class="qdb-custom-badge-details grid items-center">
                   <app-custom-badge [badge]="badge" />
                   <span>{{ badge.description }}</span>
                   <small>
@@ -78,7 +84,7 @@
                     {{ badge.assignmentCount === 1 ? 'assignment' : 'assignments' }}
                   </small>
                 </div>
-                <div class="custom-badge-actions">
+                <div class="qdb-custom-badge-actions flex max-sm:justify-end">
                   <button
                     matIconButton
                     type="button"
@@ -100,7 +106,7 @@
             }
           </ul>
         } @else {
-          <p class="empty-custom-badges">No combined custom badges yet.</p>
+          <p class="mt-5">No combined custom badges yet.</p>
         }
       }
     </mat-card-content>

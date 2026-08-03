@@ -2,7 +2,7 @@
 <mat-dialog-content>
   <p>Apply one country to {{ entityLabel }}.</p>
   @if (data.mixedCountries) {
-    <p class="hint">The selected {{ data.entity }} currently have different countries.</p>
+    <p class="qdb-hint">The selected {{ data.entity }} currently have different countries.</p>
   }
   <form id="change-entity-country-form" (submit)="$event.preventDefault(); save()">
     <mat-form-field appearance="outline">
@@ -10,14 +10,14 @@
       @if (selectedCountry(); as country) {
         <app-country-flag
           matIconPrefix
-          class="selected-country-flag"
+          class="qdb-selected-country-flag"
           decorative
           [code]="country.flagCode"
         />
       }
       <input
         matInput
-        class="country-input"
+        class="qdb-country-input"
         type="search"
         autocomplete="off"
         [formField]="countryForm.countryName"
@@ -26,7 +26,7 @@
       <mat-autocomplete #countryAutocomplete="matAutocomplete" autoActiveFirstOption>
         @for (country of filteredCountries(); track country.code3) {
           <mat-option [value]="country.name">
-            <span class="country-option">
+            <span class="qdb-country-option">
               <app-country-flag decorative [code]="country.flagCode" />
               <span>{{ country.name }}</span>
             </span>

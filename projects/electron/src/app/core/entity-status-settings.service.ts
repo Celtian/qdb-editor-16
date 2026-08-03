@@ -1,9 +1,10 @@
 import { DOCUMENT } from '@angular/common';
 import { Service, inject, signal } from '@angular/core';
+
 import {
+  type EntityStatusSettings,
   defaultEntityStatusSettings,
   normalizeEntityStatusSettings,
-  type EntityStatusSettings,
 } from '../../../shared/downloader/entity-status';
 
 export const ENTITY_STATUS_SETTINGS_STORAGE_KEY = 'qdb-downloader.entity-status-settings';

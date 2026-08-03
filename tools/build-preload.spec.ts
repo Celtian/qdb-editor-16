@@ -1,8 +1,9 @@
-import { rm, mkdtemp, readFile } from 'node:fs/promises';
+import { mkdtemp, readFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { runInNewContext } from 'node:vm';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+
 import { buildPreload } from './build-preload.mts';
 
 const temporaryDirectories: string[] = [];

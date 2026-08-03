@@ -1,10 +1,11 @@
 import { Service } from '@angular/core';
+
 import type { CombinedEntityKind } from '../../../../../shared/downloader/contracts';
 import type { ColumnPreference } from '../entity-column-editor/column-layout';
 import {
+  type CombinedEntityColumnKey,
   combinedColumnsByEntity,
   defaultCombinedColumnPreference,
-  type CombinedEntityColumnKey,
 } from './combined-entity-columns';
 
 export const combinedEntityColumnPreferenceKey = (entity: CombinedEntityKind): string =>

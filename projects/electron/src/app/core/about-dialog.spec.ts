@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+
 import axe from 'axe-core';
 
 import { VERSION_INFO } from '../../../../version-info';
@@ -23,7 +24,7 @@ describe('AboutDialog', () => {
     expect(icon?.getAttribute('ngSrc')).toBe('qdb-editor-16-icon.png');
     expect(icon?.alt).toBe('');
     expect(content.querySelector('h2')?.textContent).toContain('QDB Editor 16');
-    expect(content.querySelector('.version')?.textContent).toContain(
+    expect(content.querySelector('.qdb-version')?.textContent).toContain(
       `Version ${VERSION_INFO.version}`,
     );
   });
@@ -32,10 +33,10 @@ describe('AboutDialog', () => {
     const content = fixture.nativeElement as HTMLElement;
     const expectedYear = new Date(VERSION_INFO.date).getUTCFullYear();
 
-    expect(content.querySelector('.description')?.textContent).toContain(
+    expect(content.querySelector('.qdb-description')?.textContent).toContain(
       'A local-first FIFA 16 database project and table editor',
     );
-    expect(content.querySelector('.legal')?.textContent).toContain(
+    expect(content.querySelector('.qdb-legal')?.textContent).toContain(
       `© ${expectedYear} ${VERSION_INFO.author.name} · MIT License`,
     );
   });
@@ -43,7 +44,7 @@ describe('AboutDialog', () => {
   it('links to the documentation and GitHub repository safely', () => {
     const links = Array.from(
       (fixture.nativeElement as HTMLElement).querySelectorAll<HTMLAnchorElement>(
-        '.external-actions a',
+        '.qdb-external-actions a',
       ),
     );
 

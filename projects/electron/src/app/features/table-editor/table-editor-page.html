@@ -31,19 +31,19 @@
   </div>
 </app-page-header>
 
-<section class="page max-w-none">
+<section class="qdb-page max-w-none">
   @if (store.error()) {
-    <p class="error-banner" role="alert">{{ store.error() }}</p>
+    <p class="qdb-error-banner" role="alert">{{ store.error() }}</p>
   }
 
   <mat-form-field appearance="outline" class="w-full max-w-xl">
     <mat-label>Search every field</mat-label>
     <mat-icon matPrefix>search</mat-icon>
-    <input matInput [value]="query()" (input)="queryChanged($any($event.target).value)" />
+    <input matInput [value]="query()" (input)="queryInput($event)" />
   </mat-form-field>
 
   @if (page(); as data) {
-    <div class="table-container">
+    <div class="qdb-table-container overflow-auto rounded-xl border border-outline-variant">
       <table
         mat-table
         matSort
@@ -54,15 +54,15 @@
       >
         @for (fieldName of visibleFields(); track fieldName) {
           <ng-container [matColumnDef]="fieldName">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ fieldName }}</th>
-            <td mat-cell *matCellDef="let row">
+            <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ fieldName }}</th>
+            <td *matCellDef="let row" mat-cell>
               <span class="whitespace-nowrap">{{ value(row, fieldName) }}</span>
             </td>
           </ng-container>
         }
         <ng-container matColumnDef="__actions" stickyEnd>
-          <th mat-header-cell *matHeaderCellDef class="text-right">Actions</th>
-          <td mat-cell *matCellDef="let row" class="text-right">
+          <th *matHeaderCellDef mat-header-cell class="text-right">Actions</th>
+          <td *matCellDef="let row" mat-cell class="text-right">
             <div class="flex justify-end whitespace-nowrap">
               <button
                 type="button"
@@ -78,8 +78,8 @@
             </div>
           </td>
         </ng-container>
-        <tr mat-header-row *matHeaderRowDef="displayedColumns(); sticky: true"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns()"></tr>
+        <tr *matHeaderRowDef="displayedColumns(); sticky: true" mat-header-row></tr>
+        <tr *matRowDef="let row; columns: displayedColumns()" mat-row></tr>
       </table>
       <mat-paginator
         [length]="data.total"

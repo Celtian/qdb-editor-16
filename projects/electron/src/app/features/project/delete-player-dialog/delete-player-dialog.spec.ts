@@ -1,6 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+
 import axe from 'axe-core';
+
 import { DeletePlayerDialog } from './delete-player-dialog';
 
 describe('DeletePlayerDialog', () => {

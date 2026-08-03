@@ -1,20 +1,21 @@
 import { Service } from '@angular/core';
+
 import {
-  isSourceName,
-  leagueTiers,
-  playerPositionDetails,
   type CombinedEntityKind,
   type PlayerFoot,
   type PlayerPosition,
   type PlayerPositionDetail,
+  isSourceName,
+  leagueTiers,
+  playerPositionDetails,
 } from '../../../../../shared/downloader/contracts';
 import {
-  combinedEntityStatuses,
   type CombinedEntityStatus,
+  combinedEntityStatuses,
 } from '../../../shared/combined-entity-status-badge/combined-entity-status-badge';
 import {
-  emptyCombinedEntityFilters,
   type CombinedEntityFilters,
+  emptyCombinedEntityFilters,
 } from '../combined-entity-filter-drawer/combined-entity-filter-drawer';
 
 export interface CombinedEntityFilterPreference {

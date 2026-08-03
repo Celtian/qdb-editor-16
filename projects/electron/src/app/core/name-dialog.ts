@@ -14,22 +14,7 @@ export interface NameDialogData {
 @Component({
   selector: 'app-name-dialog',
   imports: [FormField, MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule],
-  template: `
-    <h2 mat-dialog-title>{{ data.title }}</h2>
-    <mat-dialog-content>
-      <mat-form-field appearance="outline" class="w-full pt-2">
-        <mat-label>{{ data.label }}</mat-label>
-        <input matInput [formField]="nameForm.name" />
-        @if (nameForm.name().touched() && nameForm.name().errors().length) {
-          <mat-error>{{ nameForm.name().errors()[0].message }}</mat-error>
-        }
-      </mat-form-field>
-    </mat-dialog-content>
-    <mat-dialog-actions align="end">
-      <button type="button" matButton (click)="dialog.close()">Cancel</button>
-      <button type="button" matButton="filled" (click)="save()">Save</button>
-    </mat-dialog-actions>
-  `,
+  templateUrl: './name-dialog.html',
 })
 export class NameDialog {
   protected readonly data = inject<NameDialogData>(MAT_DIALOG_DATA);

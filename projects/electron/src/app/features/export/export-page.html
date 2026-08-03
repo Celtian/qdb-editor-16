@@ -5,7 +5,7 @@
   </div>
 </app-page-header>
 
-<section class="page max-w-4xl">
+<section class="qdb-page max-w-4xl">
   <mat-card appearance="outlined">
     <mat-card-content class="grid gap-4 pt-6">
       @if (report(); as validation) {
@@ -33,11 +33,11 @@
         no data rows.
       </p>
       @if (store.error()) {
-        <p class="error-banner" role="alert">{{ store.error() }}</p>
+        <p class="qdb-error-banner" role="alert">{{ store.error() }}</p>
       }
       @if (result(); as exported) {
         <div
-          class="flex flex-wrap items-center gap-3 rounded-xl bg-[var(--mat-sys-primary-container)] p-4"
+          class="flex flex-wrap items-center gap-3 rounded-xl bg-primary-container p-4"
           role="status"
         >
           <mat-icon>check_circle</mat-icon>

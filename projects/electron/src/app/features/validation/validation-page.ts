@@ -1,16 +1,17 @@
 import { DatePipe, DecimalPipe } from '@angular/common';
 import {
   Component,
+  type OnChanges,
+  type SimpleChanges,
   inject,
   input,
-  type OnChanges,
   signal,
-  type SimpleChanges,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
+
 import type { ValidationReport } from '../../../../shared/contracts';
 import { AppStore } from '../../core/app-store';
 import { DesktopApi } from '../../core/desktop-api';

@@ -1,4 +1,7 @@
 import { Component, inject } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import {
   ActivatedRoute,
   Router,
@@ -7,9 +10,7 @@ import {
   RouterOutlet,
   type UrlTree,
 } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatToolbarModule } from '@angular/material/toolbar';
+
 import { AboutDialogService } from '../../../shared/about-dialog/about-dialog';
 
 @Component({

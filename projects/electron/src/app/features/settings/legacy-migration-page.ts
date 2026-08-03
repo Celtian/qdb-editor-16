@@ -4,6 +4,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { RouterLink } from '@angular/router';
+
 import type { LegacyMigrationPreview, LegacyMigrationResult } from '../../../../shared/contracts';
 import { AppStore } from '../../core/app-store';
 import { DesktopApi } from '../../core/desktop-api';

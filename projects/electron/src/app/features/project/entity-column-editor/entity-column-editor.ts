@@ -6,18 +6,19 @@ import {
   CdkDropList,
   moveItemInArray,
 } from '@angular/cdk/drag-drop';
-import { Component, computed, linkedSignal, input, model, signal } from '@angular/core';
-import { disabled, form, FormField } from '@angular/forms/signals';
+import { Component, computed, input, linkedSignal, model, signal } from '@angular/core';
+import { FormField, disabled, form } from '@angular/forms/signals';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
+
 import type { EntityKind } from '../../../../../shared/downloader/contracts';
 import {
-  fromColumnVisibility,
-  toColumnVisibility,
   type ColumnDefinition,
   type ColumnPreference,
   type ColumnVisibility,
+  fromColumnVisibility,
+  toColumnVisibility,
 } from './column-layout';
 
 @Component({

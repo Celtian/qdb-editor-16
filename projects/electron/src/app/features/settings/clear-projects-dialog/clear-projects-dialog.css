@@ -1,0 +1,18 @@
+.qdb-deletion-impact {
+  font-weight: 500;
+}
+
+.qdb-warning-heading {
+  align-items: center;
+  display: flex;
+  gap: 0.65rem;
+}
+
+.qdb-warning-heading mat-icon {
+  color: var(--mat-sys-error);
+}
+
+.qdb-delete-button:not(:disabled) {
+  background-color: var(--mat-sys-error);
+  color: var(--mat-sys-on-error);
+}

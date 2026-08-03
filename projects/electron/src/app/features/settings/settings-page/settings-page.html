@@ -5,10 +5,13 @@
   </div>
 </app-page-header>
 
-<section class="settings-page" aria-labelledby="settings-title">
-  <mat-card class="finder-preferences" appearance="outlined">
+<section class="qdb-settings-page" aria-labelledby="settings-title">
+  <mat-card class="qdb-finder-preferences" appearance="outlined">
     <mat-card-header>
-      <div class="finder-icon" mat-card-avatar>
+      <div
+        class="flex items-center justify-center bg-secondary-container text-on-secondary-container"
+        mat-card-avatar
+      >
         <mat-icon aria-hidden="true">filter_alt_off</mat-icon>
       </div>
       <mat-card-title>Finder filters</mat-card-title>
@@ -19,11 +22,11 @@
     <mat-card-content>
       <fieldset>
         <legend>Clear filters for</legend>
-        <p class="setting-description">
+        <p class="qdb-setting-description">
           Each option resets saved selections in its league, team, and player finders. Search text,
           column layouts, and filters in other projects are not affected.
         </p>
-        <div class="filter-reset-options">
+        <div class="mt-4 grid gap-1">
           <mat-checkbox [formField]="filterResetForm.source">Source data</mat-checkbox>
           <mat-checkbox [formField]="filterResetForm.combined">Combined data</mat-checkbox>
         </div>
@@ -41,9 +44,12 @@
     </mat-card-actions>
   </mat-card>
 
-  <mat-card class="source-data" appearance="outlined">
+  <mat-card class="qdb-source-data" appearance="outlined">
     <mat-card-header>
-      <div class="source-data-icon" mat-card-avatar>
+      <div
+        class="flex items-center justify-center bg-error-container text-on-error-container"
+        mat-card-avatar
+      >
         <mat-icon aria-hidden="true">delete_sweep</mat-icon>
       </div>
       <mat-card-title>Stored source data</mat-card-title>
@@ -52,11 +58,11 @@
     <mat-card-content>
       <fieldset>
         <legend>Delete data by source</legend>
-        <p class="setting-description">
+        <p class="qdb-setting-description">
           Choose one or more sources. The project itself, exports, global settings, and finder
           filters are not affected.
         </p>
-        <div class="source-options">
+        <div class="mt-4 grid gap-1">
           @for (option of sourceOptions; track option.value) {
             <mat-checkbox [formField]="sourceForm[option.value]">
               {{ option.label }}
@@ -65,10 +71,10 @@
         </div>
       </fieldset>
       <p
-        class="deletion-preview"
-        [class.error]="sourceDataDeletionPreviewError()"
+        class="qdb-deletion-preview mt-4 font-medium text-on-surface"
         aria-live="polite"
         aria-atomic="true"
+        [class.qdb-error]="sourceDataDeletionPreviewError()"
       >
         @if (selectedSourceNames().length === 0) {
           Select at least one source to preview affected records.
@@ -83,7 +89,7 @@
     </mat-card-content>
     <mat-card-actions align="end">
       <button
-        class="delete-button"
+        class="qdb-delete-button"
         matButton="filled"
         type="button"
         [disabled]="!canDeleteSourceData()"

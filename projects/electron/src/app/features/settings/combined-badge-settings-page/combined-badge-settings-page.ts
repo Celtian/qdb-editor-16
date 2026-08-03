@@ -6,6 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSnackBar } from '@angular/material/snack-bar';
+
 import type {
   CombinedCustomBadge,
   CombinedCustomBadgeSummary,
@@ -13,8 +14,8 @@ import type {
 import { DesktopApi } from '../../../core/downloader-api';
 import {
   CombinedEntityStatusBadge,
-  combinedEntityStatuses,
   combinedEntityStatusDetails,
+  combinedEntityStatuses,
 } from '../../../shared/combined-entity-status-badge/combined-entity-status-badge';
 import { CustomBadge as CustomBadgeView } from '../../../shared/custom-badge/custom-badge';
 import { PageHeader } from '../../../shared/page-header/page-header';

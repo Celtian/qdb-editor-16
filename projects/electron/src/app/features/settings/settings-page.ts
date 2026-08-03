@@ -4,6 +4,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatRadioModule } from '@angular/material/radio';
 import { RouterLink } from '@angular/router';
+
 import type { ThemePreference } from '../../../../shared/contracts';
 import { Theme } from '../../core/theme';
 import { PageHeader } from '../../shared/page-header/page-header';

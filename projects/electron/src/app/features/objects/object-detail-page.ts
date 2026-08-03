@@ -1,13 +1,13 @@
+import { NgOptimizedImage } from '@angular/common';
 import {
   Component,
+  type OnChanges,
+  type SimpleChanges,
   computed,
   inject,
   input,
-  type OnChanges,
   signal,
-  type SimpleChanges,
 } from '@angular/core';
-import { NgOptimizedImage } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
@@ -16,7 +16,9 @@ import { MatListModule, type MatSelectionListChange } from '@angular/material/li
 import { MatSelectModule } from '@angular/material/select';
 import { MatTabsModule } from '@angular/material/tabs';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+
 import { firstValueFrom } from 'rxjs';
+
 import type {
   DatabaseObjectSettings,
   ObjectDetail,
@@ -31,9 +33,9 @@ import { ConfirmDialog } from '../../core/confirm-dialog';
 import { DesktopApi } from '../../core/desktop-api';
 import { PageHeader } from '../../shared/page-header/page-header';
 import { OBJECT_CONFIG } from './object-config';
-import { CITY_PRESETS } from './team-location-data';
-import { ObjectValueField } from './object-value-field';
 import type { ObjectDirtyComponent } from './object-unsaved.guard';
+import { ObjectValueField } from './object-value-field';
+import { CITY_PRESETS } from './team-location-data';
 
 @Component({
   selector: 'app-object-detail-page',

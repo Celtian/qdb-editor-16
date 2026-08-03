@@ -1,8 +1,9 @@
+import { openFifaDatabase } from 'fifa-t3db';
 import { readFile, readdir } from 'node:fs/promises';
 import { basename, extname, join } from 'node:path';
-import { openFifaDatabase } from 'fifa-t3db';
+
 import type { ImportCandidate } from '../shared/contracts';
-import { fieldsFor, FIFA_TABLES, isSupportedTable } from '../shared/table-config';
+import { FIFA_TABLES, fieldsFor, isSupportedTable } from '../shared/table-config';
 import { parseTextTable } from '../shared/text-format';
 
 type Inspection = Omit<ImportCandidate, 'selectionId'>;

@@ -1,3 +1,5 @@
+/* stylelint-disable no-descending-specificity -- state and nested Material selectors intentionally override base navigation styles */
+
 :host {
   display: flex;
   min-height: 100%;
@@ -5,7 +7,7 @@
   padding: 0.75rem;
 }
 
-.brand {
+.qdb-brand {
   display: flex;
   min-width: 0;
   flex: none;
@@ -18,137 +20,85 @@
   text-decoration: none;
 }
 
-.brand.active {
+.qdb-brand.active {
   background: var(--mat-sys-secondary-container);
   color: var(--mat-sys-on-secondary-container);
 }
 
-.primary-navigation {
+.qdb-primary-navigation {
   flex: 1 0 auto;
 }
 
-.navigation-tree,
-.tree-group,
-.utility-list {
-  padding: 0;
-  margin: 0;
-  list-style: none;
-}
-
-.tree-group {
+.qdb-tree-group {
   padding-left: 0.4rem;
-  margin-left: 1rem;
-  border-left: 1px solid var(--mat-sys-outline-variant);
 }
 
-.tree-item {
-  border-radius: 0.75rem;
-  outline: none;
-}
-
-.tree-row,
-.utility-item {
-  display: flex;
-  min-width: 0;
+.qdb-tree-row,
+.qdb-utility-item {
   min-height: 2.75rem;
-  align-items: center;
-  gap: 0.625rem;
-  padding: 0 0.5rem;
-  border: 0;
-  border-radius: 0.75rem;
-  background: transparent;
   color: inherit;
-  cursor: pointer;
-  text-align: left;
-  text-decoration: none;
 }
 
-.tree-row mat-icon,
-.utility-item mat-icon {
+.qdb-tree-row mat-icon,
+.qdb-utility-item mat-icon {
   flex: none;
   color: var(--mat-sys-on-surface-variant);
 }
 
-.tree-item[data-active='true'] > .tree-row,
-.tree-row:hover,
-.utility-item:hover {
+.qdb-tree-item[data-active='true'] > .qdb-tree-row,
+.qdb-tree-row:hover,
+.qdb-utility-item:hover {
   background: color-mix(in srgb, var(--mat-sys-on-surface) 8%, transparent);
 }
 
-.tree-item[aria-current='page'] > .tree-row,
-.utility-item.active {
+.qdb-tree-item[aria-current='page'] > .qdb-tree-row,
+.qdb-utility-item.active {
   background: var(--mat-sys-secondary-container);
   color: var(--mat-sys-on-secondary-container);
 }
 
-.tree-item[aria-current='page'] > .tree-row mat-icon,
-.utility-item.active mat-icon {
+.qdb-tree-item[aria-current='page'] > .qdb-tree-row mat-icon,
+.qdb-utility-item.active mat-icon {
   color: currentcolor;
 }
 
-.tree-item:focus-visible > .tree-row,
-.brand:focus-visible,
-.utility-item:focus-visible,
-.branch-message button:focus-visible {
+.qdb-tree-item:focus-visible > .qdb-tree-row,
+.qdb-brand:focus-visible,
+.qdb-utility-item:focus-visible,
+.qdb-branch-message button:focus-visible {
   outline: 3px solid var(--mat-sys-primary);
   outline-offset: 2px;
 }
 
-.item-label {
-  min-width: 0;
-  flex: 1;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.disclosure {
-  flex: none;
-}
-
-.table-item .tree-row {
+.qdb-table-item .qdb-tree-row {
   min-height: 2.5rem;
   font-size: 0.875rem;
 }
 
-.table-item .tree-row mat-icon {
+.qdb-table-item .qdb-tree-row mat-icon {
   width: 1.25rem;
   height: 1.25rem;
   font-size: 1.25rem;
 }
 
-.branch-message {
-  display: flex;
+.qdb-branch-message {
   min-height: 2.75rem;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.375rem 0.5rem;
-  color: var(--mat-sys-on-surface-variant);
   font-size: 0.8125rem;
 }
 
-.branch-message mat-icon {
+.qdb-error-message {
+  flex-direction: column;
+  align-items: flex-start;
+  color: var(--mat-sys-error);
+}
+
+.qdb-branch-message mat-icon {
   width: 1.125rem;
   height: 1.125rem;
   flex: none;
   font-size: 1.125rem;
 }
 
-.error-message {
-  align-items: flex-start;
-  flex-direction: column;
-  color: var(--mat-sys-error);
-}
-
-.utility {
-  flex: none;
-  margin-top: 0.5rem;
-}
-
-.utility mat-divider {
+.qdb-utility mat-divider {
   margin: 0 0.25rem 0.25rem;
-}
-
-.utility-item {
-  width: 100%;
 }

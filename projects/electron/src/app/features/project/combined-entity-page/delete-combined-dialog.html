@@ -1,0 +1,53 @@
+<h2 mat-dialog-title>{{ title }}</h2>
+<mat-dialog-content>
+  <p>
+    <strong>{{ data.bulk ? entityCountLabel + ' selected' : data.name }}</strong>
+  </p>
+  @if (data.entity === 'leagues') {
+    <p>
+      Choose what should happen to {{ teamCountLabel }} and {{ playerCountLabel }}
+      {{ data.bulk ? 'across the selected leagues' : 'in this league' }}.
+    </p>
+    <mat-radio-group aria-label="Project league deletion behavior" [value]="mode()">
+      <mat-radio-button value="detach" (change)="mode.set('detach')">
+        <span class="qdb-option-title">
+          Delete {{ data.bulk ? entityCountLabel : 'the league' }} only
+        </span>
+        <span class="qdb-option-description">
+          Keep {{ teamCountLabel }} and {{ playerCountLabel }}. The teams will no longer belong to a
+          project league.
+        </span>
+      </mat-radio-button>
+      <mat-radio-button value="cascade" (change)="mode.set('cascade')">
+        <span class="qdb-option-title">Delete leagues, teams, and project players</span>
+        <span class="qdb-option-description">
+          Permanently delete {{ data.bulk ? entityCountLabel : 'the league' }},
+          {{ teamCountLabel }}, and {{ playerCountLabel }}.
+        </span>
+      </mat-radio-button>
+    </mat-radio-group>
+  } @else if (data.entity === 'teams') {
+    <p>
+      This permanently deletes {{ data.bulk ? entityCountLabel : 'the project team' }} and
+      {{ playerCountLabel }} attached to {{ entityCount === 1 ? 'it' : 'them' }}.
+    </p>
+  } @else {
+    <p>
+      This permanently deletes
+      {{ data.bulk ? entityCountLabel : 'the project player' }}.
+    </p>
+  }
+  <p>Raw source records are not affected.</p>
+  <p>This action cannot be undone.</p>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button matButton mat-dialog-close type="button">Cancel</button>
+  <button
+    class="qdb-delete-button"
+    matButton="filled"
+    type="button"
+    [mat-dialog-close]="data.entity === 'leagues' ? mode() : 'delete'"
+  >
+    {{ data.bulk ? 'Delete ' + entityCountLabel : 'Delete' }}
+  </button>
+</mat-dialog-actions>

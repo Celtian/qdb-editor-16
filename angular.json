@@ -102,6 +102,9 @@
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
+            "cache": true,
+            "cacheLocation": ".angular/cache/eslint",
+            "cacheStrategy": "content",
             "lintFilePatterns": ["projects/electron/**/*.ts", "projects/electron/**/*.html"],
             "eslintConfig": "projects/electron/eslint.config.js"
           }
@@ -200,6 +203,9 @@
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
+            "cache": true,
+            "cacheLocation": ".angular/cache/eslint",
+            "cacheStrategy": "content",
             "lintFilePatterns": ["projects/docs/**/*.ts", "projects/docs/**/*.html"],
             "eslintConfig": "projects/docs/eslint.config.js"
           }

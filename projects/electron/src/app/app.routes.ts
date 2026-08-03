@@ -1,4 +1,5 @@
 import type { Routes } from '@angular/router';
+
 import { objectUnsavedGuard } from './features/objects/object-unsaved.guard';
 
 const sourceEntityRoutes: Routes = (['leagues', 'teams', 'players'] as const).map((entity) => ({

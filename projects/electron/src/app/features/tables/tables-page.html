@@ -15,22 +15,27 @@
   </div>
 </app-page-header>
 
-<section class="page">
+<section class="qdb-page">
   @if (store.error()) {
-    <p class="error-banner" role="alert">{{ store.error() }}</p>
+    <p class="qdb-error-banner" role="alert">{{ store.error() }}</p>
   }
 
   <mat-form-field appearance="outline" class="w-full max-w-xl">
     <mat-label>Find a table</mat-label>
     <mat-icon matPrefix>search</mat-icon>
-    <input matInput [value]="query()" (input)="query.set($any($event.target).value)" />
+    <input matInput [value]="query()" (input)="queryChanged($event)" />
   </mat-form-field>
 
   <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
     @for (table of filtered(); track table.name) {
       <mat-card appearance="outlined">
         <mat-card-header>
-          <mat-icon class="table-card-icon" mat-card-avatar aria-hidden="true">table_view</mat-icon>
+          <mat-icon
+            class="qdb-table-card-icon flex items-center justify-center rounded-xl bg-tertiary-container text-on-tertiary-container"
+            mat-card-avatar
+            aria-hidden="true"
+            >table_view</mat-icon
+          >
           <mat-card-title>{{ table.name }}</mat-card-title>
           <mat-card-subtitle>{{ table.fields.length }} fields</mat-card-subtitle>
         </mat-card-header>

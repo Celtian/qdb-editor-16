@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { RouterLink } from '@angular/router';
+
 import type { ProjectDescriptor } from '../../../../shared/contracts';
 import { AppStore } from '../../core/app-store';
 import { ConfirmDialog } from '../../core/confirm-dialog';
@@ -47,6 +48,10 @@ export class ProjectsPage {
 
   constructor() {
     void this.store.refreshProjects();
+  }
+
+  protected queryChanged(event: Event): void {
+    if (event.target instanceof HTMLInputElement) this.query.set(event.target.value);
   }
 
   protected async remove(project: ProjectDescriptor): Promise<void> {

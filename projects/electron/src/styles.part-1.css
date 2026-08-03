@@ -1,0 +1,123 @@
+:root {
+  --border: var(--mat-sys-outline-variant);
+  --muted-text: var(--mat-sys-on-surface-variant);
+
+  color-scheme: light dark;
+  font-synthesis: none;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  font-family: Roboto, sans-serif;
+  background: var(--mat-sys-surface);
+  color: var(--mat-sys-on-surface);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+button,
+a,
+input,
+select {
+  font: inherit;
+}
+
+.qdb-wizard {
+  --mat-stepper-header-icon-background-color: var(--mat-sys-surface-container-highest);
+  --mat-stepper-header-icon-foreground-color: var(--mat-sys-on-surface-variant);
+  --mat-stepper-header-done-state-icon-background-color: var(--mat-sys-surface-container-highest);
+  --mat-stepper-header-done-state-icon-foreground-color: var(--mat-sys-on-surface-variant);
+  --mat-stepper-header-edit-state-icon-background-color: var(--mat-sys-surface-container-highest);
+  --mat-stepper-header-edit-state-icon-foreground-color: var(--mat-sys-on-surface-variant);
+  --mat-stepper-header-selected-state-icon-background-color: var(--mat-sys-primary);
+  --mat-stepper-header-selected-state-icon-foreground-color: var(--mat-sys-on-primary);
+  --mat-stepper-line-color: var(--mat-sys-outline-variant);
+}
+
+.warning-snackbar {
+  --mat-snack-bar-button-color: #4e2600;
+  --mat-snack-bar-container-color: #fff3e0;
+  --mat-snack-bar-supporting-text-color: #4e2600;
+}
+
+.about-dialog-panel {
+  --mat-dialog-container-shape: 2rem;
+}
+
+.cdk-overlay-pane.confetti-overlay-pane {
+  pointer-events: none;
+}
+
+.entity-filter-drawer-panel,
+.entity-side-drawer-panel {
+  --mat-dialog-container-shape: 0;
+
+  animation: entity-filter-drawer-enter 250ms ease-out;
+}
+
+.entity-filter-drawer-panel .mat-mdc-dialog-container,
+.entity-filter-drawer-panel .mat-mdc-dialog-inner-container,
+.entity-filter-drawer-panel .mat-mdc-dialog-surface,
+.entity-side-drawer-panel .mat-mdc-dialog-container,
+.entity-side-drawer-panel .mat-mdc-dialog-inner-container,
+.entity-side-drawer-panel .mat-mdc-dialog-surface {
+  height: 100%;
+}
+
+.entity-filter-drawer-panel .mat-mdc-dialog-surface,
+.entity-side-drawer-panel .mat-mdc-dialog-surface {
+  overflow: hidden;
+}
+
+@keyframes entity-filter-drawer-enter {
+  from {
+    transform: translateX(100%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}
+
+.qdb-app-content > router-outlet + * {
+  display: block;
+  min-height: 100%;
+}
+
+.qdb-page {
+  width: min(100%, 90rem);
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.qdb-page-header h1 {
+  margin: 0 0 0.25rem;
+  font-size: 1.5rem;
+  font-weight: 500;
+  line-height: 2rem;
+  letter-spacing: normal;
+}
+
+.qdb-page-header p {
+  margin: 0;
+  color: var(--mat-sys-on-surface-variant);
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5rem;
+}
+
+.qdb-empty-state {
+  padding: 3rem 1rem;
+  text-align: center;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.qdb-empty-state mat-icon {
+  width: 3rem;
+  height: 3rem;
+  font-size: 3rem;
+}

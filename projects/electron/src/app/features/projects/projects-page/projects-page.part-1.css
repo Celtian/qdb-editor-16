@@ -1,0 +1,129 @@
+:host {
+  display: block;
+  min-height: 100vh;
+}
+
+.qdb-hero {
+  align-items: center;
+  background: linear-gradient(135deg, #102b4e, #006b5f);
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  min-height: 15rem;
+  padding: 3rem clamp(1.25rem, 6vw, 6rem);
+}
+
+.qdb-hero h1 {
+  font-size: clamp(2.2rem, 4vw, 3.75rem);
+  letter-spacing: -0.04em;
+  margin: 0.25rem 0 0.75rem;
+}
+
+.qdb-hero p:not(.qdb-eyebrow) {
+  color: #d9f4ee;
+  font-size: 1.05rem;
+  margin: 0;
+  max-width: 45rem;
+}
+
+.qdb-eyebrow {
+  color: #8debd5;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  margin: 0;
+}
+
+.qdb-hero-secondary-action {
+  --mat-button-outlined-label-text-color: white;
+  --mat-button-outlined-outline-color: #d9f4ee;
+  --mat-button-outlined-ripple-color: rgb(255 255 255 / 16%);
+  --mat-button-outlined-state-layer-color: white;
+}
+
+.qdb-content {
+  margin: 0 auto;
+  padding: 2.5rem clamp(1.25rem, 6vw, 6rem);
+}
+
+.qdb-search-field {
+  max-width: 32rem;
+  width: 100%;
+}
+
+.qdb-project-grid {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 28rem), 36rem));
+}
+
+.qdb-project-card mat-card-header {
+  padding: 0.875rem 3.5rem 0 0.875rem;
+}
+
+.qdb-project-menu {
+  right: 0.5rem;
+  top: 0.5rem;
+}
+
+.qdb-project-card mat-card-title {
+  font-size: 1.15rem;
+  line-height: 1.35;
+}
+
+.qdb-project-card mat-card-subtitle {
+  font-size: 0.8rem;
+}
+
+.qdb-project-card mat-card-content {
+  padding: 0 0.875rem;
+}
+
+.qdb-project-card mat-card-actions {
+  gap: 0.25rem;
+  padding: 0.75rem 0.875rem 0.875rem;
+}
+
+.qdb-project-card mat-icon[mat-card-avatar] {
+  align-items: center;
+  background: var(--mat-sys-tertiary-container);
+  border-radius: 0.75rem;
+  color: var(--mat-sys-on-tertiary-container);
+  display: flex;
+  justify-content: center;
+}
+
+.qdb-project-details > div {
+  display: grid;
+  min-width: 0;
+  padding: 0.625rem 0.75rem;
+}
+
+.qdb-project-details dt {
+  color: var(--muted-text);
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.qdb-project-details dd {
+  font-variant-numeric: tabular-nums;
+  margin: 0;
+}
+
+.qdb-project-metric {
+  grid-column: span 2;
+}
+
+.qdb-project-metric + .qdb-project-metric {
+  border-left: 1px solid var(--mat-sys-outline-variant);
+}
+
+.qdb-project-metric dd {
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.qdb-project-date {
+  font-size: 0.8rem;
+  grid-column: span 3;
+  grid-template-columns: auto minmax(0, 1fr);
+}

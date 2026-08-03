@@ -1,5 +1,7 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest';
+
 import type { SnapshotDatabase } from './database.js';
+import { SnapshotExporter } from './exporter.js';
 
 const electron = vi.hoisted(() => ({
   getPath: vi.fn(() => '/documents'),
@@ -10,8 +12,6 @@ vi.mock('electron', () => ({
   app: { getPath: electron.getPath },
   dialog: { showOpenDialog: electron.showOpenDialog },
 }));
-
-import { SnapshotExporter } from './exporter.js';
 
 describe('SnapshotExporter', () => {
   beforeEach(() => {

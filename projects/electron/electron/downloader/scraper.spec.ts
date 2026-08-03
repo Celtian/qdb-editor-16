@@ -1,11 +1,13 @@
 import { eurofotbal, soccerway, transfermarkt, worldfootball } from 'soccerbot';
-import { afterEach, describe, expect, test, vi } from 'vitest';
 import {
   SoccerBotPositionDetail,
   SoccerBotPositionGroup,
 } from 'soccerbot/es5/shared/interfaces.js';
+import { afterEach, describe, expect, test, vi } from 'vitest';
+
 import { ApplicationError } from './errors.js';
 import {
+  SoccerbotScraper,
   deriveEurofotbalLeagueName,
   deriveSoccerwayLeagueName,
   deriveWorldFootballLeagueName,
@@ -16,7 +18,6 @@ import {
   parseTransfermarktIdentifier,
   parseTransfermarktLeagueName,
   parseWorldFootballIdentifier,
-  SoccerbotScraper,
 } from './scraper.js';
 import { buildSourceUrl } from './source-url.js';
 

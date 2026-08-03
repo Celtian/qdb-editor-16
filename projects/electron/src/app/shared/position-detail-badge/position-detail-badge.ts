@@ -1,4 +1,5 @@
 import { Component, computed, input } from '@angular/core';
+
 import type { PlayerPosition, PlayerPositionDetail } from '../../../../shared/downloader/contracts';
 import { positionBadgeDetails } from '../position-badge/position-badge';
 
@@ -44,7 +45,7 @@ export const positionDetailGroups: Record<PlayerPositionDetail, PlayerPosition> 
       {{ positionDetail() }}
     </abbr>
   `,
-  styleUrl: '../position-badge/position-badge.css',
+  host: { class: 'inline-block' },
 })
 export class PositionDetailBadge {
   readonly positionDetail = input.required<PlayerPositionDetail>();

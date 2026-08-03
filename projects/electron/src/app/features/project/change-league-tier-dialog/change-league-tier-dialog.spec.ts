@@ -1,9 +1,11 @@
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { TestBed } from '@angular/core/testing';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonHarness } from '@angular/material/button/testing';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatSelectHarness } from '@angular/material/select/testing';
+
 import axe from 'axe-core';
+
 import {
   ChangeLeagueTierDialog,
   type ChangeLeagueTierDialogData,

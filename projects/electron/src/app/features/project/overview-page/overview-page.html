@@ -18,11 +18,14 @@
     </button>
   </app-page-header>
 
-  <section class="page" aria-labelledby="overview-heading">
-    <div class="dashboard">
-      <section class="dataset-panel source-data" aria-labelledby="source-data-heading">
-        <header class="dataset-header">
-          <span class="dataset-icon">
+  <section class="qdb-page" aria-labelledby="overview-heading">
+    <div class="grid grid-cols-2 gap-5 max-wide:grid-cols-1">
+      <section
+        class="qdb-dataset-panel qdb-source-data min-w-0 p-5"
+        aria-labelledby="source-data-heading"
+      >
+        <header class="qdb-dataset-header flex items-center gap-3.5">
+          <span class="qdb-dataset-icon flex flex-none items-center justify-center">
             <mat-icon aria-hidden="true">cloud_download</mat-icon>
           </span>
           <div>
@@ -30,25 +33,28 @@
             <p>Records imported from external sources</p>
           </div>
         </header>
-        <dl class="metric-list">
-          <div class="metric">
+        <dl class="mx-0 mt-5 mb-0 grid grid-cols-3 gap-3 max-compact:grid-cols-1">
+          <div class="qdb-metric">
             <dt><mat-icon aria-hidden="true">emoji_events</mat-icon><span>Leagues</span></dt>
             <dd>{{ snapshot.leagueCount | number }}</dd>
           </div>
-          <div class="metric">
+          <div class="qdb-metric">
             <dt><mat-icon aria-hidden="true">shield</mat-icon><span>Teams</span></dt>
             <dd>{{ snapshot.teamCount | number }}</dd>
           </div>
-          <div class="metric">
+          <div class="qdb-metric">
             <dt><mat-icon aria-hidden="true">groups</mat-icon><span>Players</span></dt>
             <dd>{{ snapshot.playerCount | number }}</dd>
           </div>
         </dl>
       </section>
 
-      <section class="dataset-panel combined-data" aria-labelledby="combined-data-heading">
-        <header class="dataset-header">
-          <span class="dataset-icon">
+      <section
+        class="qdb-dataset-panel qdb-combined-data min-w-0 p-5"
+        aria-labelledby="combined-data-heading"
+      >
+        <header class="qdb-dataset-header flex items-center gap-3.5">
+          <span class="qdb-dataset-icon flex flex-none items-center justify-center">
             <mat-icon aria-hidden="true">merge_type</mat-icon>
           </span>
           <div>
@@ -56,25 +62,28 @@
             <p>Canonical records consolidated from source data</p>
           </div>
         </header>
-        <dl class="metric-list">
-          <div class="metric">
+        <dl class="mx-0 mt-5 mb-0 grid grid-cols-3 gap-3 max-compact:grid-cols-1">
+          <div class="qdb-metric">
             <dt><mat-icon aria-hidden="true">emoji_events</mat-icon><span>Leagues</span></dt>
             <dd>{{ snapshot.combinedLeagueCount ?? 0 | number }}</dd>
           </div>
-          <div class="metric">
+          <div class="qdb-metric">
             <dt><mat-icon aria-hidden="true">shield</mat-icon><span>Teams</span></dt>
             <dd>{{ snapshot.combinedTeamCount ?? 0 | number }}</dd>
           </div>
-          <div class="metric">
+          <div class="qdb-metric">
             <dt><mat-icon aria-hidden="true">groups</mat-icon><span>Players</span></dt>
             <dd>{{ snapshot.combinedPlayerCount ?? 0 | number }}</dd>
           </div>
         </dl>
       </section>
 
-      <section class="dataset-panel fifa-data" aria-labelledby="fifa-data-heading">
-        <header class="dataset-header">
-          <span class="dataset-icon">
+      <section
+        class="qdb-dataset-panel qdb-fifa-data min-w-0 p-5"
+        aria-labelledby="fifa-data-heading"
+      >
+        <header class="qdb-dataset-header flex items-center gap-3.5">
+          <span class="qdb-dataset-icon flex flex-none items-center justify-center">
             <mat-icon aria-hidden="true">storage</mat-icon>
           </span>
           <div>
@@ -82,8 +91,8 @@
             <p>Managed FIFA 16 database files</p>
           </div>
         </header>
-        <dl class="metric-list">
-          <div class="metric">
+        <dl class="mx-0 mt-5 mb-0 grid grid-cols-3 gap-3 max-compact:grid-cols-1">
+          <div class="qdb-metric">
             <dt><mat-icon aria-hidden="true">storage</mat-icon><span>Databases</span></dt>
             <dd>{{ snapshot.databaseCount ?? 0 | number }}</dd>
           </div>
@@ -93,19 +102,21 @@
 
     <mat-card
       appearance="outlined"
-      class="details"
+      class="qdb-details mt-5 overflow-hidden"
       role="region"
       aria-labelledby="snapshot-details-heading"
     >
       <mat-card-content>
-        <div class="details-header">
-          <div class="details-heading">
-            <span class="details-icon">
+        <div
+          class="flex items-center justify-between gap-4 max-compact:flex-col max-compact:items-start"
+        >
+          <div class="qdb-details-heading flex items-center gap-3.5">
+            <span class="qdb-details-icon flex flex-none items-center justify-center">
               <mat-icon aria-hidden="true">calendar_month</mat-icon>
             </span>
             <div>
               <h2 id="snapshot-details-heading">Snapshot details</h2>
-              <p class="details-intro">Key dates and snapshot history</p>
+              <p class="qdb-details-intro">Key dates and snapshot history</p>
             </div>
           </div>
           <a matButton="filled" [routerLink]="['/projects', projectId, 'source', 'import']">
@@ -113,7 +124,9 @@
             Import data
           </a>
         </div>
-        <dl class="details-list">
+        <dl
+          class="qdb-details-list mx-0 mt-5 mb-0 grid grid-cols-4 gap-px overflow-hidden rounded-xl border border-outline-variant bg-outline-variant max-wide:grid-cols-2 max-compact:grid-cols-1"
+        >
           <div>
             <dt>Reference date</dt>
             <dd>{{ snapshot.referenceDate | referenceDate }}</dd>
@@ -135,11 +148,13 @@
     </mat-card>
   </section>
 } @else if (error()) {
-  <section class="page">
-    <p class="error" role="alert">{{ error() }}</p>
+  <section class="qdb-page">
+    <p class="qdb-error" role="alert">{{ error() }}</p>
   </section>
 } @else {
-  <section class="page">
-    <div class="loading"><mat-spinner diameter="36" /><span>Loading snapshot…</span></div>
+  <section class="qdb-page">
+    <div class="flex min-h-80 items-center justify-center gap-4">
+      <mat-spinner diameter="36" /><span>Loading snapshot…</span>
+    </div>
   </section>
 }

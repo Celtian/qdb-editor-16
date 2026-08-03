@@ -1,4 +1,5 @@
 import { describe, expect, test } from 'vitest';
+
 import { formatReferenceDate, isReferenceDate, slugifySnapshotName } from './reference-date.js';
 
 describe('reference dates', () => {

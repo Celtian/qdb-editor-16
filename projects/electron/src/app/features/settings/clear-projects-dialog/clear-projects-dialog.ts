@@ -3,6 +3,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import type { MatSnackBarConfig } from '@angular/material/snack-bar';
+
 import type { DeleteAllProjectsResult } from '../../../../../shared/downloader/contracts';
 import { formatUiCount } from '../../../../../shared/downloader/ui-format';
 
@@ -32,46 +33,8 @@ export const allProjectsDeletionNotificationConfig = (
 @Component({
   selector: 'app-clear-projects-dialog',
   imports: [MatButtonModule, MatDialogModule, MatIconModule],
-  template: `
-    <h2 mat-dialog-title>Clear all projects?</h2>
-    <mat-dialog-content>
-      <p class="deletion-impact">
-        This will permanently delete
-        {{ formatUiCount(data.projectCount, 'project') }} and all related data.
-      </p>
-      <p class="warning-heading">
-        <mat-icon aria-hidden="true">warning</mat-icon>
-        <strong>This action cannot be undone.</strong>
-      </p>
-      <p>
-        Every league, team, and player in these projects will be removed. Export folders created
-        during this app session will also be removed when possible.
-      </p>
-    </mat-dialog-content>
-    <mat-dialog-actions align="end">
-      <button matButton mat-dialog-close type="button">Cancel</button>
-      <button class="delete-button" matButton="filled" [mat-dialog-close]="true" type="button">
-        Clear all projects
-      </button>
-    </mat-dialog-actions>
-  `,
-  styles: `
-    .deletion-impact {
-      font-weight: 500;
-    }
-    .warning-heading {
-      align-items: center;
-      display: flex;
-      gap: 0.65rem;
-    }
-    .warning-heading mat-icon {
-      color: var(--mat-sys-error);
-    }
-    .delete-button:not(:disabled) {
-      background-color: var(--mat-sys-error);
-      color: var(--mat-sys-on-error);
-    }
-  `,
+  templateUrl: './clear-projects-dialog.html',
+  styleUrl: './clear-projects-dialog.css',
 })
 export class ClearProjectsDialog {
   protected readonly data = inject<ClearProjectsDialogData>(MAT_DIALOG_DATA);

@@ -3,9 +3,10 @@ import { mkdtempSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
+
 import { Catalog } from '../catalog.js';
 import { createBlankDatabase } from '../database-importer.js';
-import { closeDatabase, DatabaseSync } from '../runtime-sqlite.js';
+import { DatabaseSync, closeDatabase } from '../runtime-sqlite.js';
 import { SnapshotDatabase } from './database.js';
 import { LegacyDownloaderMigration } from './legacy-migration.js';
 

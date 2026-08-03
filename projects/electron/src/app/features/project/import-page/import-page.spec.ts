@@ -1,15 +1,17 @@
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
-import { signal, type WritableSignal } from '@angular/core';
+import { type WritableSignal, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { MatCheckboxHarness } from '@angular/material/checkbox/testing';
 import { MatFormFieldHarness } from '@angular/material/form-field/testing';
 import { MatInputHarness } from '@angular/material/input/testing';
 import { MatRadioButtonHarness, MatRadioGroupHarness } from '@angular/material/radio/testing';
 import { MatSelectHarness } from '@angular/material/select/testing';
-import { MatStepperHarness } from '@angular/material/stepper/testing';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ActivatedRoute, convertToParamMap, Router } from '@angular/router';
+import { MatStepperHarness } from '@angular/material/stepper/testing';
+import { ActivatedRoute, Router, convertToParamMap } from '@angular/router';
+
 import axe from 'axe-core';
+
 import type {
   CommitImportRequest,
   ExternalTeam,
@@ -158,15 +160,15 @@ describe('ImportPage', () => {
     ]);
     expect(icons.every((icon) => !icon.querySelector('mat-icon'))).toBe(true);
     const operationOptions = await loader.getHarness(
-      MatRadioGroupHarness.with({ selector: '.operation-options' }),
+      MatRadioGroupHarness.with({ selector: '.qdb-operation-options' }),
     );
     const entityOptions = await loader.getHarness(
-      MatRadioGroupHarness.with({ selector: '.entity-options' }),
+      MatRadioGroupHarness.with({ selector: '.qdb-entity-options' }),
     );
     expect(await operationOptions.getCheckedValue()).toBe('merge');
     expect(await entityOptions.getCheckedValue()).toBe('league');
     const providerOptions = await loader.getHarness(
-      MatRadioGroupHarness.with({ selector: '.provider-options' }),
+      MatRadioGroupHarness.with({ selector: '.qdb-provider-options' }),
     );
     expect(await providerOptions.getCheckedValue()).toBe('transfermarkt');
     const element = fixture.nativeElement as HTMLElement;
@@ -203,7 +205,7 @@ describe('ImportPage', () => {
     await stepper.selectStep({ label: 'Source details' });
     expect(element.querySelector('mat-select[aria-label="Import provider"]')).toBeNull();
     const teamUrlExample = (fixture.nativeElement as HTMLElement).querySelector(
-      '.source-url-example',
+      '.qdb-source-url-example',
     );
     expect(teamUrlExample?.textContent.trim()).toBe(
       'https://www.transfermarkt.com/slug/kader/verein/281/plus/1',
@@ -265,7 +267,7 @@ describe('ImportPage', () => {
     await stepper.selectStep({ label: 'Source details' });
 
     const element = fixture.nativeElement as HTMLElement;
-    const transfermarktUrlExample = element.querySelector('.source-url-example');
+    const transfermarktUrlExample = element.querySelector('.qdb-source-url-example');
     expect(transfermarktUrlExample?.textContent.trim()).toBe(
       'https://www.transfermarkt.com/slug/startseite/wettbewerb/GB1',
     );
@@ -342,14 +344,14 @@ describe('ImportPage', () => {
     expect(page.season()).toBe('');
     expect(page.preparedRequest()).toBeUndefined();
     expect(element.textContent).not.toContain('Season (optional)');
-    const soccerwayUrlExample = element.querySelector('.source-url-example');
+    const soccerwayUrlExample = element.querySelector('.qdb-source-url-example');
     expect(soccerwayUrlExample?.textContent.trim()).toBe(
       'https://www.soccerway.com/czech-republic/chance-liga/standings/bNFMkskm/standings/overall/',
     );
     expect(soccerwayUrlExample?.querySelector('strong')?.textContent).toBe(
       'czech-republic/chance-liga/standings/bNFMkskm',
     );
-    expect(element.querySelector('.source-url-card')?.textContent).toContain(
+    expect(element.querySelector('.qdb-source-url-card')?.textContent).toContain(
       'The highlighted text is the Source ID stored in the database.',
     );
     expect(soccerwayUrlExample?.closest('a')?.getAttribute('href')).toBe(
@@ -376,10 +378,10 @@ describe('ImportPage', () => {
       season: undefined,
     });
     expect(page.name()).toBe('Chance Liga');
-    expect(element.querySelector('.provider-notice')?.textContent).toContain(
+    expect(element.querySelector('.qdb-provider-notice')?.textContent).toContain(
       'Squad loading can be slow',
     );
-    expect(element.querySelector('.provider-notice')?.textContent).toContain(
+    expect(element.querySelector('.qdb-provider-notice')?.textContent).toContain(
       'import the rest in additional batches',
     );
     expect((await axe.run(element)).violations).toEqual([]);
@@ -416,7 +418,7 @@ describe('ImportPage', () => {
     expect(page.sourceName()).toBe('worldfootball');
     expect(page.season()).toBe('');
     expect(element.textContent).not.toContain('Season (optional)');
-    const urlExample = element.querySelector('.source-url-example');
+    const urlExample = element.querySelector('.qdb-source-url-example');
     expect(urlExample?.textContent.trim()).toBe(
       'https://www.worldfootball.net/competition/co7093/mexico-lp---serie-b/',
     );
@@ -427,7 +429,7 @@ describe('ImportPage', () => {
     expect(
       [...element.querySelectorAll('mat-hint strong')].map((example) => example.textContent),
     ).toEqual(['co7093/mexico-lp---serie-b']);
-    expect(element.querySelector('.source-url-card')?.textContent).toContain(
+    expect(element.querySelector('.qdb-source-url-card')?.textContent).toContain(
       'WorldFootball imports do not use a season.',
     );
 
@@ -445,10 +447,10 @@ describe('ImportPage', () => {
       season: undefined,
     });
     expect(page.name()).toBe('Mexico Lp Serie B');
-    expect(element.querySelector('.provider-notice')?.textContent).toContain(
+    expect(element.querySelector('.qdb-provider-notice')?.textContent).toContain(
       'Fetch no more than two squads at a time',
     );
-    expect(element.querySelector('.provider-notice')?.textContent).toContain(
+    expect(element.querySelector('.qdb-provider-notice')?.textContent).toContain(
       'import them in another batch',
     );
     expect((await axe.run(element)).violations).toEqual([]);
@@ -485,7 +487,7 @@ describe('ImportPage', () => {
     expect(page.sourceName()).toBe('eurofotbal');
     expect(page.season()).toBe('');
     expect(element.textContent).not.toContain('Season (optional)');
-    const urlExample = element.querySelector('.source-url-example');
+    const urlExample = element.querySelector('.qdb-source-url-example');
     expect(urlExample?.textContent.trim()).toBe(
       'https://www.eurofotbal.cz/chance-liga/2026-2027/tabulky/',
     );
@@ -496,13 +498,13 @@ describe('ImportPage', () => {
     expect(
       [...element.querySelectorAll('mat-hint strong')].map((example) => example.textContent),
     ).toEqual(['chance-liga/2026-2027']);
-    expect(element.querySelector('.source-url-card')?.textContent).toContain(
+    expect(element.querySelector('.qdb-source-url-card')?.textContent).toContain(
       'Eurofotbal imports are very fast.',
     );
-    expect(element.querySelector('.source-url-card')?.textContent).toContain(
+    expect(element.querySelector('.qdb-source-url-card')?.textContent).toContain(
       'redirected URLs cannot be loaded',
     );
-    expect(element.querySelector('.source-url-card')?.textContent).toContain(
+    expect(element.querySelector('.qdb-source-url-card')?.textContent).toContain(
       'For league imports, the season is part of the Source ID.',
     );
 
@@ -520,7 +522,7 @@ describe('ImportPage', () => {
       season: undefined,
     });
     expect(page.name()).toBe('Chance Liga');
-    expect(element.querySelector('.provider-notice')).toBeNull();
+    expect(element.querySelector('.qdb-provider-notice')).toBeNull();
     expect((await axe.run(element)).violations).toEqual([]);
   });
 
@@ -653,7 +655,7 @@ describe('ImportPage', () => {
     });
 
     const existingPolicy = await loader.getHarness(
-      MatSelectHarness.with({ selector: '.existing-record-policy' }),
+      MatSelectHarness.with({ selector: '.qdb-existing-record-policy' }),
     );
     await existingPolicy.open();
     await existingPolicy.clickOptions({ text: 'Keep stored data' });
@@ -704,7 +706,9 @@ describe('ImportPage', () => {
     const loader = TestbedHarnessEnvironment.loader(fixture);
     const stepper = await loader.getHarness(MatStepperHarness);
     const inputs = [
-      ...(fixture.nativeElement as HTMLElement).querySelectorAll<HTMLInputElement>('.fields input'),
+      ...(fixture.nativeElement as HTMLElement).querySelectorAll<HTMLInputElement>(
+        '.qdb-fields input',
+      ),
     ];
 
     expect(api.getEntity).toHaveBeenCalledWith('project-id', 'leagues', 'league-id');
@@ -724,14 +728,14 @@ describe('ImportPage', () => {
       'Chance Liga',
     ]);
     const providerOptions = await loader.getHarness(
-      MatRadioGroupHarness.with({ selector: '.provider-options' }),
+      MatRadioGroupHarness.with({ selector: '.qdb-provider-options' }),
     );
     expect(await providerOptions.getCheckedValue()).toBe('soccerway');
     const absentTeams = await loader.getHarness(
-      MatSelectHarness.with({ selector: '.absent-team-select' }),
+      MatSelectHarness.with({ selector: '.qdb-absent-team-select' }),
     );
     const absentPlayers = await loader.getHarness(
-      MatSelectHarness.with({ selector: '.absent-player-select' }),
+      MatSelectHarness.with({ selector: '.qdb-absent-player-select' }),
     );
     expect(await absentTeams.getValueText()).toBe('Keep unchanged');
     expect(await absentPlayers.getValueText()).toBe('Keep unchanged');

@@ -1,6 +1,6 @@
-import type { EntityStatus, EntityStatusSettings } from './entity-status.js';
-import type { CustomBadge, CustomBadgeColor, CustomBadgeSummary } from './custom-badge.js';
 import type { CombinedCustomBadge, CombinedCustomBadgeSummary } from './combined-custom-badge.js';
+import type { CustomBadge, CustomBadgeColor, CustomBadgeSummary } from './custom-badge.js';
+import type { EntityStatus, EntityStatusSettings } from './entity-status.js';
 
 export type EntityKind = 'leagues' | 'teams' | 'players';
 export type EditableEntityKind = Exclude<EntityKind, 'players'>;

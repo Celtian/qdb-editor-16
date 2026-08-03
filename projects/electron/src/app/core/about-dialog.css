@@ -2,60 +2,35 @@
   display: block;
 }
 
-.about-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 1.5rem 1.5rem 0;
-}
-
-.identity {
-  display: flex;
-  min-width: 0;
-  align-items: center;
-  gap: 1rem;
-}
-
-.identity img {
+.qdb-identity img {
   flex: 0 0 auto;
   border-radius: 14px;
 }
 
-.identity h2,
-.identity p,
-.description,
-.legal {
+.qdb-identity h2,
+.qdb-identity p,
+.qdb-description,
+.qdb-legal {
   margin: 0;
 }
 
-.identity h2 {
+.qdb-identity h2 {
   padding: 0;
   font-size: 1.6rem;
 }
 
-.version {
+.qdb-version {
   margin-top: 0.25rem !important;
   color: var(--mat-sys-on-surface-variant);
   font-variant-numeric: tabular-nums;
-}
-
-.close-button {
-  flex: 0 0 auto;
 }
 
 mat-dialog-content {
   padding-top: 1.25rem;
 }
 
-.description {
+.qdb-description {
   line-height: 1.55;
-}
-
-.legal {
-  margin-top: 1rem;
-  color: var(--mat-sys-on-surface-variant);
-  font-size: 0.875rem;
 }
 
 mat-dialog-actions {
@@ -65,7 +40,7 @@ mat-dialog-actions {
   padding: 0.75rem 1.5rem 1.25rem;
 }
 
-.external-actions {
+.qdb-external-actions {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-end;
@@ -73,17 +48,13 @@ mat-dialog-actions {
 }
 
 @media (width <= 480px) {
-  .about-header {
-    padding: 1.25rem 1rem 0;
-  }
-
-  .identity img {
+  .qdb-identity img {
     width: 56px;
     height: 56px;
     border-radius: 12px;
   }
 
-  .identity h2 {
+  .qdb-identity h2 {
     font-size: 1.4rem;
   }
 
@@ -97,16 +68,12 @@ mat-dialog-actions {
     padding-inline: 1rem;
   }
 
-  .close-action {
-    align-self: flex-start;
-  }
-
-  .external-actions {
+  .qdb-external-actions {
     display: grid;
     justify-content: stretch;
   }
 
-  .external-actions a {
+  .qdb-external-actions a {
     justify-content: center;
   }
 }

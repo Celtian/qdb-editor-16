@@ -1,5 +1,5 @@
 <form
-  class="row-form"
+  class="box-border flex size-full min-h-0 flex-col overflow-hidden"
   aria-labelledby="row-editor-title"
   aria-describedby="row-editor-description"
   (submit)="save(); $event.preventDefault()"
@@ -16,9 +16,12 @@
     </button>
   </header>
 
-  <div class="row-fields" cdkScrollable>
+  <div class="flex flex-1 flex-col gap-3 overflow-auto px-4 py-5" cdkScrollable>
     @if (ratingHint(); as rating) {
-      <section class="rating-summary" aria-label="Calculated player rating">
+      <section
+        class="qdb-rating-summary flex items-start gap-3 rounded-xl bg-secondary-container p-4 text-on-secondary-container"
+        aria-label="Calculated player rating"
+      >
         <mat-icon aria-hidden="true">bar_chart</mat-icon>
         <div>
           <strong>FIFA 16 {{ rating.position }} rating: {{ rating.calculated }}</strong>
@@ -53,7 +56,7 @@
     }
 
     @if (store.error()) {
-      <p class="error-banner" role="alert">{{ store.error() }}</p>
+      <p class="qdb-error-banner" role="alert">{{ store.error() }}</p>
     }
   </div>
 

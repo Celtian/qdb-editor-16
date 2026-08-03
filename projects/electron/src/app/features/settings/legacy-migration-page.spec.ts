@@ -1,6 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
+
 import axe from 'axe-core';
+
 import { AppStore } from '../../core/app-store';
 import { DesktopApi } from '../../core/desktop-api';
 import { LegacyMigrationPage } from './legacy-migration-page';

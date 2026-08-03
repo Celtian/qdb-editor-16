@@ -1,11 +1,12 @@
 import { Service } from '@angular/core';
+
 import type { EntityKind } from '../../../../../shared/downloader/contracts';
 import type { ColumnPreference } from '../entity-column-editor/column-layout';
 import {
+  type EntityColumnKey,
+  type EntityColumnPreference,
   columnsByEntity,
   defaultColumnPreference,
-  type EntityColumnPreference,
-  type EntityColumnKey,
 } from './entity-table-columns';
 
 export const entityColumnPreferenceKey = (entity: EntityKind): string =>

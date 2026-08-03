@@ -1,10 +1,10 @@
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import {
   CdkDrag,
+  type CdkDragDrop,
   CdkDragHandle,
   CdkDropList,
   moveItemInArray,
-  type CdkDragDrop,
 } from '@angular/cdk/drag-drop';
 import { Component, inject, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
@@ -12,8 +12,9 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { sourceLabels, type SourceName } from '../../../../../shared/downloader/contracts';
+
 import { defaultSourcePriority } from '../../../../../shared/downloader/combined-data';
+import { type SourceName, sourceLabels } from '../../../../../shared/downloader/contracts';
 import { DesktopApi } from '../../../core/downloader-api';
 import { PageHeader } from '../../../shared/page-header/page-header';
 

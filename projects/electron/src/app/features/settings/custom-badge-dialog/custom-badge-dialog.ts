@@ -6,11 +6,12 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+
 import {
-  customBadgeColors,
-  customBadgeLimits,
   type CustomBadge,
   type CustomBadgeColor,
+  customBadgeColors,
+  customBadgeLimits,
 } from '../../../../../shared/downloader/custom-badge';
 import { CustomBadge as CustomBadgeView } from '../../../shared/custom-badge/custom-badge';
 
@@ -35,6 +36,21 @@ const colorLabels: Record<CustomBadgeColor, string> = {
   pink: 'Pink',
 };
 
+const colorSwatchClasses: Record<CustomBadgeColor, string> = {
+  red: 'inline-block size-4 shrink-0 rounded-full border border-badge-swatch-outline bg-badge-red',
+  orange:
+    'inline-block size-4 shrink-0 rounded-full border border-badge-swatch-outline bg-badge-orange',
+  yellow:
+    'inline-block size-4 shrink-0 rounded-full border border-badge-swatch-outline bg-badge-yellow',
+  green:
+    'inline-block size-4 shrink-0 rounded-full border border-badge-swatch-outline bg-badge-green',
+  teal: 'inline-block size-4 shrink-0 rounded-full border border-badge-swatch-outline bg-badge-teal',
+  blue: 'inline-block size-4 shrink-0 rounded-full border border-badge-swatch-outline bg-badge-blue',
+  purple:
+    'inline-block size-4 shrink-0 rounded-full border border-badge-swatch-outline bg-badge-purple',
+  pink: 'inline-block size-4 shrink-0 rounded-full border border-badge-swatch-outline bg-badge-pink',
+};
+
 @Component({
   selector: 'app-custom-badge-dialog',
   imports: [
@@ -47,136 +63,14 @@ const colorLabels: Record<CustomBadgeColor, string> = {
     MatInputModule,
     MatSelectModule,
   ],
-  template: `
-    <h2 mat-dialog-title>{{ data.badge ? 'Edit custom badge' : 'Create custom badge' }}</h2>
-    <mat-dialog-content>
-      <form id="custom-badge-form" (submit)="$event.preventDefault(); save()">
-        <mat-form-field appearance="outline">
-          <mat-label>Name</mat-label>
-          <input matInput autocomplete="off" [formField]="badgeForm.name" />
-          <mat-hint align="end">
-            {{ badgeModel().name.length | number }}/{{ limits.name.max | number }}
-          </mat-hint>
-          @if (badgeForm.name().touched() && badgeForm.name().invalid()) {
-            <mat-error>{{ badgeForm.name().errors()[0]?.message }}</mat-error>
-          }
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-          <mat-label>Tooltip description</mat-label>
-          <textarea matInput rows="3" [formField]="badgeForm.description"></textarea>
-          <mat-hint align="end">
-            {{ badgeModel().description.length | number }}/{{ limits.description.max | number }}
-          </mat-hint>
-          @if (badgeForm.description().touched() && badgeForm.description().invalid()) {
-            <mat-error>{{ badgeForm.description().errors()[0]?.message }}</mat-error>
-          }
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-          <mat-label>Color</mat-label>
-          <mat-select [formField]="badgeForm.color">
-            <mat-select-trigger>
-              <span class="color-option color-select-trigger">
-                <span
-                  aria-hidden="true"
-                  [class]="'color-swatch color-swatch--' + badgeModel().color"
-                ></span>
-                <span>{{ colorLabel(badgeModel().color) }}</span>
-              </span>
-            </mat-select-trigger>
-            @for (color of colors; track color) {
-              <mat-option [value]="color">
-                <span class="color-option">
-                  <span aria-hidden="true" [class]="'color-swatch color-swatch--' + color"></span>
-                  <span>{{ colorLabel(color) }}</span>
-                </span>
-              </mat-option>
-            }
-          </mat-select>
-        </mat-form-field>
-
-        <div class="preview" aria-live="polite">
-          <span>Preview</span>
-          <app-custom-badge [badge]="previewBadge()" />
-        </div>
-      </form>
-    </mat-dialog-content>
-    <mat-dialog-actions align="end">
-      <button matButton mat-dialog-close type="button">Cancel</button>
-      <button
-        matButton="filled"
-        form="custom-badge-form"
-        type="submit"
-        [disabled]="badgeForm().invalid()"
-      >
-        {{ data.badge ? 'Save changes' : 'Create badge' }}
-      </button>
-    </mat-dialog-actions>
-  `,
-  styles: `
-    :host {
-      display: block;
-    }
-    form {
-      display: grid;
-      gap: 0.75rem;
-      min-width: min(28rem, 75vw);
-      padding-top: 0.5rem;
-    }
-    mat-form-field {
-      width: 100%;
-    }
-    .color-option {
-      align-items: center;
-      display: inline-flex;
-      gap: 0.5rem;
-    }
-    .color-swatch {
-      border: 1px solid color-mix(in srgb, var(--mat-sys-on-surface) 24%, transparent);
-      border-radius: 50%;
-      box-sizing: border-box;
-      display: inline-block;
-      flex: 0 0 auto;
-      height: 1rem;
-      width: 1rem;
-    }
-    .color-swatch--red {
-      background: #ffdad6;
-    }
-    .color-swatch--orange {
-      background: #ffdcc2;
-    }
-    .color-swatch--yellow {
-      background: #fbe59a;
-    }
-    .color-swatch--green {
-      background: #b7f1c2;
-    }
-    .color-swatch--teal {
-      background: #9cf1df;
-    }
-    .color-swatch--blue {
-      background: #d6e3ff;
-    }
-    .color-swatch--purple {
-      background: #e9ddff;
-    }
-    .color-swatch--pink {
-      background: #ffd8e4;
-    }
-    .preview {
-      align-items: center;
-      color: var(--mat-sys-on-surface-variant);
-      display: flex;
-      gap: 0.75rem;
-    }
-  `,
+  templateUrl: './custom-badge-dialog.html',
+  styleUrl: './custom-badge-dialog.css',
 })
 export class CustomBadgeDialog {
   protected readonly data = inject<CustomBadgeDialogData>(MAT_DIALOG_DATA);
   private readonly dialogRef = inject(MatDialogRef<CustomBadgeDialog, CustomBadgeDialogValue>);
   protected readonly colors = customBadgeColors;
+  protected readonly colorSwatchClasses = colorSwatchClasses;
   protected readonly limits = customBadgeLimits;
   protected readonly badgeModel = signal<CustomBadgeDialogValue>({
     name: this.data.badge?.name ?? '',

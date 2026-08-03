@@ -1,4 +1,5 @@
 import { Component, computed, input } from '@angular/core';
+
 import type { PlayerPosition } from '../../../../shared/downloader/contracts';
 
 export interface PositionBadgeDetails {
@@ -10,22 +11,26 @@ export interface PositionBadgeDetails {
 export const positionBadgeDetails: Record<PlayerPosition, PositionBadgeDetails> = {
   GOALKEEPER: {
     abbreviation: 'GK',
-    className: 'position-badge position-badge--goalkeeper',
+    className:
+      'inline-block min-w-11 rounded-full bg-badge-goalkeeper px-2 py-0 text-center text-xs font-bold leading-6 tracking-badge text-on-badge-goalkeeper no-underline',
     label: 'Goalkeeper',
   },
   DEFENDER: {
     abbreviation: 'DEF',
-    className: 'position-badge position-badge--defender',
+    className:
+      'inline-block min-w-11 rounded-full bg-badge-defender px-2 py-0 text-center text-xs font-bold leading-6 tracking-badge text-on-badge-defender no-underline',
     label: 'Defender',
   },
   MIDFIELDER: {
     abbreviation: 'MID',
-    className: 'position-badge position-badge--midfielder',
+    className:
+      'inline-block min-w-11 rounded-full bg-badge-midfielder px-2 py-0 text-center text-xs font-bold leading-6 tracking-badge text-on-badge-midfielder no-underline',
     label: 'Midfielder',
   },
   ATTACKER: {
     abbreviation: 'ATT',
-    className: 'position-badge position-badge--attacker',
+    className:
+      'inline-block min-w-11 rounded-full bg-badge-attacker px-2 py-0 text-center text-xs font-bold leading-6 tracking-badge text-on-badge-attacker no-underline',
     label: 'Attacker',
   },
 };
@@ -41,7 +46,7 @@ export const positionBadgeDetails: Record<PlayerPosition, PositionBadgeDetails> 
       {{ details().abbreviation }}
     </abbr>
   `,
-  styleUrl: './position-badge.css',
+  host: { class: 'inline-block' },
 })
 export class PositionBadge {
   readonly position = input.required<PlayerPosition>();

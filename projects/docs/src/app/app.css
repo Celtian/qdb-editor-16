@@ -11,7 +11,7 @@ mat-toolbar {
   border-bottom: 1px solid var(--mat-sys-outline-variant);
 }
 
-.brand {
+.qdb-brand {
   display: flex;
   align-items: center;
   gap: 0.7rem;
@@ -19,12 +19,12 @@ mat-toolbar {
   text-decoration: none;
 }
 
-.brand small {
+.qdb-brand small {
   color: var(--mat-sys-on-surface-variant);
   font-weight: 400;
 }
 
-.spacer {
+.qdb-spacer {
   flex: 1;
 }
 
@@ -58,16 +58,12 @@ footer {
   border-top: 1px solid var(--mat-sys-outline-variant);
 }
 
-.skip-link {
-  position: fixed;
-  z-index: 100;
+.qdb-skip-link {
   top: 0.5rem;
   left: 0.5rem;
-  padding: 0.75rem;
   transform: translateY(-200%);
-  background: var(--mat-sys-primary-container);
 }
 
-.skip-link:focus {
+.qdb-skip-link:focus {
   transform: none;
 }

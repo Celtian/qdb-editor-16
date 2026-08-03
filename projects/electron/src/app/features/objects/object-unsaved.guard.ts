@@ -1,7 +1,9 @@
 import { inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import type { CanDeactivateFn } from '@angular/router';
+
 import { firstValueFrom } from 'rxjs';
+
 import { ConfirmDialog } from '../../core/confirm-dialog';
 
 export interface ObjectDirtyComponent {

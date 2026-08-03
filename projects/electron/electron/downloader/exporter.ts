@@ -1,4 +1,5 @@
 import { app, dialog } from 'electron';
+
 import type { ExportRequest, ExportResult, Project } from '../../shared/downloader/contracts.js';
 import type { SnapshotDatabase } from './database.js';
 import { SnapshotExportWriter } from './export-writer.js';

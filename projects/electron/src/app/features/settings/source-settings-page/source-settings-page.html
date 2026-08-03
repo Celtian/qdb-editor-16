@@ -5,9 +5,9 @@
   </div>
 </app-page-header>
 
-<section class="settings-page" aria-labelledby="source-settings-title">
+<section class="qdb-settings-page" aria-labelledby="source-settings-title">
   @if (error()) {
-    <p class="error" role="alert">{{ error() }}</p>
+    <p class="qdb-error" role="alert">{{ error() }}</p>
   }
 
   <mat-card appearance="outlined">
@@ -23,12 +23,12 @@
       } @else {
         <ol
           cdkDropList
-          class="priority-list"
+          class="qdb-priority-list mx-0 mt-4 mb-0 grid list-none gap-2 p-0"
           aria-label="Source priority"
           [cdkDropListData]="priority()"
           (cdkDropListDropped)="drop($event)"
         >
-          @for (sourceName of priority(); track sourceName; let index = $index) {
+          @for (sourceName of priority(); track sourceName) {
             <li cdkDrag>
               <button
                 cdkDragHandle
@@ -38,13 +38,17 @@
               >
                 <mat-icon aria-hidden="true">drag_indicator</mat-icon>
               </button>
-              <span class="rank" aria-hidden="true">{{ index + 1 }}</span>
+              <span
+                class="grid size-8 place-items-center rounded-full bg-secondary-container"
+                aria-hidden="true"
+                >{{ $index + 1 }}</span
+              >
               <strong>{{ sourceLabels[sourceName] }}</strong>
-              <span class="spacer"></span>
+              <span class="qdb-spacer"></span>
               <button
                 matIconButton
                 type="button"
-                [disabled]="index === 0 || saving()"
+                [disabled]="$first || saving()"
                 [attr.aria-label]="'Move ' + sourceLabels[sourceName] + ' up'"
                 (click)="move(sourceName, -1)"
               >
@@ -53,7 +57,7 @@
               <button
                 matIconButton
                 type="button"
-                [disabled]="index === priority().length - 1 || saving()"
+                [disabled]="$last || saving()"
                 [attr.aria-label]="'Move ' + sourceLabels[sourceName] + ' down'"
                 (click)="move(sourceName, 1)"
               >

@@ -1,6 +1,8 @@
 import { Component, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+
 import axe from 'axe-core';
+
 import { PageHeader } from './page-header';
 
 @Component({
@@ -30,15 +32,17 @@ describe('PageHeader', () => {
     await fixture.whenStable();
     const element = fixture.nativeElement as HTMLElement;
 
-    expect(element.querySelector('.page-header__icon mat-icon')?.textContent?.trim()).toBe('flag');
-    expect(element.querySelector('.page-header__content h1')?.textContent).toContain('Countries');
-    expect(element.querySelector('.page-header__content p')?.textContent).toContain(
+    expect(element.querySelector('.qdb-page-header-icon mat-icon')?.textContent?.trim()).toBe(
+      'flag',
+    );
+    expect(element.querySelector('[pageHeaderContent] h1')?.textContent).toContain('Countries');
+    expect(element.querySelector('[pageHeaderContent] p')?.textContent).toContain(
       'Domain-oriented FIFA 16 objects.',
     );
-    expect(element.querySelector('.page-header__title-action button')?.textContent).toContain(
+    expect(element.querySelector('.qdb-page-header-title-action button')?.textContent).toContain(
       'Title action',
     );
-    expect(element.querySelector('.page-header__actions button')?.textContent).toContain(
+    expect(element.querySelector('.qdb-page-header-actions button')?.textContent).toContain(
       'Create country',
     );
     expect(element.querySelector('.page-header--details')).toBeNull();
@@ -51,7 +55,7 @@ describe('PageHeader', () => {
     fixture.componentInstance.showActions.set(false);
     await fixture.whenStable();
     const actions = (fixture.nativeElement as HTMLElement).querySelector<HTMLElement>(
-      '.page-header__actions',
+      '.qdb-page-header-actions',
     );
 
     expect(actions?.childElementCount).toBe(0);

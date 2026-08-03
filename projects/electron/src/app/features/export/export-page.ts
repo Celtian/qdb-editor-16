@@ -1,10 +1,10 @@
 import {
   Component,
+  type OnChanges,
+  type SimpleChanges,
   inject,
   input,
-  type OnChanges,
   signal,
-  type SimpleChanges,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -12,6 +12,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+
 import type { ExportDatabaseResult, ValidationReport } from '../../../../shared/contracts';
 import { AppStore } from '../../core/app-store';
 import { ConfirmDialog } from '../../core/confirm-dialog';

@@ -9,6 +9,7 @@ import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+
 import { isReferenceDate } from '../../../../../shared/downloader/reference-date';
 
 @Component({
@@ -22,9 +23,9 @@ import { isReferenceDate } from '../../../../../shared/downloader/reference-date
     MatIconModule,
     MatInputModule,
   ],
-  providers: [provideNativeDateAdapter()],
   templateUrl: './create-project-dialog.html',
   styleUrl: './create-project-dialog.css',
+  providers: [provideNativeDateAdapter()],
 })
 export class CreateProjectDialog {
   private readonly dialogRef = inject(MatDialogRef<CreateProjectDialog, CreateProjectValue>);

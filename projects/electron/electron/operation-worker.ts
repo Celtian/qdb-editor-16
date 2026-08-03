@@ -1,8 +1,9 @@
 import { parentPort, workerData } from 'node:worker_threads';
-import type { SelectedSource } from './source-selections';
+
 import { exportDatabase } from './database-exporter';
 import { importDatabase } from './database-importer';
 import { FifaDatabase } from './fifa-database';
+import type { SelectedSource } from './source-selections';
 
 type WorkerRequest = (
   | {

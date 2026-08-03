@@ -1,21 +1,23 @@
 import { Service, signal } from '@angular/core';
+
+import type { CombinedCustomBadgeSummary } from '../../../shared/downloader/combined-custom-badge';
 import type {
-  CommitImportRequest,
-  CommitTeamCombinationRequest,
   CombineTeamCandidate,
   CombinedEntity,
   CombinedEntityFilterOptions,
   CombinedEntityFilterOptionsRequest,
   CombinedEntityKind,
   CombinedPageRequest,
+  CommitImportRequest,
+  CommitTeamCombinationRequest,
   CreateCombinedCustomBadgeRequest,
   CreateCustomBadgeRequest,
+  DeleteAllProjectsResult,
   DeleteCombinedCustomBadgeResult,
   DeleteCombinedLeaguesRequest,
   DeleteCombinedPlayersRequest,
   DeleteCombinedTeamsRequest,
   DeleteCustomBadgeResult,
-  DeleteAllProjectsResult,
   DeleteLeagueMode,
   DeleteLeaguesRequest,
   DeletePlayersRequest,
@@ -32,8 +34,8 @@ import type {
   ExportRequest,
   ExportResult,
   ExportVisibilityPresetPreference,
-  ImportResult,
   ImportPreview,
+  ImportResult,
   LeaguePreview,
   Page,
   PageRequest,
@@ -46,22 +48,21 @@ import type {
   ScrapeProgress,
   SourceDataDeletionCounts,
   SourceName,
-  TeamPreview,
   TeamCombinationPreview,
   TeamCombinationResult,
-  UpdateEntityMetadataRequest,
+  TeamPreview,
   UpdateCombinedCustomBadgeRequest,
   UpdateCombinedEntityCustomBadgesRequest,
   UpdateCombinedEntityCustomBadgesResult,
   UpdateCustomBadgeRequest,
   UpdateEntityCustomBadgesRequest,
   UpdateEntityCustomBadgesResult,
+  UpdateEntityMetadataRequest,
   UpdateLeagueCountriesRequest,
   UpdateLeagueTiersRequest,
   UpdateTeamCountriesRequest,
 } from '../../../shared/downloader/contracts';
 import type { CustomBadgeSummary } from '../../../shared/downloader/custom-badge';
-import type { CombinedCustomBadgeSummary } from '../../../shared/downloader/combined-custom-badge';
 
 @Service()
 export class DesktopApi {

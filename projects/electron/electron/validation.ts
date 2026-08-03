@@ -1,4 +1,5 @@
 import { Datatype, type Field } from 'fifatables';
+
 import type {
   TableRowValues,
   TableValue,

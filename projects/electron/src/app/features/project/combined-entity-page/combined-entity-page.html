@@ -16,14 +16,14 @@
 </app-page-header>
 
 <section
-  class="page"
+  class="qdb-page"
   [class.has-selection]="selectedCount() > 0"
   [attr.aria-labelledby]="'combined-' + entity + '-heading'"
 >
   <mat-card appearance="outlined">
-    <div class="table-toolbar">
-      <div class="table-controls">
-        <mat-form-field class="search-field" appearance="outline" subscriptSizing="dynamic">
+    <div class="qdb-table-toolbar">
+      <div class="qdb-table-controls">
+        <mat-form-field class="qdb-search-field" appearance="outline" subscriptSizing="dynamic">
           <mat-label>Search {{ entity }}</mat-label>
           <mat-icon matPrefix aria-hidden="true">search</mat-icon>
           <input
@@ -35,7 +35,7 @@
           />
         </mat-form-field>
         <button
-          class="filter-button"
+          class="qdb-filter-button"
           matButton="tonal"
           type="button"
           [attr.aria-label]="
@@ -48,11 +48,13 @@
           <mat-icon aria-hidden="true">filter_alt</mat-icon>
           Filters
           @if (activeFilterCount()) {
-            <span class="filter-count" aria-hidden="true">{{ activeFilterCount() | number }}</span>
+            <span class="qdb-filter-count" aria-hidden="true">{{
+              activeFilterCount() | number
+            }}</span>
           }
         </button>
         <button
-          class="column-button"
+          class="qdb-column-button"
           matButton="tonal"
           type="button"
           [attr.aria-label]="'Choose columns, ' + (hiddenColumnCount() | number) + ' hidden'"
@@ -61,19 +63,21 @@
           <mat-icon aria-hidden="true">view_column</mat-icon>
           Columns
           @if (hiddenColumnCount()) {
-            <span class="column-count" aria-hidden="true">{{ hiddenColumnCount() | number }}</span>
+            <span class="qdb-column-count" aria-hidden="true">{{
+              hiddenColumnCount() | number
+            }}</span>
           }
         </button>
       </div>
-      <span class="record-count">{{ total() | number }} records</span>
+      <span class="qdb-record-count">{{ total() | number }} records</span>
     </div>
     @if (loading()) {
       <mat-progress-bar mode="indeterminate" [attr.aria-label]="'Loading ' + heading" />
     }
     @if (error()) {
-      <p class="error" role="alert">{{ error() }}</p>
+      <p class="qdb-error" role="alert">{{ error() }}</p>
     }
-    <div class="table-scroll">
+    <div class="qdb-table-scroll">
       <table
         mat-table
         [class.player-table]="entity === 'players'"
@@ -81,9 +85,9 @@
         [attr.aria-label]="heading"
       >
         <ng-container matColumnDef="select">
-          <th mat-header-cell *matHeaderCellDef>
+          <th *matHeaderCellDef mat-header-cell>
             <mat-checkbox
-              class="select-all-checkbox"
+              class="qdb-select-all-checkbox"
               [checked]="allRowsSelected()"
               [indeterminate]="someRowsSelected()"
               [disabled]="bulkActionPending() || rows().length === 0"
@@ -95,9 +99,9 @@
               (change)="toggleAllRows($event.checked)"
             />
           </th>
-          <td mat-cell *matCellDef="let row">
+          <td *matCellDef="let row" mat-cell>
             <mat-checkbox
-              class="row-select-checkbox"
+              class="qdb-row-select-checkbox"
               [checked]="rowSelected(row)"
               [disabled]="bulkActionPending()"
               [aria-label]="(rowSelected(row) ? 'Deselect ' : 'Select ') + row.name"
@@ -107,8 +111,8 @@
           </td>
         </ng-container>
         <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef>Name</th>
-          <td mat-cell *matCellDef="let row">
+          <th *matHeaderCellDef mat-header-cell>Name</th>
+          <td *matCellDef="let row" mat-cell>
             @if (entity === 'leagues') {
               <a [routerLink]="['../teams']" [queryParams]="{ leagueId: row.id }">{{ row.name }}</a>
             } @else if (entity === 'teams') {
@@ -119,13 +123,13 @@
           </td>
         </ng-container>
         <ng-container matColumnDef="parent">
-          <th mat-header-cell *matHeaderCellDef>{{ parentLabel }}</th>
-          <td mat-cell *matCellDef="let row">{{ parentName(row) }}</td>
+          <th *matHeaderCellDef mat-header-cell>{{ parentLabel }}</th>
+          <td *matCellDef="let row" mat-cell>{{ parentName(row) }}</td>
         </ng-container>
         <ng-container matColumnDef="country">
-          <th mat-header-cell *matHeaderCellDef>Country</th>
-          <td mat-cell *matCellDef="let row">
-            <span class="country-with-flag">
+          <th *matHeaderCellDef mat-header-cell>Country</th>
+          <td *matCellDef="let row" mat-cell>
+            <span class="qdb-country-with-flag">
               @if (countryFlagCode(row); as flagCode) {
                 <app-country-flag decorative [code]="flagCode" />
               }
@@ -134,20 +138,20 @@
           </td>
         </ng-container>
         <ng-container matColumnDef="tier">
-          <th mat-header-cell *matHeaderCellDef>Tier</th>
-          <td mat-cell *matCellDef="let row">{{ tier(row) }}</td>
+          <th *matHeaderCellDef mat-header-cell>Tier</th>
+          <td *matCellDef="let row" mat-cell>{{ tier(row) }}</td>
         </ng-container>
         <ng-container matColumnDef="playerCount">
-          <th mat-header-cell *matHeaderCellDef>Players</th>
-          <td mat-cell *matCellDef="let row">{{ playerCount(row) | number }}</td>
+          <th *matHeaderCellDef mat-header-cell>Players</th>
+          <td *matCellDef="let row" mat-cell>{{ playerCount(row) | number }}</td>
         </ng-container>
         <ng-container matColumnDef="jerseyNumber">
-          <th mat-header-cell *matHeaderCellDef>Number</th>
-          <td mat-cell *matCellDef="let row">{{ playerData(row).jerseyNumber ?? '—' }}</td>
+          <th *matHeaderCellDef mat-header-cell>Number</th>
+          <td *matCellDef="let row" mat-cell>{{ playerData(row).jerseyNumber ?? '—' }}</td>
         </ng-container>
         <ng-container matColumnDef="position">
-          <th mat-header-cell *matHeaderCellDef>Position</th>
-          <td mat-cell *matCellDef="let row">
+          <th *matHeaderCellDef mat-header-cell>Position</th>
+          <td *matCellDef="let row" mat-cell>
             @if (playerData(row).position; as position) {
               <app-position-badge [position]="position" />
             } @else {
@@ -156,8 +160,8 @@
           </td>
         </ng-container>
         <ng-container matColumnDef="positionDetail">
-          <th mat-header-cell *matHeaderCellDef>Position detail</th>
-          <td mat-cell *matCellDef="let row">
+          <th *matHeaderCellDef mat-header-cell>Position detail</th>
+          <td *matCellDef="let row" mat-cell>
             @if (playerData(row).positionDetail; as positionDetail) {
               <app-position-detail-badge [positionDetail]="positionDetail" />
             } @else {
@@ -166,12 +170,12 @@
           </td>
         </ng-container>
         <ng-container matColumnDef="birthdate">
-          <th mat-header-cell *matHeaderCellDef>Birth date</th>
-          <td mat-cell *matCellDef="let row">{{ birthdate(row) }}</td>
+          <th *matHeaderCellDef mat-header-cell>Birth date</th>
+          <td *matCellDef="let row" mat-cell>{{ birthdate(row) }}</td>
         </ng-container>
         <ng-container matColumnDef="height">
-          <th mat-header-cell *matHeaderCellDef>Height</th>
-          <td mat-cell *matCellDef="let row">
+          <th *matHeaderCellDef mat-header-cell>Height</th>
+          <td *matCellDef="let row" mat-cell>
             @if (playerData(row).height !== undefined) {
               {{ playerData(row).height | number }} cm
             } @else {
@@ -180,31 +184,31 @@
           </td>
         </ng-container>
         <ng-container matColumnDef="foot">
-          <th mat-header-cell *matHeaderCellDef>Foot</th>
-          <td mat-cell *matCellDef="let row">{{ foot(row) }}</td>
+          <th *matHeaderCellDef mat-header-cell>Foot</th>
+          <td *matCellDef="let row" mat-cell>{{ foot(row) }}</td>
         </ng-container>
         <ng-container matColumnDef="joined">
-          <th mat-header-cell *matHeaderCellDef>Joined</th>
-          <td mat-cell *matCellDef="let row">{{ playerDate(row, 'joined') }}</td>
+          <th *matHeaderCellDef mat-header-cell>Joined</th>
+          <td *matCellDef="let row" mat-cell>{{ playerDate(row, 'joined') }}</td>
         </ng-container>
         <ng-container matColumnDef="contractExpires">
-          <th mat-header-cell *matHeaderCellDef>Contract until</th>
-          <td mat-cell *matCellDef="let row">{{ playerDate(row, 'contractExpires') }}</td>
+          <th *matHeaderCellDef mat-header-cell>Contract until</th>
+          <td *matCellDef="let row" mat-cell>{{ playerDate(row, 'contractExpires') }}</td>
         </ng-container>
         <ng-container matColumnDef="marketValue">
-          <th mat-header-cell *matHeaderCellDef>Market value</th>
-          <td mat-cell *matCellDef="let row">{{ marketValue(row) }}</td>
+          <th *matHeaderCellDef mat-header-cell>Market value</th>
+          <td *matCellDef="let row" mat-cell>{{ marketValue(row) }}</td>
         </ng-container>
         <ng-container matColumnDef="sources">
-          <th mat-header-cell *matHeaderCellDef>Sources</th>
-          <td mat-cell *matCellDef="let row">
-            <div class="sources">
+          <th *matHeaderCellDef mat-header-cell>Sources</th>
+          <td *matCellDef="let row" mat-cell>
+            <div class="qdb-sources flex flex-wrap gap-tight">
               @for (source of row.sources; track source.sourceName) {
                 @if (source.sourceUrl && source.available) {
                   <a
-                    [href]="source.sourceUrl"
                     target="_blank"
                     rel="noopener noreferrer"
+                    [href]="source.sourceUrl"
                     [attr.aria-label]="sourceLabel(source.sourceName) + ' source for ' + row.name"
                   >
                     {{ sourceLabel(source.sourceName) }}
@@ -222,9 +226,9 @@
           </td>
         </ng-container>
         <ng-container matColumnDef="badge">
-          <th mat-header-cell *matHeaderCellDef>Badges</th>
-          <td mat-cell *matCellDef="let row">
-            <span class="record-badges">
+          <th *matHeaderCellDef mat-header-cell>Badges</th>
+          <td *matCellDef="let row" mat-cell>
+            <span class="qdb-record-badges">
               <app-combined-entity-status-badge
                 [entityKind]="entity"
                 [status]="row.needsReview ? 'needsReview' : 'ready'"
@@ -236,16 +240,18 @@
           </td>
         </ng-container>
         <ng-container matColumnDef="created">
-          <th mat-header-cell *matHeaderCellDef>Created</th>
-          <td mat-cell *matCellDef="let row">{{ row.createdAt | date: 'medium' }}</td>
+          <th *matHeaderCellDef mat-header-cell>Created</th>
+          <td *matCellDef="let row" mat-cell>{{ row.createdAt | date: 'medium' }}</td>
         </ng-container>
         <ng-container matColumnDef="updated">
-          <th mat-header-cell *matHeaderCellDef>Updated</th>
-          <td mat-cell *matCellDef="let row">{{ row.updatedAt | date: 'medium' }}</td>
+          <th *matHeaderCellDef mat-header-cell>Updated</th>
+          <td *matCellDef="let row" mat-cell>{{ row.updatedAt | date: 'medium' }}</td>
         </ng-container>
         <ng-container matColumnDef="actions">
-          <th mat-header-cell *matHeaderCellDef><span class="visually-hidden">Actions</span></th>
-          <td mat-cell *matCellDef="let row">
+          <th *matHeaderCellDef mat-header-cell>
+            <span class="qdb-visually-hidden">Actions</span>
+          </th>
+          <td *matCellDef="let row" mat-cell>
             <button
               matIconButton
               type="button"
@@ -282,13 +288,13 @@
             </mat-menu>
           </td>
         </ng-container>
-        <tr mat-header-row *matHeaderRowDef="displayedColumns()"></tr>
+        <tr *matHeaderRowDef="displayedColumns()" mat-header-row></tr>
         <tr
-          mat-row
           *matRowDef="let row; columns: displayedColumns()"
+          mat-row
           [class.selected-row]="rowSelected(row)"
         ></tr>
-        <tr class="empty-row" *matNoDataRow>
+        <tr *matNoDataRow class="qdb-empty-row">
           <td [attr.colspan]="displayedColumns().length">
             @if (!loading()) {
               No project {{ entity }} match the current filters.
@@ -309,7 +315,7 @@
 
   @if (selectedCount()) {
     <aside
-      class="selection-footer"
+      class="qdb-selection-footer"
       [attr.aria-label]="'Selected project ' + entity.slice(0, -1) + ' actions'"
       [attr.aria-busy]="bulkActionPending()"
     >
@@ -317,9 +323,9 @@
         {{ selectedCount() | number }}
         {{ selectedCount() === 1 ? entity.slice(0, -1) : entity }} selected
       </strong>
-      <div class="selection-actions">
+      <div class="qdb-selection-actions">
         <button
-          class="bulk-badges-button"
+          class="qdb-bulk-badges-button"
           matButton="tonal"
           type="button"
           [disabled]="bulkActionPending()"
@@ -329,7 +335,7 @@
           Manage badges
         </button>
         <button
-          class="bulk-delete-button"
+          class="qdb-bulk-delete-button"
           matButton="filled"
           type="button"
           [disabled]="bulkActionPending()"

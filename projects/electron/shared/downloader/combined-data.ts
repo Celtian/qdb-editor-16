@@ -1,5 +1,4 @@
 import {
-  sourceNames,
   type FieldConflict,
   type FieldResolution,
   type FieldResolutions,
@@ -7,6 +6,7 @@ import {
   type PlayerMatchGroup,
   type PlayerSourceRecord,
   type SourceName,
+  sourceNames,
 } from './contracts.js';
 
 export const defaultSourcePriority = [...sourceNames];

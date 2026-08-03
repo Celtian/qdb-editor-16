@@ -3,6 +3,7 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+
 import type { EntityKind } from '../../../../../shared/downloader/contracts';
 import type { CustomBadge } from '../../../../../shared/downloader/custom-badge';
 import { CustomBadge as CustomBadgeView } from '../../../shared/custom-badge/custom-badge';
@@ -29,56 +30,8 @@ export interface ManageCustomBadgesDialogValue {
 @Component({
   selector: 'app-manage-custom-badges-dialog',
   imports: [CustomBadgeView, DecimalPipe, MatButtonModule, MatCheckboxModule, MatDialogModule],
-  template: `
-    <h2 mat-dialog-title>Manage custom badges</h2>
-    <mat-dialog-content>
-      <p>
-        Update badges for {{ data.entities.length | number }}
-        {{ data.entities.length === 1 ? singularEntity() : data.entity }}.
-      </p>
-      @if (data.badges.length) {
-        <div class="badge-options" role="group" aria-label="Custom badges">
-          @for (badge of data.badges; track badge.id) {
-            <mat-checkbox
-              [checked]="stateFor(badge.id) === 'all'"
-              [indeterminate]="stateFor(badge.id) === 'some'"
-              (change)="setState(badge.id, $event.checked)"
-            >
-              <app-custom-badge [badge]="badge" />
-            </mat-checkbox>
-          }
-        </div>
-        @if (hasMixedBadges()) {
-          <p class="hint">
-            A mixed checkbox means the badge is assigned to only some selected records. Leave it
-            unchanged to preserve those assignments.
-          </p>
-        }
-      } @else {
-        <p>
-          No custom badges exist yet. Create one in
-          {{ data.settingsPathLabel ?? 'Global settings → Badges' }}.
-        </p>
-      }
-    </mat-dialog-content>
-    <mat-dialog-actions align="end">
-      <button matButton mat-dialog-close type="button">Cancel</button>
-      <button matButton="filled" type="button" [disabled]="!hasChanges()" (click)="save()">
-        Apply badges
-      </button>
-    </mat-dialog-actions>
-  `,
-  styles: `
-    .badge-options {
-      display: grid;
-      gap: 0.5rem;
-      min-width: min(24rem, 70vw);
-    }
-    .hint {
-      color: var(--mat-sys-on-surface-variant);
-      max-width: 32rem;
-    }
-  `,
+  templateUrl: './manage-custom-badges-dialog.html',
+  styleUrl: './manage-custom-badges-dialog.css',
 })
 export class ManageCustomBadgesDialog {
   protected readonly data = inject<ManageCustomBadgesDialogData>(MAT_DIALOG_DATA);

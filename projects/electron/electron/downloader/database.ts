@@ -1,14 +1,23 @@
-import { DatabaseSync } from 'node:sqlite';
 import { mkdirSync } from 'node:fs';
 import { dirname } from 'node:path';
+import { DatabaseSync } from 'node:sqlite';
+
+import type {
+  CombinedCustomBadge,
+  CombinedCustomBadgeSummary,
+} from '../../shared/downloader/combined-custom-badge.js';
 import {
-  isSourceName,
-  leagueTiers,
-  playerPositionDetails,
-  sourceLabels,
-  sourceNames,
-  sourceSupportsSeason,
-  type CommitImportRequest,
+  collectPlayerConflicts,
+  defaultSourcePriority,
+  identifyPlayers,
+  normalizePersonName,
+  normalizeSourcePriority,
+  resolveNameValue,
+  resolvePlayer,
+  resolveValue,
+} from '../../shared/downloader/combined-data.js';
+import {
+  type CombineTeamCandidate,
   type CombinedEntity,
   type CombinedEntityFilterOptions,
   type CombinedEntityFilterOptionsRequest,
@@ -18,7 +27,7 @@ import {
   type CombinedPlayer,
   type CombinedSourceRef,
   type CombinedTeam,
-  type CombineTeamCandidate,
+  type CommitImportRequest,
   type CommitTeamCombinationRequest,
   type CountryFilterOption,
   type CreateCombinedCustomBadgeRequest,
@@ -37,80 +46,72 @@ import {
   type EditableEntity,
   type EditableEntityKind,
   type Entity,
-  type EntityKind,
   type EntityFilterOptions,
   type EntityFilterOptionsRequest,
-  type ExportConfigurationPreference,
+  type EntityKind,
   type ExportColumnSelection,
+  type ExportConfigurationPreference,
   type ExportFieldNameConfiguration,
   type ExportFieldNamePresetPreference,
   type ExportVisibilityPresetPreference,
-  type ImportConflictSummary,
+  type FieldConflict,
+  type FieldResolutions,
   type ImportChangeSummary,
+  type ImportConflictSummary,
   type ImportPreview,
   type ImportResult,
   type ImportTeam,
-  type FieldConflict,
-  type FieldResolutions,
-  type LeagueSynchronizeImportOperation,
   type League,
+  type LeagueSynchronizeImportOperation,
   type NationalityFilterOption,
   type Page,
   type PageRequest,
   type Player,
   type PlayerInput,
-  type Project,
-  type ProjectSummary,
   type PlayerMatchGroup,
   type PlayerSourceRecord,
+  type Project,
+  type ProjectSummary,
   type SourceDataDeletionCounts,
   type SourceName,
+  type SynchronizeImportOperation,
   type Team,
   type TeamCombinationPreview,
   type TeamCombinationResult,
-  type SynchronizeImportOperation,
-  type UpdateEntityMetadataRequest,
-  type UpdateCustomBadgeRequest,
   type UpdateCombinedCustomBadgeRequest,
   type UpdateCombinedEntityCustomBadgesRequest,
   type UpdateCombinedEntityCustomBadgesResult,
+  type UpdateCustomBadgeRequest,
   type UpdateEntityCustomBadgesRequest,
   type UpdateEntityCustomBadgesResult,
+  type UpdateEntityMetadataRequest,
   type UpdateLeagueCountriesRequest,
   type UpdateLeagueTiersRequest,
   type UpdateTeamCountriesRequest,
+  isSourceName,
+  leagueTiers,
+  playerPositionDetails,
+  sourceLabels,
+  sourceNames,
+  sourceSupportsSeason,
 } from '../../shared/downloader/contracts.js';
+import {
+  type CustomBadge,
+  type CustomBadgeColor,
+  type CustomBadgeSummary,
+  customBadgeLimits,
+  isCustomBadgeColor,
+} from '../../shared/downloader/custom-badge.js';
+import {
+  createEntityStatusThresholds,
+  normalizeEntityStatus,
+} from '../../shared/downloader/entity-status.js';
 import {
   cloneExportColumns,
   cloneExportFieldNames,
   validateExportColumns,
   validateExportFieldNames,
 } from '../../shared/downloader/export-schema.js';
-import type {
-  CombinedCustomBadge,
-  CombinedCustomBadgeSummary,
-} from '../../shared/downloader/combined-custom-badge.js';
-import {
-  collectPlayerConflicts,
-  defaultSourcePriority,
-  identifyPlayers,
-  normalizePersonName,
-  normalizeSourcePriority,
-  resolveNameValue,
-  resolvePlayer,
-  resolveValue,
-} from '../../shared/downloader/combined-data.js';
-import {
-  customBadgeLimits,
-  isCustomBadgeColor,
-  type CustomBadge,
-  type CustomBadgeColor,
-  type CustomBadgeSummary,
-} from '../../shared/downloader/custom-badge.js';
-import {
-  createEntityStatusThresholds,
-  normalizeEntityStatus,
-} from '../../shared/downloader/entity-status.js';
 import { findFootballCountryByCode3 } from '../../shared/downloader/football-countries.js';
 import { isReferenceDate } from '../../shared/downloader/reference-date.js';
 import { ApplicationError } from './errors.js';

@@ -1,4 +1,6 @@
-<a class="skip-link" href="#main-content">Skip to content</a>
+<a class="qdb-skip-link fixed z-100 bg-primary-container p-3" href="#main-content"
+  >Skip to content</a
+>
 <mat-toolbar>
   @if (compact()) {
     <button
@@ -10,12 +12,12 @@
       <mat-icon>menu</mat-icon>
     </button>
   }
-  <a class="brand" routerLink="/">
+  <a class="qdb-brand" routerLink="/">
     <img ngSrc="qdb-editor-16-icon.png" width="30" height="30" alt="" priority />
     <span>QDB Editor 16</span>
     <small>Documentation</small>
   </a>
-  <span class="spacer"></span>
+  <span class="qdb-spacer"></span>
   <a matButton href="https://github.com/Celtian/qdb-editor-16" target="_blank" rel="noopener">
     <mat-icon>code</mat-icon>
     GitHub
@@ -23,18 +25,18 @@
 </mat-toolbar>
 <mat-sidenav-container>
   <mat-sidenav
+    aria-label="Documentation navigation"
     [mode]="compact() ? 'over' : 'side'"
     [opened]="opened()"
     (closedStart)="mobileOpen.set(false)"
-    aria-label="Documentation navigation"
   >
     <mat-nav-list>
       @for (page of pages; track page.path) {
         <a
           mat-list-item
-          [routerLink]="'/' + page.path"
           routerLinkActive="active"
           ariaCurrentWhenActive="page"
+          [routerLink]="'/' + page.path"
           [routerLinkActiveOptions]="{ exact: true }"
           (click)="closeMobile()"
         >

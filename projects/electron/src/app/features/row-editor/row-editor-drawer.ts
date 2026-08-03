@@ -2,12 +2,14 @@ import { CdkScrollable } from '@angular/cdk/scrolling';
 import { Component, computed, inject, signal } from '@angular/core';
 import { FormField, form, required, submit, validate } from '@angular/forms/signals';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialog, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+
 import { registerFifaDatePrototype } from 'fifadate';
-import { Attribute, CalculateUtils, Fifa, Position, type FifaRatingAttributes } from 'fifarating';
+import { Attribute, CalculateUtils, Fifa, type FifaRatingAttributes, Position } from 'fifarating';
+
 import type { FieldDescriptor, TableRow, TableValue } from '../../../../shared/contracts';
 import { AppStore } from '../../core/app-store';
 import { ConfirmDialog } from '../../core/confirm-dialog';

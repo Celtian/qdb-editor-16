@@ -8,13 +8,14 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatSnackBar } from '@angular/material/snack-bar';
+
 import type {
   CustomBadge,
   CustomBadgeSummary,
 } from '../../../../../shared/downloader/custom-badge';
 import {
-  entityStatusSettingLimits,
   type EntityStatusSettings,
+  entityStatusSettingLimits,
 } from '../../../../../shared/downloader/entity-status';
 import { formatUiNumber } from '../../../../../shared/downloader/ui-format';
 import { DesktopApi } from '../../../core/downloader-api';

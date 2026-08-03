@@ -1,7 +1,9 @@
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { TestBed } from '@angular/core/testing';
 import { MatSelectHarness } from '@angular/material/select/testing';
+
 import axe from 'axe-core';
+
 import type {
   CommitImportRequest,
   ImportPreview,
@@ -100,7 +102,7 @@ describe('ImportSummary', () => {
     await fixture.whenStable();
     const loader = TestbedHarnessEnvironment.loader(fixture);
     const existingPolicy = await loader.getHarness(
-      MatSelectHarness.with({ selector: '.existing-record-policy' }),
+      MatSelectHarness.with({ selector: '.qdb-existing-record-policy' }),
     );
 
     expect(fixture.nativeElement.textContent).toContain('GB1 — Premier League');
@@ -121,7 +123,7 @@ describe('ImportSummary', () => {
     fixture.componentRef.setInput('mergeOptions', options);
     await fixture.whenStable();
     const playerPolicy = await TestbedHarnessEnvironment.loader(fixture).getHarness(
-      MatSelectHarness.with({ selector: '.player-team-policy' }),
+      MatSelectHarness.with({ selector: '.qdb-player-team-policy' }),
     );
 
     expect(await playerPolicy.isDisabled()).toBe(true);

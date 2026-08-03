@@ -1,16 +1,18 @@
+import { Tree, TreeItem, TreeItemGroup } from '@angular/aria/tree';
 import { NgOptimizedImage } from '@angular/common';
 import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Tree, TreeItem, TreeItemGroup } from '@angular/aria/tree';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router';
+
 import { filter, startWith } from 'rxjs';
+
+import { OBJECT_CONFIG, OBJECT_KINDS } from '../features/objects/object-config';
 import { AboutDialog } from './about-dialog';
 import { AppStore } from './app-store';
-import { OBJECT_CONFIG, OBJECT_KINDS } from '../features/objects/object-config';
 
 const projectNode = (projectId: string): string => `project:${projectId}`;
 const sourceNode = (projectId: string): string => `source:${projectId}`;

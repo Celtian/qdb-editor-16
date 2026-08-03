@@ -7,7 +7,9 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterOutlet } from '@angular/router';
+
 import { map } from 'rxjs';
+
 import { AppNavigation } from './core/app-navigation';
 import { AppStore } from './core/app-store';
 import { Theme } from './core/theme';

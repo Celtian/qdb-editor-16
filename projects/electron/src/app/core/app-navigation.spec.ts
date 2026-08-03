@@ -1,17 +1,19 @@
+import { TreeHarness, TreeItemHarness } from '@angular/aria/tree/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { TreeHarness, TreeItemHarness } from '@angular/aria/tree/testing';
 import { MatDialog } from '@angular/material/dialog';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
-import { provideRouter, Router } from '@angular/router';
+import { Router, provideRouter } from '@angular/router';
+
 import axe from 'axe-core';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+
 import type {
   DatabaseDescriptor,
   ProjectDescriptor,
   TableDescriptor,
 } from '../../../shared/contracts';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { AppNavigation } from './app-navigation';
 import { AppStore } from './app-store';
 import { DesktopApi } from './desktop-api';
@@ -135,7 +137,7 @@ describe('AppNavigation', () => {
     const loader = TestbedHarnessEnvironment.loader(fixture);
     const tree = await loader.getHarness(TreeHarness);
 
-    expect(element.querySelector('.brand[aria-current="page"]')).not.toBeNull();
+    expect(element.querySelector('.qdb-brand[aria-current="page"]')).not.toBeNull();
     expect(await tree.getItems({ level: 1 })).toHaveLength(2);
     element
       .querySelector<HTMLButtonElement>(`button[aria-label="Expand ${project.name}"]`)!
@@ -245,7 +247,7 @@ describe('AppNavigation', () => {
     await fixture.whenStable();
     expect(element.textContent).toContain('Catalog unavailable');
 
-    element.querySelector<HTMLButtonElement>('.error-message button')!.click();
+    element.querySelector<HTMLButtonElement>('.qdb-error-message button')!.click();
     await fixture.whenStable();
     expect(element.textContent).toContain(database.name);
   });

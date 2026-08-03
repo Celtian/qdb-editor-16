@@ -1,4 +1,5 @@
 import { describe, expect, test } from 'vitest';
+
 import { toCsv, toJson } from './export-format.js';
 
 describe('export formatting', () => {

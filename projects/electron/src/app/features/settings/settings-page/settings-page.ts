@@ -1,16 +1,17 @@
 import { Component, computed, inject, resource, signal } from '@angular/core';
 import { FormField, disabled, form } from '@angular/forms/signals';
-import { ActivatedRoute } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ActivatedRoute } from '@angular/router';
+
 import {
+  type SourceName,
   sourceLabels,
   sourceNames,
-  type SourceName,
 } from '../../../../../shared/downloader/contracts';
 import { DesktopApi } from '../../../core/downloader-api';
 import { PageHeader } from '../../../shared/page-header/page-header';

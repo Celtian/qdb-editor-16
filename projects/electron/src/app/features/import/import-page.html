@@ -5,12 +5,12 @@
   </div>
 </app-page-header>
 
-<section class="page max-w-5xl" aria-labelledby="import-heading">
+<section class="qdb-page max-w-5xl" aria-labelledby="import-heading">
   @if (store.error()) {
-    <p class="error-banner" role="alert">{{ store.error() }}</p>
+    <p class="qdb-error-banner" role="alert">{{ store.error() }}</p>
   }
 
-  <mat-card appearance="outlined" class="wizard-card">
+  <mat-card appearance="outlined" class="qdb-wizard-card">
     <mat-card-header>
       <mat-card-title>Import database</mat-card-title>
       <mat-card-subtitle>
@@ -20,46 +20,46 @@
 
     <mat-card-content>
       <mat-stepper class="qdb-wizard" linear aria-label="Database import wizard">
-        <ng-template matStepperIcon="number" let-index="index">
+        <ng-template let-index="index" matStepperIcon="number">
           <span aria-hidden="true">{{ index + 1 }}</span>
         </ng-template>
-        <ng-template matStepperIcon="edit" let-index="index">
+        <ng-template let-index="index" matStepperIcon="edit">
           <span aria-hidden="true">{{ index + 1 }}</span>
         </ng-template>
-        <ng-template matStepperIcon="done" let-index="index">
+        <ng-template let-index="index" matStepperIcon="done">
           <span aria-hidden="true">{{ index + 1 }}</span>
         </ng-template>
 
         <mat-step [completed]="true">
           <ng-template matStepLabel>Format</ng-template>
-          <div class="step-content">
+          <div class="qdb-step-content">
             <div>
               <h2>Choose source format</h2>
               <p>Select the kind of FIFA 16 database you want to import.</p>
             </div>
 
             <mat-radio-group
-              class="format-options"
+              class="qdb-format-options"
               aria-label="Database source format"
               [value]="sourceKind()"
               [disabled]="store.loading()"
               (change)="changeKind($event.value)"
             >
               <mat-radio-button value="text-folder">
-                <span class="choice-label">
+                <span class="qdb-choice-label">
                   <strong>DB Master text folder</strong>
                   <small> Import a folder of UTF-16LE, tab-separated FIFA 16 text tables. </small>
                 </span>
               </mat-radio-button>
               <mat-radio-button value="t3db">
-                <span class="choice-label">
+                <span class="qdb-choice-label">
                   <strong>PC t3db pair</strong>
                   <small>Import a .db file together with its matching metadata XML schema.</small>
                 </span>
               </mat-radio-button>
             </mat-radio-group>
 
-            <div class="step-actions">
+            <div class="qdb-step-actions">
               <a matButton [routerLink]="['/projects', projectId()]">Cancel</a>
               <button type="button" matButton="filled" matStepperNext>Next</button>
             </div>
@@ -68,7 +68,7 @@
 
         <mat-step [completed]="candidate() !== undefined">
           <ng-template matStepLabel>Source</ng-template>
-          <div class="step-content">
+          <div class="qdb-step-content">
             <div>
               <h2>Select source</h2>
               <p>
@@ -81,7 +81,7 @@
             </div>
 
             @if (sourceKind() === 'text-folder') {
-              <mat-form-field class="source-picker" appearance="outline">
+              <mat-form-field class="w-full" appearance="outline">
                 <mat-label>DB Master text folder</mat-label>
                 <input matInput readonly [value]="selectedSourcePath() ?? ''" />
                 <button
@@ -101,8 +101,8 @@
                 </mat-hint>
               </mat-form-field>
             } @else {
-              <div class="source-fields">
-                <mat-form-field class="source-picker" appearance="outline">
+              <div class="grid gap-4">
+                <mat-form-field class="w-full" appearance="outline">
                   <mat-label>t3db database</mat-label>
                   <input matInput readonly [value]="databaseFile()?.displayPath ?? ''" />
                   <button
@@ -119,7 +119,7 @@
                   </button>
                 </mat-form-field>
 
-                <mat-form-field class="source-picker" appearance="outline">
+                <mat-form-field class="w-full" appearance="outline">
                   <mat-label>Metadata XML</mat-label>
                   <input matInput readonly [value]="metadataFile()?.displayPath ?? ''" />
                   <button
@@ -139,13 +139,16 @@
             }
 
             @if (candidate(); as source) {
-              <div class="source-summary" role="status">
+              <div
+                class="flex items-center gap-2 rounded-xl bg-secondary-container px-4 py-3.5 text-on-secondary-container"
+                role="status"
+              >
                 <mat-icon aria-hidden="true">check_circle</mat-icon>
                 <span> FIFA 16 source detected · {{ source.tables.length }} supported tables </span>
               </div>
             }
 
-            <div class="step-actions">
+            <div class="qdb-step-actions">
               <button type="button" matButton matStepperPrevious [disabled]="store.loading()">
                 Back
               </button>
@@ -163,17 +166,20 @@
 
         <mat-step>
           <ng-template matStepLabel>Review</ng-template>
-          <div class="step-content">
+          <div class="qdb-step-content">
             <div>
               <h2>Review database</h2>
               <p>Confirm the detected tables and choose the managed database name.</p>
             </div>
 
             @if (candidate(); as source) {
-              <mat-card appearance="outlined" class="review-card">
+              <mat-card appearance="outlined" class="qdb-review-card">
                 <mat-card-content>
-                  <div class="review-heading">
-                    <span class="source-icon" aria-hidden="true">
+                  <div class="qdb-review-heading flex items-center gap-3.5">
+                    <span
+                      class="qdb-source-icon grid flex-none place-items-center rounded-xl bg-secondary-container text-on-secondary-container"
+                      aria-hidden="true"
+                    >
                       <mat-icon>{{ source.sourceKind === 't3db' ? 'storage' : 'folder' }}</mat-icon>
                     </span>
                     <div>
@@ -187,12 +193,12 @@
                     </div>
                   </div>
 
-                  <p class="source-path" [title]="source.originalPaths.join(' · ')">
+                  <p class="qdb-source-path" [title]="source.originalPaths.join(' · ')">
                     <mat-icon aria-hidden="true">folder_open</mat-icon>
                     <span>{{ source.originalPaths.join(' · ') }}</span>
                   </p>
 
-                  <mat-form-field appearance="outline" class="name-field">
+                  <mat-form-field appearance="outline" class="qdb-name-field w-full">
                     <mat-label>Managed database name</mat-label>
                     <input matInput autocomplete="off" [formField]="importForm.name" />
                     @if (importForm.name().touched() && importForm.name().errors().length) {
@@ -201,7 +207,7 @@
                   </mat-form-field>
 
                   <div>
-                    <h3 class="table-heading">Supported tables</h3>
+                    <h3 class="mb-3">Supported tables</h3>
                     <mat-chip-set aria-label="Supported source tables">
                       @for (table of source.tables; track table.table) {
                         <mat-chip>{{ table.table }} · {{ table.rows }} rows</mat-chip>
@@ -210,9 +216,11 @@
                   </div>
 
                   @if (source.warnings.length) {
-                    <div class="source-warnings">
+                    <div class="grid gap-3">
                       @for (warning of source.warnings; track warning) {
-                        <div class="source-warning">
+                        <div
+                          class="qdb-source-warning flex gap-3 rounded-xl bg-tertiary-container px-4 py-3.5 text-on-tertiary-container"
+                        >
                           <mat-icon aria-hidden="true">warning_amber</mat-icon>
                           <p>{{ warning }}</p>
                         </div>
@@ -223,7 +231,7 @@
               </mat-card>
             }
 
-            <div class="step-actions">
+            <div class="qdb-step-actions">
               <button type="button" matButton matStepperPrevious [disabled]="store.loading()">
                 Back
               </button>

@@ -2,7 +2,8 @@
   display: block;
   height: 100%;
 }
-.filter-form {
+
+.qdb-filter-form {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -11,6 +12,7 @@
   overflow: hidden;
   width: 100%;
 }
+
 header {
   align-items: center;
   border-bottom: 1px solid var(--mat-sys-outline-variant);
@@ -18,11 +20,13 @@ header {
   justify-content: space-between;
   padding: 0.75rem 1rem;
 }
+
 h2 {
   font-size: 1.25rem;
   margin: 0;
 }
-.filter-fields {
+
+.qdb-filter-fields {
   display: flex;
   flex: 1;
   flex-direction: column;
@@ -30,34 +34,41 @@ h2 {
   overflow: auto;
   padding: 1.25rem 1rem;
 }
+
 mat-form-field {
   width: 100%;
 }
+
 .mat-mdc-chip-grid input {
   min-width: 8rem;
 }
-.country-option,
-.nationality-option {
+
+.qdb-country-option,
+.qdb-nationality-option {
   align-items: center;
   display: inline-flex;
   gap: 0.75rem;
 }
-.filter-badges,
-.position-badges {
+
+.qdb-filter-badges,
+.qdb-position-badges {
   align-items: center;
   display: flex;
   flex-wrap: wrap;
   gap: 0.375rem;
 }
-.filter-error {
+
+.qdb-filter-error {
   background: var(--mat-sys-error-container);
   color: var(--mat-sys-on-error-container);
   margin: 1rem 1rem 0;
   padding: 0.75rem 1rem;
 }
-.filter-error p {
+
+.qdb-filter-error p {
   margin: 0 0 0.5rem;
 }
+
 footer {
   align-items: center;
   border-top: 1px solid var(--mat-sys-outline-variant);
@@ -65,6 +76,7 @@ footer {
   gap: 0.5rem;
   padding: 0.75rem 1rem;
 }
+
 footer span {
   flex: 1;
 }

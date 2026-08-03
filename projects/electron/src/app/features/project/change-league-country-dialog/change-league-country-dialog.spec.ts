@@ -3,7 +3,9 @@ import { TestBed } from '@angular/core/testing';
 import { MatAutocompleteHarness } from '@angular/material/autocomplete/testing';
 import { MatButtonHarness } from '@angular/material/button/testing';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+
 import axe from 'axe-core';
+
 import {
   ChangeLeagueCountryDialog,
   type ChangeLeagueCountryDialogData,
@@ -30,7 +32,7 @@ const createDialog = async (data: ChangeLeagueCountryDialogData) => {
 };
 
 const expectSelectedCountryFlag = (element: HTMLElement, code?: string): void => {
-  const flag = element.querySelector<HTMLImageElement>('.selected-country-flag img');
+  const flag = element.querySelector<HTMLImageElement>('.qdb-selected-country-flag img');
   if (!code) {
     expect(flag).toBeNull();
     return;
@@ -49,7 +51,7 @@ describe('ChangeLeagueCountryDialog', () => {
       mixedCountries: false,
     });
     const autocomplete = await documentLoader.getHarness(
-      MatAutocompleteHarness.with({ selector: '.country-input' }),
+      MatAutocompleteHarness.with({ selector: '.qdb-country-input' }),
     );
 
     expect(await autocomplete.getValue()).toBe('Czech Republic');
@@ -105,7 +107,7 @@ describe('ChangeLeagueCountryDialog', () => {
       mixedCountries: false,
     });
     const autocomplete = await documentLoader.getHarness(
-      MatAutocompleteHarness.with({ selector: '.country-input' }),
+      MatAutocompleteHarness.with({ selector: '.qdb-country-input' }),
     );
     const form = element.querySelector('form');
     if (!form) throw new Error('Country form did not render.');

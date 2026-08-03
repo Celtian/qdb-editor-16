@@ -1,12 +1,3 @@
 :host {
   display: block;
 }
-
-.table-card-icon {
-  align-items: center;
-  background: var(--mat-sys-tertiary-container);
-  border-radius: 0.75rem;
-  color: var(--mat-sys-on-tertiary-container);
-  display: flex;
-  justify-content: center;
-}

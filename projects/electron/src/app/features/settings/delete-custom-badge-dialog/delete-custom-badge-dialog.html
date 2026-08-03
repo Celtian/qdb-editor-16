@@ -1,0 +1,19 @@
+<h2 mat-dialog-title>Delete custom badge?</h2>
+<mat-dialog-content>
+  <p><app-custom-badge [badge]="badge" /></p>
+  @if (badge.assignmentCount) {
+    <p>
+      This also removes the badge from {{ badge.assignmentCount | number }}
+      {{ badge.assignmentCount === 1 ? 'record' : 'records' }} across all projects.
+    </p>
+  } @else {
+    <p>This badge is not assigned to any records.</p>
+  }
+  <p>This action cannot be undone.</p>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button matButton mat-dialog-close type="button">Cancel</button>
+  <button class="qdb-delete-button" matButton="filled" type="button" [mat-dialog-close]="true">
+    Delete badge
+  </button>
+</mat-dialog-actions>

@@ -1,0 +1,62 @@
+td a {
+  color: var(--mat-sys-tertiary);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+td a:hover {
+  text-decoration: underline;
+}
+
+.qdb-empty-row td {
+  color: var(--muted-text);
+  padding: 3rem;
+  text-align: center;
+}
+
+.qdb-error {
+  padding: 1rem;
+}
+
+.qdb-selection-footer {
+  align-items: center;
+  background: var(--mat-sys-surface-container-high);
+  border-top: 1px solid var(--mat-sys-outline-variant);
+  bottom: 0;
+  box-shadow: var(--mat-sys-level3);
+  display: flex;
+  gap: 1rem;
+  inset-inline: var(--project-sidebar-width, 0) 0;
+  justify-content: space-between;
+  min-height: 5rem;
+  padding: 0.75rem clamp(1rem, 4vw, 3.5rem);
+  position: fixed;
+  z-index: 100;
+}
+
+.qdb-bulk-delete-button:not(:disabled) {
+  background-color: var(--mat-sys-error);
+  color: var(--mat-sys-on-error);
+}
+
+@media (width <= 640px) {
+  .qdb-table-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .qdb-search-field,
+  .qdb-filter-button,
+  .qdb-column-button {
+    width: 100%;
+  }
+
+  .qdb-record-count {
+    align-self: flex-end;
+  }
+
+  .qdb-selection-footer {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}

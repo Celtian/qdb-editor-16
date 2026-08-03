@@ -1,10 +1,11 @@
-import { existsSync, mkdirSync, readdirSync, renameSync, rmSync, unlinkSync } from 'node:fs';
 import { randomUUID } from 'node:crypto';
+import { existsSync, mkdirSync, readdirSync, renameSync, rmSync, unlinkSync } from 'node:fs';
 import { join } from 'node:path';
+
 import type {
   CreateProjectRequest,
-  DatabaseObjectSettings,
   DatabaseDescriptor,
+  DatabaseObjectSettings,
   ProjectDeletionResult,
   ProjectDescriptor,
   SourceProvenance,
@@ -13,11 +14,11 @@ import type {
   ValidationSummary,
 } from '../shared/contracts';
 import {
-  cloneDefaultDatabaseObjectSettings,
   DEFAULT_DATABASE_OBJECT_SETTINGS,
+  cloneDefaultDatabaseObjectSettings,
 } from '../shared/object-settings';
 import { FIFA_TABLES } from '../shared/table-config';
-import { closeDatabase, DatabaseSync } from './runtime-sqlite';
+import { DatabaseSync, closeDatabase } from './runtime-sqlite';
 
 const CATALOG_SCHEMA_VERSION = 2;
 const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -149,7 +150,7 @@ export class Catalog {
   readonly projectsDirectory: string;
   private readonly database: DatabaseSync;
 
-  constructor(private readonly root: string) {
+  constructor(root: string) {
     mkdirSync(root, { recursive: true });
     this.projectsDirectory = join(root, 'projects');
     mkdirSync(this.projectsDirectory, { recursive: true });

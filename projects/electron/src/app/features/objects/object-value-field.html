@@ -1,0 +1,22 @@
+<mat-form-field appearance="outline">
+  <mat-label>{{ displayLabel() }}</mat-label>
+  @if (field().type === 'string') {
+    <input matInput type="text" [formField]="textForm.value" />
+  } @else {
+    <input
+      matInput
+      type="number"
+      [step]="field().type === 'int' ? 1 : 'any'"
+      [formField]="numberForm.value"
+    />
+  }
+  @if (field().type === 'string') {
+    @if (textForm.value().touched() && textForm.value().errors()[0]; as error) {
+      <mat-error>{{ error.message }}</mat-error>
+    }
+  } @else {
+    @if (numberForm.value().touched() && numberForm.value().errors()[0]; as error) {
+      <mat-error>{{ error.message }}</mat-error>
+    }
+  }
+</mat-form-field>

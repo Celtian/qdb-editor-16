@@ -1,4 +1,8 @@
 import { Component, computed, inject, signal } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import {
   ActivatedRoute,
   Router,
@@ -6,10 +10,7 @@ import {
   RouterLinkActive,
   RouterOutlet,
 } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { MatToolbarModule } from '@angular/material/toolbar';
+
 import type { ProjectSummary } from '../../../../../shared/downloader/contracts';
 import { DesktopApi } from '../../../core/downloader-api';
 import { AboutDialogService } from '../../../shared/about-dialog/about-dialog';

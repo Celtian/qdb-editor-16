@@ -1,0 +1,52 @@
+/* stylelint-disable no-descending-specificity -- compact navigation overrides the branded navigation base */
+
+@media (width <= 760px) {
+  :host {
+    --settings-sidebar-width: 4.5rem;
+  }
+
+  .qdb-settings-layout {
+    grid-template-columns: var(--settings-sidebar-width) minmax(0, 1fr);
+  }
+
+  .qdb-sidebar-content {
+    padding-inline: 0;
+  }
+
+  .qdb-brand,
+  nav,
+  .qdb-sidebar-footer {
+    margin-inline: auto;
+    width: 3rem;
+  }
+
+  .qdb-brand span,
+  .qdb-nav-group-label,
+  nav a span,
+  .qdb-sidebar-action span {
+    display: none;
+  }
+
+  nav a,
+  .qdb-sidebar-action {
+    --mat-button-text-icon-offset: 0;
+    --mat-button-text-icon-spacing: 0;
+    --mat-button-text-with-icon-horizontal-padding: 0;
+
+    justify-content: center;
+    min-width: 0;
+  }
+
+  .qdb-brand mat-icon,
+  nav a mat-icon,
+  .qdb-sidebar-action mat-icon {
+    --sidebar-icon-size: 1.5rem;
+
+    font-size: var(--sidebar-icon-size);
+    height: var(--sidebar-icon-size);
+    line-height: var(--sidebar-icon-size);
+    margin-inline: 0;
+    overflow: visible;
+    width: var(--sidebar-icon-size);
+  }
+}

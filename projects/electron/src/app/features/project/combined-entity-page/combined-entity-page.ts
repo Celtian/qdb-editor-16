@@ -1,10 +1,10 @@
 import { DatePipe, DecimalPipe } from '@angular/common';
-import { Component, computed, DestroyRef, inject, signal } from '@angular/core';
+import { Component, DestroyRef, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -15,8 +15,8 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+
 import {
-  sourceLabels,
   type CombinedEntity,
   type CombinedEntityFilterOptions,
   type CombinedEntityKind,
@@ -25,6 +25,7 @@ import {
   type CombinedTeam,
   type PlayerFoot,
   type SourceName,
+  sourceLabels,
 } from '../../../../../shared/downloader/contracts';
 import { findFootballCountryByCode3 } from '../../../../../shared/downloader/football-countries';
 import { formatReferenceDate } from '../../../../../shared/downloader/reference-date';
@@ -35,8 +36,8 @@ import {
 } from '../../../../../shared/downloader/ui-format';
 import { DesktopApi } from '../../../core/downloader-api';
 import {
-  combinedEntityStatuses,
   CombinedEntityStatusBadge,
+  combinedEntityStatuses,
 } from '../../../shared/combined-entity-status-badge/combined-entity-status-badge';
 import { CountryFlag } from '../../../shared/country-flag/country-flag';
 import { CustomBadge as CustomBadgeView } from '../../../shared/custom-badge/custom-badge';
@@ -45,28 +46,28 @@ import { PositionBadge } from '../../../shared/position-badge/position-badge';
 import { PositionDetailBadge } from '../../../shared/position-detail-badge/position-detail-badge';
 import {
   CombinedEntityFilterDrawer,
-  copyCombinedEntityFilters,
-  emptyCombinedEntityFilters,
   type CombinedEntityFilterDrawerData,
   type CombinedEntityFilters,
+  copyCombinedEntityFilters,
+  emptyCombinedEntityFilters,
 } from '../combined-entity-filter-drawer/combined-entity-filter-drawer';
-import {
-  ManageCustomBadgesDialog,
-  type ManageCustomBadgesDialogData,
-  type ManageCustomBadgesDialogValue,
-} from '../manage-custom-badges-dialog/manage-custom-badges-dialog';
 import {
   EntityColumnDrawer,
   type EntityColumnDrawerData,
 } from '../entity-column-drawer/entity-column-drawer';
 import type { ColumnPreference } from '../entity-column-editor/column-layout';
+import {
+  ManageCustomBadgesDialog,
+  type ManageCustomBadgesDialogData,
+  type ManageCustomBadgesDialogValue,
+} from '../manage-custom-badges-dialog/manage-custom-badges-dialog';
 import { CombinedEntityColumnPreferences } from './combined-entity-column-preferences';
-import { CombinedEntityFilterPreferences } from './combined-entity-filter-preferences';
 import {
   combinedColumnsByEntity,
   defaultCombinedColumnPreference,
   visibleCombinedColumnsFromPreference,
 } from './combined-entity-columns';
+import { CombinedEntityFilterPreferences } from './combined-entity-filter-preferences';
 
 interface DeleteCombinedDialogData {
   entity: CombinedEntityKind;
@@ -80,88 +81,8 @@ interface DeleteCombinedDialogData {
 @Component({
   selector: 'app-delete-combined-dialog',
   imports: [MatButtonModule, MatDialogModule, MatRadioModule],
-  template: `
-    <h2 mat-dialog-title>{{ title }}</h2>
-    <mat-dialog-content>
-      <p>
-        <strong>{{ data.bulk ? entityCountLabel + ' selected' : data.name }}</strong>
-      </p>
-      @if (data.entity === 'leagues') {
-        <p>
-          Choose what should happen to {{ teamCountLabel }} and {{ playerCountLabel }}
-          {{ data.bulk ? 'across the selected leagues' : 'in this league' }}.
-        </p>
-        <mat-radio-group aria-label="Project league deletion behavior" [value]="mode()">
-          <mat-radio-button value="detach" (change)="mode.set('detach')">
-            <span class="option-title">
-              Delete {{ data.bulk ? entityCountLabel : 'the league' }} only
-            </span>
-            <span class="option-description">
-              Keep {{ teamCountLabel }} and {{ playerCountLabel }}. The teams will no longer belong
-              to a project league.
-            </span>
-          </mat-radio-button>
-          <mat-radio-button value="cascade" (change)="mode.set('cascade')">
-            <span class="option-title">Delete leagues, teams, and project players</span>
-            <span class="option-description">
-              Permanently delete {{ data.bulk ? entityCountLabel : 'the league' }},
-              {{ teamCountLabel }}, and {{ playerCountLabel }}.
-            </span>
-          </mat-radio-button>
-        </mat-radio-group>
-      } @else if (data.entity === 'teams') {
-        <p>
-          This permanently deletes {{ data.bulk ? entityCountLabel : 'the project team' }} and
-          {{ playerCountLabel }} attached to {{ entityCount === 1 ? 'it' : 'them' }}.
-        </p>
-      } @else {
-        <p>
-          This permanently deletes
-          {{ data.bulk ? entityCountLabel : 'the project player' }}.
-        </p>
-      }
-      <p>Raw source records are not affected.</p>
-      <p>This action cannot be undone.</p>
-    </mat-dialog-content>
-    <mat-dialog-actions align="end">
-      <button matButton mat-dialog-close type="button">Cancel</button>
-      <button
-        class="delete-button"
-        matButton="filled"
-        type="button"
-        [mat-dialog-close]="data.entity === 'leagues' ? mode() : 'delete'"
-      >
-        {{ data.bulk ? 'Delete ' + entityCountLabel : 'Delete' }}
-      </button>
-    </mat-dialog-actions>
-  `,
-  styles: `
-    mat-radio-group {
-      display: grid;
-      gap: 0.75rem;
-      margin-top: 1rem;
-    }
-    mat-radio-button {
-      border: 1px solid var(--mat-sys-outline-variant);
-      border-radius: 0.75rem;
-      padding: 0.75rem;
-    }
-    .option-title,
-    .option-description {
-      display: block;
-    }
-    .option-title {
-      font-weight: 500;
-    }
-    .option-description {
-      color: var(--mat-sys-on-surface-variant);
-      margin-top: 0.25rem;
-    }
-    .delete-button:not(:disabled) {
-      background-color: var(--mat-sys-error);
-      color: var(--mat-sys-on-error);
-    }
-  `,
+  templateUrl: './delete-combined-dialog.html',
+  styleUrl: './delete-combined-dialog.css',
 })
 export class DeleteCombinedDialog {
   protected readonly data = inject<DeleteCombinedDialogData>(MAT_DIALOG_DATA);

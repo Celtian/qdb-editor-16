@@ -1,0 +1,18 @@
+<h2 mat-dialog-title>Delete project?</h2>
+<mat-dialog-content>
+  <p class="qdb-warning-heading">
+    <mat-icon aria-hidden="true">warning</mat-icon>
+    <strong>{{ data.name }}</strong>
+  </p>
+  <p>
+    This permanently removes all leagues, teams, and players in this project. Export folders created
+    for it during this app session will also be removed when possible.
+  </p>
+  <p>This action cannot be undone.</p>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button matButton mat-dialog-close type="button">Cancel</button>
+  <button class="qdb-delete-button" matButton="filled" type="button" [mat-dialog-close]="true">
+    Delete project
+  </button>
+</mat-dialog-actions>

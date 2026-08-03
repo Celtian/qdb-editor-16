@@ -7,7 +7,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { sourceLabels, type ProjectSummary } from '../../../../../shared/downloader/contracts';
+
+import { type ProjectSummary, sourceLabels } from '../../../../../shared/downloader/contracts';
 import { AppStore } from '../../../core/app-store';
 import { ConfirmDialog } from '../../../core/confirm-dialog';
 import { DesktopApi } from '../../../core/desktop-api';

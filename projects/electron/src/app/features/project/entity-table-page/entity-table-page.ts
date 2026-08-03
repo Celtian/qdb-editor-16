@@ -1,8 +1,7 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { DecimalPipe } from '@angular/common';
-import { Component, computed, DestroyRef, inject, signal } from '@angular/core';
+import { Component, DestroyRef, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -16,17 +15,17 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSortModule, type Sort } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+
 import { NgxNullablePipe } from 'ngx-nullable';
+
 import {
-  isSourceName,
-  leagueTiers,
-  playerPositionDetails,
-  sourceLabels,
-  type Entity,
+  type DeleteLeagueMode,
   type EditableEntityKind,
-  type EntityKind,
+  type Entity,
   type EntityFilterOption,
   type EntityFilterOptions,
+  type EntityKind,
   type League,
   type NationalityFilterOption,
   type PageRequest,
@@ -35,28 +34,31 @@ import {
   type PlayerPosition,
   type PlayerPositionDetail,
   type Team,
-  type DeleteLeagueMode,
+  isSourceName,
+  leagueTiers,
+  playerPositionDetails,
+  sourceLabels,
 } from '../../../../../shared/downloader/contracts';
 import type { CustomBadge } from '../../../../../shared/downloader/custom-badge';
+import {
+  type EntityStatus,
+  type EntityStatusSettings,
+  deriveEntityStatuses,
+  isEntityStatus,
+  normalizeEntityStatus,
+} from '../../../../../shared/downloader/entity-status';
+import { findFootballCountryByCode3 } from '../../../../../shared/downloader/football-countries';
 import { formatReferenceDate } from '../../../../../shared/downloader/reference-date';
 import {
   formatEuroCurrency,
   formatUiNumber,
   formatUiTimestamp,
 } from '../../../../../shared/downloader/ui-format';
-import { findFootballCountryByCode3 } from '../../../../../shared/downloader/football-countries';
 import { DesktopApi } from '../../../core/downloader-api';
 import { EntityStatusSettingsService } from '../../../core/entity-status-settings.service';
 import { CountryFlag } from '../../../shared/country-flag/country-flag';
 import { CustomBadge as CustomBadgeView } from '../../../shared/custom-badge/custom-badge';
 import { EntityStatusBadge } from '../../../shared/entity-status-badge/entity-status-badge';
-import {
-  deriveEntityStatuses,
-  isEntityStatus,
-  normalizeEntityStatus,
-  type EntityStatus,
-  type EntityStatusSettings,
-} from '../../../../../shared/downloader/entity-status';
 import { PageHeader } from '../../../shared/page-header/page-header';
 import { PositionBadge, positionBadgeDetails } from '../../../shared/position-badge/position-badge';
 import { PositionDetailBadge } from '../../../shared/position-detail-badge/position-detail-badge';
@@ -68,15 +70,6 @@ import {
   ChangeLeagueTierDialog,
   type ChangeLeagueTierDialogData,
 } from '../change-league-tier-dialog/change-league-tier-dialog';
-import {
-  EntityColumnDrawer,
-  type EntityColumnDrawerData,
-} from '../entity-column-drawer/entity-column-drawer';
-import {
-  EntityFilterDrawer,
-  type EntityFilterDrawerData,
-} from '../entity-filter-drawer/entity-filter-drawer';
-import { emptyEntityFilters, type EntityFilters } from '../entity-filter-form/entity-filter-form';
 import {
   DeleteLeagueDialog,
   type DeleteLeagueDialogData,
@@ -95,6 +88,15 @@ import {
   type EditEntityValue,
 } from '../edit-entity-dialog/edit-entity-dialog';
 import {
+  EntityColumnDrawer,
+  type EntityColumnDrawerData,
+} from '../entity-column-drawer/entity-column-drawer';
+import {
+  EntityFilterDrawer,
+  type EntityFilterDrawerData,
+} from '../entity-filter-drawer/entity-filter-drawer';
+import { type EntityFilters, emptyEntityFilters } from '../entity-filter-form/entity-filter-form';
+import {
   ManageCustomBadgesDialog,
   type ManageCustomBadgesDialogData,
   type ManageCustomBadgesDialogValue,
@@ -102,13 +104,13 @@ import {
 import { EntityColumnPreferences } from './entity-column-preferences';
 import { EntityFilterPreferences } from './entity-filter-preferences';
 import {
+  type EntityColumnDefinition,
+  type EntityColumnKey,
+  type EntityColumnPreference,
   columnsByEntity,
   defaultColumnPreference,
   entityColumnLabels,
   visibleColumnsFromPreference,
-  type EntityColumnDefinition,
-  type EntityColumnKey,
-  type EntityColumnPreference,
 } from './entity-table-columns';
 
 interface DisplayRow {

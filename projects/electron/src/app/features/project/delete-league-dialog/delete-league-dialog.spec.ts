@@ -3,7 +3,9 @@ import { TestBed } from '@angular/core/testing';
 import { MatButtonHarness } from '@angular/material/button/testing';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatRadioButtonHarness } from '@angular/material/radio/testing';
+
 import axe from 'axe-core';
+
 import { DeleteLeagueDialog } from './delete-league-dialog';
 
 describe('DeleteLeagueDialog', () => {

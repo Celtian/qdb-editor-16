@@ -9,15 +9,15 @@
   </a>
 </app-page-header>
 
-<section class="page migration-page">
+<section class="qdb-page qdb-migration-page grid gap-4">
   @if (loading()) {
     <mat-progress-bar mode="indeterminate" aria-label="Reading legacy database" />
   }
   @if (error()) {
-    <p class="error-banner" role="alert">{{ error() }}</p>
+    <p class="qdb-error-banner" role="alert">{{ error() }}</p>
   }
   @if (result(); as migrationResult) {
-    <p class="success-banner" role="status">
+    <p class="qdb-success-banner" role="status">
       Migration completed: {{ migrationResult.projectsCreated }} projects created and
       {{ migrationResult.projectsMerged }} merged.
     </p>
@@ -30,7 +30,7 @@
       <mat-card-subtitle>The selected SQLite file is always opened read-only.</mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
-      <p class="source-path">{{ sourcePath() || 'No legacy database detected.' }}</p>
+      <p class="qdb-source-path">{{ sourcePath() || 'No legacy database detected.' }}</p>
     </mat-card-content>
     <mat-card-actions align="end">
       @if (sourcePath()) {
@@ -57,9 +57,11 @@
         </mat-card-subtitle>
       </mat-card-header>
       <mat-card-content>
-        <div class="project-list">
+        <div class="grid gap-3">
           @for (project of migrationPreview.projects; track project.legacyProjectId) {
-            <article class="project-preview">
+            <article
+              class="qdb-project-preview flex items-center justify-between gap-4 rounded-xl border border-outline-variant p-4 max-narrow:flex-col max-narrow:items-start"
+            >
               <div>
                 <h2>{{ project.name }}</h2>
                 <p>
@@ -88,7 +90,7 @@
           }
         </div>
         @if (migrationPreview.alreadyMigrated) {
-          <p class="already-migrated" role="status">
+          <p class="mb-0 text-primary" role="status">
             This exact legacy database has already been migrated.
           </p>
         }

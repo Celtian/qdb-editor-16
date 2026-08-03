@@ -1,7 +1,8 @@
+import { openFifaDatabase } from 'fifa-t3db';
 import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import { openFifaDatabase } from 'fifa-t3db';
+
 import type { SourceProvenance, TableRowValues, ValidationReport } from '../shared/contracts';
 import { FIFA_TABLES } from '../shared/table-config';
 import { parseTextTable } from '../shared/text-format';

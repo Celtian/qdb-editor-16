@@ -1,5 +1,6 @@
-import { existsSync } from 'node:fs';
 import { Datatype, type Field } from 'fifatables';
+import { existsSync } from 'node:fs';
+
 import type {
   FieldDescriptor,
   ObjectDeleteRequest,
@@ -8,10 +9,10 @@ import type {
   ObjectListPage,
   ObjectListRequest,
   ObjectReadRequest,
-  SaveRowRequest,
-  SaveRowResult,
   SaveObjectRequest,
   SaveObjectResult,
+  SaveRowRequest,
+  SaveRowResult,
   TableDescriptor,
   TablePage,
   TablePageRequest,
@@ -22,14 +23,14 @@ import type {
   ValidationReport,
 } from '../shared/contracts';
 import {
+  FIFA_TABLES,
   defaultValueFor,
   fieldDescriptor,
-  FIFA_TABLES,
   fieldsFor,
   tableForName,
 } from '../shared/table-config';
-import { closeDatabase, DatabaseSync, type SQLInputValue } from './runtime-sqlite';
 import { FifaObjects } from './fifa-objects';
+import { DatabaseSync, type SQLInputValue, closeDatabase } from './runtime-sqlite';
 import { validateRows } from './validation';
 
 export const FIFA_DATABASE_SCHEMA_VERSION = 1;
@@ -174,7 +175,7 @@ export class FifaDatabase {
   static create(path: string, metadata: Record<string, string>): FifaDatabase {
     if (existsSync(path)) throw new Error('The database file already exists.');
     const fifaDatabase = new FifaDatabase(path, false);
-    fifaDatabase.initialize(metadata);
+    fifaDatabase.#initialize(metadata);
     return fifaDatabase;
   }
 
@@ -468,7 +469,7 @@ export class FifaDatabase {
     };
   }
 
-  private initialize(metadata: Record<string, string>): void {
+  #initialize(metadata: Record<string, string>): void {
     this.database.exec(`
       PRAGMA user_version = ${FIFA_DATABASE_SCHEMA_VERSION};
       CREATE TABLE _metadata (

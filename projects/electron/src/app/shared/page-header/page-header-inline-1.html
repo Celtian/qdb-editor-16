@@ -1,0 +1,21 @@
+<header class="qdb-page-header">
+  <div
+    class="qdb-page-header-icon grid size-16 place-items-center rounded-2xl bg-primary-container text-on-primary-container max-nav:size-14"
+    aria-hidden="true"
+  >
+    <mat-icon>{{ icon() }}</mat-icon>
+  </div>
+  <div class="flex min-w-0 items-center gap-3">
+    <div class="min-w-0">
+      <ng-content select="[pageHeaderContent]" />
+    </div>
+    <div class="qdb-page-header-title-action flex-none">
+      <ng-content select="[pageHeaderTitleAction]" />
+    </div>
+  </div>
+  <div
+    class="qdb-page-header-actions flex flex-wrap items-center justify-end gap-2 max-nav:col-span-full max-nav:justify-start"
+  >
+    <ng-content select="[pageHeaderActions]" />
+  </div>
+</header>

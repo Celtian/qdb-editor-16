@@ -22,18 +22,21 @@
   </div>
 </app-page-header>
 
-<section class="page">
+<section class="qdb-page">
   @if (store.error()) {
-    <p class="error-banner" role="alert">{{ store.error() }}</p>
+    <p class="qdb-error-banner" role="alert">{{ store.error() }}</p>
   }
 
   <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
     @for (database of store.databases(); track database.id) {
       <mat-card appearance="outlined">
         <mat-card-header>
-          <mat-icon class="database-card-icon" mat-card-avatar aria-hidden="true">{{
-            database.status === 'available' ? 'storage' : 'error'
-          }}</mat-icon>
+          <mat-icon
+            class="qdb-database-card-icon flex items-center justify-center rounded-xl bg-tertiary-container text-on-tertiary-container"
+            mat-card-avatar
+            aria-hidden="true"
+            >{{ database.status === 'available' ? 'storage' : 'error' }}</mat-icon
+          >
           <mat-card-title>{{ database.name }}</mat-card-title>
           <mat-card-subtitle>
             {{ database.source.kind === 'blank' ? 'Blank database' : database.source.kind }}
@@ -52,7 +55,7 @@
           </p>
           <p class="text-sm opacity-70">Updated {{ database.updatedAt | date: 'medium' }}</p>
           @if (database.error) {
-            <p class="error" role="alert">{{ database.error }}</p>
+            <p class="qdb-error" role="alert">{{ database.error }}</p>
           }
         </mat-card-content>
         <mat-card-actions align="end">
@@ -69,7 +72,7 @@
       </mat-card>
     } @empty {
       @if (!store.loading()) {
-        <mat-card appearance="outlined" class="empty-state md:col-span-2 xl:col-span-3">
+        <mat-card appearance="outlined" class="qdb-empty-state md:col-span-2 xl:col-span-3">
           <mat-icon>storage</mat-icon>
           <h2>No databases yet</h2>
           <p>Import a FIFA 16 source or start with all supported tables empty.</p>

@@ -1,4 +1,5 @@
 import { randomUUID } from 'node:crypto';
+
 import type { ImportCandidate, SourceFileSelection } from '../shared/contracts';
 
 export interface SelectedSource {

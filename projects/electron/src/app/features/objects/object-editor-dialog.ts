@@ -7,7 +7,9 @@ import {
   MatDialogRef,
 } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
+
 import { firstValueFrom } from 'rxjs';
+
 import type {
   FieldDescriptor,
   ObjectKind,
@@ -17,7 +19,7 @@ import type {
 import { AppStore } from '../../core/app-store';
 import { ConfirmDialog } from '../../core/confirm-dialog';
 import { DesktopApi } from '../../core/desktop-api';
-import { createFields, OBJECT_CONFIG } from './object-config';
+import { OBJECT_CONFIG, createFields } from './object-config';
 import { ObjectValueField } from './object-value-field';
 
 export interface ObjectEditorDialogData {
@@ -29,37 +31,7 @@ export interface ObjectEditorDialogData {
 @Component({
   selector: 'app-object-editor-dialog',
   imports: [MatButtonModule, MatDialogModule, MatIconModule, ObjectValueField],
-  template: `
-    <h2 mat-dialog-title>{{ data.id === undefined ? 'Create' : 'Edit' }} {{ config.singular }}</h2>
-    <mat-dialog-content>
-      <p id="object-editor-description">
-        Changes are written to the managed SQLite database only after you save.
-      </p>
-      @if (store.error()) {
-        <p class="error-banner" role="alert">{{ store.error() }}</p>
-      }
-      @if (fields().length) {
-        <div class="grid grid-cols-1 gap-3 pt-3 sm:grid-cols-2">
-          @for (field of fields(); track field.name) {
-            <app-object-value-field
-              [field]="field"
-              [value]="fieldValue(field)"
-              (valueChange)="updateValue(field.name, $event)"
-            />
-          }
-        </div>
-      } @else {
-        <p aria-live="polite">Loading editor…</p>
-      }
-    </mat-dialog-content>
-    <mat-dialog-actions align="end">
-      <button type="button" matButton mat-dialog-close>Cancel</button>
-      <button type="button" matButton="filled" [disabled]="!fields().length" (click)="save(false)">
-        <mat-icon>save</mat-icon>
-        Save
-      </button>
-    </mat-dialog-actions>
-  `,
+  templateUrl: './object-editor-dialog.html',
 })
 export class ObjectEditorDialog {
   private readonly desktop = inject(DesktopApi);

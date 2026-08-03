@@ -1,8 +1,9 @@
-import { afterEach, describe, expect, test, vi } from 'vitest';
 import { mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { DatabaseSync } from 'node:sqlite';
+import { afterEach, describe, expect, test, vi } from 'vitest';
+
 import type {
   CombinedLeague,
   CombinedPlayer,

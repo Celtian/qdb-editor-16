@@ -7,14 +7,15 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+
 import {
-  leagueTiers,
-  sourceLabels,
-  sourceSupportsSeason,
   type EditableEntityKind,
   type EntityFilterOption,
   type League,
   type Team,
+  leagueTiers,
+  sourceLabels,
+  sourceSupportsSeason,
 } from '../../../../../shared/downloader/contracts';
 import {
   findFootballCountryByName,

@@ -1,10 +1,10 @@
-<section class="summary" aria-labelledby="import-summary-heading">
+<section class="qdb-summary" aria-labelledby="import-summary-heading">
   <div>
     <h2 id="import-summary-heading">Review import</h2>
     <p>Confirm the source, selection, policies, and database changes.</p>
   </div>
 
-  <dl class="summary-list">
+  <dl class="qdb-summary-list">
     <div>
       <dt>Operation</dt>
       <dd>{{ details().operation }}</dd>
@@ -35,7 +35,10 @@
 
   @if (isMerge()) {
     @if (preview().conflicts.existingRecords.length) {
-      <section class="review-section" aria-labelledby="existing-records-heading">
+      <section
+        class="qdb-review-section rounded-xl border border-outline-variant bg-surface-container-low p-4"
+        aria-labelledby="existing-records-heading"
+      >
         <div>
           <h3 id="existing-records-heading">Existing records</h3>
           <span>{{ preview().conflicts.existingRecords.length | number }}</span>
@@ -63,7 +66,7 @@
         <mat-form-field appearance="outline" subscriptSizing="dynamic">
           <mat-label>Matching record data</mat-label>
           <mat-select
-            class="existing-record-policy"
+            class="qdb-existing-record-policy"
             [disabled]="busy()"
             [value]="mergeOptions().existingRecords"
             (selectionChange)="changeExistingRecords($event.value)"
@@ -76,7 +79,10 @@
     }
 
     @if (preview().conflicts.teamLeagueConflicts.length) {
-      <section class="review-section" aria-labelledby="team-ownership-heading">
+      <section
+        class="qdb-review-section rounded-xl border border-outline-variant bg-surface-container-low p-4"
+        aria-labelledby="team-ownership-heading"
+      >
         <div>
           <h3 id="team-ownership-heading">Teams in another league</h3>
           <span>{{ preview().conflicts.teamLeagueConflicts.length | number }}</span>
@@ -95,7 +101,7 @@
         <mat-form-field appearance="outline" subscriptSizing="dynamic">
           <mat-label>Team league conflicts</mat-label>
           <mat-select
-            class="team-league-policy"
+            class="qdb-team-league-policy"
             [disabled]="busy()"
             [value]="mergeOptions().teamLeagueConflicts"
             (selectionChange)="changeTeamOwnership($event.value)"
@@ -108,7 +114,10 @@
     }
 
     @if (preview().conflicts.playerTeamConflicts.length) {
-      <section class="review-section" aria-labelledby="player-ownership-heading">
+      <section
+        class="qdb-review-section rounded-xl border border-outline-variant bg-surface-container-low p-4"
+        aria-labelledby="player-ownership-heading"
+      >
         <div>
           <h3 id="player-ownership-heading">Players in another team</h3>
           <span>{{ preview().conflicts.playerTeamConflicts.length | number }}</span>
@@ -125,7 +134,7 @@
           }
         </ul>
         @if (hasLegacyCopies()) {
-          <p class="warning" role="status">
+          <p class="qdb-warning" role="status">
             <mat-icon aria-hidden="true">warning</mat-icon>
             Historical duplicate player copies must be consolidated into the imported team.
           </p>
@@ -133,7 +142,7 @@
         <mat-form-field appearance="outline" subscriptSizing="dynamic">
           <mat-label>Player team conflicts</mat-label>
           <mat-select
-            class="player-team-policy"
+            class="qdb-player-team-policy"
             [disabled]="busy() || hasLegacyCopies()"
             [value]="mergeOptions().playerTeamConflicts"
             (selectionChange)="changePlayerOwnership($event.value)"
@@ -145,9 +154,12 @@
       </section>
     }
   } @else {
-    <section class="review-section" aria-labelledby="selected-policies-heading">
+    <section
+      class="qdb-review-section rounded-xl border border-outline-variant bg-surface-container-low p-4"
+      aria-labelledby="selected-policies-heading"
+    >
       <h3 id="selected-policies-heading">Selected update behavior</h3>
-      <ul class="policies">
+      <ul class="mb-0">
         @for (policy of synchronizationPolicies(); track policy) {
           <li>{{ policy }}</li>
         }
@@ -155,7 +167,7 @@
     </section>
   }
 
-  <div class="table-wrapper">
+  <div class="overflow-x-auto">
     <table>
       <caption>
         Records affected
@@ -190,7 +202,10 @@
   </div>
 
   @if (hasOwnershipConflicts() && !isMerge()) {
-    <section class="review-section" aria-labelledby="ownership-conflicts-heading">
+    <section
+      class="qdb-review-section rounded-xl border border-outline-variant bg-surface-container-low p-4"
+      aria-labelledby="ownership-conflicts-heading"
+    >
       <h3 id="ownership-conflicts-heading">Ownership conflicts</h3>
       <ul>
         @for (conflict of preview().conflicts.teamLeagueConflicts; track conflict.sourceId) {
@@ -216,7 +231,7 @@
   }
 
   @if (deletedCount() > 0) {
-    <p class="warning">
+    <p class="qdb-warning">
       <mat-icon aria-hidden="true">warning</mat-icon>{{ deletedCount() | number }} stored records
       will be permanently deleted.
     </p>
@@ -228,14 +243,14 @@
     </p>
   }
   @if (deduplicatedCount() > 0) {
-    <p class="warning">
+    <p class="qdb-warning">
       <mat-icon aria-hidden="true">warning</mat-icon>{{ deduplicatedCount() | number }} historical
       player {{ deduplicatedCount() === 1 ? 'copy' : 'copies' }} will be removed during
       consolidation.
     </p>
   }
   @if (deletedCount() === 0 && detachedCount() === 0 && deduplicatedCount() === 0) {
-    <p class="safe">
+    <p class="qdb-safe">
       <mat-icon aria-hidden="true">check_circle</mat-icon>No stored records will be deleted or
       detached.
     </p>

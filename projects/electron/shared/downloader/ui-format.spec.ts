@@ -1,10 +1,11 @@
 import { describe, expect, test } from 'vitest';
+
 import {
+  UI_LOCALE,
   formatEuroCurrency,
   formatUiCount,
   formatUiNumber,
   formatUiTimestamp,
-  UI_LOCALE,
 } from './ui-format.js';
 
 describe('UI formatting', () => {

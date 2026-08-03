@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest';
+
 import type {
   CreateCustomBadgeRequest,
   ExportConfigurationPreference,
@@ -6,13 +7,14 @@ import type {
   ExportVisibilityPresetPreference,
   UpdateCustomBadgeRequest,
 } from '../../shared/downloader/contracts.js';
-import type { SnapshotDatabase } from './database.js';
-import type { SnapshotExporter } from './exporter.js';
-import type { SoccerbotScraper } from './scraper.js';
 import {
   camelCaseExportFieldNames,
   defaultExportColumns,
 } from '../../shared/downloader/export-schema.js';
+import type { SnapshotDatabase } from './database.js';
+import type { SnapshotExporter } from './exporter.js';
+import { channels, registerIpcHandlers } from './ipc.js';
+import type { SoccerbotScraper } from './scraper.js';
 
 const electron = vi.hoisted(() => ({
   handlers: new Map<string, (...args: unknown[]) => unknown>(),
@@ -29,8 +31,6 @@ vi.mock('electron', () => ({
       electron.handlers.set(channel, handler),
   },
 }));
-
-import { channels, registerIpcHandlers } from './ipc.js';
 
 const invoke = (channel: string, input?: unknown): Promise<unknown> => {
   const handler = electron.handlers.get(channel);

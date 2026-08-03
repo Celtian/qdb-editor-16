@@ -1,20 +1,21 @@
 import { DecimalPipe } from '@angular/common';
 import { Component, computed, inject, signal } from '@angular/core';
-import { Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
+
 import { DesktopApi } from '../../../core/downloader-api';
-import { ThemeService, type ThemePreference } from '../../../core/theme.service';
+import { type ThemePreference, ThemeService } from '../../../core/theme.service';
 import { PageHeader } from '../../../shared/page-header/page-header';
 import {
-  allProjectsDeletionMessage,
-  allProjectsDeletionNotificationConfig,
   ClearProjectsDialog,
   type ClearProjectsDialogData,
+  allProjectsDeletionMessage,
+  allProjectsDeletionNotificationConfig,
 } from '../clear-projects-dialog/clear-projects-dialog';
 
 @Component({

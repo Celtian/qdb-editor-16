@@ -3,7 +3,7 @@
   use the Up and Down arrow keys.
 </p>
 <div
-  class="column-list"
+  class="qdb-column-list flex flex-col"
   cdkDropList
   cdkDropListLockAxis="y"
   role="list"
@@ -11,7 +11,7 @@
   (cdkDropListDropped)="drop($event)"
 >
   @for (column of orderedColumns(); track column.key) {
-    <div class="column-row" cdkDrag role="listitem" [cdkDragData]="column">
+    <div class="qdb-column-row" cdkDrag role="listitem" [cdkDragData]="column">
       <mat-checkbox
         [formField]="columnsForm[column.key]"
         (change)="setColumnVisibility(column, $event.checked)"
@@ -19,7 +19,7 @@
         {{ column.label }}
       </mat-checkbox>
       <button
-        class="drag-handle"
+        class="flex-none cursor-grab text-on-surface-variant active:cursor-grabbing"
         cdkDragHandle
         matIconButton
         type="button"
@@ -31,7 +31,10 @@
         <mat-icon aria-hidden="true">drag_indicator</mat-icon>
       </button>
       <ng-template cdkDragPreview [matchSize]="true">
-        <div class="column-drag-preview" aria-hidden="true">
+        <div
+          class="qdb-column-drag-preview flex items-center justify-between rounded-lg bg-surface px-3 py-0 text-on-surface shadow-level3"
+          aria-hidden="true"
+        >
           <span>{{ column.label }}</span>
           <mat-icon>drag_indicator</mat-icon>
         </div>
@@ -39,4 +42,9 @@
     </div>
   }
 </div>
-<p class="live-announcement" aria-live="polite">{{ announcement() }}</p>
+<p
+  class="qdb-live-announcement absolute size-px overflow-hidden whitespace-nowrap"
+  aria-live="polite"
+>
+  {{ announcement() }}
+</p>

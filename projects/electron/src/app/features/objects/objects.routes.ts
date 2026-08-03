@@ -1,4 +1,5 @@
 import type { Routes } from '@angular/router';
+
 import type { ObjectKind, ObjectSection } from '../../../../shared/contracts';
 import { objectUnsavedGuard } from './object-unsaved.guard';
 

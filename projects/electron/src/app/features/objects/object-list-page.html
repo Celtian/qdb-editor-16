@@ -20,15 +20,15 @@
   </div>
 </app-page-header>
 
-<section class="page max-w-none">
+<section class="qdb-page max-w-none">
   @if (store.error()) {
-    <p class="error-banner" role="alert">{{ store.error() }}</p>
+    <p class="qdb-error-banner" role="alert">{{ store.error() }}</p>
   }
   @if (blockedMessage()) {
-    <p class="error-banner" role="alert">{{ blockedMessage() }}</p>
+    <p class="qdb-error-banner" role="alert">{{ blockedMessage() }}</p>
   }
   @if (!config().canCreate && (kind() === 'players' || kind() === 'stadiums')) {
-    <p class="mb-4 text-sm text-[var(--mat-sys-on-surface-variant)]">
+    <p class="mb-4 text-sm text-on-surface-variant">
       {{ kind() === 'players' ? 'Player creation and deletion' : 'Stadium editing' }} is not
       available in the source Quick Editor feature set. Existing records remain available through
       object details and Tables.
@@ -42,7 +42,7 @@
   </mat-form-field>
 
   @if (page(); as data) {
-    <div class="table-container">
+    <div class="qdb-table-container overflow-auto rounded-xl border border-outline-variant">
       <table
         mat-table
         matSort
@@ -53,8 +53,8 @@
       >
         @for (column of config().columns; track column.key) {
           <ng-container [matColumnDef]="column.key">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ column.label }}</th>
-            <td mat-cell *matCellDef="let item">
+            <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ column.label }}</th>
+            <td *matCellDef="let item" mat-cell>
               @if (column.key === 'name' && config().hasDetail) {
                 <a
                   matButton
@@ -78,8 +78,8 @@
         }
         @if (config().canEditRoot || config().canDelete) {
           <ng-container matColumnDef="__actions" stickyEnd>
-            <th mat-header-cell *matHeaderCellDef class="text-right">Actions</th>
-            <td mat-cell *matCellDef="let item" class="text-right">
+            <th *matHeaderCellDef mat-header-cell class="text-right">Actions</th>
+            <td *matCellDef="let item" mat-cell class="text-right">
               <button
                 type="button"
                 matIconButton
@@ -105,8 +105,8 @@
             </td>
           </ng-container>
         }
-        <tr mat-header-row *matHeaderRowDef="displayedColumns(); sticky: true"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns()"></tr>
+        <tr *matHeaderRowDef="displayedColumns(); sticky: true" mat-header-row></tr>
+        <tr *matRowDef="let row; columns: displayedColumns()" mat-row></tr>
       </table>
       <mat-paginator
         [length]="data.total"

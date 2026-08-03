@@ -1,0 +1,128 @@
+.qdb-export-page {
+  margin: 0 auto;
+  max-width: 78rem;
+  padding: 2.5rem clamp(1rem, 4vw, 3.5rem);
+}
+
+h2 {
+  margin: 0;
+  font-size: 1.35rem;
+}
+
+p {
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.qdb-wizard-card {
+  overflow: hidden;
+}
+
+.qdb-step-content {
+  display: grid;
+  gap: 1.5rem;
+  padding: 1.5rem 0 0.5rem;
+}
+
+.qdb-step-content p {
+  margin: 0.35rem 0 0;
+}
+
+.qdb-format-options {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+}
+
+.qdb-format-options mat-radio-button {
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: 0.75rem;
+  padding: 1rem;
+}
+
+.qdb-format-options mat-radio-button:has(input:checked) {
+  background: var(--mat-sys-secondary-container);
+  border-color: var(--mat-sys-primary);
+}
+
+.qdb-option-content > span,
+.qdb-success div {
+  display: grid;
+}
+
+.qdb-option-content small,
+.qdb-success span {
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.qdb-preset-picker {
+  width: min(100%, 24rem);
+}
+
+.qdb-preset-pickers .qdb-preset-picker {
+  flex: 1 1 18rem;
+}
+
+.qdb-folder-picker,
+.qdb-success {
+  grid-template-columns: auto minmax(0, 1fr) auto;
+}
+
+.qdb-folder-picker span {
+  overflow-wrap: anywhere;
+}
+
+.select-all {
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+  display: block;
+  font-weight: 700;
+  padding-bottom: 0.5rem;
+}
+
+.qdb-league-options {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.qdb-league-option {
+  grid-template-columns: auto minmax(10rem, 1fr) auto;
+}
+
+.qdb-league-option + .qdb-league-option {
+  border-top: 1px solid var(--mat-sys-outline-variant);
+}
+
+.qdb-metadata-item + .qdb-metadata-item::before {
+  content: '·';
+  margin-inline: 0.5rem;
+}
+
+.qdb-country-with-flag {
+  gap: 0.4rem;
+}
+
+.qdb-visually-hidden {
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+.qdb-summary-list {
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: 0.75rem;
+  margin: 0;
+}
+
+.qdb-summary-list div {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(8rem, 11rem) minmax(0, 1fr);
+  padding: 0.75rem 1rem;
+}
+
+.qdb-summary-list div + div {
+  border-top: 1px solid var(--mat-sys-outline-variant);
+}

@@ -11,11 +11,13 @@
   </div>
 </app-page-header>
 
-<section class="page max-w-5xl">
-  <nav mat-tab-nav-bar [tabPanel]="tabPanel" aria-label="Object detail sections">
+<section class="qdb-page max-w-5xl">
+  <nav mat-tab-nav-bar aria-label="Object detail sections" [tabPanel]="tabPanel">
     @for (tab of config().sections; track tab.id) {
       <a
+        #active="routerLinkActive"
         mat-tab-link
+        routerLinkActive
         [routerLink]="[
           '/projects',
           projectId(),
@@ -26,8 +28,6 @@
           id(),
           tab.id,
         ]"
-        routerLinkActive
-        #active="routerLinkActive"
         [active]="active.isActive"
       >
         <mat-icon>{{ tab.icon }}</mat-icon>
@@ -38,7 +38,7 @@
 
   <mat-tab-nav-panel #tabPanel>
     @if (store.error()) {
-      <p class="error-banner mt-4" role="alert">{{ store.error() }}</p>
+      <p class="qdb-error-banner mt-4" role="alert">{{ store.error() }}</p>
     }
 
     @if (detail(); as data) {
@@ -46,10 +46,10 @@
         <mat-card-content class="pt-4">
           @if (stadiumImageUrl(); as imageUrl) {
             <img
-              class="stadium-image mb-5"
-              [ngSrc]="imageUrl"
+              class="qdb-stadium-image mb-5 block h-auto object-cover"
               width="600"
               height="233"
+              [ngSrc]="imageUrl"
               [alt]="'Stadium ' + values()['stadiumid']"
             />
           }
@@ -67,7 +67,7 @@
               </mat-select>
             </mat-form-field>
             <div
-              class="offline-map mb-5"
+              class="qdb-offline-map relative mb-5 min-h-80 overflow-hidden rounded-xl border border-outline-variant bg-surface-container"
               role="img"
               [attr.aria-label]="
                 'Offline coordinate map at latitude ' +
@@ -77,17 +77,20 @@
               "
             >
               <span
-                class="map-marker"
+                class="qdb-map-marker absolute size-4 rounded-full bg-primary"
                 [style.left]="mapPosition().left"
                 [style.top]="mapPosition().top"
               ></span>
-              <span class="map-label">Offline coordinate grid</span>
+              <span
+                class="qdb-map-label absolute rounded-lg bg-surface px-2 py-1 text-xs text-on-surface-variant"
+                >Offline coordinate grid</span
+              >
             </div>
           }
 
           @if (data.fields.length) {
             @if (data.readOnly) {
-              <dl class="detail-values">
+              <dl class="qdb-detail-values m-0 grid list-none gap-4 p-0">
                 @for (field of data.fields; track field.name) {
                   <div>
                     <dt>{{ field.name.replaceAll('_', ' ') }}</dt>
@@ -98,7 +101,7 @@
             } @else if (section() === 'jersey-numbers') {
               <div class="grid gap-3">
                 @for (item of related(); track item.id) {
-                  <div class="related-editor">
+                  <div class="qdb-related-editor grid items-center gap-4">
                     <span>{{ item.name }}</span>
                     <app-object-value-field
                       [field]="data.fields[0]"
@@ -122,7 +125,7 @@
           }
 
           @if (data.related.length && data.fields.length === 0) {
-            <ul class="related-list">
+            <ul class="m-0 list-none p-0">
               @for (item of related(); track item.id) {
                 <li>
                   @if (relatedDestination(); as destination) {
@@ -149,7 +152,7 @@
           }
 
           @if (data.related.length && ['contract', 'leagues'].includes(section())) {
-            <h2 class="mb-2 mt-5 text-lg">Relationships</h2>
+            <h2 class="mt-5 mb-2 text-lg">Relationships</h2>
             <mat-selection-list
               [attr.aria-label]="'Select related ' + section()"
               (selectionChange)="relationsChanged($event)"
@@ -163,7 +166,7 @@
           }
 
           @if (!data.fields.length && !data.related.length) {
-            <div class="empty-state">
+            <div class="qdb-empty-state">
               <mat-icon>inbox</mat-icon>
               <p>No related objects.</p>
             </div>

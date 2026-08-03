@@ -3,6 +3,7 @@ import { Component, Service, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
+
 import { VERSION_INFO } from '../../../../../version-info';
 
 @Component({

@@ -3,9 +3,10 @@ import { Component, inject, signal, viewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
+
 import type { EntityKind } from '../../../../../shared/downloader/contracts';
-import { EntityColumnEditor } from '../entity-column-editor/entity-column-editor';
 import type { ColumnDefinition, ColumnPreference } from '../entity-column-editor/column-layout';
+import { EntityColumnEditor } from '../entity-column-editor/entity-column-editor';
 
 export interface EntityColumnDrawerData {
   entity: EntityKind;

@@ -2,7 +2,7 @@
   display: block;
 }
 
-.settings-page {
+.qdb-settings-page {
   display: grid;
   gap: 1.25rem;
   margin: 0 auto;
@@ -10,15 +10,7 @@
   padding: 2.5rem clamp(1rem, 4vw, 3.5rem);
 }
 
-.priority-list {
-  display: grid;
-  gap: 0.5rem;
-  margin: 1rem 0 0;
-  padding: 0;
-  list-style: none;
-}
-
-.priority-list li {
+.qdb-priority-list li {
   display: flex;
   align-items: center;
   gap: 0.75rem;
@@ -29,20 +21,11 @@
   background: var(--mat-sys-surface);
 }
 
-.rank {
-  display: grid;
-  width: 2rem;
-  height: 2rem;
-  place-items: center;
-  border-radius: 50%;
-  background: var(--mat-sys-secondary-container);
-}
-
-.spacer {
+.qdb-spacer {
   flex: 1;
 }
 
-.error {
+.qdb-error {
   color: var(--mat-sys-error);
 }
 

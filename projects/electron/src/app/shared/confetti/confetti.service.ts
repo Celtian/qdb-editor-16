@@ -11,10 +11,10 @@ const confettiZIndex = 1_000_000_000;
 
 @Service()
 export class ConfettiService {
-  private overlayRef?: OverlayRef;
-  private componentRef?: ComponentRef<Confetti>;
   private readonly injector = inject(Injector);
   private readonly overlay = inject(Overlay);
+  private overlayRef?: OverlayRef;
+  private componentRef?: ComponentRef<Confetti>;
 
   burst(options: ConfettiBurstOptions = {}): void {
     this.ensureConfetti().instance.burst(options);

@@ -9,16 +9,16 @@
   </a>
 </app-page-header>
 
-<section class="page">
+<section class="qdb-page">
   @if (store.error()) {
-    <p class="error-banner" role="alert">{{ store.error() }}</p>
+    <p class="qdb-error-banner" role="alert">{{ store.error() }}</p>
   }
 
   @if (store.projects().length) {
     <mat-form-field appearance="outline" class="w-full max-w-xl">
       <mat-label>Find a project</mat-label>
       <mat-icon matPrefix>search</mat-icon>
-      <input matInput [value]="query()" (input)="query.set($any($event.target).value)" />
+      <input matInput [value]="query()" (input)="queryChanged($event)" />
     </mat-form-field>
     <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
       @for (project of filtered(); track project.id) {
@@ -60,20 +60,25 @@
       }
     </div>
   } @else if (!store.loading()) {
-    <mat-card appearance="outlined" class="empty-state projects-empty-state">
-      <mat-card-content class="projects-empty-state__content">
-        <div class="projects-empty-state__icon" aria-hidden="true">
+    <mat-card appearance="outlined" class="qdb-empty-state qdb-projects-empty-state p-0">
+      <mat-card-content
+        class="flex flex-1 flex-col items-center justify-center gap-6 pt-12 pb-6 text-center max-xs:gap-5 max-xs:pt-10 max-xs:pb-5"
+      >
+        <div
+          class="qdb-projects-empty-state-icon grid size-20 place-items-center rounded-3xl bg-primary-container text-on-primary-container"
+          aria-hidden="true"
+        >
           <mat-icon>create_new_folder</mat-icon>
         </div>
-        <div class="projects-empty-state__copy">
+        <div class="qdb-projects-empty-state-copy grid gap-2">
           <h2>Create your first project</h2>
           <p>
             Keep related FIFA 16 databases together and manage them from one shared reference date.
           </p>
         </div>
       </mat-card-content>
-      <mat-card-actions class="projects-empty-state__actions">
-        <a matButton="filled" class="projects-empty-state__action" routerLink="/projects/new">
+      <mat-card-actions class="justify-center pb-12 max-xs:pb-10">
+        <a matButton="filled" class="qdb-projects-empty-state-action" routerLink="/projects/new">
           <mat-icon>add</mat-icon>
           New project
         </a>

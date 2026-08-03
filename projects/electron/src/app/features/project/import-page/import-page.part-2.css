@@ -1,0 +1,64 @@
+.qdb-behavior-grid {
+  align-items: start;
+  gap: 0.75rem 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+}
+
+.qdb-behavior-grid mat-form-field {
+  width: 100%;
+}
+
+.qdb-behavior-checkboxes {
+  align-content: start;
+}
+
+.qdb-behavior-hint {
+  font-size: 0.85rem;
+}
+
+.qdb-team-list {
+  gap: 0.25rem 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+  max-height: 22rem;
+}
+
+.qdb-team-list .select-all {
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+  font-weight: 700;
+  grid-column: 1 / -1;
+  margin-bottom: 0.35rem;
+  padding-bottom: 0.35rem;
+}
+
+.qdb-squad-card mat-card-content {
+  padding-top: 0.75rem;
+}
+
+.qdb-player-grid {
+  gap: 0.25rem 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+}
+
+.qdb-player-position {
+  margin-left: 0.4rem;
+}
+
+.qdb-empty-state {
+  background: var(--mat-sys-surface-container-low);
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: 0.75rem;
+  padding: 1rem;
+}
+
+.qdb-step-actions {
+  align-items: center;
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+@media (width <= 48rem) {
+  .qdb-selection-heading {
+    align-items: start;
+  }
+}

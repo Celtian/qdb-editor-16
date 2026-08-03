@@ -1,6 +1,6 @@
 <h2 mat-dialog-title>Create snapshot project</h2>
 <mat-dialog-content>
-  <p class="hint">A project represents football data as it stood on one reference date.</p>
+  <p class="qdb-hint">A project represents football data as it stood on one reference date.</p>
   <form id="create-project-form" (submit)="$event.preventDefault(); save()">
     <mat-form-field appearance="outline">
       <mat-label>Project name</mat-label>
@@ -35,8 +35,8 @@
       </button>
       <mat-datepicker-toggle
         matIconSuffix
-        [for]="referenceDatePicker"
         aria-label="Choose reference date"
+        [for]="referenceDatePicker"
       />
       <mat-datepicker #referenceDatePicker />
       <mat-hint>Choose a date from the calendar</mat-hint>
