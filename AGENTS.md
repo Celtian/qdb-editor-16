@@ -48,6 +48,24 @@ You are an expert in TypeScript, Angular, and scalable web application developme
 - Use the async pipe to handle observables
 - Do not assume globals like (`new Date()`) are available.
 
+## Styling
+
+- Use Tailwind CSS v4 utilities directly in Angular templates for ordinary presentation styling
+- Use `@import 'tailwindcss'`; do not add Tailwind v3 directives or a `tailwind.config.js` file
+- Use standard Tailwind utilities whenever possible. Add reusable named values to the shared `tailwind.theme-*.css` theme files when the standard scale does not represent a required design token
+- Do NOT use arbitrary-value Tailwind classes, custom `@utility` declarations, presentation-only custom classes, `data-ui-*` styling hooks, ESLint class whitelists, or concatenated class-name fragments
+- For conditional styling, bind complete Tailwind utility names with `[class.utility]` or return complete, statically discoverable class strings from typed lookup tables
+- Put descendant styling on owned child elements instead of styling them through a parent selector
+- Keep semantic `data-*` attributes only when they represent application state or identity, or when they are required to coordinate runtime-generated or third-party descendants that Tailwind variants cannot address cleanly. Never add them solely for tests or ordinary presentation
+- Keep component CSS focused on component hosts, Angular Material/CDK internals and overlay contracts, animations and reduced-motion rules, pseudo-elements or complex selectors, runtime coordinate styles, and complex graphics such as the offline map
+- Remove empty stylesheets and obsolete `styleUrl` declarations
+- Keep Tailwind classes ordered by the configured formatter and ensure `tailwindcss/no-arbitrary-value` and `tailwindcss/no-custom-classname` continue to pass without exceptions
+
+## Styling Tests
+
+- Prefer Angular Material/CDK harnesses, roles, accessible names, semantic application state, and rendered behavior over presentation selectors
+- Do not assert removed custom class names or introduce test-only styling hooks
+
 ## Services
 
 - Design services around a single responsibility
