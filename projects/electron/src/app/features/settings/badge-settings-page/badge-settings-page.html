@@ -5,8 +5,11 @@
   </div>
 </app-page-header>
 
-<section data-ui-settings-page aria-labelledby="badges-title">
-  <mat-card data-ui-badge-age appearance="outlined">
+<section
+  class="mx-auto grid max-w-settings gap-6 px-footer-inline py-10"
+  aria-labelledby="badges-title"
+>
+  <mat-card appearance="outlined">
     <mat-card-header>
       <div
         class="flex items-center justify-center bg-tertiary-container text-on-tertiary-container"
@@ -19,10 +22,10 @@
     </mat-card-header>
     <mat-card-content>
       <form class="grid gap-6" aria-labelledby="badge-age-title">
-        <div class="grid gap-1" data-ui-badge-age-setting>
-          <div class="flex items-baseline justify-between gap-4" data-ui-badge-age-heading>
-            <label for="new-days-slider">New</label>
-            <output for="new-days-slider">
+        <div class="grid gap-1">
+          <div class="flex items-baseline justify-between gap-4">
+            <label class="text-base font-semibold text-on-surface" for="new-days-slider">New</label>
+            <output class="font-semibold text-primary" for="new-days-slider">
               {{ badgeSettingsModel().newDays | number }}
               {{ dayUnit(badgeSettingsModel().newDays) }}
             </output>
@@ -31,6 +34,7 @@
             Created within the selected number of days, relative to the current time.
           </p>
           <mat-slider
+            class="w-full"
             discrete
             step="1"
             [displayWith]="formatUiNumber"
@@ -47,10 +51,12 @@
           </mat-slider>
         </div>
 
-        <div class="grid gap-1" data-ui-badge-age-setting>
-          <div class="flex items-baseline justify-between gap-4" data-ui-badge-age-heading>
-            <label for="old-months-slider">Old</label>
-            <output for="old-months-slider">
+        <div class="grid gap-1">
+          <div class="flex items-baseline justify-between gap-4">
+            <label class="text-base font-semibold text-on-surface" for="old-months-slider"
+              >Old</label
+            >
+            <output class="font-semibold text-primary" for="old-months-slider">
               {{ badgeSettingsModel().oldMonths | number }}
               {{ monthUnit(badgeSettingsModel().oldMonths) }}
             </output>
@@ -59,6 +65,7 @@
             Not updated within the selected number of months before each project reference date.
           </p>
           <mat-slider
+            class="w-full"
             discrete
             showTickMarks
             step="1"
@@ -106,27 +113,34 @@
           <button matButton type="button" (click)="retryCustomBadges()">Retry</button>
         </div>
       } @else {
-        <div class="flex items-center justify-between gap-4" data-ui-custom-badges-heading>
-          <p>Names are shown in the Badge column. Descriptions appear as tooltips.</p>
+        <div
+          class="flex items-center justify-between gap-4 max-tablet:flex-col max-tablet:items-stretch"
+        >
+          <p class="max-w-empty-copy">
+            Names are shown in the Badge column. Descriptions appear as tooltips.
+          </p>
           <button matButton="filled" type="button" (click)="createCustomBadge()">
             <mat-icon aria-hidden="true">add</mat-icon>
             Create badge
           </button>
         </div>
         @if (customBadges().length) {
-          <ul class="mx-0 mt-5 mb-0 grid list-none p-0" data-ui-custom-badge-list>
+          <ul class="mx-0 mt-5 mb-0 grid list-none p-0">
             @for (badge of customBadges(); track badge.id) {
-              <li>
-                <div class="grid items-center" data-ui-custom-badge-details>
-                  <app-custom-badge [badge]="badge" />
+              <li
+                class="flex items-center justify-between gap-4 border-t border-outline-variant px-0 py-4 max-tablet:flex-col max-tablet:items-stretch"
+              >
+                <div class="grid grid-cols-icon-copy items-center gap-x-3 gap-y-1">
+                  <app-custom-badge class="row-span-2 row-start-1" [badge]="badge" />
                   <span>{{ badge.description }}</span>
-                  <small>
+                  <small class="text-on-surface-variant">
                     {{ badge.assignmentCount | number }}
                     {{ badge.assignmentCount === 1 ? 'assignment' : 'assignments' }}
                   </small>
                 </div>
-                <div class="flex max-sm:justify-end" data-ui-custom-badge-actions>
+                <div class="flex max-sm:justify-end">
                   <button
+                    class="last:text-error"
                     matIconButton
                     type="button"
                     [attr.aria-label]="'Edit ' + badge.name"
@@ -135,6 +149,7 @@
                     <mat-icon aria-hidden="true">edit</mat-icon>
                   </button>
                   <button
+                    class="last:text-error"
                     matIconButton
                     type="button"
                     [attr.aria-label]="'Delete ' + badge.name"

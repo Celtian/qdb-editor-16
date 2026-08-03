@@ -11,23 +11,6 @@ mat-toolbar {
   border-bottom: 1px solid var(--mat-sys-outline-variant);
 }
 
-[data-ui-brand] {
-  display: flex;
-  align-items: center;
-  gap: 0.7rem;
-  color: inherit;
-  text-decoration: none;
-}
-
-[data-ui-brand] small {
-  color: var(--mat-sys-on-surface-variant);
-  font-weight: 400;
-}
-
-[data-ui-spacer] {
-  flex: 1;
-}
-
 mat-sidenav-container {
   min-height: 0;
 }
@@ -58,12 +41,6 @@ footer {
   border-top: 1px solid var(--mat-sys-outline-variant);
 }
 
-[data-ui-skip-link] {
-  top: 0.5rem;
-  left: 0.5rem;
+[data-skip-link] {
   transform: translateY(-200%);
-}
-
-[data-ui-skip-link]:focus {
-  transform: none;
 }

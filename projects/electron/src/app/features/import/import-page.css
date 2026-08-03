@@ -4,110 +4,17 @@
   display: block;
 }
 
-[data-ui-wizard-card] {
-  overflow: hidden;
-}
-
-[data-ui-wizard-card] mat-card-header {
-  padding-bottom: 1rem;
-}
-
-[data-ui-wizard] {
+[data-wizard] {
   --mat-stepper-container-color: transparent;
 }
 
-[data-ui-step-content] {
-  display: grid;
-  gap: 1.5rem;
-  padding: 1.5rem 0 0.5rem;
-}
-
-[data-ui-step-content] h2,
-[data-ui-step-content] h3,
-[data-ui-step-content] p {
-  margin: 0;
-}
-
-[data-ui-step-content] h2 {
-  font-size: 1.35rem;
-}
-
-[data-ui-step-content] h2 + p,
-[data-ui-review-heading] p,
-[data-ui-source-path] {
+[data-step-content] h2 + p,
+[data-review-heading] p,
+[data-source-path] {
   color: var(--mat-sys-on-surface-variant);
 }
 
-[data-ui-format-options] {
-  display: grid;
-  gap: 0.75rem;
-  max-width: 52rem;
-}
-
-[data-ui-format-options] mat-radio-button {
-  padding: 1rem;
-  border: 1px solid var(--mat-sys-outline-variant);
-  border-radius: 0.75rem;
-}
-
-[data-ui-format-options] mat-radio-button:has(input:checked) {
+[data-format-options] mat-radio-button:has(input:checked) {
   border-color: var(--mat-sys-primary);
   background: var(--mat-sys-secondary-container);
-}
-
-[data-ui-choice-label] {
-  display: grid;
-  gap: 0.2rem;
-}
-
-[data-ui-choice-label] small {
-  color: var(--mat-sys-on-surface-variant);
-  white-space: normal;
-}
-
-[data-ui-review-card] mat-card-content {
-  display: grid;
-  gap: 1.25rem;
-  padding-top: 1rem;
-}
-
-[data-ui-source-icon] {
-  width: 2.75rem;
-  height: 2.75rem;
-}
-
-[data-ui-source-path] {
-  display: flex;
-  min-width: 0;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-[data-ui-source-path] mat-icon {
-  flex: 0 0 auto;
-}
-
-[data-ui-source-path] span {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-[data-ui-source-warning] mat-icon {
-  flex: 0 0 auto;
-}
-
-[data-ui-step-actions] {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 0.75rem;
-}
-
-@media (width <= 600px) {
-  [data-ui-step-actions] button,
-  [data-ui-step-actions] a {
-    flex: 1 1 auto;
-  }
 }

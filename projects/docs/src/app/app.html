@@ -1,4 +1,7 @@
-<a class="fixed z-100 bg-primary-container p-3" data-ui-skip-link href="#main-content"
+<a
+  class="fixed top-2 left-2 z-100 bg-primary-container p-3 focus:translate-y-0"
+  data-skip-link
+  href="#main-content"
   >Skip to content</a
 >
 <mat-toolbar>
@@ -12,12 +15,12 @@
       <mat-icon>menu</mat-icon>
     </button>
   }
-  <a data-ui-brand routerLink="/">
+  <a class="flex items-center gap-skip text-inherit no-underline" data-brand routerLink="/">
     <img ngSrc="qdb-editor-16-icon.png" width="30" height="30" alt="" priority />
     <span>QDB Editor 16</span>
-    <small>Documentation</small>
+    <small class="font-normal text-on-surface-variant">Documentation</small>
   </a>
-  <span data-ui-spacer></span>
+  <span class="flex-1"></span>
   <a matButton href="https://github.com/Celtian/qdb-editor-16" target="_blank" rel="noopener">
     <mat-icon>code</mat-icon>
     GitHub
@@ -34,7 +37,7 @@
       @for (page of pages; track page.path) {
         <a
           mat-list-item
-          routerLinkActive="active"
+          routerLinkActive="bg-secondary-container text-on-secondary-container"
           ariaCurrentWhenActive="page"
           [routerLink]="'/' + page.path"
           [routerLinkActiveOptions]="{ exact: true }"

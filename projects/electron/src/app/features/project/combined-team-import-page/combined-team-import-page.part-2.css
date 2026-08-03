@@ -1,39 +1,15 @@
-[data-ui-player-cell] {
-  min-height: 8.5rem;
-  border: 1px dashed var(--mat-sys-outline-variant);
+[data-player-cell] {
   transition:
     border-color 120ms ease,
     background-color 120ms ease;
 }
 
-[data-ui-player-cell].cdk-drop-list-receiving {
+[data-player-cell].cdk-drop-list-receiving {
   border-color: var(--mat-sys-primary);
   background: var(--mat-sys-primary-container);
 }
 
-[data-ui-new-row-cell] {
-  min-height: 4.5rem;
-  align-items: center;
-}
-
-[data-ui-player-tile] {
-  align-content: space-between;
-  box-shadow: var(--mat-sys-level1);
-}
-
-[data-ui-player-details] strong {
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-[data-ui-player-metadata] {
-  gap: 0.25rem 0.625rem;
-  font-size: 0.8125rem;
-}
-
-[data-ui-player-actions] [data-ui-player-action-button] {
+[data-player-actions] [data-player-action-button] {
   display: inline-grid;
   width: 2.25rem;
   height: 2.25rem;
@@ -45,80 +21,15 @@
   --mat-icon-button-touch-target-display: none;
 }
 
-[data-ui-player-action-button] mat-icon {
-  display: block;
-  width: 1.125rem;
-  height: 1.125rem;
-  font-size: 1.125rem;
-  line-height: 1.125rem;
-}
-
-[data-ui-empty-label] {
-  font-size: 0.8125rem;
-}
-
-[data-ui-new-row-cell] mat-icon {
-  flex: 0 0 auto;
-}
-
-[data-ui-player-tile].cdk-drag-preview {
+[data-player-tile].cdk-drag-preview {
   box-shadow: var(--mat-sys-level3);
 }
 
-[data-ui-player-tile].cdk-drag-placeholder {
+[data-player-tile].cdk-drag-placeholder {
   opacity: 0.2;
 }
 
-[data-ui-review-card] {
-  align-content: start;
-  gap: 1rem;
-  padding-inline-start: 0;
-}
-
-[data-ui-review-card-metadata] {
-  min-block-size: 1.25rem;
-}
-
-[data-ui-review-card-heading] app-position-badge {
-  flex: 0 0 auto;
-}
-
-[data-ui-review-field] {
-  grid-template-columns: minmax(7.5rem, 0.35fr) minmax(0, 1fr);
-}
-
-[data-ui-review-field] dt {
-  color: var(--mat-sys-on-surface-variant);
-  font-size: 0.8125rem;
-  font-weight: 600;
-}
-
-[data-ui-review-field] dd {
-  min-width: 0;
-  margin: 0;
-}
-
-[data-ui-review-field][data-ui-conflicting] dd {
+[data-review-field][data-conflicting] dd {
   display: grid;
   gap: 0.75rem;
-}
-
-[data-ui-resolution-options] mat-button-toggle {
-  flex: 1 1 auto;
-}
-
-[data-ui-summary] {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
-  gap: 0.75rem;
-}
-
-[data-ui-summary] div {
-  padding: 1rem;
-  border-radius: 0.75rem;
-  background: var(--mat-sys-surface-container);
-}
-
-[data-ui-summary] dt {
-  color: var(--muted-text);
 }

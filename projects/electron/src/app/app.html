@@ -19,11 +19,10 @@
     @if (store.loading()) {
       <mat-progress-bar mode="indeterminate" aria-label="Operation in progress" />
     }
-    <main data-ui-app-content>
+    <main class="h-full min-w-0 overflow-auto bg-surface" data-app-content>
       @if (store.progress(); as progress) {
         <div
-          class="sticky z-5 m-0 flex items-center justify-center gap-3 bg-primary-container px-4 py-2 text-center text-on-primary-container"
-          data-ui-progress-message
+          class="sticky top-0 z-5 m-0 flex items-center justify-center gap-3 bg-primary-container px-4 py-2 text-center text-on-primary-container"
           aria-live="polite"
         >
           <span>{{ progress.message }}</span>

@@ -1,47 +1,12 @@
-[data-ui-offline-map] {
+[data-offline-map] {
   background-image:
     linear-gradient(to right, var(--mat-sys-outline-variant) 1px, transparent 1px),
     linear-gradient(to bottom, var(--mat-sys-outline-variant) 1px, transparent 1px);
   background-size: 10% 10%;
 }
 
-[data-ui-stadium-image] {
-  width: min(100%, 600px);
-  border-radius: var(--mat-sys-corner-medium);
-}
-
-[data-ui-map-marker] {
+[data-map-marker] {
   border: 3px solid var(--mat-sys-on-primary);
   box-shadow: 0 0 0 3px var(--mat-sys-primary);
   transform: translate(-50%, -50%);
-}
-
-[data-ui-map-label] {
-  right: 0.75rem;
-  bottom: 0.75rem;
-}
-
-[data-ui-detail-values] {
-  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
-}
-
-[data-ui-detail-values] div {
-  padding: 0.75rem;
-  border-radius: 0.5rem;
-  background: var(--mat-sys-surface-container);
-}
-
-[data-ui-detail-values] dt {
-  color: var(--mat-sys-on-surface-variant);
-  font-size: 0.75rem;
-  text-transform: capitalize;
-}
-
-[data-ui-detail-values] dd {
-  margin: 0.25rem 0 0;
-  font-weight: 500;
-}
-
-[data-ui-related-editor] {
-  grid-template-columns: minmax(10rem, 1fr) minmax(8rem, 12rem);
 }

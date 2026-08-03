@@ -1,11 +1,11 @@
 <h2 mat-dialog-title>Clear all projects?</h2>
 <mat-dialog-content>
-  <p data-ui-deletion-impact>
+  <p class="font-medium">
     This will permanently delete
     {{ formatUiCount(data.projectCount, 'project') }} and all related data.
   </p>
-  <p data-ui-warning-heading>
-    <mat-icon aria-hidden="true">warning</mat-icon>
+  <p class="flex items-center gap-brand-gap" data-warning-heading>
+    <mat-icon class="text-error" aria-hidden="true">warning</mat-icon>
     <strong>This action cannot be undone.</strong>
   </p>
   <p>
@@ -15,7 +15,12 @@
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button matButton mat-dialog-close type="button">Cancel</button>
-  <button data-ui-delete-button matButton="filled" type="button" [mat-dialog-close]="true">
+  <button
+    class="enabled:bg-error enabled:text-on-error"
+    matButton="filled"
+    type="button"
+    [mat-dialog-close]="true"
+  >
     Clear all projects
   </button>
 </mat-dialog-actions>

@@ -5,9 +5,12 @@
   </div>
 </app-page-header>
 
-<section data-ui-settings-page aria-labelledby="settings-title">
-  <mat-card data-ui-finder-preferences appearance="outlined">
-    <mat-card-header>
+<section
+  class="mx-auto grid max-w-settings gap-6 px-footer-inline py-10"
+  aria-labelledby="settings-title"
+>
+  <mat-card data-finder-preferences appearance="outlined">
+    <mat-card-header class="px-4 pt-4 pb-0">
       <div
         class="flex items-center justify-center bg-secondary-container text-on-secondary-container"
         mat-card-avatar
@@ -19,10 +22,10 @@
         Clear saved source and combined finder filters for this project.
       </mat-card-subtitle>
     </mat-card-header>
-    <mat-card-content>
+    <mat-card-content class="pb-2 text-on-surface-variant">
       <fieldset>
-        <legend>Clear filters for</legend>
-        <p data-ui-setting-description>
+        <legend class="text-base font-medium text-on-surface">Clear filters for</legend>
+        <p class="m-0 text-on-surface-variant" data-setting-description>
           Each option resets saved selections in its league, team, and player finders. Search text,
           column layouts, and filters in other projects are not affected.
         </p>
@@ -32,7 +35,7 @@
         </div>
       </fieldset>
     </mat-card-content>
-    <mat-card-actions align="end">
+    <mat-card-actions class="px-4 pt-2 pb-4" align="end">
       <button
         matButton="outlined"
         type="button"
@@ -44,8 +47,8 @@
     </mat-card-actions>
   </mat-card>
 
-  <mat-card data-ui-source-data appearance="outlined">
-    <mat-card-header>
+  <mat-card data-source-data appearance="outlined">
+    <mat-card-header class="px-4 pt-4 pb-0">
       <div
         class="flex items-center justify-center bg-error-container text-on-error-container"
         mat-card-avatar
@@ -55,10 +58,10 @@
       <mat-card-title>Stored source data</mat-card-title>
       <mat-card-subtitle>Remove imported records from this project.</mat-card-subtitle>
     </mat-card-header>
-    <mat-card-content>
+    <mat-card-content class="pb-2 text-on-surface-variant">
       <fieldset>
-        <legend>Delete data by source</legend>
-        <p data-ui-setting-description>
+        <legend class="text-base font-medium text-on-surface">Delete data by source</legend>
+        <p class="m-0 text-on-surface-variant" data-setting-description>
           Choose one or more sources. The project itself, exports, global settings, and finder
           filters are not affected.
         </p>
@@ -72,10 +75,10 @@
       </fieldset>
       <p
         class="mt-4 font-medium text-on-surface"
-        data-ui-deletion-preview
+        data-deletion-preview
         aria-live="polite"
         aria-atomic="true"
-        [attr.data-ui-error]="sourceDataDeletionPreviewError() ? '' : null"
+        [attr.data-error]="sourceDataDeletionPreviewError() ? '' : null"
       >
         @if (selectedSourceNames().length === 0) {
           Select at least one source to preview affected records.
@@ -88,9 +91,9 @@
         }
       </p>
     </mat-card-content>
-    <mat-card-actions align="end">
+    <mat-card-actions class="px-4 pt-2 pb-4" align="end">
       <button
-        data-ui-delete-button
+        class="enabled:bg-error enabled:text-on-error"
         matButton="filled"
         type="button"
         [disabled]="!canDeleteSourceData()"

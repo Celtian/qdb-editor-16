@@ -5,13 +5,15 @@
   </div>
 </app-page-header>
 
-<section class="max-w-5xl" data-ui-page aria-labelledby="import-heading">
+<section class="mx-auto w-full max-w-5xl p-8 max-nav:p-4" aria-labelledby="import-heading">
   @if (store.error()) {
-    <p data-ui-error-banner role="alert">{{ store.error() }}</p>
+    <p class="rounded-xl bg-error-container px-4 py-3 text-on-error-container" role="alert">
+      {{ store.error() }}
+    </p>
   }
 
-  <mat-card appearance="outlined" data-ui-wizard-card>
-    <mat-card-header>
+  <mat-card class="overflow-hidden" appearance="outlined">
+    <mat-card-header class="pb-4">
       <mat-card-title>Import database</mat-card-title>
       <mat-card-subtitle>
         Choose a source format, select its files, and review the detected database.
@@ -19,7 +21,7 @@
     </mat-card-header>
 
     <mat-card-content>
-      <mat-stepper data-ui-wizard linear aria-label="Database import wizard">
+      <mat-stepper data-wizard linear aria-label="Database import wizard">
         <ng-template let-index="index" matStepperIcon="number">
           <span aria-hidden="true">{{ index + 1 }}</span>
         </ng-template>
@@ -32,46 +34,58 @@
 
         <mat-step [completed]="true">
           <ng-template matStepLabel>Format</ng-template>
-          <div data-ui-step-content>
+          <div class="grid gap-6 px-0 pt-6 pb-2" data-step-content>
             <div>
-              <h2>Choose source format</h2>
-              <p>Select the kind of FIFA 16 database you want to import.</p>
+              <h2 class="m-0 text-step-heading">Choose source format</h2>
+              <p class="m-0">Select the kind of FIFA 16 database you want to import.</p>
             </div>
 
             <mat-radio-group
-              data-ui-format-options
+              class="grid max-w-import gap-3"
+              data-format-options
               aria-label="Database source format"
               [value]="sourceKind()"
               [disabled]="store.loading()"
               (change)="changeKind($event.value)"
             >
-              <mat-radio-button value="text-folder">
-                <span data-ui-choice-label>
+              <mat-radio-button
+                class="rounded-xl border border-outline-variant p-4"
+                value="text-folder"
+              >
+                <span class="grid gap-micro">
                   <strong>DB Master text folder</strong>
-                  <small> Import a folder of UTF-16LE, tab-separated FIFA 16 text tables. </small>
+                  <small class="whitespace-normal text-on-surface-variant">
+                    Import a folder of UTF-16LE, tab-separated FIFA 16 text tables.
+                  </small>
                 </span>
               </mat-radio-button>
-              <mat-radio-button value="t3db">
-                <span data-ui-choice-label>
+              <mat-radio-button class="rounded-xl border border-outline-variant p-4" value="t3db">
+                <span class="grid gap-micro">
                   <strong>PC t3db pair</strong>
-                  <small>Import a .db file together with its matching metadata XML schema.</small>
+                  <small class="whitespace-normal text-on-surface-variant"
+                    >Import a .db file together with its matching metadata XML schema.</small
+                  >
                 </span>
               </mat-radio-button>
             </mat-radio-group>
 
-            <div data-ui-step-actions>
-              <a matButton [routerLink]="['/projects', projectId()]">Cancel</a>
-              <button type="button" matButton="filled" matStepperNext>Next</button>
+            <div class="flex flex-wrap items-center justify-end gap-3">
+              <a class="max-xs:flex-auto" matButton [routerLink]="['/projects', projectId()]"
+                >Cancel</a
+              >
+              <button class="max-xs:flex-auto" type="button" matButton="filled" matStepperNext>
+                Next
+              </button>
             </div>
           </div>
         </mat-step>
 
         <mat-step [completed]="candidate() !== undefined">
           <ng-template matStepLabel>Source</ng-template>
-          <div data-ui-step-content>
+          <div class="grid gap-6 px-0 pt-6 pb-2" data-step-content>
             <div>
-              <h2>Select source</h2>
-              <p>
+              <h2 class="m-0 text-step-heading">Select source</h2>
+              <p class="m-0">
                 {{
                   sourceKind() === 'text-folder'
                     ? 'Choose the folder that directly contains the exported FIFA table files.'
@@ -148,11 +162,18 @@
               </div>
             }
 
-            <div data-ui-step-actions>
-              <button type="button" matButton matStepperPrevious [disabled]="store.loading()">
+            <div class="flex flex-wrap items-center justify-end gap-3">
+              <button
+                class="max-xs:flex-auto"
+                type="button"
+                matButton
+                matStepperPrevious
+                [disabled]="store.loading()"
+              >
                 Back
               </button>
               <button
+                class="max-xs:flex-auto"
                 type="button"
                 matButton="filled"
                 [disabled]="!sourceReady() || store.loading()"
@@ -166,26 +187,25 @@
 
         <mat-step>
           <ng-template matStepLabel>Review</ng-template>
-          <div data-ui-step-content>
+          <div class="grid gap-6 px-0 pt-6 pb-2" data-step-content>
             <div>
-              <h2>Review database</h2>
-              <p>Confirm the detected tables and choose the managed database name.</p>
+              <h2 class="m-0 text-step-heading">Review database</h2>
+              <p class="m-0">Confirm the detected tables and choose the managed database name.</p>
             </div>
 
             @if (candidate(); as source) {
-              <mat-card appearance="outlined" data-ui-review-card>
-                <mat-card-content>
-                  <div class="flex items-center gap-3.5" data-ui-review-heading>
+              <mat-card appearance="outlined" data-review-card>
+                <mat-card-content class="grid gap-5 pt-4">
+                  <div class="flex items-center gap-3.5" data-review-heading>
                     <span
-                      class="grid flex-none place-items-center rounded-xl bg-secondary-container text-on-secondary-container"
-                      data-ui-source-icon
+                      class="grid size-11 flex-none place-items-center rounded-xl bg-secondary-container text-on-secondary-container"
                       aria-hidden="true"
                     >
                       <mat-icon>{{ source.sourceKind === 't3db' ? 'storage' : 'folder' }}</mat-icon>
                     </span>
                     <div>
-                      <h3>FIFA 16 source detected</h3>
-                      <p>
+                      <h3 class="m-0">FIFA 16 source detected</h3>
+                      <p class="m-0">
                         {{
                           source.sourceKind === 't3db' ? 'PC t3db pair' : 'DB Master text folder'
                         }}
@@ -194,12 +214,16 @@
                     </div>
                   </div>
 
-                  <p data-ui-source-path [title]="source.originalPaths.join(' · ')">
-                    <mat-icon aria-hidden="true">folder_open</mat-icon>
-                    <span>{{ source.originalPaths.join(' · ') }}</span>
+                  <p
+                    class="m-0 flex min-w-0 items-center gap-2"
+                    data-source-path
+                    [title]="source.originalPaths.join(' · ')"
+                  >
+                    <mat-icon class="flex-none" aria-hidden="true">folder_open</mat-icon>
+                    <span class="truncate">{{ source.originalPaths.join(' · ') }}</span>
                   </p>
 
-                  <mat-form-field appearance="outline" class="w-full" data-ui-name-field>
+                  <mat-form-field appearance="outline" class="w-full" data-name-field>
                     <mat-label>Managed database name</mat-label>
                     <input matInput autocomplete="off" [formField]="importForm.name" />
                     @if (importForm.name().touched() && importForm.name().errors().length) {
@@ -208,7 +232,7 @@
                   </mat-form-field>
 
                   <div>
-                    <h3 class="mb-3">Supported tables</h3>
+                    <h3 class="m-0 mb-3">Supported tables</h3>
                     <mat-chip-set aria-label="Supported source tables">
                       @for (table of source.tables; track table.table) {
                         <mat-chip>{{ table.table }} · {{ table.rows }} rows</mat-chip>
@@ -221,10 +245,9 @@
                       @for (warning of source.warnings; track warning) {
                         <div
                           class="flex gap-3 rounded-xl bg-tertiary-container px-4 py-3.5 text-on-tertiary-container"
-                          data-ui-source-warning
                         >
-                          <mat-icon aria-hidden="true">warning_amber</mat-icon>
-                          <p>{{ warning }}</p>
+                          <mat-icon class="flex-none" aria-hidden="true">warning_amber</mat-icon>
+                          <p class="m-0">{{ warning }}</p>
                         </div>
                       }
                     </div>
@@ -233,12 +256,21 @@
               </mat-card>
             }
 
-            <div data-ui-step-actions>
-              <button type="button" matButton matStepperPrevious [disabled]="store.loading()">
+            <div class="flex flex-wrap items-center justify-end gap-3">
+              <button
+                class="max-xs:flex-auto"
+                type="button"
+                matButton
+                matStepperPrevious
+                [disabled]="store.loading()"
+              >
                 Back
               </button>
-              <a matButton [routerLink]="['/projects', projectId()]">Cancel</a>
+              <a class="max-xs:flex-auto" matButton [routerLink]="['/projects', projectId()]"
+                >Cancel</a
+              >
               <button
+                class="max-xs:flex-auto"
                 type="button"
                 matButton="filled"
                 [disabled]="!candidate() || importForm.name().invalid() || store.loading()"

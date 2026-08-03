@@ -16,14 +16,21 @@
 </app-page-header>
 
 <section
-  data-ui-page
-  [class.has-selection]="selectedCount() > 0"
+  class="mx-auto w-full max-w-table p-8 px-footer-inline py-10 max-nav:p-4"
+  [class.pb-32]="selectedCount() > 0"
   [attr.aria-labelledby]="'combined-' + entity + '-heading'"
 >
   <mat-card appearance="outlined">
-    <div data-ui-table-toolbar>
-      <div data-ui-table-controls>
-        <mat-form-field data-ui-search-field appearance="outline" subscriptSizing="dynamic">
+    <div
+      class="flex items-center justify-between gap-4 p-4 max-tablet:flex-col max-tablet:items-stretch"
+      data-table-toolbar
+    >
+      <div class="flex min-w-0 flex-1 flex-wrap items-center gap-3">
+        <mat-form-field
+          class="w-search-field max-tablet:w-full"
+          appearance="outline"
+          subscriptSizing="dynamic"
+        >
           <mat-label>Search {{ entity }}</mat-label>
           <mat-icon matPrefix aria-hidden="true">search</mat-icon>
           <input
@@ -35,7 +42,8 @@
           />
         </mat-form-field>
         <button
-          data-ui-filter-button
+          class="min-h-14 max-tablet:w-full"
+          data-filter-button
           matButton="tonal"
           type="button"
           [attr.aria-label]="
@@ -48,11 +56,16 @@
           <mat-icon aria-hidden="true">filter_alt</mat-icon>
           Filters
           @if (activeFilterCount()) {
-            <span data-ui-filter-count aria-hidden="true">{{ activeFilterCount() | number }}</span>
+            <span
+              class="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-on-primary px-1 py-0 text-xs font-bold text-primary"
+              aria-hidden="true"
+              >{{ activeFilterCount() | number }}</span
+            >
           }
         </button>
         <button
-          data-ui-column-button
+          class="min-h-14 max-tablet:w-full"
+          data-column-button
           matButton="tonal"
           type="button"
           [attr.aria-label]="'Choose columns, ' + (hiddenColumnCount() | number) + ' hidden'"
@@ -61,29 +74,45 @@
           <mat-icon aria-hidden="true">view_column</mat-icon>
           Columns
           @if (hiddenColumnCount()) {
-            <span data-ui-column-count aria-hidden="true">{{ hiddenColumnCount() | number }}</span>
+            <span
+              class="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-on-primary px-1 py-0 text-xs font-bold text-primary"
+              aria-hidden="true"
+              >{{ hiddenColumnCount() | number }}</span
+            >
           }
         </button>
       </div>
-      <span data-ui-record-count>{{ total() | number }} records</span>
+      <span class="whitespace-nowrap text-on-surface-variant max-tablet:self-end" data-record-count
+        >{{ total() | number }} records</span
+      >
     </div>
     @if (loading()) {
       <mat-progress-bar mode="indeterminate" [attr.aria-label]="'Loading ' + heading" />
     }
     @if (error()) {
-      <p data-ui-error role="alert">{{ error() }}</p>
+      <p
+        class="rounded-xl bg-error-container p-4 px-4 py-3 text-on-error-container"
+        data-error
+        role="alert"
+      >
+        {{ error() }}
+      </p>
     }
-    <div data-ui-table-scroll>
+    <div class="overflow-auto" data-table-scroll>
       <table
         mat-table
-        [class.player-table]="entity === 'players'"
+        [class]="
+          entity === 'players'
+            ? 'w-full min-w-combined-player-table! whitespace-nowrap'
+            : 'w-full min-w-table-base!'
+        "
         [dataSource]="rows()"
         [attr.aria-label]="heading"
       >
         <ng-container matColumnDef="select">
           <th *matHeaderCellDef mat-header-cell>
             <mat-checkbox
-              data-ui-select-all-checkbox
+              data-select-all-checkbox
               [checked]="allRowsSelected()"
               [indeterminate]="someRowsSelected()"
               [disabled]="bulkActionPending() || rows().length === 0"
@@ -97,7 +126,7 @@
           </th>
           <td *matCellDef="let row" mat-cell>
             <mat-checkbox
-              data-ui-row-select-checkbox
+              data-row-select-checkbox
               [checked]="rowSelected(row)"
               [disabled]="bulkActionPending()"
               [aria-label]="(rowSelected(row) ? 'Deselect ' : 'Select ') + row.name"
@@ -125,7 +154,7 @@
         <ng-container matColumnDef="country">
           <th *matHeaderCellDef mat-header-cell>Country</th>
           <td *matCellDef="let row" mat-cell>
-            <span data-ui-country-with-flag>
+            <span class="inline-flex min-w-max items-center gap-country-gap whitespace-nowrap">
               @if (countryFlagCode(row); as flagCode) {
                 <app-country-flag decorative [code]="flagCode" />
               }
@@ -198,10 +227,11 @@
         <ng-container matColumnDef="sources">
           <th *matHeaderCellDef mat-header-cell>Sources</th>
           <td *matCellDef="let row" mat-cell>
-            <div class="flex flex-wrap gap-tight" data-ui-sources>
+            <div class="flex flex-wrap gap-tight">
               @for (source of row.sources; track source.sourceName) {
                 @if (source.sourceUrl && source.available) {
                   <a
+                    class="rounded-full bg-secondary-container px-2 py-micro text-on-secondary-container"
                     target="_blank"
                     rel="noopener noreferrer"
                     [href]="source.sourceUrl"
@@ -210,7 +240,10 @@
                     {{ sourceLabel(source.sourceName) }}
                   </a>
                 } @else {
-                  <span [class.missing]="!source.available">
+                  <span
+                    class="rounded-full bg-secondary-container px-2 py-micro text-on-secondary-container"
+                    [class.text-error]="!source.available"
+                  >
                     {{ sourceLabel(source.sourceName) }}
                     @if (!source.available) {
                       · missing
@@ -224,7 +257,7 @@
         <ng-container matColumnDef="badge">
           <th *matHeaderCellDef mat-header-cell>Badges</th>
           <td *matCellDef="let row" mat-cell>
-            <span data-ui-record-badges>
+            <span class="flex flex-wrap items-center gap-tight">
               <app-combined-entity-status-badge
                 [entityKind]="entity"
                 [status]="row.needsReview ? 'needsReview' : 'ready'"
@@ -245,7 +278,10 @@
         </ng-container>
         <ng-container matColumnDef="actions">
           <th *matHeaderCellDef mat-header-cell>
-            <span data-ui-visually-hidden>Actions</span>
+            <span
+              class="sr-only absolute -m-px size-px overflow-hidden border-0 p-0 whitespace-nowrap"
+              >Actions</span
+            >
           </th>
           <td *matCellDef="let row" mat-cell>
             <button
@@ -288,10 +324,13 @@
         <tr
           *matRowDef="let row; columns: displayedColumns()"
           mat-row
-          [class.selected-row]="rowSelected(row)"
+          [class.bg-secondary-container]="rowSelected(row)"
         ></tr>
-        <tr *matNoDataRow data-ui-empty-row>
-          <td [attr.colspan]="displayedColumns().length">
+        <tr *matNoDataRow data-empty-row>
+          <td
+            class="p-12 text-center text-on-surface-variant"
+            [attr.colspan]="displayedColumns().length"
+          >
             @if (!loading()) {
               No project {{ entity }} match the current filters.
             }
@@ -311,7 +350,8 @@
 
   @if (selectedCount()) {
     <aside
-      data-ui-selection-footer
+      class="fixed bottom-0 z-100 flex min-h-20 items-center justify-between gap-4 border-t border-outline-variant bg-surface-container-high px-footer-inline py-3 shadow-level3 max-tablet:flex-col max-tablet:items-stretch"
+      data-selection-footer
       [attr.aria-label]="'Selected project ' + entity.slice(0, -1) + ' actions'"
       [attr.aria-busy]="bulkActionPending()"
     >
@@ -319,9 +359,9 @@
         {{ selectedCount() | number }}
         {{ selectedCount() === 1 ? entity.slice(0, -1) : entity }} selected
       </strong>
-      <div data-ui-selection-actions>
+      <div class="flex flex-wrap items-center gap-tight">
         <button
-          data-ui-bulk-badges-button
+          data-bulk-badges-button
           matButton="tonal"
           type="button"
           [disabled]="bulkActionPending()"
@@ -331,7 +371,8 @@
           Manage badges
         </button>
         <button
-          data-ui-bulk-delete-button
+          class="enabled:bg-error enabled:text-on-error"
+          data-bulk-delete-button
           matButton="filled"
           type="button"
           [disabled]="bulkActionPending()"

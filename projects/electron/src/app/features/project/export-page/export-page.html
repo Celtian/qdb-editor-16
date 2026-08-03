@@ -6,19 +6,20 @@
 </app-page-header>
 
 <section
-  class="grid gap-6 max-md:px-4 max-md:py-6"
-  data-ui-export-page
+  class="mx-auto grid max-w-workflow gap-6 px-footer-inline py-10 max-md:px-4 max-md:py-6"
   aria-labelledby="export-heading"
 >
   @if (error()) {
-    <p data-ui-error role="alert">{{ error() }}</p>
+    <p class="m-0 rounded-xl bg-error-container px-4 py-3 text-error" data-error role="alert">
+      {{ error() }}
+    </p>
   }
   @if (warning()) {
-    <p data-ui-warning role="status">{{ warning() }}</p>
+    <p class="m-0 text-on-surface-variant" data-warning role="status">{{ warning() }}</p>
   }
 
-  <mat-card appearance="outlined" data-ui-wizard-card>
-    <mat-stepper data-ui-wizard linear aria-label="Export project wizard">
+  <mat-card class="overflow-hidden" appearance="outlined">
+    <mat-stepper data-wizard linear aria-label="Export project wizard">
       <ng-template let-index="index" matStepperIcon="number">
         <span aria-hidden="true">{{ index + 1 }}</span>
       </ng-template>
@@ -31,10 +32,10 @@
 
       <mat-step [completed]="columnsValid()">
         <ng-template matStepLabel>Dataset</ng-template>
-        <div data-ui-step-content>
+        <div class="grid gap-6 px-0 pt-6 pb-2" data-step-content>
           <div>
             <h2>{{ dataset() === 'source' ? 'Source DB' : 'Combined DB' }}</h2>
-            <p>
+            <p class="mx-0 mt-tight mb-0">
               {{
                 dataset() === 'source'
                   ? 'Export the provider-specific records stored in this project.'
@@ -42,7 +43,7 @@
               }}
             </p>
           </div>
-          <div data-ui-step-actions>
+          <div class="flex justify-end gap-2">
             <button matButton="filled" matStepperNext type="button">Next</button>
           </div>
         </div>
@@ -50,42 +51,56 @@
 
       <mat-step [completed]="true">
         <ng-template matStepLabel>Format</ng-template>
-        <div data-ui-step-content>
+        <div class="grid gap-6 px-0 pt-6 pb-2" data-step-content>
           <div>
             <h2>Choose a format</h2>
-            <p>Choose separate files or one nested JSON snapshot.</p>
+            <p class="mx-0 mt-tight mb-0">Choose separate files or one nested JSON snapshot.</p>
           </div>
           <mat-radio-group
-            data-ui-format-options
+            class="grid grid-cols-options gap-3 max-panel:grid-cols-1"
+            data-format-options
             aria-label="Export format"
             [value]="format()"
             (change)="selectFormat($event.value)"
           >
-            <mat-radio-button value="single-json">
-              <span class="flex items-center gap-3" data-ui-option-content>
+            <mat-radio-button
+              class="rounded-xl border border-outline-variant p-4"
+              value="single-json"
+            >
+              <span class="flex items-center gap-3">
                 <mat-icon aria-hidden="true">account_tree</mat-icon>
-                <span
+                <span class="grid"
                   ><strong>Single JSON</strong
-                  ><small>One JSON file with players nested under teams</small></span
+                  ><small class="text-on-surface-variant"
+                    >One JSON file with players nested under teams</small
+                  ></span
                 >
               </span>
             </mat-radio-button>
-            <mat-radio-button value="json">
-              <span class="flex items-center gap-3" data-ui-option-content>
+            <mat-radio-button class="rounded-xl border border-outline-variant p-4" value="json">
+              <span class="flex items-center gap-3">
                 <mat-icon aria-hidden="true">data_object</mat-icon>
-                <span
-                  ><strong>JSON</strong><small>Structured arrays for scripts and APIs</small></span
+                <span class="grid"
+                  ><strong>JSON</strong
+                  ><small class="text-on-surface-variant"
+                    >Structured arrays for scripts and APIs</small
+                  ></span
                 >
               </span>
             </mat-radio-button>
-            <mat-radio-button value="csv">
-              <span class="flex items-center gap-3" data-ui-option-content>
+            <mat-radio-button class="rounded-xl border border-outline-variant p-4" value="csv">
+              <span class="flex items-center gap-3">
                 <mat-icon aria-hidden="true">table_view</mat-icon>
-                <span><strong>CSV</strong><small>UTF-8 tables for spreadsheets</small></span>
+                <span class="grid"
+                  ><strong>CSV</strong
+                  ><small class="text-on-surface-variant"
+                    >UTF-8 tables for spreadsheets</small
+                  ></span
+                >
               </span>
             </mat-radio-button>
           </mat-radio-group>
-          <div data-ui-step-actions>
+          <div class="flex justify-end gap-2">
             <button matButton="filled" matStepperNext type="button">Next</button>
           </div>
         </div>
@@ -93,16 +108,21 @@
 
       <mat-step [completed]="true">
         <ng-template matStepLabel>Columns</ng-template>
-        <div data-ui-step-content>
+        <div class="grid gap-6 px-0 pt-6 pb-2" data-step-content>
           <div>
             <h2>Choose columns</h2>
-            <p>
+            <p class="mx-0 mt-tight mb-0">
               Choose field visibility and exported names independently. Changes here are temporary.
             </p>
           </div>
 
-          <div class="flex flex-wrap gap-4" data-ui-preset-pickers>
-            <mat-form-field data-ui-preset-picker appearance="outline" subscriptSizing="dynamic">
+          <div class="flex flex-wrap gap-4" data-preset-pickers>
+            <mat-form-field
+              class="w-preset-picker"
+              data-preset-picker
+              appearance="outline"
+              subscriptSizing="dynamic"
+            >
               <mat-label>Visibility preset</mat-label>
               <mat-select
                 aria-label="Export visibility preset"
@@ -118,7 +138,12 @@
               </mat-select>
             </mat-form-field>
 
-            <mat-form-field data-ui-preset-picker appearance="outline" subscriptSizing="dynamic">
+            <mat-form-field
+              class="w-preset-picker"
+              data-preset-picker
+              appearance="outline"
+              subscriptSizing="dynamic"
+            >
               <mat-label>Field names preset</mat-label>
               <mat-select
                 aria-label="Export field-name preset"
@@ -142,7 +167,7 @@
             (fieldNamesChange)="updateFieldNames($event)"
           />
 
-          <div data-ui-step-actions>
+          <div class="flex justify-end gap-2">
             <button matButton matStepperPrevious type="button">Back</button>
             <button matButton="filled" matStepperNext type="button" [disabled]="!columnsValid()">
               Next
@@ -153,18 +178,20 @@
 
       <mat-step [completed]="!!destination()">
         <ng-template matStepLabel>Folder</ng-template>
-        <div data-ui-step-content>
+        <div class="grid gap-6 px-0 pt-6 pb-2" data-step-content>
           <div>
             <h2>Choose a destination folder</h2>
-            <p>A new timestamped folder containing the exported files will be created here.</p>
+            <p class="mx-0 mt-tight mb-0">
+              A new timestamped folder containing the exported files will be created here.
+            </p>
           </div>
           <div
-            class="grid items-center gap-3 rounded-xl border border-outline-variant bg-surface-container-low p-4"
-            data-ui-folder-picker
+            class="grid grid-cols-issue-compact items-center gap-3 rounded-xl border border-outline-variant bg-surface-container-low p-4 max-panel:grid-cols-1"
           >
-            <mat-icon aria-hidden="true">folder</mat-icon>
-            <span>{{ destination() || 'No folder selected' }}</span>
+            <mat-icon class="max-panel:hidden" aria-hidden="true">folder</mat-icon>
+            <span class="wrap-anywhere">{{ destination() || 'No folder selected' }}</span>
             <button
+              class="max-panel:justify-self-start"
               matButton="outlined"
               type="button"
               [disabled]="choosingFolder()"
@@ -173,7 +200,7 @@
               {{ destination() ? 'Change folder' : 'Choose folder' }}
             </button>
           </div>
-          <div data-ui-step-actions>
+          <div class="flex justify-end gap-2">
             <button matButton matStepperPrevious type="button">Back</button>
             <button matButton="filled" matStepperNext type="button" [disabled]="!destination()">
               Next
@@ -184,17 +211,21 @@
 
       <mat-step [completed]="leagueSelectionValid()">
         <ng-template matStepLabel>Leagues</ng-template>
-        <div data-ui-step-content>
+        <div class="grid gap-6 px-0 pt-6 pb-2" data-step-content>
           <div>
             <h2>Choose leagues</h2>
-            <p>
+            <p class="mx-0 mt-tight mb-0">
               Teams and players belonging to the selected leagues will be included automatically.
             </p>
           </div>
           @if (loadingLeagues()) {
             <mat-progress-bar mode="indeterminate" aria-label="Loading leagues" />
           } @else if (leagues().length === 0 && !hasTeamsWithoutLeague()) {
-            <p data-ui-empty-state>This project has no leagues to export.</p>
+            <p
+              class="mx-0 mt-tight mb-0 rounded-xl bg-surface-container-low p-4 px-4 py-12 text-center text-on-surface-variant"
+            >
+              This project has no leagues to export.
+            </p>
           } @else {
             <div
               class="max-h-80 overflow-auto rounded-xl border border-outline-variant px-4 py-2"
@@ -202,7 +233,7 @@
               aria-label="Leagues to export"
             >
               <mat-checkbox
-                class="select-all"
+                class="block border-b border-outline-variant pb-2 font-bold"
                 [checked]="allLeaguesSelected()"
                 [indeterminate]="someLeaguesSelected()"
                 (change)="toggleAllLeagues($event.checked)"
@@ -210,36 +241,40 @@
                   hasTeamsWithoutLeague() ? 'All leagues and unassigned teams' : 'All leagues'
                 }}</mat-checkbox
               >
-              <ul data-ui-league-options>
+              <ul class="m-0 list-none p-0" data-league-options>
                 @for (league of leagues(); track league.id) {
-                  <li class="grid min-h-12 items-center gap-3 px-1 py-2" data-ui-league-option>
+                  <li
+                    class="grid min-h-12 grid-cols-league-option items-center gap-3 px-1 py-2 max-panel:grid-cols-icon-copy"
+                    data-league-option
+                  >
                     <mat-checkbox
-                      data-ui-league-checkbox
                       [aria-label]="'Select ' + league.name"
                       [checked]="isLeagueSelected(league.id)"
                       (change)="toggleLeague(league.id, $event.checked)"
                     >
-                      <span data-ui-visually-hidden>Select {{ league.name }}</span>
+                      <span
+                        class="sr-only absolute -m-px size-px overflow-hidden border-0 p-0 whitespace-nowrap"
+                        >Select {{ league.name }}</span
+                      >
                     </mat-checkbox>
-                    <span class="min-w-0 font-bold" data-ui-league-name>{{ league.name }}</span>
+                    <span class="min-w-0 font-bold" data-league-name>{{ league.name }}</span>
                     <span
-                      class="flex min-w-0 flex-wrap items-center justify-end text-sm text-on-surface-variant max-md:justify-start"
-                      data-ui-league-metadata
+                      class="flex min-w-0 flex-wrap items-center justify-end text-sm text-on-surface-variant max-panel:col-start-2 max-md:justify-start"
+                      data-league-metadata
                     >
                       <span
-                        class="inline-flex min-w-0 items-center"
-                        data-ui-country-with-flag
-                        data-ui-metadata-item
+                        class="inline-flex min-w-0 items-center gap-nav-indent"
+                        data-metadata-item
                       >
                         @if (league.countryCode) {
                           <app-country-flag decorative [code]="league.countryCode" />
                         }
                         <span>{{ league.countryName || 'Country not set' }}</span>
                       </span>
-                      <span class="inline-flex min-w-0 items-center" data-ui-metadata-item>{{
+                      <span class="inline-flex min-w-0 items-center" data-metadata-item>{{
                         providerLabel(league)
                       }}</span>
-                      <span class="inline-flex min-w-0 items-center" data-ui-metadata-item>{{
+                      <span class="inline-flex min-w-0 items-center" data-metadata-item>{{
                         league.tier === undefined ? 'Tier not set' : 'Tier ' + league.tier
                       }}</span>
                     </span>
@@ -257,10 +292,12 @@
               }
             </div>
             @if (!leagueSelectionValid()) {
-              <p data-ui-validation role="alert">Choose at least one league or unassigned team.</p>
+              <p class="m-0 mx-0 mt-tight mb-0 text-error" role="alert">
+                Choose at least one league or unassigned team.
+              </p>
             }
           }
-          <div data-ui-step-actions>
+          <div class="flex justify-end gap-2">
             <button matButton matStepperPrevious type="button">Back</button>
             <button
               matButton="filled"
@@ -276,47 +313,49 @@
 
       <mat-step>
         <ng-template matStepLabel>Summary</ng-template>
-        <div data-ui-step-content>
+        <div class="grid gap-6 px-0 pt-6 pb-2" data-step-content>
           <div>
             <h2>Review export</h2>
-            <p>Confirm your choices before creating the files.</p>
+            <p class="mx-0 mt-tight mb-0">Confirm your choices before creating the files.</p>
           </div>
-          <dl data-ui-summary-list>
-            <div>
-              <dt>Dataset</dt>
-              <dd>{{ dataset() === 'source' ? 'Source data' : 'Combined data' }}</dd>
+          <dl class="m-0 rounded-xl border border-outline-variant" data-summary-list>
+            <div class="grid grid-cols-summary-list gap-4 px-4 py-3 max-panel:grid-cols-1">
+              <dt class="font-semibold text-on-surface-variant">Dataset</dt>
+              <dd class="m-0 wrap-anywhere">
+                {{ dataset() === 'source' ? 'Source data' : 'Combined data' }}
+              </dd>
             </div>
-            <div>
-              <dt>Format</dt>
-              <dd>{{ formatLabel() }}</dd>
+            <div class="grid grid-cols-summary-list gap-4 px-4 py-3 max-panel:grid-cols-1">
+              <dt class="font-semibold text-on-surface-variant">Format</dt>
+              <dd class="m-0 wrap-anywhere">{{ formatLabel() }}</dd>
             </div>
-            <div>
-              <dt>Folder</dt>
-              <dd>{{ destination() }}</dd>
+            <div class="grid grid-cols-summary-list gap-4 px-4 py-3 max-panel:grid-cols-1">
+              <dt class="font-semibold text-on-surface-variant">Folder</dt>
+              <dd class="m-0 wrap-anywhere">{{ destination() }}</dd>
             </div>
-            <div>
-              <dt>Leagues</dt>
-              <dd>{{ leagueSummary() }}</dd>
+            <div class="grid grid-cols-summary-list gap-4 px-4 py-3 max-panel:grid-cols-1">
+              <dt class="font-semibold text-on-surface-variant">Leagues</dt>
+              <dd class="m-0 wrap-anywhere">{{ leagueSummary() }}</dd>
             </div>
-            <div>
-              <dt>Visibility preset</dt>
-              <dd>{{ visibilityPresetLabel() }}</dd>
+            <div class="grid grid-cols-summary-list gap-4 px-4 py-3 max-panel:grid-cols-1">
+              <dt class="font-semibold text-on-surface-variant">Visibility preset</dt>
+              <dd class="m-0 wrap-anywhere">{{ visibilityPresetLabel() }}</dd>
             </div>
-            <div>
-              <dt>Field names preset</dt>
-              <dd>{{ fieldNamePresetLabel() }}</dd>
+            <div class="grid grid-cols-summary-list gap-4 px-4 py-3 max-panel:grid-cols-1">
+              <dt class="font-semibold text-on-surface-variant">Field names preset</dt>
+              <dd class="m-0 wrap-anywhere">{{ fieldNamePresetLabel() }}</dd>
             </div>
-            <div>
-              <dt>League columns</dt>
-              <dd>{{ columnSummary('leagues') }}</dd>
+            <div class="grid grid-cols-summary-list gap-4 px-4 py-3 max-panel:grid-cols-1">
+              <dt class="font-semibold text-on-surface-variant">League columns</dt>
+              <dd class="m-0 wrap-anywhere">{{ columnSummary('leagues') }}</dd>
             </div>
-            <div>
-              <dt>Team columns</dt>
-              <dd>{{ columnSummary('teams') }}</dd>
+            <div class="grid grid-cols-summary-list gap-4 px-4 py-3 max-panel:grid-cols-1">
+              <dt class="font-semibold text-on-surface-variant">Team columns</dt>
+              <dd class="m-0 wrap-anywhere">{{ columnSummary('teams') }}</dd>
             </div>
-            <div>
-              <dt>Player columns</dt>
-              <dd>{{ columnSummary('players') }}</dd>
+            <div class="grid grid-cols-summary-list gap-4 px-4 py-3 max-panel:grid-cols-1">
+              <dt class="font-semibold text-on-surface-variant">Player columns</dt>
+              <dd class="m-0 wrap-anywhere">{{ columnSummary('players') }}</dd>
             </div>
           </dl>
 
@@ -326,22 +365,31 @@
 
           @if (result(); as exportResult) {
             <div
-              class="grid items-center gap-3 rounded-xl border border-outline-variant bg-surface-container-low p-4"
-              data-ui-success
+              class="grid grid-cols-issue-compact items-center gap-3 rounded-xl border border-outline-variant bg-surface-container-low p-4 max-panel:grid-cols-1"
               aria-live="polite"
             >
-              <mat-icon aria-hidden="true">check_circle</mat-icon>
-              <div>
+              <mat-icon class="text-primary max-panel:hidden" aria-hidden="true"
+                >check_circle</mat-icon
+              >
+              <div class="grid">
                 <strong>Export complete</strong
-                ><span>{{ fileCountLabel(exportResult.files.length) }}</span>
+                ><span class="text-on-surface-variant">{{
+                  fileCountLabel(exportResult.files.length)
+                }}</span>
               </div>
-              <button matButton="outlined" type="button" (click)="openDirectory()">
-                <mat-icon aria-hidden="true">folder_open</mat-icon>Open directory
+              <button
+                class="max-panel:justify-self-start"
+                matButton="outlined"
+                type="button"
+                (click)="openDirectory()"
+              >
+                <mat-icon class="text-primary" aria-hidden="true">folder_open</mat-icon>Open
+                directory
               </button>
             </div>
           }
 
-          <div data-ui-step-actions>
+          <div class="flex justify-end gap-2">
             <button matButton matStepperPrevious type="button" [disabled]="busy()">Back</button>
             <button
               matButton="filled"

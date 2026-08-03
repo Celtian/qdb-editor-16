@@ -1,8 +1,10 @@
 <article>
-  <header data-ui-hero>
-    <p data-ui-eyebrow>QDB Editor 16 documentation</p>
+  <header class="pb-4" data-hero>
+    <p class="font-semibold text-primary uppercase" data-eyebrow>QDB Editor 16 documentation</p>
     <h1>{{ page.title }}</h1>
-    <p data-ui-summary>{{ page.summary }}</p>
+    <p class="max-w-copy text-doc-summary leading-docs text-on-surface-variant" data-summary>
+      {{ page.summary }}
+    </p>
   </header>
   @for (section of page.sections; track section.title) {
     <mat-card appearance="outlined">

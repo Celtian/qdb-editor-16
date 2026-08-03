@@ -10,7 +10,6 @@ import { CustomBadge } from '../../../shared/custom-badge/custom-badge';
   selector: 'app-delete-custom-badge-dialog',
   imports: [CustomBadge, DecimalPipe, MatButtonModule, MatDialogModule],
   templateUrl: './delete-custom-badge-dialog.html',
-  styleUrl: './delete-custom-badge-dialog.css',
 })
 export class DeleteCustomBadgeDialog {
   protected readonly badge = inject<CustomBadgeSummary>(MAT_DIALOG_DATA);

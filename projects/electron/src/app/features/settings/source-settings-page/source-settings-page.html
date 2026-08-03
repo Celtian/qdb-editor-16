@@ -5,9 +5,14 @@
   </div>
 </app-page-header>
 
-<section data-ui-settings-page aria-labelledby="source-settings-title">
+<section
+  class="mx-auto grid max-w-settings gap-5 px-footer-inline py-10"
+  aria-labelledby="source-settings-title"
+>
   @if (error()) {
-    <p data-ui-error role="alert">{{ error() }}</p>
+    <p class="rounded-xl bg-error-container px-4 py-3 text-error" data-error role="alert">
+      {{ error() }}
+    </p>
   }
 
   <mat-card appearance="outlined">
@@ -24,13 +29,15 @@
         <ol
           cdkDropList
           class="mx-0 mt-4 mb-0 grid list-none gap-2 p-0"
-          data-ui-priority-list
           aria-label="Source priority"
           [cdkDropListData]="priority()"
           (cdkDropListDropped)="drop($event)"
         >
           @for (sourceName of priority(); track sourceName) {
-            <li cdkDrag>
+            <li
+              class="flex min-h-14 items-center gap-3 rounded-xl border border-outline-variant bg-surface px-brand-gap py-tight"
+              cdkDrag
+            >
               <button
                 cdkDragHandle
                 matIconButton
@@ -45,7 +52,7 @@
                 >{{ $index + 1 }}</span
               >
               <strong>{{ sourceLabels[sourceName] }}</strong>
-              <span data-ui-spacer></span>
+              <span class="flex-1"></span>
               <button
                 matIconButton
                 type="button"

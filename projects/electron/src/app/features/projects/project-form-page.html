@@ -11,7 +11,7 @@
   </div>
 </app-page-header>
 
-<section data-ui-page data-ui-project-form-page>
+<section class="mx-auto w-full max-w-form p-8 max-nav:p-4">
   <mat-card appearance="outlined" aria-labelledby="project-details-title">
     <mat-card-header>
       <mat-card-title id="project-details-title">Project details</mat-card-title>
@@ -21,8 +21,8 @@
     </mat-card-header>
 
     <mat-card-content class="grid gap-4 pt-4">
-      <div class="grid gap-4 max-nav:grid-cols-1" data-ui-form-grid>
-        <mat-form-field appearance="outline" data-ui-name-field>
+      <div class="grid grid-cols-form gap-4 max-nav:grid-cols-1">
+        <mat-form-field class="w-full" appearance="outline" data-name-field>
           <mat-label>Project name</mat-label>
           <mat-icon matPrefix>folder</mat-icon>
           <input matInput autocomplete="off" [formField]="projectForm.name" />
@@ -32,7 +32,7 @@
           }
         </mat-form-field>
 
-        <mat-form-field appearance="outline" data-ui-date-field>
+        <mat-form-field class="w-full" appearance="outline">
           <mat-label>Reference date</mat-label>
           <mat-icon matPrefix>event</mat-icon>
           <input type="date" matInput [formField]="projectForm.referenceDate" />
@@ -46,7 +46,9 @@
       </div>
 
       @if (store.error()) {
-        <p data-ui-error-banner role="alert">{{ store.error() }}</p>
+        <p class="rounded-xl bg-error-container px-4 py-3 text-on-error-container" role="alert">
+          {{ store.error() }}
+        </p>
       }
     </mat-card-content>
 

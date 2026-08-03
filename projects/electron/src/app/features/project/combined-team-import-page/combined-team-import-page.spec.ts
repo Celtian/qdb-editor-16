@@ -181,7 +181,7 @@ describe('CombinedTeamImportPage', () => {
     await (await loader.getHarness(MatButtonHarness.with({ text: 'Review summary' }))).click();
     await fixture.whenStable();
     const playerCheckbox = await loader.getHarness(
-      MatCheckboxHarness.with({ selector: '[data-ui-summary-player-option]' }),
+      MatCheckboxHarness.with({ selector: '[data-summary-player-option]' }),
     );
     expect(await playerCheckbox.isChecked()).toBe(true);
     expect(await playerCheckbox.getLabelText()).toContain('Single Player');
@@ -367,12 +367,12 @@ describe('CombinedTeamImportPage', () => {
     const stepIcons = [...element.querySelectorAll<HTMLElement>('.mat-step-icon-content')];
     expect(stepIcons.map((icon) => icon.textContent.trim())).toEqual(['1', '2', '3']);
     expect(stepIcons.every((icon) => !icon.querySelector('mat-icon'))).toBe(true);
-    expect(element.querySelector('mat-stepper')?.hasAttribute('data-ui-wizard')).toBe(true);
+    expect(element.querySelector('mat-stepper')?.hasAttribute('data-wizard')).toBe(true);
     expect(element.querySelector('app-page-header mat-icon')?.textContent?.trim()).toBe('download');
     expect(element.querySelector('h1')?.textContent).toContain('Import teams');
     expect(element.textContent).toContain('Source records remain unchanged.');
     expect(
-      [...element.querySelectorAll('fieldset[data-ui-provider-group] > legend')].map((legend) =>
+      [...element.querySelectorAll('fieldset[data-provider-group] > legend')].map((legend) =>
         legend.textContent.trim(),
       ),
     ).toEqual(['Transfermarkt', 'Soccerway', 'WorldFootball', 'Eurofotbal']);
@@ -445,12 +445,12 @@ describe('CombinedTeamImportPage', () => {
       '[aria-label="Search Transfermarkt teams"]',
     );
     expect(
-      leagueInput?.closest('[data-ui-autocomplete-control]')?.querySelector('app-country-flag'),
+      leagueInput?.closest('[data-autocomplete-control]')?.querySelector('app-country-flag'),
     ).not.toBeNull();
     expect(
-      teamInput?.closest('[data-ui-autocomplete-control]')?.querySelector('app-country-flag'),
+      teamInput?.closest('[data-autocomplete-control]')?.querySelector('app-country-flag'),
     ).not.toBeNull();
-    expect(element.querySelector('[data-ui-selected-tier]')?.textContent).toContain('Tier 1');
+    expect(element.querySelector('[data-selected-tier]')?.textContent).toContain('Tier 1');
     expect(element.querySelector('button[aria-label="Clear Transfermarkt league"]')).not.toBeNull();
     expect(element.querySelector('button[aria-label="Clear Transfermarkt team"]')).not.toBeNull();
 
@@ -1080,16 +1080,14 @@ describe('CombinedTeamImportPage', () => {
 
     expect(
       [
-        ...element.querySelectorAll<HTMLElement>(
-          '[data-ui-alignment-header] [role="columnheader"]',
-        ),
+        ...element.querySelectorAll<HTMLElement>('[data-alignment-header] [role="columnheader"]'),
       ].map((header) => header.textContent.trim()),
     ).toEqual(['Soccerway', 'Eurofotbal']);
     expect(element.querySelector('[data-group-id="group-a"]')?.textContent).toContain(
       'Automatic match',
     );
     const soccerwayAdam = element.querySelector<HTMLElement>('[data-player-id="sw-adam"]');
-    expect(soccerwayAdam?.querySelector('[data-ui-player-birthdate]')?.textContent.trim()).toBe(
+    expect(soccerwayAdam?.querySelector('[data-player-birthdate]')?.textContent.trim()).toBe(
       formatReferenceDate('2000-01-01'),
     );
     expect(soccerwayAdam?.querySelector<HTMLImageElement>('app-country-flag img')?.src).toContain(
@@ -1098,7 +1096,7 @@ describe('CombinedTeamImportPage', () => {
     expect(
       soccerwayAdam?.querySelector('app-country-flag picture')?.getAttribute('aria-hidden'),
     ).toBe('true');
-    expect(soccerwayAdam?.querySelector('[data-ui-player-country-name]')?.textContent.trim()).toBe(
+    expect(soccerwayAdam?.querySelector('[data-player-country-name]')?.textContent.trim()).toBe(
       'Czechia',
     );
     const goalkeeperBadge = soccerwayAdam?.querySelector('app-position-badge abbr');
@@ -1106,16 +1104,16 @@ describe('CombinedTeamImportPage', () => {
     expect(goalkeeperBadge?.getAttribute('aria-label')).toBe('Goalkeeper');
     expect(goalkeeperBadge?.getAttribute('title')).toBe('Goalkeeper');
     const eurofotbalAdam = element.querySelector<HTMLElement>('[data-player-id="ef-adam"]');
-    expect(eurofotbalAdam?.querySelector('[data-ui-player-country-name]')?.textContent.trim()).toBe(
+    expect(eurofotbalAdam?.querySelector('[data-player-country-name]')?.textContent.trim()).toBe(
       'Czechia',
     );
     expect(eurofotbalAdam?.querySelector('app-country-flag')).toBeNull();
     const soccerwayBruno = element.querySelector<HTMLElement>('[data-player-id="sw-bruno"]');
-    expect(soccerwayBruno?.querySelector('[data-ui-player-country-name]')?.textContent.trim()).toBe(
+    expect(soccerwayBruno?.querySelector('[data-player-country-name]')?.textContent.trim()).toBe(
       'SK',
     );
     const eurofotbalBruno = element.querySelector<HTMLElement>('[data-player-id="ef-bruno"]');
-    expect(eurofotbalBruno?.querySelector('[data-ui-player-birthdate]')?.textContent.trim()).toBe(
+    expect(eurofotbalBruno?.querySelector('[data-player-birthdate]')?.textContent.trim()).toBe(
       'Birthdate unknown',
     );
     expect(eurofotbalBruno?.querySelector('.player-country')).toBeNull();
@@ -1147,7 +1145,7 @@ describe('CombinedTeamImportPage', () => {
     expect(
       element
         .querySelector('[data-player-action="drag-sw-adam"] button')
-        ?.hasAttribute('data-ui-player-drag-handle'),
+        ?.hasAttribute('data-player-drag-handle'),
     ).toBe(true);
     expect((await axe.run(element)).violations).toEqual([]);
 
@@ -1211,7 +1209,7 @@ describe('CombinedTeamImportPage', () => {
     expect(playersInRow(element, 'group-b')).toEqual(['sw-adam', 'ef-bruno']);
     expect(
       element.querySelector<HTMLButtonElement>(
-        '[data-player-id="sw-adam"] [data-ui-player-drag-handle]',
+        '[data-player-id="sw-adam"] [data-player-drag-handle]',
       ),
     ).toBe(document.activeElement);
 
@@ -1228,7 +1226,7 @@ describe('CombinedTeamImportPage', () => {
     ).toEqual(['sw-adam']);
     expect(
       element.querySelector<HTMLButtonElement>(
-        '[data-player-id="sw-adam"] [data-ui-player-drag-handle]',
+        '[data-player-id="sw-adam"] [data-player-drag-handle]',
       ),
     ).toBe(document.activeElement);
   });
@@ -1246,7 +1244,7 @@ describe('CombinedTeamImportPage', () => {
     expect(cards[0]?.querySelector('app-country-flag picture')?.getAttribute('aria-hidden')).toBe(
       'true',
     );
-    expect(cards[0]?.querySelector('[data-ui-player-country-name]')?.textContent.trim()).toBe(
+    expect(cards[0]?.querySelector('[data-player-country-name]')?.textContent.trim()).toBe(
       'Czech Republic',
     );
     expect(
@@ -1255,9 +1253,9 @@ describe('CombinedTeamImportPage', () => {
       ),
     ).toEqual(['name', 'countryName']);
     expect(cards[1]?.querySelector('mat-card-subtitle')).not.toBeNull();
-    expect(cards[0]?.querySelector('[data-ui-review-card-metadata]')).not.toBeNull();
-    expect(cards[1]?.querySelector('[data-ui-review-card-metadata]')).not.toBeNull();
-    expect(cards[1]?.querySelector('[data-ui-player-birthdate]')?.textContent.trim()).toBe(
+    expect(cards[0]?.querySelector('[data-review-card-metadata]')).not.toBeNull();
+    expect(cards[1]?.querySelector('[data-review-card-metadata]')).not.toBeNull();
+    expect(cards[1]?.querySelector('[data-player-birthdate]')?.textContent.trim()).toBe(
       formatReferenceDate('2000-01-01'),
     );
     expect(cards[1]?.querySelector<HTMLImageElement>('app-country-flag img')?.src).toContain(
@@ -1266,7 +1264,7 @@ describe('CombinedTeamImportPage', () => {
     expect(cards[1]?.querySelector('app-country-flag picture')?.getAttribute('aria-hidden')).toBe(
       'true',
     );
-    expect(cards[1]?.querySelector('[data-ui-player-country-name]')?.textContent.trim()).toBe(
+    expect(cards[1]?.querySelector('[data-player-country-name]')?.textContent.trim()).toBe(
       'Czechia',
     );
     expect(
@@ -1299,7 +1297,7 @@ describe('CombinedTeamImportPage', () => {
     await fixture.whenStable();
     expect(
       element
-        .querySelector('[data-review-card="team"] [data-ui-player-country-name]')
+        .querySelector('[data-review-card="team"] [data-player-country-name]')
         ?.textContent.trim(),
     ).toBe('Czechia');
 
@@ -1371,8 +1369,8 @@ describe('CombinedTeamImportPage', () => {
       });
       const teamCard = element.querySelector<HTMLElement>('[data-review-card="team"]');
 
-      expect(teamCard?.querySelector('[data-ui-review-card-metadata]')).not.toBeNull();
-      expect(teamCard?.querySelector('[data-ui-player-country-name]')?.textContent.trim()).toBe(
+      expect(teamCard?.querySelector('[data-review-card-metadata]')).not.toBeNull();
+      expect(teamCard?.querySelector('[data-player-country-name]')?.textContent.trim()).toBe(
         expectedCountry,
       );
       const flag = teamCard?.querySelector<HTMLImageElement>('app-country-flag img');
@@ -1413,7 +1411,7 @@ describe('CombinedTeamImportPage', () => {
     await fixture.whenStable();
 
     const playerCheckboxes = await loader.getAllHarnesses(
-      MatCheckboxHarness.with({ selector: '[data-ui-summary-player-option]' }),
+      MatCheckboxHarness.with({ selector: '[data-summary-player-option]' }),
     );
     expect(playerCheckboxes).toHaveLength(5);
     expect(await Promise.all(playerCheckboxes.map((checkbox) => checkbox.isChecked()))).toEqual([
@@ -1423,7 +1421,7 @@ describe('CombinedTeamImportPage', () => {
       true,
       true,
     ]);
-    expect(element.querySelector('[data-ui-summary-player-heading]')?.textContent).toContain(
+    expect(element.querySelector('[data-summary-player-heading]')?.textContent).toContain(
       '5 of 5 selected',
     );
     expect(
@@ -1447,7 +1445,7 @@ describe('CombinedTeamImportPage', () => {
     const dora = await loader.getHarness(MatCheckboxHarness.with({ label: /Dora/ }));
     expect(await bruno.isChecked()).toBe(true);
     expect(await dora.isChecked()).toBe(false);
-    expect(element.querySelector('[data-ui-summary-player-heading]')?.textContent).toContain(
+    expect(element.querySelector('[data-summary-player-heading]')?.textContent).toContain(
       '4 of 5 selected',
     );
     expect(await bulkDeselect.isDisabled()).toBe(true);
@@ -1462,7 +1460,7 @@ describe('CombinedTeamImportPage', () => {
       MatButtonHarness.with({ text: /Apply recombination/ }),
     );
     expect(await commitButton.isDisabled()).toBe(true);
-    expect(element.querySelector('[data-ui-summary-player-error]')?.textContent.trim()).toBe(
+    expect(element.querySelector('[data-summary-player-error]')?.textContent.trim()).toBe(
       'Select at least one project player to continue.',
     );
 

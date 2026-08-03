@@ -31,7 +31,7 @@ export default {
   },
   overrides: [
     {
-      files: ['projects/*/src/styles.css', 'tailwind.theme.css'],
+      files: ['projects/*/src/styles.css', 'tailwind.theme*.css'],
       rules: {
         'at-rule-no-unknown': [
           true,

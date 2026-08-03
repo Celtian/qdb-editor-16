@@ -1,6 +1,8 @@
 <h2 mat-dialog-title>Edit {{ data.kind === 'leagues' ? 'league' : 'team' }}</h2>
 <mat-dialog-content>
-  <p data-ui-hint>Source identity changes keep this record’s internal links intact.</p>
+  <p class="mx-0 mt-0 mb-6 text-on-surface-variant">
+    Source identity changes keep this record’s internal links intact.
+  </p>
   <form id="edit-entity-form" (submit)="$event.preventDefault(); save()">
     <mat-form-field appearance="outline">
       <mat-label>Name</mat-label>
@@ -13,15 +15,16 @@
       <mat-label>Country</mat-label>
       @if (selectedCountry(); as country) {
         <app-country-flag
+          class="ms-3 me-2"
           matIconPrefix
-          data-ui-selected-country-flag
+          data-selected-country-flag
           decorative
           [code]="country.flagCode"
         />
       }
       <input
         matInput
-        data-ui-country-input
+        data-country-input
         type="search"
         autocomplete="off"
         [formField]="metadataForm.countryName"
@@ -30,7 +33,7 @@
       <mat-autocomplete #countryAutocomplete="matAutocomplete" autoActiveFirstOption>
         @for (country of filteredCountries(); track country.code3) {
           <mat-option [value]="country.name">
-            <span data-ui-country-option>
+            <span class="inline-flex items-center gap-2">
               <app-country-flag decorative [code]="country.flagCode" />
               <span>{{ country.name }}</span>
             </span>
@@ -47,7 +50,7 @@
     @if (data.kind === 'teams') {
       <mat-form-field appearance="outline">
         <mat-label>League</mat-label>
-        <mat-select data-ui-league-select [formField]="metadataForm.leagueId">
+        <mat-select data-league-select [formField]="metadataForm.leagueId">
           <mat-option value="">No league</mat-option>
           @for (league of availableLeagues; track league.id) {
             <mat-option [value]="league.id">{{ league.name }}</mat-option>
@@ -94,36 +97,42 @@
       </mat-form-field>
     }
     <aside
-      class="mx-0 mt-3 mb-5 grid gap-3 rounded-xl border border-outline-variant bg-secondary-container px-4 py-3.5 text-on-secondary-container"
-      data-ui-source-note
+      class="mx-0 mt-3 mb-5 grid grid-cols-icon-copy items-start gap-3 rounded-xl border border-outline-variant bg-secondary-container px-4 py-3.5 text-on-secondary-container"
+      data-source-note
       aria-labelledby="source-note-title"
     >
-      <mat-icon aria-hidden="true">link</mat-icon>
+      <mat-icon class="mt-0.5 text-primary" aria-hidden="true">link</mat-icon>
       <div class="min-w-0">
-        <h3 id="source-note-title">How Soccerbot builds source links</h3>
-        <p class="mx-0 mt-0.5 mb-3 text-sm" data-ui-source-note-intro>
+        <h3 class="m-0 text-base leading-ui" id="source-note-title">
+          How Soccerbot builds source links
+        </h3>
+        <p class="mx-0 mt-0.5 mb-3 text-sm leading-issue text-inherit">
           Soccerbot combines the Source ID with the provider’s URL.
         </p>
         <div class="grid gap-2">
           @for (example of sourceUrlGuidance.examples; track example.url) {
             <a
-              class="grid items-center gap-3 rounded-lg border border-outline-variant bg-surface-container-low px-3 py-2.5 text-on-surface no-underline hover:bg-surface-container"
-              data-ui-source-example
+              class="grid grid-cols-action-copy items-center gap-3 rounded-lg border border-outline-variant bg-surface-container-low px-3 py-2.5 text-on-surface no-underline hover:bg-surface-container focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-primary"
+              data-source-example
               target="_blank"
               rel="noopener noreferrer"
               [href]="example.url"
               [attr.aria-label]="'Open example ' + example.label + ' URL in the system browser'"
             >
-              <span class="grid min-w-0 gap-0.5" data-ui-source-example-copy>
-                <strong>{{ example.label }}</strong>
-                <code>{{ example.url }}</code>
+              <span class="grid min-w-0 gap-0.5">
+                <strong class="text-ui-sm text-primary">{{ example.label }}</strong>
+                <code class="font-mono text-xs leading-issue wrap-anywhere whitespace-normal">{{
+                  example.url
+                }}</code>
               </span>
-              <mat-icon aria-hidden="true">open_in_new</mat-icon>
+              <mat-icon class="text-primary" aria-hidden="true">open_in_new</mat-icon>
             </a>
           }
         </div>
         @if (sourceUrlGuidance.detail; as detail) {
-          <p class="mx-0 mt-3 mb-0 text-sm" data-ui-source-note-detail>{{ detail }}</p>
+          <p class="mx-0 mt-3 mb-0 text-sm leading-issue text-inherit" data-source-note-detail>
+            {{ detail }}
+          </p>
         }
       </div>
     </aside>

@@ -1,53 +1,9 @@
-[data-ui-summary] dd {
-  margin: 0.25rem 0 0;
-  font-size: 1.4rem;
-  font-weight: 700;
-}
-
-[data-ui-summary-player-section] > button {
-  justify-self: start;
-}
-
-[data-ui-summary-player-heading] h3,
-[data-ui-summary-player-heading] p,
-[data-ui-summary-player-error] {
-  margin: 0;
-}
-
-[data-ui-summary-player-list] {
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
-}
-
-[data-ui-summary-player-label] {
-  padding-inline-end: 3.75rem;
-}
-
-[data-ui-summary-player-label] [data-ui-player-heading] app-position-badge {
+[data-summary-player-label] [data-player-heading] app-position-badge {
   position: absolute;
   inset-block-start: 0.75rem;
   inset-inline-end: 0.75rem;
 }
 
-[data-ui-step-content] [data-ui-summary-player-error] {
+[data-step-content] [data-summary-player-error] {
   color: var(--mat-sys-error);
-}
-
-[data-ui-error] {
-  color: var(--mat-sys-error);
-}
-
-[data-ui-empty] {
-  padding: 1.25rem;
-  border-radius: 0.75rem;
-  background: var(--mat-sys-surface-container);
-}
-
-@media (width <= 48rem) {
-  [data-ui-provider-groups] {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  [data-ui-review-field] {
-    grid-template-columns: minmax(0, 1fr);
-  }
 }

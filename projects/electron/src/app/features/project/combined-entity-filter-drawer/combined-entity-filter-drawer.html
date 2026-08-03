@@ -1,5 +1,6 @@
 <form
-  data-ui-filter-form
+  class="box-border flex size-full min-h-0 flex-col overflow-hidden"
+  data-filter-form
   aria-labelledby="combined-entity-filter-title"
   [attr.aria-busy]="data.loading()"
   (submit)="apply(); $event.preventDefault()"
@@ -15,13 +16,16 @@
     <mat-progress-bar mode="indeterminate" aria-label="Loading project filter options" />
   }
   @if (data.error()) {
-    <div data-ui-filter-error role="alert">
+    <div
+      class="flex items-center justify-between gap-3 bg-error-container px-4 py-3 text-on-error-container"
+      role="alert"
+    >
       <p>Additional filters could not be loaded: {{ data.error() }}</p>
       <button matButton type="button" (click)="data.retry()">Retry</button>
     </div>
   }
 
-  <div data-ui-filter-fields>
+  <div class="flex flex-1 flex-col gap-4 overflow-auto px-4 py-5">
     <mat-form-field appearance="outline" subscriptSizing="dynamic">
       <mat-label>Linked providers</mat-label>
       <mat-select
@@ -45,7 +49,7 @@
         (selectionChange)="setSelectedBadges($event)"
       >
         <mat-select-trigger>
-          <span data-ui-filter-badges>
+          <span class="flex flex-wrap items-center gap-1" data-filter-badges>
             @for (status of selectedStatuses(); track status.value) {
               <span
                 class="rounded-full bg-tertiary-container px-2 py-micro text-xs font-bold text-on-tertiary-container"
@@ -79,13 +83,13 @@
         <mat-label>Countries</mat-label>
         <mat-chip-grid
           #countryChipGrid
-          data-ui-country-chip-grid
+          data-country-chip-grid
           [attr.aria-label]="selectedCountryOptions().length ? 'Selected countries' : null"
           [disabled]="dynamicControlsDisabled()"
         >
           @for (country of selectedCountryOptions(); track country.name) {
             <mat-chip-row (removed)="removeCountry(country.name)">
-              <span data-ui-country-option>
+              <span class="inline-flex items-center gap-2">
                 @if (country.code) {
                   <app-country-flag decorative [code]="country.code" />
                 }
@@ -116,7 +120,7 @@
         >
           @for (country of filteredCountryOptions(); track country.name) {
             <mat-option [value]="country">
-              <span data-ui-country-option>
+              <span class="inline-flex items-center gap-2">
                 @if (country.code) {
                   <app-country-flag decorative [code]="country.code" />
                 }
@@ -155,7 +159,7 @@
         <mat-label>{{ parentDetails().label }}</mat-label>
         <mat-chip-grid
           #parentChipGrid
-          data-ui-parent-chip-grid
+          data-parent-chip-grid
           [attr.aria-label]="selectedParentOptions().length ? parentDetails().selectedLabel : null"
           [disabled]="dynamicControlsDisabled()"
         >
@@ -204,13 +208,13 @@
         <mat-label>Nationalities</mat-label>
         <mat-chip-grid
           #nationalityChipGrid
-          data-ui-nationality-chip-grid
+          data-nationality-chip-grid
           [attr.aria-label]="selectedNationalityOptions().length ? 'Selected nationalities' : null"
           [disabled]="dynamicControlsDisabled()"
         >
           @for (nationality of selectedNationalityOptions(); track nationality.name) {
             <mat-chip-row (removed)="removeNationality(nationality.name)">
-              <span data-ui-country-option>
+              <span class="inline-flex items-center gap-2">
                 @if (nationality.code) {
                   <app-country-flag decorative [code]="nationality.code" />
                 }
@@ -241,7 +245,7 @@
         >
           @for (nationality of filteredNationalityOptions(); track nationality.name) {
             <mat-option [value]="nationality">
-              <span data-ui-country-option>
+              <span class="inline-flex items-center gap-2">
                 @if (nationality.code) {
                   <app-country-flag decorative [code]="nationality.code" />
                 }
@@ -262,7 +266,7 @@
           [formField]="filtersForm.positions"
         >
           <mat-select-trigger>
-            <span data-ui-position-badges>
+            <span class="flex flex-wrap items-center gap-1" data-position-badges>
               @for (position of filtersModel().positions; track position) {
                 <app-position-badge [position]="position" />
               }
@@ -284,7 +288,7 @@
           [formField]="filtersForm.positionDetails"
         >
           <mat-select-trigger>
-            <span data-ui-position-badges>
+            <span class="flex flex-wrap items-center gap-1" data-position-badges>
               @for (positionDetail of filtersModel().positionDetails; track positionDetail) {
                 <app-position-detail-badge [positionDetail]="positionDetail" />
               }

@@ -4,22 +4,8 @@
   display: block;
 }
 
-[data-ui-settings-page] {
-  display: grid;
-  gap: 1.5rem;
-  margin: 0 auto;
-  max-width: 64rem;
-  padding: 2.5rem clamp(1rem, 4vw, 3.5rem);
-}
-
-[data-ui-setting-description],
-[data-ui-theme-option] small,
-[data-ui-settings-card] mat-card-content {
-  color: var(--mat-sys-on-surface-variant);
-}
-
-[data-ui-setting-description],
-[data-ui-settings-card] mat-card-content p {
+[data-setting-description],
+[data-settings-card] mat-card-content p {
   margin: 0;
 }
 
@@ -54,45 +40,15 @@ mat-radio-button {
   padding: 0.75rem;
 }
 
-mat-radio-button.selected {
-  background: var(--mat-sys-secondary-container);
-}
-
-[data-ui-theme-option] > span {
+[data-theme-option] > span {
   display: grid;
   gap: 0.15rem;
 }
 
-[data-ui-theme-option] small {
-  font-size: 0.85rem;
-}
-
-[data-ui-settings-card] mat-card-header {
-  padding: 1rem 1rem 0;
-}
-
-[data-ui-project-data] {
+[data-project-data] {
   --mat-card-outlined-outline-color: var(--mat-sys-error);
 }
 
-[data-ui-settings-card] mat-card-content {
-  padding-bottom: 0.5rem;
-}
-
-[data-ui-settings-card] mat-card-actions {
-  padding: 0.5rem 1rem 1rem;
-}
-
-[data-ui-project-data] mat-card-content {
-  display: grid;
-  gap: 1rem;
-}
-
-[data-ui-project-count-status][data-ui-error] {
+[data-project-count-status][data-error] {
   color: var(--mat-sys-error);
-}
-
-[data-ui-clear-projects-button]:not(:disabled) {
-  background-color: var(--mat-sys-error);
-  color: var(--mat-sys-on-error);
 }

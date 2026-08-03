@@ -1,14 +1,14 @@
 <mat-tab-group
-  data-ui-export-column-tabs
+  data-export-column-tabs
   animationDuration="0ms"
   aria-label="Export fields by entity"
   [preserveContent]="true"
 >
   @for (entity of entities; track entity) {
     <mat-tab [label]="entityLabels[entity]">
-      <div data-ui-column-tab-content>
+      <div class="grid gap-2 px-4 pt-5 pb-4">
         @if (showsVisibility()) {
-          <div data-ui-column-tab-actions>
+          <div class="flex justify-end">
             <button
               matButton
               type="button"
@@ -23,16 +23,14 @@
           </div>
         }
         <div
-          class="grid"
-          data-ui-column-grid
+          class="grid grid-cols-column-sections gap-x-4 gap-y-3"
           role="group"
           [attr.aria-label]="entityLabels[entity] + ' export fields'"
         >
           @for (column of columnDefinitions[entity]; track column.key) {
             <div
-              data-ui-column-row
-              [class.names-only]="mode() === 'fieldNames'"
-              [class.visibility-only]="mode() === 'visibility'"
+              class="grid grid-cols-column-row items-center gap-2 max-dialog:grid-cols-1 max-dialog:items-stretch"
+              [class.grid-cols-1]="mode() === 'visibility'"
             >
               @if (showsVisibility()) {
                 <mat-checkbox
@@ -43,14 +41,18 @@
                   {{ column.label }}
                 </mat-checkbox>
               } @else {
-                <span data-ui-column-label>{{ column.label }}</span>
+                <span class="ps-3">{{ column.label }}</span>
               }
               @if (showsFieldNames()) {
                 @let index = fieldNameIndex(entity, column.key);
                 @if (index >= 0) {
                   @switch (entity) {
                     @case ('leagues') {
-                      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                      <mat-form-field
+                        class="min-w-0"
+                        appearance="outline"
+                        subscriptSizing="dynamic"
+                      >
                         <mat-label>Export name for {{ column.label }}</mat-label>
                         <input matInput [formField]="fieldNamesForm.leagues[index].outputName" />
                         @if (
@@ -64,7 +66,11 @@
                       </mat-form-field>
                     }
                     @case ('teams') {
-                      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                      <mat-form-field
+                        class="min-w-0"
+                        appearance="outline"
+                        subscriptSizing="dynamic"
+                      >
                         <mat-label>Export name for {{ column.label }}</mat-label>
                         <input matInput [formField]="fieldNamesForm.teams[index].outputName" />
                         @if (
@@ -78,7 +84,11 @@
                       </mat-form-field>
                     }
                     @case ('players') {
-                      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                      <mat-form-field
+                        class="min-w-0"
+                        appearance="outline"
+                        subscriptSizing="dynamic"
+                      >
                         <mat-label>Export name for {{ column.label }}</mat-label>
                         <input matInput [formField]="fieldNamesForm.players[index].outputName" />
                         @if (

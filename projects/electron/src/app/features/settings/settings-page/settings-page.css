@@ -2,19 +2,6 @@
   display: block;
 }
 
-[data-ui-settings-page] {
-  display: grid;
-  gap: 1.5rem;
-  margin: 0 auto;
-  max-width: 64rem;
-  padding: 2.5rem clamp(1rem, 4vw, 3.5rem);
-}
-
-[data-ui-setting-description] {
-  color: var(--mat-sys-on-surface-variant);
-  margin: 0;
-}
-
 mat-card {
   max-width: 42rem;
 }
@@ -23,29 +10,13 @@ mat-card-content {
   padding: 1.5rem;
 }
 
-[data-ui-finder-preferences] mat-card-header,
-[data-ui-source-data] mat-card-header {
-  padding: 1rem 1rem 0;
-}
-
-[data-ui-source-data] {
+[data-source-data] {
   --mat-card-outlined-outline-color: var(--mat-sys-error);
 }
 
-[data-ui-finder-preferences] mat-card-content,
-[data-ui-source-data] mat-card-content {
-  color: var(--mat-sys-on-surface-variant);
-  padding-bottom: 0.5rem;
-}
-
-[data-ui-finder-preferences] mat-card-content p,
-[data-ui-source-data] mat-card-content p {
+[data-finder-preferences] mat-card-content p,
+[data-source-data] mat-card-content p {
   margin: 0;
-}
-
-[data-ui-finder-preferences] mat-card-actions,
-[data-ui-source-data] mat-card-actions {
-  padding: 0.5rem 1rem 1rem;
 }
 
 fieldset {
@@ -54,18 +25,6 @@ fieldset {
   padding: 0;
 }
 
-[data-ui-finder-preferences] legend,
-[data-ui-source-data] legend {
-  color: var(--mat-sys-on-surface);
-  font-size: 1rem;
-  font-weight: 500;
-}
-
-[data-ui-deletion-preview][data-ui-error] {
+[data-deletion-preview][data-error] {
   color: var(--mat-sys-error);
-}
-
-[data-ui-delete-button]:not(:disabled) {
-  background-color: var(--mat-sys-error);
-  color: var(--mat-sys-on-error);
 }

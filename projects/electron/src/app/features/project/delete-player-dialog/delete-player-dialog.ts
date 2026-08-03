@@ -15,7 +15,6 @@ export interface DeletePlayerDialogData {
   selector: 'app-delete-player-dialog',
   imports: [MatButtonModule, MatDialogModule, MatIconModule],
   templateUrl: './delete-player-dialog.html',
-  styleUrl: './delete-player-dialog.css',
 })
 export class DeletePlayerDialog {
   protected readonly data = inject<DeletePlayerDialogData>(MAT_DIALOG_DATA);

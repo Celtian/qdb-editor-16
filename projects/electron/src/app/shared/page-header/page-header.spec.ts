@@ -32,17 +32,17 @@ describe('PageHeader', () => {
     await fixture.whenStable();
     const element = fixture.nativeElement as HTMLElement;
 
-    expect(element.querySelector('[data-ui-page-header-icon] mat-icon')?.textContent?.trim()).toBe(
+    expect(element.querySelector('[data-page-header-icon] mat-icon')?.textContent?.trim()).toBe(
       'flag',
     );
     expect(element.querySelector('[pageHeaderContent] h1')?.textContent).toContain('Countries');
     expect(element.querySelector('[pageHeaderContent] p')?.textContent).toContain(
       'Domain-oriented FIFA 16 objects.',
     );
-    expect(
-      element.querySelector('[data-ui-page-header-title-action] button')?.textContent,
-    ).toContain('Title action');
-    expect(element.querySelector('[data-ui-page-header-actions] button')?.textContent).toContain(
+    expect(element.querySelector('[data-page-header-title-action] button')?.textContent).toContain(
+      'Title action',
+    );
+    expect(element.querySelector('[data-page-header-actions] button')?.textContent).toContain(
       'Create country',
     );
     expect(element.querySelector('.page-header--details')).toBeNull();
@@ -55,7 +55,7 @@ describe('PageHeader', () => {
     fixture.componentInstance.showActions.set(false);
     await fixture.whenStable();
     const actions = (fixture.nativeElement as HTMLElement).querySelector<HTMLElement>(
-      '[data-ui-page-header-actions]',
+      '[data-page-header-actions]',
     );
 
     expect(actions?.childElementCount).toBe(0);

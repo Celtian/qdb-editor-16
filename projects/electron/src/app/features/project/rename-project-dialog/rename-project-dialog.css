@@ -2,11 +2,6 @@
   display: block;
 }
 
-[data-ui-hint] {
-  color: var(--muted-text);
-  margin: 0 0 1.5rem;
-}
-
 form {
   min-width: min(28rem, 72vw);
   padding-top: 0.25rem;

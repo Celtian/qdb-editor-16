@@ -5,7 +5,3 @@
 mat-form-field {
   width: 100%;
 }
-
-[data-ui-hint] {
-  color: var(--muted-text);
-}

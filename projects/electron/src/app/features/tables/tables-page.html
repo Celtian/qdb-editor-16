@@ -15,9 +15,11 @@
   </div>
 </app-page-header>
 
-<section data-ui-page>
+<section class="mx-auto w-full max-w-app p-8 max-nav:p-4">
   @if (store.error()) {
-    <p data-ui-error-banner role="alert">{{ store.error() }}</p>
+    <p class="rounded-xl bg-error-container px-4 py-3 text-on-error-container" role="alert">
+      {{ store.error() }}
+    </p>
   }
 
   <mat-form-field appearance="outline" class="w-full max-w-xl">
@@ -32,7 +34,7 @@
         <mat-card-header>
           <mat-icon
             class="flex items-center justify-center rounded-xl bg-tertiary-container text-on-tertiary-container"
-            data-ui-table-card-icon
+            data-table-card-icon
             mat-card-avatar
             aria-hidden="true"
             >table_view</mat-icon

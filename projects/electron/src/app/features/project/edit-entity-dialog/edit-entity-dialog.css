@@ -2,72 +2,9 @@
   display: block;
 }
 
-[data-ui-hint] {
-  color: var(--muted-text);
-  margin: 0 0 1.5rem;
-}
-
 form {
   display: grid;
   gap: 0.25rem;
   min-width: min(30rem, 76vw);
   padding-top: 0.25rem;
-}
-
-[data-ui-country-option] {
-  align-items: center;
-  display: inline-flex;
-  gap: 0.5rem;
-}
-
-[data-ui-selected-country-flag] {
-  margin-inline: 0.75rem 0.5rem;
-}
-
-[data-ui-source-note] {
-  align-items: start;
-  grid-template-columns: auto minmax(0, 1fr);
-}
-
-[data-ui-source-note] > mat-icon {
-  color: var(--mat-sys-primary);
-  margin-top: 0.125rem;
-}
-
-[data-ui-source-note] h3 {
-  font-size: 1rem;
-  line-height: 1.4;
-  margin: 0;
-}
-
-[data-ui-source-note-intro],
-[data-ui-source-note-detail] {
-  color: inherit;
-  line-height: 1.45;
-}
-
-[data-ui-source-example] {
-  grid-template-columns: minmax(0, 1fr) auto;
-}
-
-[data-ui-source-example]:focus-visible {
-  outline: 0.1875rem solid var(--mat-sys-primary);
-  outline-offset: 0.125rem;
-}
-
-[data-ui-source-example-copy] strong {
-  color: var(--mat-sys-primary);
-  font-size: 0.8125rem;
-}
-
-[data-ui-source-example] code {
-  font-family: ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace;
-  font-size: 0.75rem;
-  line-height: 1.45;
-  overflow-wrap: anywhere;
-  white-space: normal;
-}
-
-[data-ui-source-example] > mat-icon {
-  color: var(--mat-sys-primary);
 }

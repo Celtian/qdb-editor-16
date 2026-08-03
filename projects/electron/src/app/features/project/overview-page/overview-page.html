@@ -18,88 +18,124 @@
     </button>
   </app-page-header>
 
-  <section data-ui-page aria-labelledby="overview-heading">
+  <section
+    class="mx-auto w-full max-w-workflow p-8 px-footer-inline py-10 max-nav:p-4"
+    aria-labelledby="overview-heading"
+  >
     <div class="grid grid-cols-2 gap-5 max-wide:grid-cols-1">
       <section
-        class="min-w-0 p-5"
-        data-ui-dataset-panel
-        data-ui-source-data
+        class="min-w-0 rounded-panel p-5 shadow-sm"
+        data-dataset-panel
+        data-source-data
         aria-labelledby="source-data-heading"
       >
-        <header class="flex items-center gap-3.5" data-ui-dataset-header>
-          <span class="flex flex-none items-center justify-center" data-ui-dataset-icon>
+        <header class="flex items-center gap-3.5" data-dataset-header>
+          <span class="flex flex-none items-center justify-center" data-dataset-icon>
             <mat-icon aria-hidden="true">cloud_download</mat-icon>
           </span>
           <div>
             <h2 id="source-data-heading">Source data</h2>
-            <p>Records imported from external sources</p>
+            <p class="mx-0 mt-micro mb-0 text-ui-note text-on-surface-variant">
+              Records imported from external sources
+            </p>
           </div>
         </header>
         <dl class="mx-0 mt-5 mb-0 grid grid-cols-3 gap-3 max-compact:grid-cols-1">
-          <div data-ui-metric>
-            <dt><mat-icon aria-hidden="true">emoji_events</mat-icon><span>Leagues</span></dt>
+          <div class="min-w-0 rounded-2xl p-3.5" data-metric>
+            <dt
+              class="flex items-center gap-nav-indent text-ui-date font-medium text-on-surface-variant"
+            >
+              <mat-icon aria-hidden="true">emoji_events</mat-icon><span>Leagues</span>
+            </dt>
             <dd>{{ snapshot.leagueCount | number }}</dd>
           </div>
-          <div data-ui-metric>
-            <dt><mat-icon aria-hidden="true">shield</mat-icon><span>Teams</span></dt>
+          <div class="min-w-0 rounded-2xl p-3.5" data-metric>
+            <dt
+              class="flex items-center gap-nav-indent text-ui-date font-medium text-on-surface-variant"
+            >
+              <mat-icon aria-hidden="true">shield</mat-icon><span>Teams</span>
+            </dt>
             <dd>{{ snapshot.teamCount | number }}</dd>
           </div>
-          <div data-ui-metric>
-            <dt><mat-icon aria-hidden="true">groups</mat-icon><span>Players</span></dt>
+          <div class="min-w-0 rounded-2xl p-3.5" data-metric>
+            <dt
+              class="flex items-center gap-nav-indent text-ui-date font-medium text-on-surface-variant"
+            >
+              <mat-icon aria-hidden="true">groups</mat-icon><span>Players</span>
+            </dt>
             <dd>{{ snapshot.playerCount | number }}</dd>
           </div>
         </dl>
       </section>
 
       <section
-        class="min-w-0 p-5"
-        data-ui-combined-data
-        data-ui-dataset-panel
+        class="min-w-0 rounded-panel p-5 shadow-sm"
+        data-combined-data
+        data-dataset-panel
         aria-labelledby="combined-data-heading"
       >
-        <header class="flex items-center gap-3.5" data-ui-dataset-header>
-          <span class="flex flex-none items-center justify-center" data-ui-dataset-icon>
+        <header class="flex items-center gap-3.5" data-dataset-header>
+          <span class="flex flex-none items-center justify-center" data-dataset-icon>
             <mat-icon aria-hidden="true">merge_type</mat-icon>
           </span>
           <div>
             <h2 id="combined-data-heading">Combined data</h2>
-            <p>Canonical records consolidated from source data</p>
+            <p class="mx-0 mt-micro mb-0 text-ui-note text-on-surface-variant">
+              Canonical records consolidated from source data
+            </p>
           </div>
         </header>
         <dl class="mx-0 mt-5 mb-0 grid grid-cols-3 gap-3 max-compact:grid-cols-1">
-          <div data-ui-metric>
-            <dt><mat-icon aria-hidden="true">emoji_events</mat-icon><span>Leagues</span></dt>
+          <div class="min-w-0 rounded-2xl p-3.5" data-metric>
+            <dt
+              class="flex items-center gap-nav-indent text-ui-date font-medium text-on-surface-variant"
+            >
+              <mat-icon aria-hidden="true">emoji_events</mat-icon><span>Leagues</span>
+            </dt>
             <dd>{{ snapshot.combinedLeagueCount ?? 0 | number }}</dd>
           </div>
-          <div data-ui-metric>
-            <dt><mat-icon aria-hidden="true">shield</mat-icon><span>Teams</span></dt>
+          <div class="min-w-0 rounded-2xl p-3.5" data-metric>
+            <dt
+              class="flex items-center gap-nav-indent text-ui-date font-medium text-on-surface-variant"
+            >
+              <mat-icon aria-hidden="true">shield</mat-icon><span>Teams</span>
+            </dt>
             <dd>{{ snapshot.combinedTeamCount ?? 0 | number }}</dd>
           </div>
-          <div data-ui-metric>
-            <dt><mat-icon aria-hidden="true">groups</mat-icon><span>Players</span></dt>
+          <div class="min-w-0 rounded-2xl p-3.5" data-metric>
+            <dt
+              class="flex items-center gap-nav-indent text-ui-date font-medium text-on-surface-variant"
+            >
+              <mat-icon aria-hidden="true">groups</mat-icon><span>Players</span>
+            </dt>
             <dd>{{ snapshot.combinedPlayerCount ?? 0 | number }}</dd>
           </div>
         </dl>
       </section>
 
       <section
-        class="min-w-0 p-5"
-        data-ui-dataset-panel
-        data-ui-fifa-data
+        class="min-w-0 rounded-panel p-5 shadow-sm"
+        data-dataset-panel
         aria-labelledby="fifa-data-heading"
       >
-        <header class="flex items-center gap-3.5" data-ui-dataset-header>
-          <span class="flex flex-none items-center justify-center" data-ui-dataset-icon>
+        <header class="flex items-center gap-3.5" data-dataset-header>
+          <span class="flex flex-none items-center justify-center" data-dataset-icon>
             <mat-icon aria-hidden="true">storage</mat-icon>
           </span>
           <div>
             <h2 id="fifa-data-heading">FIFA databases</h2>
-            <p>Managed FIFA 16 database files</p>
+            <p class="mx-0 mt-micro mb-0 text-ui-note text-on-surface-variant">
+              Managed FIFA 16 database files
+            </p>
           </div>
         </header>
         <dl class="mx-0 mt-5 mb-0 grid grid-cols-3 gap-3 max-compact:grid-cols-1">
-          <div data-ui-metric>
-            <dt><mat-icon aria-hidden="true">storage</mat-icon><span>Databases</span></dt>
+          <div class="min-w-0 rounded-2xl p-3.5" data-metric>
+            <dt
+              class="flex items-center gap-nav-indent text-ui-date font-medium text-on-surface-variant"
+            >
+              <mat-icon aria-hidden="true">storage</mat-icon><span>Databases</span>
+            </dt>
             <dd>{{ snapshot.databaseCount ?? 0 | number }}</dd>
           </div>
         </dl>
@@ -109,21 +145,22 @@
     <mat-card
       appearance="outlined"
       class="mt-5 overflow-hidden"
-      data-ui-details
       role="region"
       aria-labelledby="snapshot-details-heading"
     >
-      <mat-card-content>
+      <mat-card-content class="p-5">
         <div
           class="flex items-center justify-between gap-4 max-compact:flex-col max-compact:items-start"
         >
-          <div class="flex items-center gap-3.5" data-ui-details-heading>
-            <span class="flex flex-none items-center justify-center" data-ui-details-icon>
+          <div class="flex items-center gap-3.5" data-details-heading>
+            <span class="flex flex-none items-center justify-center" data-details-icon>
               <mat-icon aria-hidden="true">calendar_month</mat-icon>
             </span>
             <div>
               <h2 id="snapshot-details-heading">Snapshot details</h2>
-              <p data-ui-details-intro>Key dates and snapshot history</p>
+              <p class="mx-0 mt-micro mb-0 text-ui-note text-on-surface-variant">
+                Key dates and snapshot history
+              </p>
             </div>
           </div>
           <a matButton="filled" [routerLink]="['/projects', projectId, 'source', 'import']">
@@ -133,34 +170,42 @@
         </div>
         <dl
           class="mx-0 mt-5 mb-0 grid grid-cols-4 gap-px overflow-hidden rounded-xl border border-outline-variant bg-outline-variant max-wide:grid-cols-2 max-compact:grid-cols-1"
-          data-ui-details-list
+          data-details-list
         >
-          <div>
+          <div class="grid min-w-0 gap-tight bg-surface-container-low p-4">
             <dt>Reference date</dt>
-            <dd>{{ snapshot.referenceDate | referenceDate }}</dd>
+            <dd class="m-0 font-medium wrap-anywhere tabular-nums">
+              {{ snapshot.referenceDate | referenceDate }}
+            </dd>
           </div>
-          <div>
+          <div class="grid min-w-0 gap-tight bg-surface-container-low p-4">
             <dt>Sources</dt>
-            <dd>{{ sourceText() }}</dd>
+            <dd class="m-0 font-medium wrap-anywhere tabular-nums">{{ sourceText() }}</dd>
           </div>
-          <div>
+          <div class="grid min-w-0 gap-tight bg-surface-container-low p-4">
             <dt>Created</dt>
-            <dd>{{ snapshot.createdAt | date: 'medium' }}</dd>
+            <dd class="m-0 font-medium wrap-anywhere tabular-nums">
+              {{ snapshot.createdAt | date: 'medium' }}
+            </dd>
           </div>
-          <div>
+          <div class="grid min-w-0 gap-tight bg-surface-container-low p-4">
             <dt>Last updated</dt>
-            <dd>{{ snapshot.updatedAt | date: 'medium' }}</dd>
+            <dd class="m-0 font-medium wrap-anywhere tabular-nums">
+              {{ snapshot.updatedAt | date: 'medium' }}
+            </dd>
           </div>
         </dl>
       </mat-card-content>
     </mat-card>
   </section>
 } @else if (error()) {
-  <section data-ui-page>
-    <p data-ui-error role="alert">{{ error() }}</p>
+  <section class="mx-auto w-full max-w-workflow p-8 px-footer-inline py-10 max-nav:p-4">
+    <p class="rounded-xl bg-error-container px-4 py-3 text-error" data-error role="alert">
+      {{ error() }}
+    </p>
   </section>
 } @else {
-  <section data-ui-page>
+  <section class="mx-auto w-full max-w-workflow p-8 px-footer-inline py-10 max-nav:p-4">
     <div class="flex min-h-80 items-center justify-center gap-4">
       <mat-spinner diameter="36" /><span>Loading snapshot…</span>
     </div>

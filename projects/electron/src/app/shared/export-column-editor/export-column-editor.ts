@@ -39,7 +39,6 @@ const entityKinds = ['leagues', 'teams', 'players'] as const satisfies readonly 
     MatTabsModule,
   ],
   templateUrl: './export-column-editor.html',
-  styleUrl: './export-column-editor.css',
 })
 export class ExportColumnEditor {
   readonly selection = model<ExportColumnSelection>(defaultExportColumns());

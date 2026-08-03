@@ -9,15 +9,17 @@
   </a>
 </app-page-header>
 
-<section class="grid gap-4" data-ui-migration-page data-ui-page>
+<section class="mx-auto grid w-full max-w-migration gap-4 p-8 max-nav:p-4">
   @if (loading()) {
     <mat-progress-bar mode="indeterminate" aria-label="Reading legacy database" />
   }
   @if (error()) {
-    <p data-ui-error-banner role="alert">{{ error() }}</p>
+    <p class="rounded-xl bg-error-container px-4 py-3 text-on-error-container" role="alert">
+      {{ error() }}
+    </p>
   }
   @if (result(); as migrationResult) {
-    <p data-ui-success-banner role="status">
+    <p role="status">
       Migration completed: {{ migrationResult.projectsCreated }} projects created and
       {{ migrationResult.projectsMerged }} merged.
     </p>
@@ -30,7 +32,9 @@
       <mat-card-subtitle>The selected SQLite file is always opened read-only.</mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
-      <p data-ui-source-path>{{ sourcePath() || 'No legacy database detected.' }}</p>
+      <p class="wrap-anywhere" data-source-path>
+        {{ sourcePath() || 'No legacy database detected.' }}
+      </p>
     </mat-card-content>
     <mat-card-actions align="end">
       @if (sourcePath()) {
@@ -61,27 +65,26 @@
           @for (project of migrationPreview.projects; track project.legacyProjectId) {
             <article
               class="flex items-center justify-between gap-4 rounded-xl border border-outline-variant p-4 max-narrow:flex-col max-narrow:items-start"
-              data-ui-project-preview
             >
               <div>
-                <h2>{{ project.name }}</h2>
-                <p>
+                <h2 class="m-0">{{ project.name }}</h2>
+                <p class="m-0">
                   {{ project.referenceDate }} ·
                   {{ project.action === 'merge' ? 'Merge into' : 'Create' }}
                   <strong>{{ project.targetName }}</strong>
                 </p>
               </div>
-              <dl>
+              <dl class="m-0 flex gap-4">
                 <div>
-                  <dt>Source</dt>
-                  <dd>
+                  <dt class="text-xs text-on-surface-variant">Source</dt>
+                  <dd class="m-0">
                     {{ project.counts.leagues }} / {{ project.counts.teams }} /
                     {{ project.counts.players }}
                   </dd>
                 </div>
                 <div>
-                  <dt>Combined</dt>
-                  <dd>
+                  <dt class="text-xs text-on-surface-variant">Combined</dt>
+                  <dd class="m-0">
                     {{ project.counts.combinedLeagues }} / {{ project.counts.combinedTeams }} /
                     {{ project.counts.combinedPlayers }}
                   </dd>

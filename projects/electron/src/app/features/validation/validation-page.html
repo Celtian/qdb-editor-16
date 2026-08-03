@@ -15,84 +15,83 @@
   </button>
 </app-page-header>
 
-<section class="max-w-5xl" data-ui-page aria-labelledby="validation-heading">
+<section class="mx-auto w-full max-w-5xl p-8 max-nav:p-4" aria-labelledby="validation-heading">
   @if (store.error()) {
-    <p data-ui-error-banner role="alert">{{ store.error() }}</p>
+    <p class="rounded-xl bg-error-container px-4 py-3 text-on-error-container" role="alert">
+      {{ store.error() }}
+    </p>
   }
 
   @if (report(); as result) {
     <div class="mb-4 grid grid-cols-4 gap-3 max-editor:grid-cols-2 max-nano:grid-cols-1">
-      <mat-card appearance="outlined" data-ui-metric>
-        <mat-card-content>
+      <mat-card appearance="outlined" data-metric>
+        <mat-card-content class="flex items-center gap-3 pt-4">
           <span
             class="grid size-10 flex-none place-items-center rounded-xl"
-            data-ui-metric-icon
+            data-metric-icon
             aria-hidden="true"
           >
             <mat-icon>table_view</mat-icon>
           </span>
-          <span class="grid" data-ui-metric-copy>
-            <strong>{{ result.tablesChecked | number }}</strong>
-            <span>Tables checked</span>
+          <span class="grid">
+            <strong class="text-xl font-medium">{{ result.tablesChecked | number }}</strong>
+            <span class="text-xs text-on-surface-variant">Tables checked</span>
           </span>
         </mat-card-content>
       </mat-card>
-      <mat-card appearance="outlined" data-ui-metric>
-        <mat-card-content>
+      <mat-card appearance="outlined" data-metric>
+        <mat-card-content class="flex items-center gap-3 pt-4">
           <span
             class="grid size-10 flex-none place-items-center rounded-xl"
-            data-ui-metric-icon
+            data-metric-icon
             aria-hidden="true"
           >
             <mat-icon>view_list</mat-icon>
           </span>
-          <span class="grid" data-ui-metric-copy>
-            <strong>{{ result.rowsChecked | number }}</strong>
-            <span>Rows checked</span>
+          <span class="grid">
+            <strong class="text-xl font-medium">{{ result.rowsChecked | number }}</strong>
+            <span class="text-xs text-on-surface-variant">Rows checked</span>
           </span>
         </mat-card-content>
       </mat-card>
-      <mat-card appearance="outlined" data-ui-metric data-ui-metric-error>
-        <mat-card-content>
+      <mat-card appearance="outlined" data-metric data-metric-error>
+        <mat-card-content class="flex items-center gap-3 pt-4">
           <span
             class="grid size-10 flex-none place-items-center rounded-xl"
-            data-ui-metric-icon
+            data-metric-icon
             aria-hidden="true"
           >
             <mat-icon>error_outline</mat-icon>
           </span>
-          <span class="grid" data-ui-metric-copy>
-            <strong>{{ result.errorCount | number }}</strong>
-            <span>Errors</span>
+          <span class="grid">
+            <strong class="text-xl font-medium">{{ result.errorCount | number }}</strong>
+            <span class="text-xs text-on-surface-variant">Errors</span>
           </span>
         </mat-card-content>
       </mat-card>
-      <mat-card appearance="outlined" data-ui-metric data-ui-metric-warning>
-        <mat-card-content>
+      <mat-card appearance="outlined" data-metric data-metric-warning>
+        <mat-card-content class="flex items-center gap-3 pt-4">
           <span
             class="grid size-10 flex-none place-items-center rounded-xl"
-            data-ui-metric-icon
+            data-metric-icon
             aria-hidden="true"
           >
             <mat-icon>warning_amber</mat-icon>
           </span>
-          <span class="grid" data-ui-metric-copy>
-            <strong>{{ result.warningCount | number }}</strong>
-            <span>Warnings</span>
+          <span class="grid">
+            <strong class="text-xl font-medium">{{ result.warningCount | number }}</strong>
+            <span class="text-xs text-on-surface-variant">Warnings</span>
           </span>
         </mat-card-content>
       </mat-card>
     </div>
 
     @if (result.validatedAt) {
-      <p
-        class="mx-0 mt-0 mb-3 flex items-center gap-2 text-sm leading-5 text-on-surface-variant"
-        data-ui-validation-time
-      >
-        <mat-icon aria-hidden="true">schedule</mat-icon>
+      <p class="mx-0 mt-0 mb-3 flex items-center gap-2 text-sm leading-5 text-on-surface-variant">
+        <mat-icon class="size-4.5 text-lg" aria-hidden="true">schedule</mat-icon>
         <span>
           Last validated
-          <time [attr.datetime]="result.validatedAt">
+          <time class="font-medium text-on-surface" [attr.datetime]="result.validatedAt">
             {{ result.validatedAt | date: 'medium' }}
           </time>
         </span>
@@ -105,58 +104,64 @@
         track issue.severity + issue.table + issue.field + issue.message
       ) {
         <details
-          class="overflow-hidden border border-outline-variant bg-surface-container-low"
-          data-ui-issue
-          [attr.data-ui-issue-error]="issue.severity === 'error' ? '' : null"
-          [class.issue--warning]="issue.severity === 'warning'"
+          class="overflow-hidden rounded-card border border-outline-variant bg-surface-container-low"
+          data-issue
+          [attr.data-issue-error]="issue.severity === 'error' ? '' : null"
         >
-          <summary>
+          <summary
+            class="grid min-h-19 cursor-pointer list-none grid-cols-issue items-center gap-3.5 px-4 py-3 max-compact:grid-cols-issue-compact max-compact:gap-3"
+          >
             <span
               class="grid size-10 place-items-center rounded-xl"
-              data-ui-issue-icon
+              data-issue-icon
               aria-hidden="true"
             >
               <mat-icon>{{
                 issue.severity === 'error' ? 'error_outline' : 'warning_amber'
               }}</mat-icon>
             </span>
-            <span class="grid min-w-0 gap-0.5" data-ui-issue-heading>
-              <strong>
+            <span class="grid min-w-0 gap-0.5">
+              <strong class="truncate text-issue-heading leading-5.5 font-medium">
                 {{ issue.table }}
                 @if (issue.field) {
-                  <span data-ui-issue--separator>.</span>{{ issue.field }}
+                  <span>.</span>{{ issue.field }}
                 }
               </strong>
-              <span>{{ issue.message }}</span>
+              <span class="truncate text-ui-sm leading-5 text-on-surface-variant">{{
+                issue.message
+              }}</span>
             </span>
             <span
-              class="rounded-full px-2.5 py-1.5 text-xs leading-4 font-medium whitespace-nowrap max-compact:justify-self-start"
-              data-ui-issue-count
+              class="rounded-full px-2.5 py-1.5 text-xs leading-4 font-medium whitespace-nowrap max-compact:col-start-2 max-compact:justify-self-start"
+              data-issue-count
             >
               {{ issue.occurrences | number }}
               {{ issue.occurrences === 1 ? 'occurrence' : 'occurrences' }}
             </span>
-            <mat-icon class="text-on-surface-variant" data-ui-issue-chevron aria-hidden="true"
+            <mat-icon
+              class="text-on-surface-variant max-compact:col-start-3 max-compact:row-start-1"
+              data-issue-chevron
+              aria-hidden="true"
               >expand_more</mat-icon
             >
           </summary>
 
           <div
-            class="border-t border-outline-variant bg-surface max-compact:pl-4"
-            data-ui-issue-details
+            class="border-t border-outline-variant bg-surface py-4 ps-17.5 pe-4 max-compact:pl-4"
           >
             @if (issue.samples.length) {
               <p
-                class="mx-0 mt-0 mb-2 text-xs font-medium text-on-surface-variant uppercase"
-                data-ui-issue-label
+                class="mx-0 mt-0 mb-2 text-xs font-medium tracking-subtle text-on-surface-variant uppercase"
               >
                 Sample rows
               </p>
-              <ul class="m-0 grid list-none gap-1.5 p-0" data-ui-samples>
+              <ul class="m-0 grid list-none gap-1.5 p-0">
                 @for (sample of issue.samples; track sample.rowId) {
-                  <li>
+                  <li
+                    class="flex min-w-0 items-center justify-between gap-4 rounded-lg bg-surface-container px-3 py-2 text-ui-sm"
+                  >
                     <span>Row {{ sample.rowId | number }}</span>
-                    <code>{{ sample.value }}</code>
+                    <code class="overflow-hidden text-ellipsis">{{ sample.value }}</code>
                   </li>
                 }
               </ul>
@@ -180,12 +185,12 @@
           </div>
         </details>
       } @empty {
-        <mat-card appearance="outlined" data-ui-empty-state data-ui-validation-empty-state>
+        <mat-card class="px-4 py-12 text-center text-on-surface-variant" appearance="outlined">
           <span class="text-primary" aria-hidden="true">
-            <mat-icon>check_circle</mat-icon>
+            <mat-icon class="size-12 text-5xl">check_circle</mat-icon>
           </span>
-          <h2>No issues found</h2>
-          <p>The current supported FIFA 16 data passes validation.</p>
+          <h2 class="mx-0 mt-2 mb-0">No issues found</h2>
+          <p class="mx-0 mt-2 mb-0">The current supported FIFA 16 data passes validation.</p>
         </mat-card>
       }
     </div>

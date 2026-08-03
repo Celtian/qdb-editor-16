@@ -16,7 +16,6 @@ export interface DeleteTeamDialogData {
   selector: 'app-delete-team-dialog',
   imports: [MatButtonModule, MatDialogModule, MatIconModule],
   templateUrl: './delete-team-dialog.html',
-  styleUrl: './delete-team-dialog.css',
 })
 export class DeleteTeamDialog {
   protected readonly data = inject<DeleteTeamDialogData>(MAT_DIALOG_DATA);

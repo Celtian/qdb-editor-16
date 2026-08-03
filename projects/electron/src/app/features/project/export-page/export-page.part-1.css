@@ -1,9 +1,3 @@
-[data-ui-export-page] {
-  margin: 0 auto;
-  max-width: 78rem;
-  padding: 2.5rem clamp(1rem, 4vw, 3.5rem);
-}
-
 h2 {
   margin: 0;
   font-size: 1.35rem;
@@ -13,116 +7,24 @@ p {
   color: var(--mat-sys-on-surface-variant);
 }
 
-[data-ui-wizard-card] {
-  overflow: hidden;
-}
-
-[data-ui-step-content] {
-  display: grid;
-  gap: 1.5rem;
-  padding: 1.5rem 0 0.5rem;
-}
-
-[data-ui-step-content] p {
-  margin: 0.35rem 0 0;
-}
-
-[data-ui-format-options] {
-  display: grid;
-  gap: 0.75rem;
-  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
-}
-
-[data-ui-format-options] mat-radio-button {
-  border: 1px solid var(--mat-sys-outline-variant);
-  border-radius: 0.75rem;
-  padding: 1rem;
-}
-
-[data-ui-format-options] mat-radio-button:has(input:checked) {
+[data-format-options] mat-radio-button:has(input:checked) {
   background: var(--mat-sys-secondary-container);
   border-color: var(--mat-sys-primary);
 }
 
-[data-ui-option-content] > span,
-[data-ui-success] div {
-  display: grid;
-}
-
-[data-ui-option-content] small,
-[data-ui-success] span {
-  color: var(--mat-sys-on-surface-variant);
-}
-
-[data-ui-preset-picker] {
-  width: min(100%, 24rem);
-}
-
-[data-ui-preset-pickers] [data-ui-preset-picker] {
+[data-preset-pickers] [data-preset-picker] {
   flex: 1 1 18rem;
 }
 
-[data-ui-folder-picker],
-[data-ui-success] {
-  grid-template-columns: auto minmax(0, 1fr) auto;
-}
-
-[data-ui-folder-picker] span {
-  overflow-wrap: anywhere;
-}
-
-.select-all {
-  border-bottom: 1px solid var(--mat-sys-outline-variant);
-  display: block;
-  font-weight: 700;
-  padding-bottom: 0.5rem;
-}
-
-[data-ui-league-options] {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-[data-ui-league-option] {
-  grid-template-columns: auto minmax(10rem, 1fr) auto;
-}
-
-[data-ui-league-option] + [data-ui-league-option] {
+[data-league-option] + [data-league-option] {
   border-top: 1px solid var(--mat-sys-outline-variant);
 }
 
-[data-ui-metadata-item] + [data-ui-metadata-item]::before {
+[data-metadata-item] + [data-metadata-item]::before {
   content: '·';
   margin-inline: 0.5rem;
 }
 
-[data-ui-country-with-flag] {
-  gap: 0.4rem;
-}
-
-[data-ui-visually-hidden] {
-  clip-path: inset(50%);
-  height: 1px;
-  overflow: hidden;
-  position: absolute;
-  white-space: nowrap;
-  width: 1px;
-}
-
-[data-ui-summary-list] {
-  border: 1px solid var(--mat-sys-outline-variant);
-  border-radius: 0.75rem;
-  margin: 0;
-}
-
-[data-ui-summary-list] div {
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: minmax(8rem, 11rem) minmax(0, 1fr);
-  padding: 0.75rem 1rem;
-}
-
-[data-ui-summary-list] div + div {
+[data-summary-list] div + div {
   border-top: 1px solid var(--mat-sys-outline-variant);
 }

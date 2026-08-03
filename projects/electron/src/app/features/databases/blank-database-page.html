@@ -5,7 +5,7 @@
   </div>
 </app-page-header>
 
-<section class="max-w-3xl" data-ui-page>
+<section class="mx-auto w-full max-w-3xl p-8 max-nav:p-4">
   <mat-card appearance="outlined">
     <mat-card-content class="pt-6">
       <mat-form-field appearance="outline" class="w-full">
@@ -16,7 +16,9 @@
         }
       </mat-form-field>
       @if (store.error()) {
-        <p data-ui-error-banner role="alert">{{ store.error() }}</p>
+        <p class="rounded-xl bg-error-container px-4 py-3 text-on-error-container" role="alert">
+          {{ store.error() }}
+        </p>
       }
     </mat-card-content>
     <mat-card-actions align="end">

@@ -11,7 +11,7 @@
   </div>
 </app-page-header>
 
-<section class="max-w-5xl" data-ui-page>
+<section class="mx-auto w-full max-w-5xl p-8 max-nav:p-4">
   <nav mat-tab-nav-bar aria-label="Object detail sections" [tabPanel]="tabPanel">
     @for (tab of config().sections; track tab.id) {
       <a
@@ -38,7 +38,9 @@
 
   <mat-tab-nav-panel #tabPanel>
     @if (store.error()) {
-      <p class="mt-4" data-ui-error-banner role="alert">{{ store.error() }}</p>
+      <p class="mt-4 rounded-xl bg-error-container px-4 py-3 text-on-error-container" role="alert">
+        {{ store.error() }}
+      </p>
     }
 
     @if (detail(); as data) {
@@ -46,8 +48,7 @@
         <mat-card-content class="pt-4">
           @if (stadiumImageUrl(); as imageUrl) {
             <img
-              class="mb-5 block h-auto object-cover"
-              data-ui-stadium-image
+              class="mb-5 block h-auto w-stadium-image rounded-material-medium object-cover"
               width="600"
               height="233"
               [ngSrc]="imageUrl"
@@ -69,7 +70,7 @@
             </mat-form-field>
             <div
               class="relative mb-5 min-h-80 overflow-hidden rounded-xl border border-outline-variant bg-surface-container"
-              data-ui-offline-map
+              data-offline-map
               role="img"
               [attr.aria-label]="
                 'Offline coordinate map at latitude ' +
@@ -80,13 +81,12 @@
             >
               <span
                 class="absolute size-4 rounded-full bg-primary"
-                data-ui-map-marker
+                data-map-marker
                 [style.left]="mapPosition().left"
                 [style.top]="mapPosition().top"
               ></span>
               <span
-                class="absolute rounded-lg bg-surface px-2 py-1 text-xs text-on-surface-variant"
-                data-ui-map-label
+                class="absolute right-3 bottom-3 rounded-lg bg-surface px-2 py-1 text-xs text-on-surface-variant"
                 >Offline coordinate grid</span
               >
             </div>
@@ -94,18 +94,22 @@
 
           @if (data.fields.length) {
             @if (data.readOnly) {
-              <dl class="m-0 grid list-none gap-4 p-0" data-ui-detail-values>
+              <dl class="m-0 grid list-none grid-cols-detail-values gap-4 p-0">
                 @for (field of data.fields; track field.name) {
-                  <div>
-                    <dt>{{ field.name.replaceAll('_', ' ') }}</dt>
-                    <dd>{{ fieldValue(field.name, field.defaultValue) }}</dd>
+                  <div class="rounded-lg bg-surface-container p-3">
+                    <dt class="text-xs text-on-surface-variant capitalize">
+                      {{ field.name.replaceAll('_', ' ') }}
+                    </dt>
+                    <dd class="mx-0 mt-1 mb-0 font-medium">
+                      {{ fieldValue(field.name, field.defaultValue) }}
+                    </dd>
                   </div>
                 }
               </dl>
             } @else if (section() === 'jersey-numbers') {
               <div class="grid gap-3">
                 @for (item of related(); track item.id) {
-                  <div class="grid items-center gap-4" data-ui-related-editor>
+                  <div class="grid grid-cols-related items-center gap-4">
                     <span>{{ item.name }}</span>
                     <app-object-value-field
                       [field]="data.fields[0]"
@@ -170,8 +174,8 @@
           }
 
           @if (!data.fields.length && !data.related.length) {
-            <div data-ui-empty-state>
-              <mat-icon>inbox</mat-icon>
+            <div class="px-4 py-12 text-center text-on-surface-variant">
+              <mat-icon class="size-12 text-5xl">inbox</mat-icon>
               <p>No related objects.</p>
             </div>
           }

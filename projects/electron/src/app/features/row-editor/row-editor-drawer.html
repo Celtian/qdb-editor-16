@@ -20,11 +20,10 @@
     @if (ratingHint(); as rating) {
       <section
         class="flex items-start gap-3 rounded-xl bg-secondary-container p-4 text-on-secondary-container"
-        data-ui-rating-summary
         aria-label="Calculated player rating"
       >
         <mat-icon aria-hidden="true">bar_chart</mat-icon>
-        <div>
+        <div class="flex flex-col gap-1">
           <strong>FIFA 16 {{ rating.position }} rating: {{ rating.calculated }}</strong>
           <span>Stored overall: {{ rating.stored }}</span>
           @if (rating.calculated !== rating.stored) {
@@ -57,7 +56,9 @@
     }
 
     @if (store.error()) {
-      <p data-ui-error-banner role="alert">{{ store.error() }}</p>
+      <p class="rounded-xl bg-error-container px-4 py-3 text-on-error-container" role="alert">
+        {{ store.error() }}
+      </p>
     }
   </div>
 

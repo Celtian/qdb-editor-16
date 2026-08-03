@@ -31,7 +31,6 @@ export interface ManageCustomBadgesDialogValue {
   selector: 'app-manage-custom-badges-dialog',
   imports: [CustomBadgeView, DecimalPipe, MatButtonModule, MatCheckboxModule, MatDialogModule],
   templateUrl: './manage-custom-badges-dialog.html',
-  styleUrl: './manage-custom-badges-dialog.css',
 })
 export class ManageCustomBadgesDialog {
   protected readonly data = inject<ManageCustomBadgesDialogData>(MAT_DIALOG_DATA);

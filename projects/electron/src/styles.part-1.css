@@ -26,7 +26,7 @@ select {
   font: inherit;
 }
 
-[data-ui-wizard] {
+[data-wizard] {
   --mat-stepper-header-icon-background-color: var(--mat-sys-surface-container-highest);
   --mat-stepper-header-icon-foreground-color: var(--mat-sys-on-surface-variant);
   --mat-stepper-header-done-state-icon-background-color: var(--mat-sys-surface-container-highest);
@@ -83,18 +83,12 @@ select {
   }
 }
 
-[data-ui-app-content] > router-outlet + * {
+[data-app-content] > router-outlet + * {
   display: block;
   min-height: 100%;
 }
 
-[data-ui-page] {
-  width: min(100%, 90rem);
-  margin: 0 auto;
-  padding: 2rem;
-}
-
-[data-ui-page-header] h1 {
+[data-page-header] h1 {
   margin: 0 0 0.25rem;
   font-size: 1.5rem;
   font-weight: 500;
@@ -102,22 +96,10 @@ select {
   letter-spacing: normal;
 }
 
-[data-ui-page-header] p {
+[data-page-header] p {
   margin: 0;
   color: var(--mat-sys-on-surface-variant);
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.5rem;
-}
-
-[data-ui-empty-state] {
-  padding: 3rem 1rem;
-  text-align: center;
-  color: var(--mat-sys-on-surface-variant);
-}
-
-[data-ui-empty-state] mat-icon {
-  width: 3rem;
-  height: 3rem;
-  font-size: 3rem;
 }

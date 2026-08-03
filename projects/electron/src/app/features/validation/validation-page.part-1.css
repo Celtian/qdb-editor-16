@@ -2,127 +2,60 @@
   display: block;
 }
 
-[data-ui-metric] {
+[data-metric] {
   --metric-color: var(--mat-sys-primary);
   --metric-container: var(--mat-sys-primary-container);
 }
 
-[data-ui-metric-error] {
+[data-metric-error] {
   --metric-color: var(--mat-sys-error);
   --metric-container: var(--mat-sys-error-container);
 }
 
-[data-ui-metric-warning] {
+[data-metric-warning] {
   --metric-color: light-dark(#805600, #ffcc80);
   --metric-container: light-dark(#fff1c7, #493600);
 }
 
-[data-ui-metric] mat-card-content {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding-top: 1rem;
-}
-
-[data-ui-metric-icon] {
+[data-metric-icon] {
   background: var(--metric-container);
   color: var(--metric-color);
 }
 
-[data-ui-metric-copy] strong {
-  font-size: 1.25rem;
-  font-weight: 500;
-}
-
-[data-ui-metric-copy] span {
-  color: var(--mat-sys-on-surface-variant);
-  font-size: 0.75rem;
-}
-
-[data-ui-validation-time] mat-icon {
-  width: 1.125rem;
-  height: 1.125rem;
-  font-size: 1.125rem;
-}
-
-[data-ui-validation-time] time {
-  color: var(--mat-sys-on-surface);
-  font-weight: 500;
-}
-
-[data-ui-issue] {
+[data-issue] {
   --issue-color: light-dark(#805600, #ffcc80);
   --issue-container: light-dark(#fff1c7, #493600);
-
-  border-radius: 0.875rem;
 }
 
-[data-ui-issue-error] {
+[data-issue-error] {
   --issue-color: var(--mat-sys-error);
   --issue-container: var(--mat-sys-error-container);
 }
 
-[data-ui-issue][open] {
+[data-issue][open] {
   border-color: color-mix(in srgb, var(--issue-color) 55%, var(--mat-sys-outline-variant));
 }
 
-[data-ui-issue] summary {
-  display: grid;
-  min-height: 4.75rem;
-  padding: 0.75rem 1rem;
-  cursor: pointer;
-  grid-template-columns: auto minmax(0, 1fr) auto auto;
-  align-items: center;
-  gap: 0.875rem;
-  list-style: none;
-}
-
-[data-ui-issue] summary::-webkit-details-marker {
+[data-issue] summary::-webkit-details-marker {
   display: none;
 }
 
-[data-ui-issue] summary:focus-visible {
+[data-issue] summary:focus-visible {
   border-radius: inherit;
   outline: 0.1875rem solid var(--mat-sys-primary);
   outline-offset: -0.1875rem;
 }
 
-[data-ui-issue-icon] {
+[data-issue-icon] {
   background: var(--issue-container);
   color: var(--issue-color);
 }
 
-[data-ui-issue-heading] strong {
-  overflow: hidden;
-  font-size: 0.9375rem;
-  font-weight: 500;
-  line-height: 1.375rem;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-[data-ui-issue-heading] > span {
-  overflow: hidden;
-  color: var(--mat-sys-on-surface-variant);
-  font-size: 0.8125rem;
-  line-height: 1.25rem;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-[data-ui-issue-count] {
+[data-issue-count] {
   background: var(--issue-container);
   color: var(--issue-color);
 }
 
-[data-ui-issue][open] [data-ui-issue-chevron] {
+[data-issue][open] [data-issue-chevron] {
   transform: rotate(180deg);
-}
-
-[data-ui-issue-details] {
-  padding: 1rem 1rem 1rem 4.375rem;
-}
-
-[data-ui-issue-label] {
-  letter-spacing: 0.04em;
 }

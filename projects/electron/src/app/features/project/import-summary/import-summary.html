@@ -1,23 +1,23 @@
-<section data-ui-summary aria-labelledby="import-summary-heading">
+<section class="grid gap-5" data-summary aria-labelledby="import-summary-heading">
   <div>
     <h2 id="import-summary-heading">Review import</h2>
     <p>Confirm the source, selection, policies, and database changes.</p>
   </div>
 
-  <dl data-ui-summary-list>
-    <div>
+  <dl class="m-0 rounded-xl border border-outline-variant" data-summary-list>
+    <div class="grid grid-cols-summary-list gap-4 px-4 py-3 max-panel:grid-cols-1">
       <dt>Operation</dt>
       <dd>{{ details().operation }}</dd>
     </div>
-    <div>
+    <div class="grid grid-cols-summary-list gap-4 px-4 py-3 max-panel:grid-cols-1">
       <dt>Type</dt>
       <dd>{{ details().entity }}</dd>
     </div>
-    <div>
+    <div class="grid grid-cols-summary-list gap-4 px-4 py-3 max-panel:grid-cols-1">
       <dt>Source</dt>
       <dd>{{ sourceLabel() }} · {{ details().identifier }} — {{ details().name }}</dd>
     </div>
-    <div>
+    <div class="grid grid-cols-summary-list gap-4 px-4 py-3 max-panel:grid-cols-1">
       <dt>Season</dt>
       <dd>
         {{
@@ -25,7 +25,7 @@
         }}
       </dd>
     </div>
-    <div>
+    <div class="grid grid-cols-summary-list gap-4 px-4 py-3 max-panel:grid-cols-1">
       <dt>Selection</dt>
       <dd>
         {{ details().teamCount | number }} teams · {{ details().playerCount | number }} players
@@ -37,14 +37,14 @@
     @if (preview().conflicts.existingRecords.length) {
       <section
         class="rounded-xl border border-outline-variant bg-surface-container-low p-4"
-        data-ui-review-section
+        data-review-section
         aria-labelledby="existing-records-heading"
       >
-        <div>
+        <div class="first:flex first:items-center first:justify-between">
           <h3 id="existing-records-heading">Existing records</h3>
           <span>{{ preview().conflicts.existingRecords.length | number }}</span>
         </div>
-        <ul>
+        <ul class="mx-0 my-3 grid gap-2 ps-5">
           @for (
             conflict of preview().conflicts.existingRecords;
             track conflict.entity + ':' + conflict.sourceId
@@ -64,10 +64,14 @@
             </li>
           }
         </ul>
-        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-form-field
+          class="w-full max-w-search-field"
+          appearance="outline"
+          subscriptSizing="dynamic"
+        >
           <mat-label>Matching record data</mat-label>
           <mat-select
-            data-ui-existing-record-policy
+            data-existing-record-policy
             [disabled]="busy()"
             [value]="mergeOptions().existingRecords"
             (selectionChange)="changeExistingRecords($event.value)"
@@ -82,14 +86,14 @@
     @if (preview().conflicts.teamLeagueConflicts.length) {
       <section
         class="rounded-xl border border-outline-variant bg-surface-container-low p-4"
-        data-ui-review-section
+        data-review-section
         aria-labelledby="team-ownership-heading"
       >
-        <div>
+        <div class="first:flex first:items-center first:justify-between">
           <h3 id="team-ownership-heading">Teams in another league</h3>
           <span>{{ preview().conflicts.teamLeagueConflicts.length | number }}</span>
         </div>
-        <ul>
+        <ul class="mx-0 my-3 grid gap-2 ps-5">
           @for (conflict of preview().conflicts.teamLeagueConflicts; track conflict.sourceId) {
             <li>
               <strong>{{ conflict.name }}</strong
@@ -100,10 +104,13 @@
             </li>
           }
         </ul>
-        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-form-field
+          class="w-full max-w-search-field"
+          appearance="outline"
+          subscriptSizing="dynamic"
+        >
           <mat-label>Team league conflicts</mat-label>
           <mat-select
-            data-ui-team-league-policy
             [disabled]="busy()"
             [value]="mergeOptions().teamLeagueConflicts"
             (selectionChange)="changeTeamOwnership($event.value)"
@@ -118,14 +125,14 @@
     @if (preview().conflicts.playerTeamConflicts.length) {
       <section
         class="rounded-xl border border-outline-variant bg-surface-container-low p-4"
-        data-ui-review-section
+        data-review-section
         aria-labelledby="player-ownership-heading"
       >
-        <div>
+        <div class="first:flex first:items-center first:justify-between">
           <h3 id="player-ownership-heading">Players in another team</h3>
           <span>{{ preview().conflicts.playerTeamConflicts.length | number }}</span>
         </div>
-        <ul>
+        <ul class="mx-0 my-3 grid gap-2 ps-5">
           @for (conflict of preview().conflicts.playerTeamConflicts; track conflict.sourceId) {
             <li>
               <strong>{{ conflict.name }}</strong
@@ -137,15 +144,19 @@
           }
         </ul>
         @if (hasLegacyCopies()) {
-          <p data-ui-warning role="status">
+          <p class="flex items-center gap-2" data-warning role="status">
             <mat-icon aria-hidden="true">warning</mat-icon>
             Historical duplicate player copies must be consolidated into the imported team.
           </p>
         }
-        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-form-field
+          class="w-full max-w-search-field"
+          appearance="outline"
+          subscriptSizing="dynamic"
+        >
           <mat-label>Player team conflicts</mat-label>
           <mat-select
-            data-ui-player-team-policy
+            data-player-team-policy
             [disabled]="busy() || hasLegacyCopies()"
             [value]="mergeOptions().playerTeamConflicts"
             (selectionChange)="changePlayerOwnership($event.value)"
@@ -159,11 +170,11 @@
   } @else {
     <section
       class="rounded-xl border border-outline-variant bg-surface-container-low p-4"
-      data-ui-review-section
+      data-review-section
       aria-labelledby="selected-policies-heading"
     >
       <h3 id="selected-policies-heading">Selected update behavior</h3>
-      <ul class="mb-0">
+      <ul class="mx-0 my-3 mb-0 grid gap-2 ps-5">
         @for (policy of synchronizationPolicies(); track policy) {
           <li>{{ policy }}</li>
         }
@@ -198,7 +209,7 @@
             <td>{{ row.counts.moved | number }}</td>
             <td>{{ row.counts.detached | number }}</td>
             <td>{{ row.counts.deduplicated | number }}</td>
-            <td [class.destructive]="row.counts.deleted > 0">{{ row.counts.deleted | number }}</td>
+            <td [class.text-error]="row.counts.deleted > 0">{{ row.counts.deleted | number }}</td>
           </tr>
         }
       </tbody>
@@ -208,11 +219,11 @@
   @if (hasOwnershipConflicts() && !isMerge()) {
     <section
       class="rounded-xl border border-outline-variant bg-surface-container-low p-4"
-      data-ui-review-section
+      data-review-section
       aria-labelledby="ownership-conflicts-heading"
     >
       <h3 id="ownership-conflicts-heading">Ownership conflicts</h3>
-      <ul>
+      <ul class="mx-0 my-3 grid gap-2 ps-5">
         @for (conflict of preview().conflicts.teamLeagueConflicts; track conflict.sourceId) {
           <li>
             <strong>{{ conflict.name }}</strong
@@ -236,7 +247,7 @@
   }
 
   @if (deletedCount() > 0) {
-    <p data-ui-warning>
+    <p class="flex items-center gap-2" data-warning>
       <mat-icon aria-hidden="true">warning</mat-icon>{{ deletedCount() | number }} stored records
       will be permanently deleted.
     </p>
@@ -248,14 +259,14 @@
     </p>
   }
   @if (deduplicatedCount() > 0) {
-    <p data-ui-warning>
+    <p class="flex items-center gap-2" data-warning>
       <mat-icon aria-hidden="true">warning</mat-icon>{{ deduplicatedCount() | number }} historical
       player {{ deduplicatedCount() === 1 ? 'copy' : 'copies' }} will be removed during
       consolidation.
     </p>
   }
   @if (deletedCount() === 0 && detachedCount() === 0 && deduplicatedCount() === 0) {
-    <p data-ui-safe>
+    <p class="flex items-center gap-2" data-safe>
       <mat-icon aria-hidden="true">check_circle</mat-icon>No stored records will be deleted or
       detached.
     </p>

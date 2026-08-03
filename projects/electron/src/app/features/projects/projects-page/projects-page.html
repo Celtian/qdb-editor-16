@@ -1,6 +1,11 @@
-<header data-ui-hero>
+<header
+  class="flex min-h-60 items-center justify-between px-page-inline py-12 text-white max-tablet:flex-col max-tablet:items-start max-tablet:gap-8"
+  data-hero
+>
   <div>
-    <p data-ui-eyebrow>LOCAL FOOTBALL DATA</p>
+    <p class="m-0 text-xs font-bold tracking-hero-eyebrow text-sidebar-accent" data-eyebrow>
+      LOCAL FOOTBALL DATA
+    </p>
     <h1>Snapshot projects</h1>
     <p>
       Keep Transfermarkt, Soccerway, and WorldFootball league, team, and player data organized by a
@@ -9,7 +14,7 @@
   </div>
   <div class="flex items-center gap-3 max-sm:flex-wrap">
     <a
-      data-ui-hero-secondary-action
+      data-hero-secondary-action
       matButton="outlined"
       routerLink="/settings"
       aria-label="Global settings"
@@ -24,17 +29,25 @@
   </div>
 </header>
 
-<main #mainContent id="main-content" class="max-w-360" data-ui-content tabindex="-1">
+<main #mainContent id="main-content" class="mx-auto max-w-360 px-page-inline py-10" tabindex="-1">
   @if (loading()) {
-    <div data-ui-state><mat-spinner diameter="36" /><span>Loading projects…</span></div>
+    <div class="flex min-h-72 flex-col items-center justify-center gap-4 text-center">
+      <mat-spinner diameter="36" /><span>Loading projects…</span>
+    </div>
   } @else if (error()) {
-    <div data-ui-error data-ui-state role="alert">
+    <div
+      class="flex min-h-72 flex-col items-center justify-center gap-4 rounded-xl bg-error-container px-4 py-3 text-center text-error"
+      data-error
+      role="alert"
+    >
       <mat-icon>error</mat-icon>
       <span>{{ error() }}</span>
     </div>
   } @else if (!projects().length) {
-    <mat-card appearance="outlined" data-ui-empty>
-      <mat-card-content>
+    <mat-card appearance="outlined" data-empty>
+      <mat-card-content
+        class="flex min-h-72 flex-col items-center justify-center gap-4 text-center"
+      >
         <mat-icon>calendar_month</mat-icon>
         <h2>Create your first snapshot</h2>
         <p>A reference date keeps every league, team, and player in the project aligned.</p>
@@ -44,7 +57,7 @@
   } @else {
     @if (showSearch()) {
       <div class="mb-5 flex">
-        <mat-form-field data-ui-search-field appearance="outline" subscriptSizing="dynamic">
+        <mat-form-field class="w-full max-w-lg" appearance="outline" subscriptSizing="dynamic">
           <mat-label>Search projects</mat-label>
           <mat-icon matPrefix aria-hidden="true">search</mat-icon>
           <input
@@ -71,12 +84,11 @@
     }
 
     @if (visibleProjects().length) {
-      <section class="grid gap-5" data-ui-project-grid aria-label="Snapshot projects">
+      <section class="grid grid-cols-projects gap-5" aria-label="Snapshot projects">
         @for (project of visibleProjects(); track project.id) {
-          <mat-card appearance="outlined" class="relative overflow-hidden" data-ui-project-card>
+          <mat-card appearance="outlined" class="relative overflow-hidden" data-project-card>
             <button
-              class="absolute z-1"
-              data-ui-project-menu
+              class="absolute top-2 right-2 z-1"
               matIconButton
               type="button"
               [matMenuTriggerFor]="projectActionsMenu"
@@ -88,58 +100,61 @@
             <mat-card-header>
               <mat-icon mat-card-avatar>storage</mat-icon>
               <mat-card-title>{{ project.name }}</mat-card-title>
-              <mat-card-subtitle
+              <mat-card-subtitle class="text-ui-date"
                 >Reference: {{ project.referenceDate | referenceDate }}</mat-card-subtitle
               >
             </mat-card-header>
-            <mat-card-content>
+            <mat-card-content class="px-3.5 py-0">
               <dl
                 class="mx-0 mt-3 mb-0 grid grid-cols-6 overflow-hidden rounded-xl border border-outline-variant bg-surface-container-low"
-                data-ui-project-details
                 aria-label="Project details"
               >
-                <div class="gap-micro" data-ui-project-metric>
-                  <dt>Leagues</dt>
-                  <dd>{{ project.leagueCount | number }}</dd>
+                <div class="col-span-2 grid min-w-0 gap-micro px-3 py-2.5" data-project-metric>
+                  <dt class="text-xs font-medium text-on-surface-variant">Leagues</dt>
+                  <dd class="m-0 tabular-nums">{{ project.leagueCount | number }}</dd>
                 </div>
-                <div class="gap-micro" data-ui-project-metric>
-                  <dt>Teams</dt>
-                  <dd>{{ project.teamCount | number }}</dd>
+                <div class="col-span-2 grid min-w-0 gap-micro px-3 py-2.5" data-project-metric>
+                  <dt class="text-xs font-medium text-on-surface-variant">Teams</dt>
+                  <dd class="m-0 tabular-nums">{{ project.teamCount | number }}</dd>
                 </div>
-                <div class="gap-micro" data-ui-project-metric>
-                  <dt>Players</dt>
-                  <dd>{{ project.playerCount | number }}</dd>
-                </div>
-                <div
-                  class="items-baseline gap-2 border-t border-outline-variant max-sm:col-span-full"
-                  data-ui-project-date
-                >
-                  <dt>Created</dt>
-                  <dd>{{ project.createdAt | date: 'medium' }}</dd>
+                <div class="col-span-2 grid min-w-0 gap-micro px-3 py-2.5" data-project-metric>
+                  <dt class="text-xs font-medium text-on-surface-variant">Players</dt>
+                  <dd class="m-0 tabular-nums">{{ project.playerCount | number }}</dd>
                 </div>
                 <div
-                  class="items-baseline gap-2 border-t border-outline-variant max-sm:col-span-full"
-                  data-ui-project-date
+                  class="col-span-3 grid min-w-0 grid-cols-icon-copy items-baseline gap-2 border-t border-outline-variant px-3 py-2.5 text-ui-date max-sm:col-span-full"
+                  data-project-date
                 >
-                  <dt>Updated</dt>
-                  <dd>{{ project.updatedAt | date: 'medium' }}</dd>
+                  <dt class="text-xs font-medium text-on-surface-variant">Created</dt>
+                  <dd class="m-0 wrap-anywhere whitespace-nowrap tabular-nums">
+                    {{ project.createdAt | date: 'medium' }}
+                  </dd>
+                </div>
+                <div
+                  class="col-span-3 grid min-w-0 grid-cols-icon-copy items-baseline gap-2 border-t border-outline-variant px-3 py-2.5 text-ui-date max-sm:col-span-full"
+                  data-project-date
+                >
+                  <dt class="text-xs font-medium text-on-surface-variant">Updated</dt>
+                  <dd class="m-0 wrap-anywhere whitespace-nowrap tabular-nums">
+                    {{ project.updatedAt | date: 'medium' }}
+                  </dd>
                 </div>
               </dl>
             </mat-card-content>
-            <mat-card-actions align="end">
+            <mat-card-actions class="gap-1 px-3.5 pt-3 pb-3.5" align="end">
               <mat-menu #projectActionsMenu="matMenu">
                 <button mat-menu-item type="button" (click)="renameProject(project)">
                   <mat-icon aria-hidden="true">edit</mat-icon>
                   <span>Rename</span>
                 </button>
                 <button
-                  data-ui-delete-action
+                  class="text-error"
                   mat-menu-item
                   type="button"
                   [attr.aria-label]="'Delete ' + project.name"
                   (click)="deleteProject(project)"
                 >
-                  <mat-icon aria-hidden="true">delete</mat-icon>
+                  <mat-icon class="text-error" aria-hidden="true">delete</mat-icon>
                   <span>Delete</span>
                 </button>
               </mat-menu>
@@ -152,10 +167,15 @@
         }
       </section>
     } @else {
-      <div data-ui-no-results role="status">
-        <mat-icon aria-hidden="true">search_off</mat-icon>
-        <h2>No projects found</h2>
-        <p>No project names match “{{ search().trim() }}”.</p>
+      <div
+        class="flex min-h-72 flex-col items-center justify-center gap-4 text-center"
+        role="status"
+      >
+        <mat-icon class="size-10 text-4xl text-on-surface-variant" aria-hidden="true"
+          >search_off</mat-icon
+        >
+        <h2 class="m-0">No projects found</h2>
+        <p class="m-0">No project names match “{{ search().trim() }}”.</p>
         <button matButton="outlined" type="button" (click)="clearSearch()">Clear search</button>
       </div>
     }

@@ -34,7 +34,6 @@ export const allProjectsDeletionNotificationConfig = (
   selector: 'app-clear-projects-dialog',
   imports: [MatButtonModule, MatDialogModule, MatIconModule],
   templateUrl: './clear-projects-dialog.html',
-  styleUrl: './clear-projects-dialog.css',
 })
 export class ClearProjectsDialog {
   protected readonly data = inject<ClearProjectsDialogData>(MAT_DIALOG_DATA);

@@ -15,17 +15,6 @@ mat-sidenav-content {
   overflow: hidden;
 }
 
-[data-ui-app-content] {
-  height: 100%;
-  min-width: 0;
-  overflow: auto;
-  background: var(--mat-sys-surface);
-}
-
-mat-toolbar + [data-ui-app-content] {
+mat-toolbar + [data-app-content] {
   height: calc(100% - 64px);
-}
-
-[data-ui-progress-message] {
-  top: 0;
 }

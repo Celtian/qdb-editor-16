@@ -1,5 +1,5 @@
 :host,
-[data-ui-project-layout] {
+[data-project-layout] {
   display: block;
   height: 100vh;
 }
@@ -8,58 +8,14 @@
   --project-sidebar-width: 15.5rem;
 }
 
-[data-ui-project-layout] {
-  grid-template-columns: var(--project-sidebar-width) minmax(0, 1fr);
-}
-
-[data-ui-sidebar] {
-  background: #102b4e;
-  color: white;
-  min-height: 0;
-  overflow: hidden auto;
-}
-
-[data-ui-sidebar-content] {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  padding: 1.25rem 0.75rem;
-}
-
-[data-ui-brand] {
-  align-items: center;
-  color: white;
-  display: flex;
-  font-size: 1.05rem;
-  font-weight: 700;
-  gap: 0.75rem;
-  padding: 0.5rem 0.75rem 1.75rem;
-  text-decoration: none;
-}
-
-[data-ui-nav-group],
-[data-ui-sidebar-footer] {
-  display: grid;
-  gap: 0.25rem;
-}
-
-[data-ui-nav-group] + [data-ui-nav-group] {
+[data-nav-group] + [data-nav-group] {
   border-top: 1px solid color-mix(in srgb, #dbe9ff 18%, transparent);
   margin-top: 0.5rem;
   padding-top: 0.5rem;
 }
 
-[data-ui-nav-group-label] {
-  color: #a9c5e8;
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  padding: 0.35rem 0.75rem 0.15rem;
-  text-transform: uppercase;
-}
-
 nav a,
-[data-ui-sidebar-action] {
+[data-sidebar-action] {
   --mat-button-text-label-text-color: #dbe9ff;
   --mat-button-text-ripple-color: color-mix(in srgb, #dbe9ff 12%, transparent);
   --mat-button-text-state-layer-color: #dbe9ff;
@@ -69,19 +25,9 @@ nav a,
   width: 100%;
 }
 
-nav a.active,
-[data-ui-sidebar-action].active {
+nav a[aria-current='page'] {
   --mat-button-text-label-text-color: #004e45;
   --mat-button-text-state-layer-color: #004e45;
-
-  background: #d9f4ee;
-  color: #004e45;
-}
-
-[data-ui-sidebar-footer] {
-  border-top: 1px solid color-mix(in srgb, #dbe9ff 18%, transparent);
-  margin-top: auto;
-  padding-top: 0.5rem;
 }
 
 mat-toolbar {
@@ -101,14 +47,6 @@ mat-toolbar div {
 mat-toolbar div span {
   color: var(--muted-text);
   font-size: 0.8rem;
-}
-
-[data-ui-spacer] {
-  flex: 1;
-}
-
-[data-ui-error] {
-  color: var(--mat-sys-error);
 }
 
 main {

@@ -5,30 +5,22 @@
     --project-sidebar-width: 4.5rem;
   }
 
-  [data-ui-project-layout] {
-    grid-template-columns: var(--project-sidebar-width) minmax(0, 1fr);
-  }
-
-  [data-ui-sidebar-content] {
-    padding-inline: 0;
-  }
-
-  [data-ui-brand],
+  [data-brand],
   nav,
-  [data-ui-sidebar-footer] {
+  [data-sidebar-footer] {
     margin-inline: auto;
     width: 3rem;
   }
 
-  [data-ui-brand] span,
-  [data-ui-nav-group-label],
+  [data-brand] span,
+  [data-nav-group-label],
   nav a span,
-  [data-ui-sidebar-action] span {
+  [data-sidebar-action] span {
     display: none;
   }
 
   nav a,
-  [data-ui-sidebar-action] {
+  [data-sidebar-action] {
     --mat-button-text-icon-offset: 0;
     --mat-button-text-icon-spacing: 0;
     --mat-button-text-with-icon-horizontal-padding: 0;
@@ -37,9 +29,9 @@
     min-width: 0;
   }
 
-  [data-ui-brand] mat-icon,
+  [data-brand] mat-icon,
   nav a mat-icon,
-  [data-ui-sidebar-action] mat-icon {
+  [data-sidebar-action] mat-icon {
     --sidebar-icon-size: 1.5rem;
 
     font-size: var(--sidebar-icon-size);

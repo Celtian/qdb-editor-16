@@ -24,7 +24,7 @@ describe('AboutDialog', () => {
     expect(icon?.getAttribute('ngSrc')).toBe('qdb-editor-16-icon.png');
     expect(icon?.alt).toBe('');
     expect(content.querySelector('h2')?.textContent).toContain('QDB Editor 16');
-    expect(content.querySelector('[data-ui-version]')?.textContent).toContain(
+    expect(content.querySelector('[data-version]')?.textContent).toContain(
       `Version ${VERSION_INFO.version}`,
     );
   });
@@ -33,10 +33,10 @@ describe('AboutDialog', () => {
     const content = fixture.nativeElement as HTMLElement;
     const expectedYear = new Date(VERSION_INFO.date).getUTCFullYear();
 
-    expect(content.querySelector('[data-ui-description]')?.textContent).toContain(
+    expect(content.querySelector('[data-description]')?.textContent).toContain(
       'A local-first FIFA 16 database project and table editor',
     );
-    expect(content.querySelector('[data-ui-legal]')?.textContent).toContain(
+    expect(content.querySelector('[data-legal]')?.textContent).toContain(
       `© ${expectedYear} ${VERSION_INFO.author.name} · MIT License`,
     );
   });
@@ -44,7 +44,7 @@ describe('AboutDialog', () => {
   it('links to the documentation and GitHub repository safely', () => {
     const links = Array.from(
       (fixture.nativeElement as HTMLElement).querySelectorAll<HTMLAnchorElement>(
-        '[data-ui-external-actions] a',
+        '[data-external-actions] a',
       ),
     );
 

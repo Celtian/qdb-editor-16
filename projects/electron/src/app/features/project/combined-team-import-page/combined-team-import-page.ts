@@ -74,6 +74,16 @@ import { ReferenceDatePipe } from '../../../shared/reference-date-pipe';
 type LeagueMode = 'none' | 'existing' | 'create';
 type PlayerReviewField = (typeof playerFields)[number];
 type ReviewValue = string | number | undefined;
+type MatchStatus = 'automatic' | 'manual' | 'singleSource';
+
+const matchStatusClass: Readonly<Record<MatchStatus, string>> = {
+  automatic:
+    'rounded-full bg-primary-container px-2.5 py-micro text-xs font-semibold text-on-primary-container',
+  manual:
+    'rounded-full bg-tertiary-container px-2.5 py-micro text-xs font-semibold text-on-tertiary-container',
+  singleSource:
+    'rounded-full bg-surface-container-high px-2.5 py-micro text-xs font-semibold text-on-surface-variant',
+};
 
 interface ReviewFieldDefinition<Field extends string = string> {
   key: Field;
@@ -586,6 +596,11 @@ export class CombinedTeamImportPage {
     return group.automatic ? 'Automatic match' : 'Manual match';
   }
 
+  protected matchStatusClasses(group: PlayerMatchGroup): string {
+    if (group.players.length === 1) return matchStatusClass.singleSource;
+    return group.automatic ? matchStatusClass.automatic : matchStatusClass.manual;
+  }
+
   protected countryLabel(player: Pick<PlayerInput, 'countryName' | 'countryCode2'>): string {
     return player.countryName ?? player.countryCode2?.toLocaleUpperCase('en') ?? '';
   }
@@ -1001,7 +1016,7 @@ export class CombinedTeamImportPage {
         const tile = [
           ...this.elementRef.nativeElement.querySelectorAll<HTMLElement>('[data-player-id]'),
         ].find((candidate) => candidate.dataset['playerId'] === playerId);
-        tile?.querySelector<HTMLButtonElement>('[data-ui-player-drag-handle]')?.focus();
+        tile?.querySelector<HTMLButtonElement>('[data-player-drag-handle]')?.focus();
       },
       { injector: this.injector },
     );

@@ -32,7 +32,6 @@ export const sourceDataDeletionMessage = (result: DeleteSourceDataResult): strin
   selector: 'app-delete-source-data-dialog',
   imports: [MatButtonModule, MatDialogModule, MatIconModule],
   templateUrl: './delete-source-data-dialog.html',
-  styleUrl: './delete-source-data-dialog.css',
 })
 export class DeleteSourceDataDialog {
   protected readonly data = inject<DeleteSourceDataDialogData>(MAT_DIALOG_DATA);

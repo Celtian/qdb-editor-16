@@ -1,15 +1,3 @@
 :host {
   display: block;
 }
-
-[data-ui-project-form-page] {
-  width: min(100%, 54rem);
-}
-
-[data-ui-form-grid] {
-  grid-template-columns: minmax(0, 1.5fr) minmax(15rem, 1fr);
-}
-
-[data-ui-form-grid] mat-form-field {
-  width: 100%;
-}

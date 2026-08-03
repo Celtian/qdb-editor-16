@@ -35,7 +35,7 @@
     "check-circular-dependencies": "madge --circular --extensions ts --ts-config tsconfig.json projects/electron/src/main.ts projects/docs/src/main.ts projects/electron/electron/main/index.ts tools",
     "lint": "bun run --parallel 'lint:*'",
     "lint:angular": "ng lint",
-    "lint:styles": "stylelint 'projects/**/*.css' 'tailwind.theme.css'",
+    "lint:styles": "stylelint 'projects/**/*.css' 'tailwind.theme*.css'",
     "lint:tooling": "eslint --cache --cache-location .angular/cache/eslint/tooling --cache-strategy content projects/electron/electron projects/electron/shared tools",
     "format": "prettier --write .",
     "format:check": "prettier --check .",

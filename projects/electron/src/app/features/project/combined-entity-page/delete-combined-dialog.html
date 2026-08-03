@@ -10,17 +10,17 @@
     </p>
     <mat-radio-group aria-label="Project league deletion behavior" [value]="mode()">
       <mat-radio-button value="detach" (change)="mode.set('detach')">
-        <span data-ui-option-title>
+        <span class="block font-medium">
           Delete {{ data.bulk ? entityCountLabel : 'the league' }} only
         </span>
-        <span data-ui-option-description>
+        <span class="mt-1 block text-on-surface-variant">
           Keep {{ teamCountLabel }} and {{ playerCountLabel }}. The teams will no longer belong to a
           project league.
         </span>
       </mat-radio-button>
       <mat-radio-button value="cascade" (change)="mode.set('cascade')">
-        <span data-ui-option-title>Delete leagues, teams, and project players</span>
-        <span data-ui-option-description>
+        <span class="block font-medium">Delete leagues, teams, and project players</span>
+        <span class="mt-1 block text-on-surface-variant">
           Permanently delete {{ data.bulk ? entityCountLabel : 'the league' }},
           {{ teamCountLabel }}, and {{ playerCountLabel }}.
         </span>
@@ -43,7 +43,7 @@
 <mat-dialog-actions align="end">
   <button matButton mat-dialog-close type="button">Cancel</button>
   <button
-    data-ui-delete-button
+    class="enabled:bg-error enabled:text-on-error"
     matButton="filled"
     type="button"
     [mat-dialog-close]="data.entity === 'leagues' ? mode() : 'delete'"

@@ -1,7 +1,8 @@
 <a
-  data-ui-brand
+  class="flex min-w-0 flex-none items-center gap-3 rounded-full p-3 font-semibold text-inherit no-underline"
+  data-brand
   routerLink="/projects"
-  routerLinkActive="active"
+  routerLinkActive="bg-secondary-container text-on-secondary-container"
   ariaCurrentWhenActive="page"
   aria-label="QDB Editor 16 projects"
   [routerLinkActiveOptions]="{ exact: true }"
@@ -10,7 +11,7 @@
   <span>QDB Editor 16</span>
 </a>
 
-<nav data-ui-primary-navigation aria-label="Projects and databases">
+<nav class="shrink-0 grow basis-auto" aria-label="Projects and databases">
   <ul
     #tree="ngTree"
     ngTree
@@ -27,7 +28,7 @@
         #projectItem="ngTreeItem"
         ngTreeItem
         class="rounded-xl outline-none"
-        data-ui-tree-item
+        data-tree-item
         [parent]="tree"
         [value]="projectNode(project.id)"
         [label]="project.name"
@@ -35,10 +36,10 @@
         (expandedChange)="projectExpanded(project.id, $event)"
       >
         <div
-          class="flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
-          data-ui-tree-row
+          class="flex min-h-11 min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left text-inherit no-underline"
+          data-tree-row
         >
-          <mat-icon>folder</mat-icon>
+          <mat-icon class="flex-none text-on-surface-variant">folder</mat-icon>
           <span class="min-w-0 flex-1 truncate">{{ project.name }}</span>
           <button
             type="button"
@@ -50,7 +51,7 @@
             "
             (click)="toggleProject($event, project.id)"
           >
-            <mat-icon>
+            <mat-icon class="flex-none text-on-surface-variant">
               {{ isExpanded(projectNode(project.id)) ? 'expand_more' : 'chevron_right' }}
             </mat-icon>
           </button>
@@ -58,15 +59,14 @@
 
         <ul
           role="group"
-          class="m-0 ml-4 list-none border-l border-outline-variant p-0"
-          data-ui-tree-group
+          class="m-0 ml-4 list-none border-l border-outline-variant p-0 pl-nav-indent"
         >
           <ng-template #projectGroup="ngTreeItemGroup" ngTreeItemGroup [ownedBy]="projectItem">
             <li
               #sourceItem="ngTreeItem"
               ngTreeItem
               class="rounded-xl outline-none"
-              data-ui-tree-item
+              data-tree-item
               label="Source DB"
               [parent]="projectGroup"
               [value]="sourceNode(project.id)"
@@ -74,10 +74,10 @@
               (expandedChange)="nodeExpanded(sourceNode(project.id), $event)"
             >
               <div
-                class="flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
-                data-ui-tree-row
+                class="flex min-h-11 min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left text-inherit no-underline"
+                data-tree-row
               >
-                <mat-icon>cloud_download</mat-icon>
+                <mat-icon class="flex-none text-on-surface-variant">cloud_download</mat-icon>
                 <span class="min-w-0 flex-1 truncate">Source DB</span>
                 <button
                   type="button"
@@ -89,30 +89,29 @@
                   "
                   (click)="toggleNode($event, sourceNode(project.id))"
                 >
-                  <mat-icon>
+                  <mat-icon class="flex-none text-on-surface-variant">
                     {{ isExpanded(sourceNode(project.id)) ? 'expand_more' : 'chevron_right' }}
                   </mat-icon>
                 </button>
               </div>
               <ul
                 role="group"
-                class="m-0 ml-4 list-none border-l border-outline-variant p-0"
-                data-ui-tree-group
+                class="m-0 ml-4 list-none border-l border-outline-variant p-0 pl-nav-indent"
               >
                 <ng-template #sourceGroup="ngTreeItemGroup" ngTreeItemGroup [ownedBy]="sourceItem">
                   <li
                     ngTreeItem
                     class="rounded-xl outline-none"
-                    data-ui-tree-item
+                    data-tree-item
                     label="Import"
                     [parent]="sourceGroup"
                     [value]="sourceImportNode(project.id)"
                   >
                     <div
-                      class="flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
-                      data-ui-tree-row
+                      class="flex min-h-11 min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left text-inherit no-underline"
+                      data-tree-row
                     >
-                      <mat-icon>download</mat-icon>
+                      <mat-icon class="flex-none text-on-surface-variant">download</mat-icon>
                       <span class="min-w-0 flex-1 truncate">Import</span>
                     </div>
                   </li>
@@ -120,7 +119,7 @@
                     #sourceObjectsItem="ngTreeItem"
                     ngTreeItem
                     class="rounded-xl outline-none"
-                    data-ui-tree-item
+                    data-tree-item
                     label="Objects"
                     [parent]="sourceGroup"
                     [value]="sourceObjectsNode(project.id)"
@@ -128,10 +127,10 @@
                     (expandedChange)="nodeExpanded(sourceObjectsNode(project.id), $event)"
                   >
                     <div
-                      class="flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
-                      data-ui-tree-row
+                      class="flex min-h-11 min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left text-inherit no-underline"
+                      data-tree-row
                     >
-                      <mat-icon>category</mat-icon>
+                      <mat-icon class="flex-none text-on-surface-variant">category</mat-icon>
                       <span class="min-w-0 flex-1 truncate">Objects</span>
                       <button
                         type="button"
@@ -145,7 +144,7 @@
                         "
                         (click)="toggleNode($event, sourceObjectsNode(project.id))"
                       >
-                        <mat-icon>
+                        <mat-icon class="flex-none text-on-surface-variant">
                           {{
                             isExpanded(sourceObjectsNode(project.id))
                               ? 'expand_more'
@@ -156,8 +155,7 @@
                     </div>
                     <ul
                       role="group"
-                      class="m-0 ml-4 list-none border-l border-outline-variant p-0"
-                      data-ui-tree-group
+                      class="m-0 ml-4 list-none border-l border-outline-variant p-0 pl-nav-indent"
                     >
                       <ng-template
                         #sourceObjectGroup="ngTreeItemGroup"
@@ -168,17 +166,19 @@
                           <li
                             ngTreeItem
                             class="rounded-xl outline-none"
-                            data-ui-table-item
-                            data-ui-tree-item
+                            data-table-item
+                            data-tree-item
                             [parent]="sourceObjectGroup"
                             [value]="sourceObjectNode(project.id, object.kind)"
                             [label]="object.label"
                           >
                             <div
-                              class="flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
-                              data-ui-tree-row
+                              class="flex min-h-11 min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left text-inherit no-underline"
+                              data-tree-row
                             >
-                              <mat-icon>{{ object.icon }}</mat-icon>
+                              <mat-icon class="flex-none text-on-surface-variant">{{
+                                object.icon
+                              }}</mat-icon>
                               <span class="min-w-0 flex-1 truncate">{{ object.label }}</span>
                             </div>
                           </li>
@@ -189,16 +189,16 @@
                   <li
                     ngTreeItem
                     class="rounded-xl outline-none"
-                    data-ui-tree-item
+                    data-tree-item
                     label="Export"
                     [parent]="sourceGroup"
                     [value]="sourceExportNode(project.id)"
                   >
                     <div
-                      class="flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
-                      data-ui-tree-row
+                      class="flex min-h-11 min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left text-inherit no-underline"
+                      data-tree-row
                     >
-                      <mat-icon>drive_file_move</mat-icon>
+                      <mat-icon class="flex-none text-on-surface-variant">drive_file_move</mat-icon>
                       <span class="min-w-0 flex-1 truncate">Export</span>
                     </div>
                   </li>
@@ -210,7 +210,7 @@
               #combinedItem="ngTreeItem"
               ngTreeItem
               class="rounded-xl outline-none"
-              data-ui-tree-item
+              data-tree-item
               label="Combined DB"
               [parent]="projectGroup"
               [value]="combinedNode(project.id)"
@@ -218,10 +218,10 @@
               (expandedChange)="nodeExpanded(combinedNode(project.id), $event)"
             >
               <div
-                class="flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
-                data-ui-tree-row
+                class="flex min-h-11 min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left text-inherit no-underline"
+                data-tree-row
               >
-                <mat-icon>merge</mat-icon>
+                <mat-icon class="flex-none text-on-surface-variant">merge</mat-icon>
                 <span class="min-w-0 flex-1 truncate">Combined DB</span>
                 <button
                   type="button"
@@ -235,15 +235,14 @@
                   "
                   (click)="toggleNode($event, combinedNode(project.id))"
                 >
-                  <mat-icon>
+                  <mat-icon class="flex-none text-on-surface-variant">
                     {{ isExpanded(combinedNode(project.id)) ? 'expand_more' : 'chevron_right' }}
                   </mat-icon>
                 </button>
               </div>
               <ul
                 role="group"
-                class="m-0 ml-4 list-none border-l border-outline-variant p-0"
-                data-ui-tree-group
+                class="m-0 ml-4 list-none border-l border-outline-variant p-0 pl-nav-indent"
               >
                 <ng-template
                   #combinedGroup="ngTreeItemGroup"
@@ -253,16 +252,16 @@
                   <li
                     ngTreeItem
                     class="rounded-xl outline-none"
-                    data-ui-tree-item
+                    data-tree-item
                     label="Import"
                     [parent]="combinedGroup"
                     [value]="combinedImportNode(project.id)"
                   >
                     <div
-                      class="flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
-                      data-ui-tree-row
+                      class="flex min-h-11 min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left text-inherit no-underline"
+                      data-tree-row
                     >
-                      <mat-icon>download</mat-icon>
+                      <mat-icon class="flex-none text-on-surface-variant">download</mat-icon>
                       <span class="min-w-0 flex-1 truncate">Import</span>
                     </div>
                   </li>
@@ -270,7 +269,7 @@
                     #combinedObjectsItem="ngTreeItem"
                     ngTreeItem
                     class="rounded-xl outline-none"
-                    data-ui-tree-item
+                    data-tree-item
                     label="Objects"
                     [parent]="combinedGroup"
                     [value]="combinedObjectsNode(project.id)"
@@ -278,10 +277,10 @@
                     (expandedChange)="nodeExpanded(combinedObjectsNode(project.id), $event)"
                   >
                     <div
-                      class="flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
-                      data-ui-tree-row
+                      class="flex min-h-11 min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left text-inherit no-underline"
+                      data-tree-row
                     >
-                      <mat-icon>category</mat-icon>
+                      <mat-icon class="flex-none text-on-surface-variant">category</mat-icon>
                       <span class="min-w-0 flex-1 truncate">Objects</span>
                       <button
                         type="button"
@@ -295,7 +294,7 @@
                         "
                         (click)="toggleNode($event, combinedObjectsNode(project.id))"
                       >
-                        <mat-icon>
+                        <mat-icon class="flex-none text-on-surface-variant">
                           {{
                             isExpanded(combinedObjectsNode(project.id))
                               ? 'expand_more'
@@ -306,8 +305,7 @@
                     </div>
                     <ul
                       role="group"
-                      class="m-0 ml-4 list-none border-l border-outline-variant p-0"
-                      data-ui-tree-group
+                      class="m-0 ml-4 list-none border-l border-outline-variant p-0 pl-nav-indent"
                     >
                       <ng-template
                         #combinedObjectGroup="ngTreeItemGroup"
@@ -318,17 +316,19 @@
                           <li
                             ngTreeItem
                             class="rounded-xl outline-none"
-                            data-ui-table-item
-                            data-ui-tree-item
+                            data-table-item
+                            data-tree-item
                             [parent]="combinedObjectGroup"
                             [value]="combinedObjectNode(project.id, object.kind)"
                             [label]="object.label"
                           >
                             <div
-                              class="flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
-                              data-ui-tree-row
+                              class="flex min-h-11 min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left text-inherit no-underline"
+                              data-tree-row
                             >
-                              <mat-icon>{{ object.icon }}</mat-icon>
+                              <mat-icon class="flex-none text-on-surface-variant">{{
+                                object.icon
+                              }}</mat-icon>
                               <span class="min-w-0 flex-1 truncate">{{ object.label }}</span>
                             </div>
                           </li>
@@ -339,16 +339,16 @@
                   <li
                     ngTreeItem
                     class="rounded-xl outline-none"
-                    data-ui-tree-item
+                    data-tree-item
                     label="Export"
                     [parent]="combinedGroup"
                     [value]="combinedExportNode(project.id)"
                   >
                     <div
-                      class="flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
-                      data-ui-tree-row
+                      class="flex min-h-11 min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left text-inherit no-underline"
+                      data-tree-row
                     >
-                      <mat-icon>drive_file_move</mat-icon>
+                      <mat-icon class="flex-none text-on-surface-variant">drive_file_move</mat-icon>
                       <span class="min-w-0 flex-1 truncate">Export</span>
                     </div>
                   </li>
@@ -360,7 +360,7 @@
               #fifaItem="ngTreeItem"
               ngTreeItem
               class="rounded-xl outline-none"
-              data-ui-tree-item
+              data-tree-item
               label="FIFA DB"
               [parent]="projectGroup"
               [value]="fifaNode(project.id)"
@@ -368,10 +368,10 @@
               (expandedChange)="fifaExpanded(project.id, $event)"
             >
               <div
-                class="flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
-                data-ui-tree-row
+                class="flex min-h-11 min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left text-inherit no-underline"
+                data-tree-row
               >
-                <mat-icon>storage</mat-icon>
+                <mat-icon class="flex-none text-on-surface-variant">storage</mat-icon>
                 <span class="min-w-0 flex-1 truncate">FIFA DB</span>
                 <button
                   type="button"
@@ -383,35 +383,34 @@
                   "
                   (click)="toggleFifa($event, project.id)"
                 >
-                  <mat-icon>
+                  <mat-icon class="flex-none text-on-surface-variant">
                     {{ isExpanded(fifaNode(project.id)) ? 'expand_more' : 'chevron_right' }}
                   </mat-icon>
                 </button>
               </div>
               <ul
                 role="group"
-                class="m-0 ml-4 list-none border-l border-outline-variant p-0"
-                data-ui-tree-group
+                class="m-0 ml-4 list-none border-l border-outline-variant p-0 pl-nav-indent"
               >
                 <ng-template #fifaGroup="ngTreeItemGroup" ngTreeItemGroup [ownedBy]="fifaItem">
                   @switch (store.databaseLoadState(project.id).status) {
                     @case ('loading') {
                       <li
                         role="none"
-                        class="flex items-center gap-2 px-2 py-1.5 text-on-surface-variant"
-                        data-ui-branch-message
+                        class="flex min-h-11 items-center gap-2 px-2 py-1.5 text-ui-sm text-on-surface-variant"
+                        data-branch-message
                         aria-live="polite"
                       >
-                        <mat-icon>hourglass_empty</mat-icon>
+                        <mat-icon class="size-4.5 flex-none text-lg">hourglass_empty</mat-icon>
                         <span>Loading databases…</span>
                       </li>
                     }
                     @case ('error') {
                       <li
                         role="none"
-                        class="flex items-center gap-2 px-2 py-1.5 text-on-surface-variant"
-                        data-ui-branch-message
-                        data-ui-error-message
+                        class="flex min-h-11 flex-col items-start gap-2 px-2 py-1.5 text-ui-sm text-error"
+                        data-branch-message
+                        data-error-message
                       >
                         <span>{{ store.databaseLoadState(project.id).error }}</span>
                         <button
@@ -429,7 +428,7 @@
                           #databaseItem="ngTreeItem"
                           ngTreeItem
                           class="rounded-xl outline-none"
-                          data-ui-tree-item
+                          data-tree-item
                           [parent]="fifaGroup"
                           [value]="databaseNode(project.id, database.id)"
                           [label]="database.name"
@@ -437,10 +436,10 @@
                           (expandedChange)="databaseExpanded(project.id, database.id, $event)"
                         >
                           <div
-                            class="flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
-                            data-ui-tree-row
+                            class="flex min-h-11 min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left text-inherit no-underline"
+                            data-tree-row
                           >
-                            <mat-icon>storage</mat-icon>
+                            <mat-icon class="flex-none text-on-surface-variant">storage</mat-icon>
                             <span class="min-w-0 flex-1 truncate">{{ database.name }}</span>
                             <button
                               type="button"
@@ -454,7 +453,7 @@
                               "
                               (click)="toggleDatabase($event, project.id, database.id)"
                             >
-                              <mat-icon>
+                              <mat-icon class="flex-none text-on-surface-variant">
                                 {{
                                   isExpanded(databaseNode(project.id, database.id))
                                     ? 'expand_more'
@@ -465,8 +464,7 @@
                           </div>
                           <ul
                             role="group"
-                            class="m-0 ml-4 list-none border-l border-outline-variant p-0"
-                            data-ui-tree-group
+                            class="m-0 ml-4 list-none border-l border-outline-variant p-0 pl-nav-indent"
                           >
                             <ng-template
                               #databaseGroup="ngTreeItemGroup"
@@ -477,7 +475,7 @@
                                 #objectsItem="ngTreeItem"
                                 ngTreeItem
                                 class="rounded-xl outline-none"
-                                data-ui-tree-item
+                                data-tree-item
                                 label="Objects"
                                 [parent]="databaseGroup"
                                 [value]="objectsNode(project.id, database.id)"
@@ -485,10 +483,12 @@
                                 (expandedChange)="objectsExpanded(project.id, database.id, $event)"
                               >
                                 <div
-                                  class="flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
-                                  data-ui-tree-row
+                                  class="flex min-h-11 min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left text-inherit no-underline"
+                                  data-tree-row
                                 >
-                                  <mat-icon>category</mat-icon>
+                                  <mat-icon class="flex-none text-on-surface-variant"
+                                    >category</mat-icon
+                                  >
                                   <span class="min-w-0 flex-1 truncate">Objects</span>
                                   <button
                                     type="button"
@@ -498,7 +498,7 @@
                                     aria-label="Toggle FIFA database objects"
                                     (click)="toggleObjects($event, project.id, database.id)"
                                   >
-                                    <mat-icon>
+                                    <mat-icon class="flex-none text-on-surface-variant">
                                       {{
                                         isExpanded(objectsNode(project.id, database.id))
                                           ? 'expand_more'
@@ -509,8 +509,7 @@
                                 </div>
                                 <ul
                                   role="group"
-                                  class="m-0 ml-4 list-none border-l border-outline-variant p-0"
-                                  data-ui-tree-group
+                                  class="m-0 ml-4 list-none border-l border-outline-variant p-0 pl-nav-indent"
                                 >
                                   <ng-template
                                     #objectGroup="ngTreeItemGroup"
@@ -521,17 +520,19 @@
                                       <li
                                         ngTreeItem
                                         class="rounded-xl outline-none"
-                                        data-ui-table-item
-                                        data-ui-tree-item
+                                        data-table-item
+                                        data-tree-item
                                         [parent]="objectGroup"
                                         [value]="objectNode(project.id, database.id, kind)"
                                         [label]="objectConfig[kind].label"
                                       >
                                         <div
-                                          class="flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
-                                          data-ui-tree-row
+                                          class="flex min-h-11 min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left text-inherit no-underline"
+                                          data-tree-row
                                         >
-                                          <mat-icon>{{ objectConfig[kind].icon }}</mat-icon>
+                                          <mat-icon class="flex-none text-on-surface-variant">{{
+                                            objectConfig[kind].icon
+                                          }}</mat-icon>
                                           <span class="min-w-0 flex-1 truncate">{{
                                             objectConfig[kind].label
                                           }}</span>
@@ -546,7 +547,7 @@
                                 #tablesItem="ngTreeItem"
                                 ngTreeItem
                                 class="rounded-xl outline-none"
-                                data-ui-tree-item
+                                data-tree-item
                                 label="Tables"
                                 [parent]="databaseGroup"
                                 [value]="tablesNode(project.id, database.id)"
@@ -554,10 +555,12 @@
                                 (expandedChange)="tablesExpanded(project.id, database.id, $event)"
                               >
                                 <div
-                                  class="flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
-                                  data-ui-tree-row
+                                  class="flex min-h-11 min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left text-inherit no-underline"
+                                  data-tree-row
                                 >
-                                  <mat-icon>table_view</mat-icon>
+                                  <mat-icon class="flex-none text-on-surface-variant"
+                                    >table_view</mat-icon
+                                  >
                                   <span class="min-w-0 flex-1 truncate">Tables</span>
                                   <button
                                     type="button"
@@ -567,7 +570,7 @@
                                     aria-label="Toggle FIFA database tables"
                                     (click)="toggleTables($event, project.id, database.id)"
                                   >
-                                    <mat-icon>
+                                    <mat-icon class="flex-none text-on-surface-variant">
                                       {{
                                         isExpanded(tablesNode(project.id, database.id))
                                           ? 'expand_more'
@@ -578,8 +581,7 @@
                                 </div>
                                 <ul
                                   role="group"
-                                  class="m-0 ml-4 list-none border-l border-outline-variant p-0"
-                                  data-ui-tree-group
+                                  class="m-0 ml-4 list-none border-l border-outline-variant p-0 pl-nav-indent"
                                 >
                                   <ng-template
                                     #tableGroup="ngTreeItemGroup"
@@ -590,8 +592,8 @@
                                       @case ('loading') {
                                         <li
                                           role="none"
-                                          class="flex items-center gap-2 px-2 py-1.5 text-on-surface-variant"
-                                          data-ui-branch-message
+                                          class="flex min-h-11 items-center gap-2 px-2 py-1.5 text-ui-sm text-on-surface-variant"
+                                          data-branch-message
                                           aria-live="polite"
                                         >
                                           <span>Loading tables…</span>
@@ -600,9 +602,9 @@
                                       @case ('error') {
                                         <li
                                           role="none"
-                                          class="flex items-center gap-2 px-2 py-1.5 text-on-surface-variant"
-                                          data-ui-branch-message
-                                          data-ui-error-message
+                                          class="flex min-h-11 flex-col items-start gap-2 px-2 py-1.5 text-ui-sm text-error"
+                                          data-branch-message
+                                          data-error-message
                                         >
                                           <span>{{ store.tableLoadState(database.id).error }}</span>
                                           <button
@@ -622,17 +624,19 @@
                                           <li
                                             ngTreeItem
                                             class="rounded-xl outline-none"
-                                            data-ui-table-item
-                                            data-ui-tree-item
+                                            data-table-item
+                                            data-tree-item
                                             [parent]="tableGroup"
                                             [value]="tableNode(project.id, database.id, table.name)"
                                             [label]="table.name"
                                           >
                                             <div
-                                              class="flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
-                                              data-ui-tree-row
+                                              class="flex min-h-11 min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left text-inherit no-underline"
+                                              data-tree-row
                                             >
-                                              <mat-icon>table_rows</mat-icon>
+                                              <mat-icon class="flex-none text-on-surface-variant"
+                                                >table_rows</mat-icon
+                                              >
                                               <span class="min-w-0 flex-1 truncate">{{
                                                 table.name
                                               }}</span>
@@ -641,8 +645,8 @@
                                         } @empty {
                                           <li
                                             role="none"
-                                            class="flex items-center gap-2 px-2 py-1.5 text-on-surface-variant"
-                                            data-ui-branch-message
+                                            class="flex min-h-11 items-center gap-2 px-2 py-1.5 text-ui-sm text-on-surface-variant"
+                                            data-branch-message
                                           >
                                             No tables available.
                                           </li>
@@ -656,48 +660,54 @@
                               <li
                                 ngTreeItem
                                 class="rounded-xl outline-none"
-                                data-ui-tree-item
+                                data-tree-item
                                 label="Settings"
                                 [parent]="databaseGroup"
                                 [value]="settingsNode(project.id, database.id)"
                               >
                                 <div
-                                  class="flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
-                                  data-ui-tree-row
+                                  class="flex min-h-11 min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left text-inherit no-underline"
+                                  data-tree-row
                                 >
-                                  <mat-icon>tune</mat-icon>
+                                  <mat-icon class="flex-none text-on-surface-variant"
+                                    >tune</mat-icon
+                                  >
                                   <span class="min-w-0 flex-1 truncate">Settings</span>
                                 </div>
                               </li>
                               <li
                                 ngTreeItem
                                 class="rounded-xl outline-none"
-                                data-ui-tree-item
+                                data-tree-item
                                 label="Validation"
                                 [parent]="databaseGroup"
                                 [value]="validationNode(project.id, database.id)"
                               >
                                 <div
-                                  class="flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
-                                  data-ui-tree-row
+                                  class="flex min-h-11 min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left text-inherit no-underline"
+                                  data-tree-row
                                 >
-                                  <mat-icon>fact_check</mat-icon>
+                                  <mat-icon class="flex-none text-on-surface-variant"
+                                    >fact_check</mat-icon
+                                  >
                                   <span class="min-w-0 flex-1 truncate">Validation</span>
                                 </div>
                               </li>
                               <li
                                 ngTreeItem
                                 class="rounded-xl outline-none"
-                                data-ui-tree-item
+                                data-tree-item
                                 label="Export"
                                 [parent]="databaseGroup"
                                 [value]="exportNode(project.id, database.id)"
                               >
                                 <div
-                                  class="flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
-                                  data-ui-tree-row
+                                  class="flex min-h-11 min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left text-inherit no-underline"
+                                  data-tree-row
                                 >
-                                  <mat-icon>drive_file_move</mat-icon>
+                                  <mat-icon class="flex-none text-on-surface-variant"
+                                    >drive_file_move</mat-icon
+                                  >
                                   <span class="min-w-0 flex-1 truncate">Export</span>
                                 </div>
                               </li>
@@ -707,8 +717,8 @@
                       } @empty {
                         <li
                           role="none"
-                          class="flex items-center gap-2 px-2 py-1.5 text-on-surface-variant"
-                          data-ui-branch-message
+                          class="flex min-h-11 items-center gap-2 px-2 py-1.5 text-ui-sm text-on-surface-variant"
+                          data-branch-message
                         >
                           No FIFA databases.
                         </li>
@@ -724,8 +734,8 @@
     } @empty {
       <li
         role="none"
-        class="flex items-center gap-2 px-2 py-1.5 text-on-surface-variant"
-        data-ui-branch-message
+        class="flex min-h-11 items-center gap-2 px-2 py-1.5 text-ui-sm text-on-surface-variant"
+        data-branch-message
       >
         No projects yet.
       </li>
@@ -733,30 +743,30 @@
   </ul>
 </nav>
 
-<div class="mt-2 flex-none" data-ui-utility>
-  <mat-divider />
+<div class="mt-2 flex-none">
+  <mat-divider class="mx-1 mt-0 mb-1" />
   <nav aria-label="Application navigation">
     <ul class="m-0 list-none p-0">
       <li>
         <a
-          class="flex w-full min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
-          data-ui-utility-item
+          class="flex min-h-11 w-full min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left text-inherit no-underline"
+          data-utility-item
           routerLink="/settings"
-          routerLinkActive="active"
+          routerLinkActive="bg-secondary-container text-on-secondary-container"
           ariaCurrentWhenActive="page"
         >
-          <mat-icon>settings</mat-icon>
+          <mat-icon class="flex-none">settings</mat-icon>
           <span class="min-w-0 flex-1 truncate">Settings</span>
         </a>
       </li>
       <li>
         <button
           type="button"
-          class="flex w-full min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
-          data-ui-utility-item
+          class="flex min-h-11 w-full min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left text-inherit no-underline"
+          data-utility-item
           (click)="openAbout()"
         >
-          <mat-icon>info</mat-icon>
+          <mat-icon class="flex-none text-on-surface-variant">info</mat-icon>
           <span class="min-w-0 flex-1 truncate">About</span>
         </button>
       </li>

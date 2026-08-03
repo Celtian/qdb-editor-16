@@ -141,7 +141,7 @@ describe('project and import flows', () => {
 
     const cardIcons = [
       ...(fixture.nativeElement as HTMLElement).querySelectorAll<HTMLElement>(
-        'mat-card-header [data-ui-database-card-icon]',
+        'mat-card-header [data-database-card-icon]',
       ),
     ];
     expect(cardIcons.map((icon) => icon.textContent?.trim())).toEqual(['storage', 'error']);
@@ -172,7 +172,7 @@ describe('project and import flows', () => {
       fixture.detectChanges();
       cardIcons = [
         ...(fixture.nativeElement as HTMLElement).querySelectorAll<HTMLElement>(
-          'mat-card-header [data-ui-table-card-icon]',
+          'mat-card-header [data-table-card-icon]',
         ),
       ];
       expect(cardIcons).toHaveLength(2);
@@ -249,7 +249,7 @@ describe('project and import flows', () => {
     fixture.detectChanges();
     await (await loader.getHarness(MatButtonHarness.with({ text: /Review import/ }))).click();
     const input = await loader.getHarness(
-      MatInputHarness.with({ selector: '[data-ui-name-field] input' }),
+      MatInputHarness.with({ selector: '[data-name-field] input' }),
     );
     expect(await input.getValue()).toBe('Imported career');
     await (await loader.getHarness(MatButtonHarness.with({ text: /Import database/ }))).click();

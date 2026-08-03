@@ -2,33 +2,6 @@
   display: block;
 }
 
-[data-ui-settings-page] {
-  display: grid;
-  gap: 1.25rem;
-  margin: 0 auto;
-  max-width: 64rem;
-  padding: 2.5rem clamp(1rem, 4vw, 3.5rem);
-}
-
-[data-ui-priority-list] li {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  min-height: 3.5rem;
-  padding: 0.35rem 0.65rem;
-  border: 1px solid var(--mat-sys-outline-variant);
-  border-radius: 0.75rem;
-  background: var(--mat-sys-surface);
-}
-
-[data-ui-spacer] {
-  flex: 1;
-}
-
-[data-ui-error] {
-  color: var(--mat-sys-error);
-}
-
 .cdk-drag-preview {
   box-sizing: border-box;
   border-radius: 0.75rem;

@@ -2,35 +2,12 @@
   display: block;
 }
 
-[data-ui-identity] img {
-  flex: 0 0 auto;
-  border-radius: 14px;
-}
-
-[data-ui-identity] h2,
-[data-ui-identity] p,
-[data-ui-description],
-[data-ui-legal] {
-  margin: 0;
-}
-
-[data-ui-identity] h2 {
-  padding: 0;
-  font-size: 1.6rem;
-}
-
-[data-ui-version] {
+[data-version] {
   margin-top: 0.25rem !important;
-  color: var(--mat-sys-on-surface-variant);
-  font-variant-numeric: tabular-nums;
 }
 
 mat-dialog-content {
   padding-top: 1.25rem;
-}
-
-[data-ui-description] {
-  line-height: 1.55;
 }
 
 mat-dialog-actions {
@@ -40,24 +17,7 @@ mat-dialog-actions {
   padding: 0.75rem 1.5rem 1.25rem;
 }
 
-[data-ui-external-actions] {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  gap: 0.25rem;
-}
-
 @media (width <= 480px) {
-  [data-ui-identity] img {
-    width: 56px;
-    height: 56px;
-    border-radius: 12px;
-  }
-
-  [data-ui-identity] h2 {
-    font-size: 1.4rem;
-  }
-
   mat-dialog-content {
     padding-inline: 1rem;
   }
@@ -66,14 +26,5 @@ mat-dialog-actions {
     align-items: stretch;
     flex-direction: column;
     padding-inline: 1rem;
-  }
-
-  [data-ui-external-actions] {
-    display: grid;
-    justify-content: stretch;
-  }
-
-  [data-ui-external-actions] a {
-    justify-content: center;
   }
 }

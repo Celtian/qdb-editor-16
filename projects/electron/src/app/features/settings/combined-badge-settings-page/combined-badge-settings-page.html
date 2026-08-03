@@ -8,12 +8,8 @@
   </div>
 </app-page-header>
 
-<section data-ui-settings-page aria-labelledby="combined-badges-title">
-  <mat-card
-    data-ui-built-in-badges-card
-    appearance="outlined"
-    aria-labelledby="combined-built-in-badges-title"
-  >
+<section aria-labelledby="combined-badges-title">
+  <mat-card appearance="outlined" aria-labelledby="combined-built-in-badges-title">
     <mat-card-header>
       <div
         class="flex items-center justify-center bg-tertiary-container text-on-tertiary-container"
@@ -27,7 +23,7 @@
       </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
-      <ul class="m-0 grid list-none gap-4 p-0" data-ui-built-in-badge-list>
+      <ul class="m-0 grid list-none gap-4 p-0">
         @for (status of builtInStatuses; track status) {
           <li>
             <app-combined-entity-status-badge [status]="status" />
@@ -65,7 +61,7 @@
           <button matButton type="button" (click)="retryCustomBadges()">Retry</button>
         </div>
       } @else {
-        <div class="flex items-center justify-between gap-4" data-ui-custom-badges-heading>
+        <div class="flex items-center justify-between gap-4">
           <p>Names are shown in the Badges column. Descriptions appear as tooltips.</p>
           <button matButton="filled" type="button" (click)="createCustomBadge()">
             <mat-icon aria-hidden="true">add</mat-icon>
@@ -73,10 +69,10 @@
           </button>
         </div>
         @if (customBadges().length) {
-          <ul class="mx-0 mt-5 mb-0 grid list-none p-0" data-ui-custom-badge-list>
+          <ul class="mx-0 mt-5 mb-0 grid list-none p-0">
             @for (badge of customBadges(); track badge.id) {
               <li>
-                <div class="grid items-center" data-ui-custom-badge-details>
+                <div class="grid items-center">
                   <app-custom-badge [badge]="badge" />
                   <span>{{ badge.description }}</span>
                   <small>
@@ -84,7 +80,7 @@
                     {{ badge.assignmentCount === 1 ? 'assignment' : 'assignments' }}
                   </small>
                 </div>
-                <div class="flex max-sm:justify-end" data-ui-custom-badge-actions>
+                <div class="flex max-sm:justify-end">
                   <button
                     matIconButton
                     type="button"

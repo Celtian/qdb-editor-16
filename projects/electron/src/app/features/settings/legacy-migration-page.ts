@@ -21,7 +21,6 @@ import { PageHeader } from '../../shared/page-header/page-header';
     RouterLink,
   ],
   templateUrl: './legacy-migration-page.html',
-  styleUrl: './legacy-migration-page.css',
 })
 export class LegacyMigrationPage {
   private readonly desktop = inject(DesktopApi);

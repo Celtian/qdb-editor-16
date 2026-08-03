@@ -2,14 +2,6 @@
   display: block;
 }
 
-[data-ui-settings-page] {
-  display: grid;
-  gap: 1.5rem;
-  margin: 0 auto;
-  max-width: 64rem;
-  padding: 2.5rem clamp(1rem, 4vw, 3.5rem);
-}
-
 mat-card {
   max-width: 42rem;
 }
@@ -25,64 +17,4 @@ mat-card-content {
 
 mat-card-content p {
   margin: 0;
-}
-
-[data-ui-built-in-badge-list] li {
-  align-items: center;
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: auto minmax(0, 1fr);
-}
-
-[data-ui-custom-badges-heading] p {
-  max-width: 34rem;
-}
-
-[data-ui-custom-badge-list] li {
-  align-items: center;
-  border-top: 1px solid var(--mat-sys-outline-variant);
-  display: flex;
-  gap: 1rem;
-  justify-content: space-between;
-  padding: 1rem 0;
-}
-
-[data-ui-custom-badge-details] {
-  gap: 0.25rem 0.75rem;
-  grid-template-columns: auto minmax(0, 1fr);
-}
-
-[data-ui-custom-badge-details] app-custom-badge {
-  grid-row: 1 / span 2;
-}
-
-[data-ui-custom-badge-details] small {
-  color: var(--mat-sys-on-surface-variant);
-}
-
-[data-ui-custom-badge-actions] button:last-child {
-  color: var(--mat-sys-error);
-}
-
-[data-ui-badge-age-heading] label {
-  color: var(--mat-sys-on-surface);
-  font-size: 1rem;
-  font-weight: 600;
-}
-
-[data-ui-badge-age-heading] output {
-  color: var(--mat-sys-primary);
-  font-weight: 600;
-}
-
-[data-ui-badge-age-setting] mat-slider {
-  width: 100%;
-}
-
-@media (width <= 640px) {
-  [data-ui-custom-badges-heading],
-  [data-ui-custom-badge-list] li {
-    align-items: stretch;
-    flex-direction: column;
-  }
 }

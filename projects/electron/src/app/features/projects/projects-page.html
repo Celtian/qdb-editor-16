@@ -9,9 +9,11 @@
   </a>
 </app-page-header>
 
-<section data-ui-page>
+<section class="mx-auto w-full max-w-app p-8 max-nav:p-4">
   @if (store.error()) {
-    <p data-ui-error-banner role="alert">{{ store.error() }}</p>
+    <p class="rounded-xl bg-error-container px-4 py-3 text-on-error-container" role="alert">
+      {{ store.error() }}
+    </p>
   }
 
   @if (store.projects().length) {
@@ -60,18 +62,21 @@
       }
     </div>
   } @else if (!store.loading()) {
-    <mat-card appearance="outlined" class="p-0" data-ui-empty-state data-ui-projects-empty-state>
+    <mat-card
+      appearance="outlined"
+      class="min-h-88 p-0 px-4 py-12 text-center text-on-surface-variant max-xs:min-h-76"
+    >
       <mat-card-content
         class="flex flex-1 flex-col items-center justify-center gap-6 pt-12 pb-6 text-center max-xs:gap-5 max-xs:pt-10 max-xs:pb-5"
       >
         <div
-          class="grid size-20 place-items-center rounded-3xl bg-primary-container text-on-primary-container"
-          data-ui-projects-empty-state-icon
+          class="grid size-20 place-items-center rounded-3xl bg-primary-container text-on-primary-container max-xs:size-18 max-xs:rounded-panel"
+          data-projects-empty-state-icon
           aria-hidden="true"
         >
-          <mat-icon>create_new_folder</mat-icon>
+          <mat-icon class="size-10 text-4xl">create_new_folder</mat-icon>
         </div>
-        <div class="grid gap-2" data-ui-projects-empty-state-copy>
+        <div class="grid max-w-empty-copy gap-2" data-projects-empty-state-copy>
           <h2>Create your first project</h2>
           <p>
             Keep related FIFA 16 databases together and manage them from one shared reference date.
@@ -79,8 +84,8 @@
         </div>
       </mat-card-content>
       <mat-card-actions class="justify-center pb-12 max-xs:pb-10">
-        <a matButton="filled" data-ui-projects-empty-state-action routerLink="/projects/new">
-          <mat-icon>add</mat-icon>
+        <a class="min-w-40" matButton="filled" routerLink="/projects/new">
+          <mat-icon class="size-12 text-5xl">add</mat-icon>
           New project
         </a>
       </mat-card-actions>

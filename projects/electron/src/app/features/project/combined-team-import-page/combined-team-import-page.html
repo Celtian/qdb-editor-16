@@ -5,15 +5,20 @@
   </div>
 </app-page-header>
 
-<section data-ui-page aria-labelledby="import-heading">
+<section
+  class="mx-auto grid w-full max-w-workflow gap-6 p-8 px-footer-inline py-10 max-nav:p-4"
+  aria-labelledby="import-heading"
+>
   @if (error()) {
-    <p data-ui-error role="alert">{{ error() }}</p>
+    <p class="rounded-xl bg-error-container px-4 py-3 text-error" data-error role="alert">
+      {{ error() }}
+    </p>
   }
   @if (loading()) {
     <mat-progress-bar mode="indeterminate" aria-label="Loading source teams" />
   } @else {
-    <mat-card appearance="outlined" data-ui-wizard-card>
-      <mat-stepper data-ui-wizard linear aria-label="Import team wizard">
+    <mat-card class="overflow-hidden" appearance="outlined">
+      <mat-stepper data-wizard linear aria-label="Import team wizard">
         <ng-template let-index="index" matStepperIcon="number">
           <span aria-hidden="true">{{ index + 1 }}</span>
         </ng-template>
@@ -24,40 +29,43 @@
           <span aria-hidden="true">{{ index + 1 }}</span>
         </ng-template>
 
-        <mat-step data-step-id="source-teams" [completed]="!!preview()">
+        <mat-step [completed]="!!preview()">
           <ng-template matStepLabel>Source teams</ng-template>
-          <div data-ui-step-content>
+          <div class="grid gap-6 px-0 pt-6 pb-2" data-step-content>
             <div>
-              <h2>Select one or more source teams</h2>
-              <p>
+              <h2 class="m-0 text-step-heading">Select one or more source teams</h2>
+              <p class="m-0 text-on-surface-variant">
                 {{
                   combinedTeamId()
                     ? 'Existing linked teams are preselected. Valid manual player groups and field choices are preserved when possible.'
                     : 'Choose no more than one stored team from each provider. Source records remain unchanged.'
                 }}
               </p>
-              <p>
+              <p class="m-0 text-on-surface-variant">
                 Choose a team once. Unique exact-name records from other providers are selected
                 automatically.
               </p>
             </div>
-            <div class="grid grid-cols-2 gap-4" data-ui-provider-groups>
+            <div class="grid grid-cols-2 gap-4 max-panel:grid-cols-1">
               @for (sourceName of orderedSources(); track sourceName) {
                 <fieldset
                   class="m-0 box-border grid min-w-0 gap-4 rounded-xl border border-outline-variant p-4"
-                  data-ui-provider-group
+                  data-provider-group
                 >
-                  <legend>{{ sourceLabels[sourceName] }}</legend>
+                  <legend class="px-tight py-0 font-semibold text-on-surface">
+                    {{ sourceLabels[sourceName] }}
+                  </legend>
 
-                  <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                  <mat-form-field
+                    class="w-full min-w-0"
+                    appearance="outline"
+                    subscriptSizing="dynamic"
+                  >
                     <mat-label>Source league</mat-label>
                     @if (!selectedLeague(sourceName)) {
                       <mat-icon matPrefix aria-hidden="true">search</mat-icon>
                     }
-                    <div
-                      class="flex w-full min-w-0 items-center gap-2"
-                      data-ui-autocomplete-control
-                    >
+                    <div class="flex w-full min-w-0 items-center gap-2" data-autocomplete-control>
                       @if (selectedLeague(sourceName); as league) {
                         @if (countryFlagCode(league); as flagCode) {
                           <app-country-flag decorative [code]="flagCode" />
@@ -65,6 +73,7 @@
                       }
                       <input
                         #leagueInput
+                        class="min-w-0 flex-auto"
                         matInput
                         type="search"
                         autocomplete="off"
@@ -78,7 +87,7 @@
                       <span
                         matTextSuffix
                         class="text-xs whitespace-nowrap text-on-surface-variant"
-                        data-ui-selected-tier
+                        data-selected-tier
                       >
                         {{ league.tier ? 'Tier ' + league.tier : 'Tier not set' }}
                       </span>
@@ -106,10 +115,7 @@
                               <app-country-flag decorative [code]="flagCode" />
                             }
                             <span class="min-w-0 truncate">{{ league.name }}</span>
-                            <span
-                              class="text-sm whitespace-nowrap text-on-surface-variant"
-                              data-ui-option-metadata
-                            >
+                            <span class="ml-auto text-sm whitespace-nowrap text-on-surface-variant">
                               {{ league.tier ? 'Tier ' + league.tier : 'Tier not set' }}
                             </span>
                           </span>
@@ -121,15 +127,16 @@
                     <mat-hint>Type a league name, Source ID, or country</mat-hint>
                   </mat-form-field>
 
-                  <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                  <mat-form-field
+                    class="w-full min-w-0"
+                    appearance="outline"
+                    subscriptSizing="dynamic"
+                  >
                     <mat-label>Source team</mat-label>
                     @if (!selectedCandidate(sourceName)) {
                       <mat-icon matPrefix aria-hidden="true">search</mat-icon>
                     }
-                    <div
-                      class="flex w-full min-w-0 items-center gap-2"
-                      data-ui-autocomplete-control
-                    >
+                    <div class="flex w-full min-w-0 items-center gap-2" data-autocomplete-control>
                       @if (selectedCandidate(sourceName); as candidate) {
                         @if (countryFlagCode(candidate); as flagCode) {
                           <app-country-flag decorative [code]="flagCode" />
@@ -137,6 +144,7 @@
                       }
                       <input
                         #teamInput
+                        class="min-w-0 flex-auto"
                         matInput
                         type="search"
                         autocomplete="off"
@@ -171,15 +179,13 @@
                             <span class="min-w-0 truncate">{{ candidate.name }}</span>
                             @if (candidate.combinedTeamName) {
                               <span
-                                class="text-sm whitespace-nowrap text-on-surface-variant"
-                                data-ui-option-metadata
+                                class="ml-auto text-sm whitespace-nowrap text-on-surface-variant"
                               >
                                 Already linked to {{ candidate.combinedTeamName }}
                               </span>
                             } @else {
                               <span
-                                class="text-sm whitespace-nowrap text-on-surface-variant"
-                                data-ui-option-metadata
+                                class="ml-auto text-sm whitespace-nowrap text-on-surface-variant"
                               >
                                 {{ candidate.playerCount ?? 0 | number }} players
                               </span>
@@ -201,7 +207,7 @@
                 </fieldset>
               }
             </div>
-            <p class="flex flex-wrap gap-1">
+            <p class="m-0 flex flex-wrap gap-1 text-on-surface-variant">
               {{ selectedTeamCount() | number }} providers selected
               @if (automaticTeamCount()) {
                 <span>· {{ automaticTeamCount() | number }} matched automatically</span>
@@ -223,7 +229,7 @@
             @if (busy()) {
               <mat-progress-bar mode="indeterminate" aria-label="Identifying source players" />
             }
-            <div data-ui-step-actions>
+            <div class="flex items-center justify-end gap-2">
               <button
                 matButton="filled"
                 type="button"
@@ -236,12 +242,13 @@
           </div>
         </mat-step>
 
-        <mat-step data-step-id="league" [completed]="true">
+        <mat-step [completed]="true">
           <ng-template matStepLabel>League</ng-template>
-          <div data-ui-step-content>
-            <h2>Choose the project league</h2>
+          <div class="grid gap-6 px-0 pt-6 pb-2" data-step-content>
+            <h2 class="m-0 text-step-heading">Choose the project league</h2>
             <mat-radio-group
-              data-ui-league-options
+              class="grid gap-3"
+              data-league-options
               aria-label="Project league behavior"
               [value]="leagueMode()"
               (change)="setLeagueMode($event.value)"
@@ -266,10 +273,7 @@
                           <app-country-flag decorative [code]="flagCode" />
                         }
                         <span class="min-w-0 truncate">{{ league.name }}</span>
-                        <span
-                          class="text-sm whitespace-nowrap text-on-surface-variant"
-                          data-ui-option-metadata
-                        >
+                        <span class="ml-auto text-sm whitespace-nowrap text-on-surface-variant">
                           {{ league.tier === undefined ? 'Tier not set' : 'Tier ' + league.tier }}
                         </span>
                       </span>
@@ -282,10 +286,7 @@
                           <app-country-flag decorative [code]="flagCode" />
                         }
                         <span class="min-w-0 truncate">{{ league.name }}</span>
-                        <span
-                          class="text-sm whitespace-nowrap text-on-surface-variant"
-                          data-ui-option-metadata
-                        >
+                        <span class="ml-auto text-sm whitespace-nowrap text-on-surface-variant">
                           {{ league.tier === undefined ? 'Tier not set' : 'Tier ' + league.tier }}
                         </span>
                       </span>
@@ -294,7 +295,7 @@
                 </mat-select>
               </mat-form-field>
             } @else if (leagueMode() === 'create') {
-              <div data-ui-source-leagues role="group" aria-label="Source leagues">
+              <div class="grid gap-3" role="group" aria-label="Source leagues">
                 @for (league of preview()?.sourceLeagues ?? []; track league.id) {
                   <mat-checkbox
                     [checked]="sourceLeagueIds().includes(league.id)"
@@ -311,7 +312,7 @@
                 }
               </div>
             }
-            <div data-ui-step-actions>
+            <div class="flex items-center justify-end gap-2">
               <button matButton matStepperPrevious type="button">Back</button>
               <button matButton="filled" matStepperNext type="button">
                 {{
@@ -327,23 +328,22 @@
         </mat-step>
 
         @if (showPlayerMatches()) {
-          <mat-step data-step-id="player-matches" [completed]="true">
+          <mat-step [completed]="true">
             <ng-template matStepLabel>Player matches</ng-template>
-            <div data-ui-step-content>
+            <div class="grid gap-6 px-0 pt-6 pb-2" data-step-content>
               <div>
-                <h2>Review player identification</h2>
-                <p id="player-alignment-help">
+                <h2 class="m-0 text-step-heading">Review player identification</h2>
+                <p class="m-0 text-on-surface-variant" id="player-alignment-help">
                   Players in the same row will be combined as one person. Drag players vertically or
                   use the arrow buttons to align them.
                 </p>
-                <p class="mt-2 text-sm">
+                <p class="m-0 mt-2 text-sm text-on-surface-variant">
                   {{ automaticGroupCount() | number }} automatic matches ·
                   {{ unmatchedGroupCount() | number }} single-source players
                 </p>
               </div>
               <div
-                class="max-w-full overflow-x-auto px-0.5 pt-0.5 pb-3 focus-visible:rounded-xl"
-                data-ui-alignment-scroll
+                class="max-w-full overflow-x-auto px-0.5 pt-0.5 pb-3 focus-visible:rounded-xl focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-primary"
                 role="region"
                 tabindex="0"
                 aria-label="Player matching table"
@@ -352,12 +352,16 @@
                 <div
                   cdkDropListGroup
                   class="grid gap-2.5"
-                  data-ui-alignment-board
+                  data-alignment-board
                   role="table"
                   aria-label="Players grouped by provider and canonical identity"
                   [style.--provider-count]="activeSources().length"
                 >
-                  <div class="sticky z-2 grid gap-2.5" data-ui-alignment-header role="row">
+                  <div
+                    class="sticky top-0 z-2 grid grid-cols-provider-board gap-2.5"
+                    data-alignment-header
+                    role="row"
+                  >
                     @for (sourceName of activeSources(); track sourceName) {
                       <div role="columnheader">
                         {{ sourceLabels[sourceName] }}
@@ -371,29 +375,22 @@
                     let rowIndex = $index, rowCount = $count
                   ) {
                     <div
-                      class="grid gap-2.5 rounded-xl border border-outline-variant bg-surface-container-lowest p-2.5"
-                      data-ui-alignment-row
+                      class="grid grid-cols-provider-board gap-2.5 rounded-xl border border-outline-variant bg-surface-container-lowest p-2.5"
                       role="row"
                       [attr.aria-label]="'Player match row ' + (rowIndex + 1)"
                       [attr.data-group-id]="group.id"
                     >
                       <div class="col-span-full flex min-h-6 items-center">
-                        <span
-                          class="rounded-full bg-tertiary-container px-2.5 py-micro text-xs font-semibold text-on-tertiary-container"
-                          data-ui-status-badge
-                          [class.automatic]="group.automatic"
-                          [attr.data-ui-single-source]="group.players.length === 1 ? '' : null"
-                        >
+                        <span [class]="matchStatusClasses(group)">
                           Row {{ rowIndex + 1 }} · {{ matchStatus(group) }}
                         </span>
                       </div>
                       @for (sourceName of activeSources(); track sourceName) {
                         <div
                           cdkDropList
-                          class="box-border flex items-stretch rounded-notice bg-surface-container-low p-1.5"
-                          data-ui-player-cell
+                          class="box-border flex min-h-34 items-stretch rounded-notice border border-dashed border-outline-variant bg-surface-container-low p-1.5"
+                          data-player-cell
                           role="cell"
-                          [class.empty-cell]="!playerFor(group, sourceName)"
                           [attr.aria-label]="
                             sourceLabels[sourceName] +
                             ', row ' +
@@ -411,26 +408,25 @@
                             <article
                               cdkDrag
                               cdkDragLockAxis="y"
-                              class="box-border grid w-full min-w-0 gap-2.5 rounded-lg border border-outline-variant bg-surface p-3"
-                              data-ui-player-tile
+                              class="box-border grid w-full min-w-0 content-between gap-2.5 rounded-lg border border-outline-variant bg-surface p-3 shadow-sm"
+                              data-player-tile
                               [attr.data-player-id]="player.id"
                               [cdkDragData]="dragData(group, player)"
                             >
-                              <div class="grid min-w-0 gap-micro" data-ui-player-details>
+                              <div class="grid min-w-0 gap-micro">
                                 <div
                                   class="flex min-w-0 items-start justify-between gap-2"
-                                  data-ui-player-heading
+                                  data-player-heading
                                 >
-                                  <strong>{{ player.name }}</strong>
+                                  <strong class="min-w-0 truncate">{{ player.name }}</strong>
                                   @if (player.position) {
                                     <app-position-badge [position]="player.position" />
                                   }
                                 </div>
                                 <div
-                                  class="flex flex-wrap items-center text-on-surface-variant"
-                                  data-ui-player-metadata
+                                  class="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-ui-sm text-on-surface-variant"
                                 >
-                                  <span data-ui-player-birthdate>
+                                  <span data-player-birthdate>
                                     {{
                                       player.birthdate
                                         ? (player.birthdate | referenceDate)
@@ -442,7 +438,7 @@
                                       @if (player.countryCode2) {
                                         <app-country-flag decorative [code]="player.countryCode2" />
                                       }
-                                      <span data-ui-player-country-name>
+                                      <span data-player-country-name>
                                         {{ countryLabel(player) }}
                                       </span>
                                     </span>
@@ -451,7 +447,7 @@
                               </div>
                               <div
                                 class="flex flex-wrap items-center justify-end gap-0.5"
-                                data-ui-player-actions
+                                data-player-actions
                                 aria-label="Player row controls"
                               >
                                 <span
@@ -465,8 +461,8 @@
                                     cdkDragHandle
                                     matIconButton
                                     class="cursor-grab active:cursor-grabbing"
-                                    data-ui-player-action-button
-                                    data-ui-player-drag-handle
+                                    data-player-action-button
+                                    data-player-drag-handle
                                     type="button"
                                     [attr.aria-label]="
                                       'Drag ' +
@@ -476,7 +472,11 @@
                                       ' column'
                                     "
                                   >
-                                    <mat-icon aria-hidden="true">drag_indicator</mat-icon>
+                                    <mat-icon
+                                      class="block size-4.5 text-lg leading-4.5"
+                                      aria-hidden="true"
+                                      >drag_indicator</mat-icon
+                                    >
                                   </button>
                                 </span>
                                 <span
@@ -487,13 +487,17 @@
                                 >
                                   <button
                                     matIconButton
-                                    data-ui-player-action-button
+                                    data-player-action-button
                                     type="button"
                                     [disabled]="rowIndex === 0"
                                     [attr.aria-label]="'Move ' + player.name + ' up one row'"
                                     (click)="movePlayer(group.id, player.id, -1)"
                                   >
-                                    <mat-icon aria-hidden="true">arrow_upward</mat-icon>
+                                    <mat-icon
+                                      class="block size-4.5 text-lg leading-4.5"
+                                      aria-hidden="true"
+                                      >arrow_upward</mat-icon
+                                    >
                                   </button>
                                 </span>
                                 <span
@@ -504,13 +508,17 @@
                                 >
                                   <button
                                     matIconButton
-                                    data-ui-player-action-button
+                                    data-player-action-button
                                     type="button"
                                     [disabled]="rowIndex === rowCount - 1"
                                     [attr.aria-label]="'Move ' + player.name + ' down one row'"
                                     (click)="movePlayer(group.id, player.id, 1)"
                                   >
-                                    <mat-icon aria-hidden="true">arrow_downward</mat-icon>
+                                    <mat-icon
+                                      class="block size-4.5 text-lg leading-4.5"
+                                      aria-hidden="true"
+                                      >arrow_downward</mat-icon
+                                    >
                                   </button>
                                 </span>
                                 <span
@@ -521,7 +529,7 @@
                                 >
                                   <button
                                     matIconButton
-                                    data-ui-player-action-button
+                                    data-player-action-button
                                     type="button"
                                     [disabled]="group.players.length === 1"
                                     [attr.aria-label]="
@@ -529,16 +537,17 @@
                                     "
                                     (click)="separatePlayer(group.id, player.id)"
                                   >
-                                    <mat-icon aria-hidden="true">call_split</mat-icon>
+                                    <mat-icon
+                                      class="block size-4.5 text-lg leading-4.5"
+                                      aria-hidden="true"
+                                      >call_split</mat-icon
+                                    >
                                   </button>
                                 </span>
                               </div>
                             </article>
                           } @else {
-                            <span
-                              class="text-on-surface-variant"
-                              data-ui-empty-label
-                              aria-hidden="true"
+                            <span class="text-ui-sm text-on-surface-variant" aria-hidden="true"
                               >Empty</span
                             >
                           }
@@ -548,26 +557,21 @@
                   }
 
                   <div
-                    class="grid gap-2.5 rounded-xl border border-outline-variant bg-surface-container-lowest p-2.5"
-                    data-ui-alignment-row
-                    data-ui-new-row
+                    class="grid grid-cols-provider-board gap-2.5 rounded-xl border border-dashed border-outline-variant bg-transparent p-2.5"
                     role="row"
                     aria-label="New unmatched row"
                   >
                     <div class="col-span-full flex min-h-6 items-center">
                       <span
                         class="rounded-full bg-tertiary-container px-2.5 py-micro text-xs font-semibold text-on-tertiary-container"
-                        data-ui-single-source
-                        data-ui-status-badge
                         >New unmatched row</span
                       >
                     </div>
                     @for (sourceName of activeSources(); track sourceName) {
                       <div
                         cdkDropList
-                        class="box-border flex items-stretch justify-center gap-1.5 rounded-notice bg-surface-container-low p-1.5 text-center text-on-surface-variant"
-                        data-ui-new-row-cell
-                        data-ui-player-cell
+                        class="box-border flex min-h-18 items-center justify-center gap-1.5 rounded-notice border border-dashed border-outline-variant bg-surface-container-low p-1.5 text-center text-on-surface-variant"
+                        data-player-cell
                         role="cell"
                         data-new-row="true"
                         [attr.aria-label]="
@@ -579,14 +583,14 @@
                         [cdkDropListSortingDisabled]="true"
                         (cdkDropListDropped)="dropPlayer($event)"
                       >
-                        <mat-icon aria-hidden="true">add</mat-icon>
+                        <mat-icon class="flex-none" aria-hidden="true">add</mat-icon>
                         <span>Drop player here to separate</span>
                       </div>
                     }
                   </div>
                 </div>
               </div>
-              <div data-ui-step-actions>
+              <div class="flex items-center justify-end gap-2">
                 <button matButton matStepperPrevious type="button">Back</button>
                 <button matButton="filled" type="button" (click)="continueMatches()">
                   {{ showConflicts() ? 'Resolve fields' : 'Review summary' }}
@@ -597,39 +601,35 @@
         }
 
         @if (showConflicts()) {
-          <mat-step data-step-id="conflicts" [completed]="true">
+          <mat-step [completed]="true">
             <ng-template matStepLabel>Conflicts</ng-template>
-            <div data-ui-step-content>
-              <h2>Resolve conflicting information</h2>
-              <p>
+            <div class="grid gap-6 px-0 pt-6 pb-2" data-step-content>
+              <h2 class="m-0 text-step-heading">Resolve conflicting information</h2>
+              <p class="m-0 text-on-surface-variant">
                 Only team and player fields with conflicting values are shown below. Names prefer
                 equivalent variants with diacritics; other values follow the global source priority.
               </p>
               @if (reviewCards().length) {
-                <div class="grid gap-4" data-ui-review-cards>
+                <div class="grid grid-cols-review-cards gap-4">
                   @for (card of reviewCards(); track card.id) {
                     <mat-card
                       appearance="outlined"
-                      class="box-border grid w-full min-w-0 gap-2.5 rounded-lg border border-outline-variant bg-surface p-3"
-                      data-ui-player-tile
-                      data-ui-review-card
+                      class="box-border grid w-full min-w-0 content-start gap-4 rounded-lg border border-outline-variant bg-surface p-3 ps-0 shadow-sm"
+                      data-player-tile
+                      data-review-card
                       [attr.data-review-card]="card.id"
                       [attr.aria-labelledby]="card.headingId"
                     >
-                      <mat-card-header
-                        class="flex items-start justify-between gap-2"
-                        data-ui-review-card-heading
-                      >
+                      <mat-card-header class="flex items-start justify-between gap-2">
                         <mat-card-title>
                           <span [id]="card.headingId">{{ card.name }}</span>
                         </mat-card-title>
                         <mat-card-subtitle
-                          class="flex flex-wrap items-center text-on-surface-variant"
-                          data-ui-player-metadata
-                          data-ui-review-card-metadata
+                          class="flex min-h-5 flex-wrap items-center gap-x-2.5 gap-y-1 text-ui-sm text-on-surface-variant"
+                          data-review-card-metadata
                         >
                           @if (card.kind === 'player') {
-                            <span data-ui-player-birthdate>
+                            <span data-player-birthdate>
                               {{
                                 card.birthdate
                                   ? (card.birthdate | referenceDate)
@@ -642,37 +642,38 @@
                               @if (card.countryCode2) {
                                 <app-country-flag decorative [code]="card.countryCode2" />
                               }
-                              <span data-ui-player-country-name>
+                              <span data-player-country-name>
                                 {{ countryLabel(card) || 'Country unknown' }}
                               </span>
                             </span>
                           }
                         </mat-card-subtitle>
                         @if (card.position) {
-                          <app-position-badge [position]="card.position" />
+                          <app-position-badge class="flex-none" [position]="card.position" />
                         }
                       </mat-card-header>
                       <mat-card-content>
                         <dl class="m-0 grid">
                           @for (field of card.fields; track field.key) {
                             <div
-                              class="grid gap-3 border-t border-outline-variant px-0 py-3 max-md:gap-1.5"
-                              data-ui-conflicting
-                              data-ui-review-field
+                              class="grid grid-cols-review-field gap-3 border-t border-outline-variant px-0 py-3 max-panel:grid-cols-1 max-md:gap-1.5"
+                              data-conflicting
+                              data-review-field
                               [attr.data-review-field]="field.key"
                             >
-                              <dt>{{ field.label }}</dt>
-                              <dd>
+                              <dt class="text-ui-sm font-semibold text-on-surface-variant">
+                                {{ field.label }}
+                              </dt>
+                              <dd class="m-0 min-w-0">
                                 <mat-button-toggle-group
                                   class="flex w-fit max-w-full overflow-hidden"
-                                  data-ui-resolution-options
                                   hideSingleSelectionIndicator
                                   [attr.aria-label]="'Choose ' + field.label + ' for ' + card.name"
                                   [value]="field.selectedOptionKey"
                                   (change)="selectReviewOption(field, $event.value)"
                                 >
                                   @for (option of field.options; track option.key) {
-                                    <mat-button-toggle [value]="option.key">
+                                    <mat-button-toggle class="flex-auto" [value]="option.key">
                                       <span class="block">{{ option.displayValue }}</span>
                                     </mat-button-toggle>
                                   }
@@ -686,9 +687,14 @@
                   }
                 </div>
               } @else {
-                <p data-ui-empty-state role="status">No conflicts to resolve.</p>
+                <p
+                  class="m-0 rounded-xl border border-outline-variant bg-surface-container-low p-4 px-4 py-12 text-center text-on-surface-variant"
+                  role="status"
+                >
+                  No conflicts to resolve.
+                </p>
               }
-              <div data-ui-step-actions>
+              <div class="flex items-center justify-end gap-2">
                 <button matButton matStepperPrevious type="button">Back</button>
                 <button matButton="filled" type="button" (click)="continueConflicts()">
                   Review summary
@@ -698,46 +704,52 @@
           </mat-step>
         }
 
-        <mat-step data-step-id="summary">
+        <mat-step>
           <ng-template matStepLabel>Summary</ng-template>
-          <div data-ui-step-content>
-            <h2>{{ combinedTeamId() ? 'Apply team recombination' : 'Import project team' }}</h2>
-            <dl data-ui-summary>
-              <div>
-                <dt>Source teams</dt>
-                <dd>{{ selectedTeamCount() | number }}</dd>
+          <div class="grid gap-6 px-0 pt-6 pb-2" data-step-content>
+            <h2 class="m-0 text-step-heading">
+              {{ combinedTeamId() ? 'Apply team recombination' : 'Import project team' }}
+            </h2>
+            <dl class="grid grid-cols-summary gap-3" data-summary>
+              <div class="rounded-xl bg-surface-container p-4">
+                <dt class="text-on-surface-variant">Source teams</dt>
+                <dd class="mx-0 mt-1 mb-0 text-dialog-title-compact font-bold">
+                  {{ selectedTeamCount() | number }}
+                </dd>
               </div>
-              <div>
-                <dt>Selected players</dt>
-                <dd>
+              <div class="rounded-xl bg-surface-container p-4">
+                <dt class="text-on-surface-variant">Selected players</dt>
+                <dd class="mx-0 mt-1 mb-0 text-dialog-title-compact font-bold">
                   {{ selectedPlayerCount() | number }} of {{ summaryPlayers().length | number }}
                 </dd>
               </div>
-              <div>
-                <dt>Field conflicts</dt>
-                <dd>{{ conflicts().length | number }}</dd>
+              <div class="rounded-xl bg-surface-container p-4">
+                <dt class="text-on-surface-variant">Field conflicts</dt>
+                <dd class="mx-0 mt-1 mb-0 text-dialog-title-compact font-bold">
+                  {{ conflicts().length | number }}
+                </dd>
               </div>
-              <div>
-                <dt>League</dt>
-                <dd>{{ leagueMode() === 'none' ? 'Unassigned' : leagueMode() }}</dd>
+              <div class="rounded-xl bg-surface-container p-4">
+                <dt class="text-on-surface-variant">League</dt>
+                <dd class="mx-0 mt-1 mb-0 text-dialog-title-compact font-bold">
+                  {{ leagueMode() === 'none' ? 'Unassigned' : leagueMode() }}
+                </dd>
               </div>
             </dl>
-            <p>
+            <p class="m-0 text-on-surface-variant">
               Source leagues, teams, and players will not be modified. The canonical update is
               committed in one database transaction.
             </p>
-            <section
-              class="grid gap-2"
-              data-ui-summary-player-section
-              aria-labelledby="summary-player-heading"
-            >
+            <section class="grid gap-2" aria-labelledby="summary-player-heading">
               <div
                 class="flex flex-wrap items-center justify-between gap-3"
-                data-ui-summary-player-heading
+                data-summary-player-heading
               >
                 <div>
-                  <h3 id="summary-player-heading">Select project players</h3>
-                  <p>Choose the resolved players included in the project team.</p>
+                  <h3 class="m-0" id="summary-player-heading">Select project players</h3>
+                  <p class="m-0 text-on-surface-variant">
+                    Choose the resolved players included in the project team.
+                  </p>
                 </div>
                 <span aria-live="polite">
                   {{ selectedPlayerCount() | number }} of
@@ -745,6 +757,7 @@
                 </span>
               </div>
               <button
+                class="justify-self-start"
                 matButton="outlined"
                 type="button"
                 [disabled]="selectedPlayersWithoutBirthdateCount() === 0"
@@ -753,23 +766,22 @@
                 Deselect players without birthdate
               </button>
               <div
-                class="grid gap-3"
-                data-ui-summary-player-list
+                class="grid grid-cols-summary-players gap-3"
                 role="group"
                 aria-labelledby="summary-player-heading"
               >
                 @for (player of summaryPlayers(); track player.groupId) {
                   <mat-checkbox
                     class="relative rounded-xl border border-outline-variant bg-surface-container-low p-3"
-                    data-ui-summary-player-option
+                    data-summary-player-option
                     [checked]="selectedPlayerGroupIds().has(player.groupId)"
                     [attr.data-summary-player-group-id]="player.groupId"
                     (change)="toggleSummaryPlayer(player.groupId, $event.checked)"
                   >
-                    <span class="grid gap-2" data-ui-summary-player-label>
+                    <span class="grid gap-2 pe-15" data-summary-player-label>
                       <span
                         class="flex min-w-0 items-start justify-between gap-2"
-                        data-ui-player-heading
+                        data-player-heading
                       >
                         <strong>{{ player.name }}</strong>
                         @if (player.position) {
@@ -777,10 +789,9 @@
                         }
                       </span>
                       <span
-                        class="flex flex-wrap items-center text-on-surface-variant"
-                        data-ui-player-metadata
+                        class="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-ui-sm text-on-surface-variant"
                       >
-                        <span data-ui-player-birthdate>
+                        <span data-player-birthdate>
                           {{
                             player.birthdate
                               ? (player.birthdate | referenceDate)
@@ -792,7 +803,7 @@
                             @if (player.countryCode2) {
                               <app-country-flag decorative [code]="player.countryCode2" />
                             }
-                            <span data-ui-player-country-name>{{ countryLabel(player) }}</span>
+                            <span data-player-country-name>{{ countryLabel(player) }}</span>
                           </span>
                         }
                       </span>
@@ -801,7 +812,7 @@
                 }
               </div>
               @if (!selectedPlayerCount()) {
-                <p data-ui-summary-player-error role="status">
+                <p class="m-0 text-on-surface-variant" data-summary-player-error role="status">
                   Select at least one project player to continue.
                 </p>
               }
@@ -809,7 +820,7 @@
             @if (busy()) {
               <mat-progress-bar mode="indeterminate" aria-label="Saving project team" />
             }
-            <div data-ui-step-actions>
+            <div class="flex items-center justify-end gap-2">
               <button matButton matStepperPrevious type="button" [disabled]="busy()">Back</button>
               <button
                 matButton="filled"
