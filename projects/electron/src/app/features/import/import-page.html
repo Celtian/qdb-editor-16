@@ -5,12 +5,12 @@
   </div>
 </app-page-header>
 
-<section class="qdb-page max-w-5xl" aria-labelledby="import-heading">
+<section class="max-w-5xl" data-ui-page aria-labelledby="import-heading">
   @if (store.error()) {
-    <p class="qdb-error-banner" role="alert">{{ store.error() }}</p>
+    <p data-ui-error-banner role="alert">{{ store.error() }}</p>
   }
 
-  <mat-card appearance="outlined" class="qdb-wizard-card">
+  <mat-card appearance="outlined" data-ui-wizard-card>
     <mat-card-header>
       <mat-card-title>Import database</mat-card-title>
       <mat-card-subtitle>
@@ -19,7 +19,7 @@
     </mat-card-header>
 
     <mat-card-content>
-      <mat-stepper class="qdb-wizard" linear aria-label="Database import wizard">
+      <mat-stepper data-ui-wizard linear aria-label="Database import wizard">
         <ng-template let-index="index" matStepperIcon="number">
           <span aria-hidden="true">{{ index + 1 }}</span>
         </ng-template>
@@ -32,34 +32,34 @@
 
         <mat-step [completed]="true">
           <ng-template matStepLabel>Format</ng-template>
-          <div class="qdb-step-content">
+          <div data-ui-step-content>
             <div>
               <h2>Choose source format</h2>
               <p>Select the kind of FIFA 16 database you want to import.</p>
             </div>
 
             <mat-radio-group
-              class="qdb-format-options"
+              data-ui-format-options
               aria-label="Database source format"
               [value]="sourceKind()"
               [disabled]="store.loading()"
               (change)="changeKind($event.value)"
             >
               <mat-radio-button value="text-folder">
-                <span class="qdb-choice-label">
+                <span data-ui-choice-label>
                   <strong>DB Master text folder</strong>
                   <small> Import a folder of UTF-16LE, tab-separated FIFA 16 text tables. </small>
                 </span>
               </mat-radio-button>
               <mat-radio-button value="t3db">
-                <span class="qdb-choice-label">
+                <span data-ui-choice-label>
                   <strong>PC t3db pair</strong>
                   <small>Import a .db file together with its matching metadata XML schema.</small>
                 </span>
               </mat-radio-button>
             </mat-radio-group>
 
-            <div class="qdb-step-actions">
+            <div data-ui-step-actions>
               <a matButton [routerLink]="['/projects', projectId()]">Cancel</a>
               <button type="button" matButton="filled" matStepperNext>Next</button>
             </div>
@@ -68,7 +68,7 @@
 
         <mat-step [completed]="candidate() !== undefined">
           <ng-template matStepLabel>Source</ng-template>
-          <div class="qdb-step-content">
+          <div data-ui-step-content>
             <div>
               <h2>Select source</h2>
               <p>
@@ -148,7 +148,7 @@
               </div>
             }
 
-            <div class="qdb-step-actions">
+            <div data-ui-step-actions>
               <button type="button" matButton matStepperPrevious [disabled]="store.loading()">
                 Back
               </button>
@@ -166,18 +166,19 @@
 
         <mat-step>
           <ng-template matStepLabel>Review</ng-template>
-          <div class="qdb-step-content">
+          <div data-ui-step-content>
             <div>
               <h2>Review database</h2>
               <p>Confirm the detected tables and choose the managed database name.</p>
             </div>
 
             @if (candidate(); as source) {
-              <mat-card appearance="outlined" class="qdb-review-card">
+              <mat-card appearance="outlined" data-ui-review-card>
                 <mat-card-content>
-                  <div class="qdb-review-heading flex items-center gap-3.5">
+                  <div class="flex items-center gap-3.5" data-ui-review-heading>
                     <span
-                      class="qdb-source-icon grid flex-none place-items-center rounded-xl bg-secondary-container text-on-secondary-container"
+                      class="grid flex-none place-items-center rounded-xl bg-secondary-container text-on-secondary-container"
+                      data-ui-source-icon
                       aria-hidden="true"
                     >
                       <mat-icon>{{ source.sourceKind === 't3db' ? 'storage' : 'folder' }}</mat-icon>
@@ -193,12 +194,12 @@
                     </div>
                   </div>
 
-                  <p class="qdb-source-path" [title]="source.originalPaths.join(' · ')">
+                  <p data-ui-source-path [title]="source.originalPaths.join(' · ')">
                     <mat-icon aria-hidden="true">folder_open</mat-icon>
                     <span>{{ source.originalPaths.join(' · ') }}</span>
                   </p>
 
-                  <mat-form-field appearance="outline" class="qdb-name-field w-full">
+                  <mat-form-field appearance="outline" class="w-full" data-ui-name-field>
                     <mat-label>Managed database name</mat-label>
                     <input matInput autocomplete="off" [formField]="importForm.name" />
                     @if (importForm.name().touched() && importForm.name().errors().length) {
@@ -219,7 +220,8 @@
                     <div class="grid gap-3">
                       @for (warning of source.warnings; track warning) {
                         <div
-                          class="qdb-source-warning flex gap-3 rounded-xl bg-tertiary-container px-4 py-3.5 text-on-tertiary-container"
+                          class="flex gap-3 rounded-xl bg-tertiary-container px-4 py-3.5 text-on-tertiary-container"
+                          data-ui-source-warning
                         >
                           <mat-icon aria-hidden="true">warning_amber</mat-icon>
                           <p>{{ warning }}</p>
@@ -231,7 +233,7 @@
               </mat-card>
             }
 
-            <div class="qdb-step-actions">
+            <div data-ui-step-actions>
               <button type="button" matButton matStepperPrevious [disabled]="store.loading()">
                 Back
               </button>

@@ -1,10 +1,11 @@
 <div
-  class="qdb-dialog-header grid items-center gap-5 px-8 pt-9 pb-3 max-tiny:px-5 max-tiny:pt-6 max-tiny:pb-3"
+  class="grid items-center gap-5 px-8 pt-9 pb-3 max-tiny:px-5 max-tiny:pt-6 max-tiny:pb-3"
+  data-ui-dialog-header
 >
   <img ngSrc="qdb-downloader.png" width="72" height="72" alt="" priority />
-  <div class="qdb-product-heading min-w-0">
+  <div class="min-w-0" data-ui-product-heading>
     <h2 mat-dialog-title>QDB Downloader</h2>
-    <p class="qdb-version">Version {{ version }}</p>
+    <p data-ui-version>Version {{ version }}</p>
   </div>
   <button matIconButton mat-dialog-close type="button" aria-label="Close About dialog">
     <mat-icon aria-hidden="true">close</mat-icon>
@@ -12,16 +13,16 @@
 </div>
 
 <mat-dialog-content>
-  <p class="qdb-description">
+  <p data-ui-description>
     Local-first desktop app for creating date-based football-data snapshots from Transfermarkt,
     Soccerway, and WorldFootball.
   </p>
-  <p class="qdb-copyright mx-0 mt-5 mb-0">© {{ currentYear }} {{ author }} · MIT License</p>
+  <p class="mx-0 mt-5 mb-0" data-ui-copyright>© {{ currentYear }} {{ author }} · MIT License</p>
 </mat-dialog-content>
 
 <mat-dialog-actions>
   <button matButton mat-dialog-close type="button">Close</button>
-  <div class="qdb-external-actions">
+  <div data-ui-external-actions>
     <a
       matButton
       href="https://celtian.github.io/qdb-downloader/"

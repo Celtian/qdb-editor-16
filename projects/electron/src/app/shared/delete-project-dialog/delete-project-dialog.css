@@ -1,14 +1,14 @@
-.qdb-warning-heading {
+[data-ui-warning-heading] {
   align-items: center;
   display: flex;
   gap: 0.65rem;
 }
 
-.qdb-warning-heading mat-icon {
+[data-ui-warning-heading] mat-icon {
   color: #ba1a1a;
 }
 
-.qdb-delete-button {
+[data-ui-delete-button] {
   background-color: #ba1a1a;
   color: #fff;
 }

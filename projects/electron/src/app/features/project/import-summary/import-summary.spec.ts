@@ -102,7 +102,7 @@ describe('ImportSummary', () => {
     await fixture.whenStable();
     const loader = TestbedHarnessEnvironment.loader(fixture);
     const existingPolicy = await loader.getHarness(
-      MatSelectHarness.with({ selector: '.qdb-existing-record-policy' }),
+      MatSelectHarness.with({ selector: '[data-ui-existing-record-policy]' }),
     );
 
     expect(fixture.nativeElement.textContent).toContain('GB1 — Premier League');
@@ -123,7 +123,7 @@ describe('ImportSummary', () => {
     fixture.componentRef.setInput('mergeOptions', options);
     await fixture.whenStable();
     const playerPolicy = await TestbedHarnessEnvironment.loader(fixture).getHarness(
-      MatSelectHarness.with({ selector: '.qdb-player-team-policy' }),
+      MatSelectHarness.with({ selector: '[data-ui-player-team-policy]' }),
     );
 
     expect(await playerPolicy.isDisabled()).toBe(true);

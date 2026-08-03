@@ -2,7 +2,7 @@
   {{ bulk ? 'Delete selected ' + (playerCount === 1 ? 'player?' : 'players?') : 'Delete player?' }}
 </h2>
 <mat-dialog-content>
-  <p class="qdb-warning-heading">
+  <p data-ui-warning-heading>
     <mat-icon aria-hidden="true">warning</mat-icon>
     <strong>{{ bulk ? formatUiCount(playerCount, 'player') + ' selected' : data.name }}</strong>
   </p>
@@ -14,7 +14,7 @@
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button matButton mat-dialog-close type="button">Cancel</button>
-  <button class="qdb-delete-button" matButton="filled" type="button" [mat-dialog-close]="true">
+  <button data-ui-delete-button matButton="filled" type="button" [mat-dialog-close]="true">
     {{ bulk ? 'Delete ' + formatUiCount(playerCount, 'player') : 'Delete player' }}
   </button>
 </mat-dialog-actions>

@@ -1,6 +1,6 @@
 <h2 mat-dialog-title>Edit {{ data.kind === 'leagues' ? 'league' : 'team' }}</h2>
 <mat-dialog-content>
-  <p class="qdb-hint">Source identity changes keep this record’s internal links intact.</p>
+  <p data-ui-hint>Source identity changes keep this record’s internal links intact.</p>
   <form id="edit-entity-form" (submit)="$event.preventDefault(); save()">
     <mat-form-field appearance="outline">
       <mat-label>Name</mat-label>
@@ -14,14 +14,14 @@
       @if (selectedCountry(); as country) {
         <app-country-flag
           matIconPrefix
-          class="qdb-selected-country-flag"
+          data-ui-selected-country-flag
           decorative
           [code]="country.flagCode"
         />
       }
       <input
         matInput
-        class="qdb-country-input"
+        data-ui-country-input
         type="search"
         autocomplete="off"
         [formField]="metadataForm.countryName"
@@ -30,7 +30,7 @@
       <mat-autocomplete #countryAutocomplete="matAutocomplete" autoActiveFirstOption>
         @for (country of filteredCountries(); track country.code3) {
           <mat-option [value]="country.name">
-            <span class="qdb-country-option">
+            <span data-ui-country-option>
               <app-country-flag decorative [code]="country.flagCode" />
               <span>{{ country.name }}</span>
             </span>
@@ -47,7 +47,7 @@
     @if (data.kind === 'teams') {
       <mat-form-field appearance="outline">
         <mat-label>League</mat-label>
-        <mat-select class="qdb-league-select" [formField]="metadataForm.leagueId">
+        <mat-select data-ui-league-select [formField]="metadataForm.leagueId">
           <mat-option value="">No league</mat-option>
           @for (league of availableLeagues; track league.id) {
             <mat-option [value]="league.id">{{ league.name }}</mat-option>
@@ -94,25 +94,27 @@
       </mat-form-field>
     }
     <aside
-      class="qdb-source-note mx-0 mt-3 mb-5 grid gap-3 rounded-xl border border-outline-variant bg-secondary-container px-4 py-3.5 text-on-secondary-container"
+      class="mx-0 mt-3 mb-5 grid gap-3 rounded-xl border border-outline-variant bg-secondary-container px-4 py-3.5 text-on-secondary-container"
+      data-ui-source-note
       aria-labelledby="source-note-title"
     >
       <mat-icon aria-hidden="true">link</mat-icon>
       <div class="min-w-0">
         <h3 id="source-note-title">How Soccerbot builds source links</h3>
-        <p class="qdb-source-note-intro mx-0 mt-0.5 mb-3 text-sm">
+        <p class="mx-0 mt-0.5 mb-3 text-sm" data-ui-source-note-intro>
           Soccerbot combines the Source ID with the provider’s URL.
         </p>
         <div class="grid gap-2">
           @for (example of sourceUrlGuidance.examples; track example.url) {
             <a
-              class="qdb-source-example grid items-center gap-3 rounded-lg border border-outline-variant bg-surface-container-low px-3 py-2.5 text-on-surface no-underline hover:bg-surface-container"
+              class="grid items-center gap-3 rounded-lg border border-outline-variant bg-surface-container-low px-3 py-2.5 text-on-surface no-underline hover:bg-surface-container"
+              data-ui-source-example
               target="_blank"
               rel="noopener noreferrer"
               [href]="example.url"
               [attr.aria-label]="'Open example ' + example.label + ' URL in the system browser'"
             >
-              <span class="qdb-source-example-copy grid min-w-0 gap-0.5">
+              <span class="grid min-w-0 gap-0.5" data-ui-source-example-copy>
                 <strong>{{ example.label }}</strong>
                 <code>{{ example.url }}</code>
               </span>
@@ -121,7 +123,7 @@
           }
         </div>
         @if (sourceUrlGuidance.detail; as detail) {
-          <p class="qdb-source-note-detail mx-0 mt-3 mb-0 text-sm">{{ detail }}</p>
+          <p class="mx-0 mt-3 mb-0 text-sm" data-ui-source-note-detail>{{ detail }}</p>
         }
       </div>
     </aside>

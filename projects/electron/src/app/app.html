@@ -19,10 +19,11 @@
     @if (store.loading()) {
       <mat-progress-bar mode="indeterminate" aria-label="Operation in progress" />
     }
-    <main class="qdb-app-content">
+    <main data-ui-app-content>
       @if (store.progress(); as progress) {
         <div
-          class="qdb-progress-message sticky z-5 m-0 flex items-center justify-center gap-3 bg-primary-container px-4 py-2 text-center text-on-primary-container"
+          class="sticky z-5 m-0 flex items-center justify-center gap-3 bg-primary-container px-4 py-2 text-center text-on-primary-container"
+          data-ui-progress-message
           aria-live="polite"
         >
           <span>{{ progress.message }}</span>

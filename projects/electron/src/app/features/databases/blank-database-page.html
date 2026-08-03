@@ -5,7 +5,7 @@
   </div>
 </app-page-header>
 
-<section class="qdb-page max-w-3xl">
+<section class="max-w-3xl" data-ui-page>
   <mat-card appearance="outlined">
     <mat-card-content class="pt-6">
       <mat-form-field appearance="outline" class="w-full">
@@ -16,7 +16,7 @@
         }
       </mat-form-field>
       @if (store.error()) {
-        <p class="qdb-error-banner" role="alert">{{ store.error() }}</p>
+        <p data-ui-error-banner role="alert">{{ store.error() }}</p>
       }
     </mat-card-content>
     <mat-card-actions align="end">

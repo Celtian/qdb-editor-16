@@ -26,7 +26,9 @@ const expectSourceExample = (
   label: string,
   url: string,
 ): void => {
-  const link = [...element.querySelectorAll<HTMLAnchorElement>('.qdb-source-example')].at(index);
+  const link = [...element.querySelectorAll<HTMLAnchorElement>('[data-ui-source-example]')].at(
+    index,
+  );
   if (!link) throw new Error(`Source example ${index} did not render.`);
 
   expect(link.textContent).toContain(label);
@@ -38,7 +40,7 @@ const expectSourceExample = (
 };
 
 const expectSelectedCountryFlag = (element: HTMLElement, code?: string): void => {
-  const flag = element.querySelector<HTMLImageElement>('.qdb-selected-country-flag img');
+  const flag = element.querySelector<HTMLImageElement>('[data-ui-selected-country-flag] img');
   if (!code) {
     expect(flag).toBeNull();
     return;
@@ -77,7 +79,7 @@ describe('EditEntityDialog', () => {
     const element = fixture.nativeElement as HTMLElement;
     const documentLoader = TestbedHarnessEnvironment.documentRootLoader(fixture);
     const autocomplete = await documentLoader.getHarness(
-      MatAutocompleteHarness.with({ selector: '.qdb-country-input' }),
+      MatAutocompleteHarness.with({ selector: '[data-ui-country-input]' }),
     );
     const tierSelect = await documentLoader.getHarness(
       MatSelectHarness.with({ selector: 'mat-select[aria-label="League tier"]' }),
@@ -161,10 +163,10 @@ describe('EditEntityDialog', () => {
     const seasonInput = inputs[4];
     const documentLoader = TestbedHarnessEnvironment.documentRootLoader(fixture);
     const countryAutocomplete = await documentLoader.getHarness(
-      MatAutocompleteHarness.with({ selector: '.qdb-country-input' }),
+      MatAutocompleteHarness.with({ selector: '[data-ui-country-input]' }),
     );
     const leagueSelect = await loader.getHarness(
-      MatSelectHarness.with({ selector: '.qdb-league-select' }),
+      MatSelectHarness.with({ selector: '[data-ui-league-select]' }),
     );
     if (!form) throw new Error('Metadata form did not render.');
 
@@ -179,17 +181,17 @@ describe('EditEntityDialog', () => {
     expect(
       [...element.querySelectorAll('mat-hint strong')].map((example) => example.textContent),
     ).toEqual(['281', '2026']);
-    expect(element.querySelector('.qdb-source-note h3')?.textContent).toBe(
+    expect(element.querySelector('[data-ui-source-note] h3')?.textContent).toBe(
       'How Soccerbot builds source links',
     );
-    expect(element.querySelectorAll('.qdb-source-example')).toHaveLength(1);
+    expect(element.querySelectorAll('[data-ui-source-example]')).toHaveLength(1);
     expectSourceExample(
       element,
       0,
       'Team page',
       'https://www.transfermarkt.com/slug/kader/verein/281/plus/1',
     );
-    expect(element.querySelector('.qdb-source-note-detail')?.textContent).toContain(
+    expect(element.querySelector('[data-ui-source-note-detail]')?.textContent).toContain(
       'Season 2026 adds ?saison_id=2026.',
     );
     expect((await axe.run(element)).violations).toEqual([]);
@@ -264,10 +266,10 @@ describe('EditEntityDialog', () => {
     const loader = TestbedHarnessEnvironment.loader(fixture);
     const documentLoader = TestbedHarnessEnvironment.documentRootLoader(fixture);
     const countryAutocomplete = await documentLoader.getHarness(
-      MatAutocompleteHarness.with({ selector: '.qdb-country-input' }),
+      MatAutocompleteHarness.with({ selector: '[data-ui-country-input]' }),
     );
     const leagueSelect = await loader.getHarness(
-      MatSelectHarness.with({ selector: '.qdb-league-select' }),
+      MatSelectHarness.with({ selector: '[data-ui-league-select]' }),
     );
     const form = fixture.nativeElement.querySelector('form') as HTMLFormElement | null;
     if (!form) throw new Error('Metadata form did not render.');
@@ -322,7 +324,7 @@ describe('EditEntityDialog', () => {
     expect(
       [...element.querySelectorAll('mat-hint strong')].map((example) => example.textContent),
     ).toEqual(['slavia-prague/viXGgnyB']);
-    expect(element.querySelectorAll('.qdb-source-example')).toHaveLength(2);
+    expect(element.querySelectorAll('[data-ui-source-example]')).toHaveLength(2);
     expectSourceExample(
       element,
       0,
@@ -391,7 +393,7 @@ describe('EditEntityDialog', () => {
     expect(
       [...element.querySelectorAll('mat-hint strong')].map((example) => example.textContent),
     ).toEqual(['te237557/artesanos-metepec']);
-    expect(element.querySelectorAll('.qdb-source-example')).toHaveLength(2);
+    expect(element.querySelectorAll('[data-ui-source-example]')).toHaveLength(2);
     expectSourceExample(
       element,
       0,
@@ -457,7 +459,7 @@ describe('EditEntityDialog', () => {
     expect(
       [...element.querySelectorAll('mat-hint strong')].map((example) => example.textContent),
     ).toEqual(['cesko/sparta-praha']);
-    expect(element.querySelectorAll('.qdb-source-example')).toHaveLength(1);
+    expect(element.querySelectorAll('[data-ui-source-example]')).toHaveLength(1);
     expectSourceExample(
       element,
       0,

@@ -1,14 +1,14 @@
 <mat-tab-group
-  class="qdb-export-column-tabs"
+  data-ui-export-column-tabs
   animationDuration="0ms"
   aria-label="Export fields by entity"
   [preserveContent]="true"
 >
   @for (entity of entities; track entity) {
     <mat-tab [label]="entityLabels[entity]">
-      <div class="qdb-column-tab-content">
+      <div data-ui-column-tab-content>
         @if (showsVisibility()) {
-          <div class="qdb-column-tab-actions">
+          <div data-ui-column-tab-actions>
             <button
               matButton
               type="button"
@@ -23,13 +23,14 @@
           </div>
         }
         <div
-          class="qdb-column-grid grid"
+          class="grid"
+          data-ui-column-grid
           role="group"
           [attr.aria-label]="entityLabels[entity] + ' export fields'"
         >
           @for (column of columnDefinitions[entity]; track column.key) {
             <div
-              class="qdb-column-row"
+              data-ui-column-row
               [class.names-only]="mode() === 'fieldNames'"
               [class.visibility-only]="mode() === 'visibility'"
             >
@@ -42,7 +43,7 @@
                   {{ column.label }}
                 </mat-checkbox>
               } @else {
-                <span class="qdb-column-label">{{ column.label }}</span>
+                <span data-ui-column-label>{{ column.label }}</span>
               }
               @if (showsFieldNames()) {
                 @let index = fieldNameIndex(entity, column.key);

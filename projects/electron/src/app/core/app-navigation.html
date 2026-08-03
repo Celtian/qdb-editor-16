@@ -1,5 +1,5 @@
 <a
-  class="qdb-brand"
+  data-ui-brand
   routerLink="/projects"
   routerLinkActive="active"
   ariaCurrentWhenActive="page"
@@ -10,7 +10,7 @@
   <span>QDB Editor 16</span>
 </a>
 
-<nav class="qdb-primary-navigation" aria-label="Projects and databases">
+<nav data-ui-primary-navigation aria-label="Projects and databases">
   <ul
     #tree="ngTree"
     ngTree
@@ -26,7 +26,8 @@
       <li
         #projectItem="ngTreeItem"
         ngTreeItem
-        class="qdb-tree-item rounded-xl outline-none"
+        class="rounded-xl outline-none"
+        data-ui-tree-item
         [parent]="tree"
         [value]="projectNode(project.id)"
         [label]="project.name"
@@ -34,7 +35,8 @@
         (expandedChange)="projectExpanded(project.id, $event)"
       >
         <div
-          class="qdb-tree-row flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
+          class="flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
+          data-ui-tree-row
         >
           <mat-icon>folder</mat-icon>
           <span class="min-w-0 flex-1 truncate">{{ project.name }}</span>
@@ -56,13 +58,15 @@
 
         <ul
           role="group"
-          class="qdb-tree-group m-0 ml-4 list-none border-l border-outline-variant p-0"
+          class="m-0 ml-4 list-none border-l border-outline-variant p-0"
+          data-ui-tree-group
         >
           <ng-template #projectGroup="ngTreeItemGroup" ngTreeItemGroup [ownedBy]="projectItem">
             <li
               #sourceItem="ngTreeItem"
               ngTreeItem
-              class="qdb-tree-item rounded-xl outline-none"
+              class="rounded-xl outline-none"
+              data-ui-tree-item
               label="Source DB"
               [parent]="projectGroup"
               [value]="sourceNode(project.id)"
@@ -70,7 +74,8 @@
               (expandedChange)="nodeExpanded(sourceNode(project.id), $event)"
             >
               <div
-                class="qdb-tree-row flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
+                class="flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
+                data-ui-tree-row
               >
                 <mat-icon>cloud_download</mat-icon>
                 <span class="min-w-0 flex-1 truncate">Source DB</span>
@@ -91,18 +96,21 @@
               </div>
               <ul
                 role="group"
-                class="qdb-tree-group m-0 ml-4 list-none border-l border-outline-variant p-0"
+                class="m-0 ml-4 list-none border-l border-outline-variant p-0"
+                data-ui-tree-group
               >
                 <ng-template #sourceGroup="ngTreeItemGroup" ngTreeItemGroup [ownedBy]="sourceItem">
                   <li
                     ngTreeItem
-                    class="qdb-tree-item rounded-xl outline-none"
+                    class="rounded-xl outline-none"
+                    data-ui-tree-item
                     label="Import"
                     [parent]="sourceGroup"
                     [value]="sourceImportNode(project.id)"
                   >
                     <div
-                      class="qdb-tree-row flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
+                      class="flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
+                      data-ui-tree-row
                     >
                       <mat-icon>download</mat-icon>
                       <span class="min-w-0 flex-1 truncate">Import</span>
@@ -111,7 +119,8 @@
                   <li
                     #sourceObjectsItem="ngTreeItem"
                     ngTreeItem
-                    class="qdb-tree-item rounded-xl outline-none"
+                    class="rounded-xl outline-none"
+                    data-ui-tree-item
                     label="Objects"
                     [parent]="sourceGroup"
                     [value]="sourceObjectsNode(project.id)"
@@ -119,7 +128,8 @@
                     (expandedChange)="nodeExpanded(sourceObjectsNode(project.id), $event)"
                   >
                     <div
-                      class="qdb-tree-row flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
+                      class="flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
+                      data-ui-tree-row
                     >
                       <mat-icon>category</mat-icon>
                       <span class="min-w-0 flex-1 truncate">Objects</span>
@@ -146,7 +156,8 @@
                     </div>
                     <ul
                       role="group"
-                      class="qdb-tree-group m-0 ml-4 list-none border-l border-outline-variant p-0"
+                      class="m-0 ml-4 list-none border-l border-outline-variant p-0"
+                      data-ui-tree-group
                     >
                       <ng-template
                         #sourceObjectGroup="ngTreeItemGroup"
@@ -156,13 +167,16 @@
                         @for (object of sourceObjectKinds; track object.kind) {
                           <li
                             ngTreeItem
-                            class="qdb-tree-item qdb-table-item rounded-xl outline-none"
+                            class="rounded-xl outline-none"
+                            data-ui-table-item
+                            data-ui-tree-item
                             [parent]="sourceObjectGroup"
                             [value]="sourceObjectNode(project.id, object.kind)"
                             [label]="object.label"
                           >
                             <div
-                              class="qdb-tree-row flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
+                              class="flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
+                              data-ui-tree-row
                             >
                               <mat-icon>{{ object.icon }}</mat-icon>
                               <span class="min-w-0 flex-1 truncate">{{ object.label }}</span>
@@ -174,13 +188,15 @@
                   </li>
                   <li
                     ngTreeItem
-                    class="qdb-tree-item rounded-xl outline-none"
+                    class="rounded-xl outline-none"
+                    data-ui-tree-item
                     label="Export"
                     [parent]="sourceGroup"
                     [value]="sourceExportNode(project.id)"
                   >
                     <div
-                      class="qdb-tree-row flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
+                      class="flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
+                      data-ui-tree-row
                     >
                       <mat-icon>drive_file_move</mat-icon>
                       <span class="min-w-0 flex-1 truncate">Export</span>
@@ -193,7 +209,8 @@
             <li
               #combinedItem="ngTreeItem"
               ngTreeItem
-              class="qdb-tree-item rounded-xl outline-none"
+              class="rounded-xl outline-none"
+              data-ui-tree-item
               label="Combined DB"
               [parent]="projectGroup"
               [value]="combinedNode(project.id)"
@@ -201,7 +218,8 @@
               (expandedChange)="nodeExpanded(combinedNode(project.id), $event)"
             >
               <div
-                class="qdb-tree-row flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
+                class="flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
+                data-ui-tree-row
               >
                 <mat-icon>merge</mat-icon>
                 <span class="min-w-0 flex-1 truncate">Combined DB</span>
@@ -224,7 +242,8 @@
               </div>
               <ul
                 role="group"
-                class="qdb-tree-group m-0 ml-4 list-none border-l border-outline-variant p-0"
+                class="m-0 ml-4 list-none border-l border-outline-variant p-0"
+                data-ui-tree-group
               >
                 <ng-template
                   #combinedGroup="ngTreeItemGroup"
@@ -233,13 +252,15 @@
                 >
                   <li
                     ngTreeItem
-                    class="qdb-tree-item rounded-xl outline-none"
+                    class="rounded-xl outline-none"
+                    data-ui-tree-item
                     label="Import"
                     [parent]="combinedGroup"
                     [value]="combinedImportNode(project.id)"
                   >
                     <div
-                      class="qdb-tree-row flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
+                      class="flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
+                      data-ui-tree-row
                     >
                       <mat-icon>download</mat-icon>
                       <span class="min-w-0 flex-1 truncate">Import</span>
@@ -248,7 +269,8 @@
                   <li
                     #combinedObjectsItem="ngTreeItem"
                     ngTreeItem
-                    class="qdb-tree-item rounded-xl outline-none"
+                    class="rounded-xl outline-none"
+                    data-ui-tree-item
                     label="Objects"
                     [parent]="combinedGroup"
                     [value]="combinedObjectsNode(project.id)"
@@ -256,7 +278,8 @@
                     (expandedChange)="nodeExpanded(combinedObjectsNode(project.id), $event)"
                   >
                     <div
-                      class="qdb-tree-row flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
+                      class="flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
+                      data-ui-tree-row
                     >
                       <mat-icon>category</mat-icon>
                       <span class="min-w-0 flex-1 truncate">Objects</span>
@@ -283,7 +306,8 @@
                     </div>
                     <ul
                       role="group"
-                      class="qdb-tree-group m-0 ml-4 list-none border-l border-outline-variant p-0"
+                      class="m-0 ml-4 list-none border-l border-outline-variant p-0"
+                      data-ui-tree-group
                     >
                       <ng-template
                         #combinedObjectGroup="ngTreeItemGroup"
@@ -293,13 +317,16 @@
                         @for (object of sourceObjectKinds; track object.kind) {
                           <li
                             ngTreeItem
-                            class="qdb-tree-item qdb-table-item rounded-xl outline-none"
+                            class="rounded-xl outline-none"
+                            data-ui-table-item
+                            data-ui-tree-item
                             [parent]="combinedObjectGroup"
                             [value]="combinedObjectNode(project.id, object.kind)"
                             [label]="object.label"
                           >
                             <div
-                              class="qdb-tree-row flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
+                              class="flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
+                              data-ui-tree-row
                             >
                               <mat-icon>{{ object.icon }}</mat-icon>
                               <span class="min-w-0 flex-1 truncate">{{ object.label }}</span>
@@ -311,13 +338,15 @@
                   </li>
                   <li
                     ngTreeItem
-                    class="qdb-tree-item rounded-xl outline-none"
+                    class="rounded-xl outline-none"
+                    data-ui-tree-item
                     label="Export"
                     [parent]="combinedGroup"
                     [value]="combinedExportNode(project.id)"
                   >
                     <div
-                      class="qdb-tree-row flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
+                      class="flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
+                      data-ui-tree-row
                     >
                       <mat-icon>drive_file_move</mat-icon>
                       <span class="min-w-0 flex-1 truncate">Export</span>
@@ -330,7 +359,8 @@
             <li
               #fifaItem="ngTreeItem"
               ngTreeItem
-              class="qdb-tree-item rounded-xl outline-none"
+              class="rounded-xl outline-none"
+              data-ui-tree-item
               label="FIFA DB"
               [parent]="projectGroup"
               [value]="fifaNode(project.id)"
@@ -338,7 +368,8 @@
               (expandedChange)="fifaExpanded(project.id, $event)"
             >
               <div
-                class="qdb-tree-row flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
+                class="flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
+                data-ui-tree-row
               >
                 <mat-icon>storage</mat-icon>
                 <span class="min-w-0 flex-1 truncate">FIFA DB</span>
@@ -359,14 +390,16 @@
               </div>
               <ul
                 role="group"
-                class="qdb-tree-group m-0 ml-4 list-none border-l border-outline-variant p-0"
+                class="m-0 ml-4 list-none border-l border-outline-variant p-0"
+                data-ui-tree-group
               >
                 <ng-template #fifaGroup="ngTreeItemGroup" ngTreeItemGroup [ownedBy]="fifaItem">
                   @switch (store.databaseLoadState(project.id).status) {
                     @case ('loading') {
                       <li
                         role="none"
-                        class="qdb-branch-message flex items-center gap-2 px-2 py-1.5 text-on-surface-variant"
+                        class="flex items-center gap-2 px-2 py-1.5 text-on-surface-variant"
+                        data-ui-branch-message
                         aria-live="polite"
                       >
                         <mat-icon>hourglass_empty</mat-icon>
@@ -376,7 +409,9 @@
                     @case ('error') {
                       <li
                         role="none"
-                        class="qdb-branch-message qdb-error-message flex items-center gap-2 px-2 py-1.5 text-on-surface-variant"
+                        class="flex items-center gap-2 px-2 py-1.5 text-on-surface-variant"
+                        data-ui-branch-message
+                        data-ui-error-message
                       >
                         <span>{{ store.databaseLoadState(project.id).error }}</span>
                         <button
@@ -393,7 +428,8 @@
                         <li
                           #databaseItem="ngTreeItem"
                           ngTreeItem
-                          class="qdb-tree-item rounded-xl outline-none"
+                          class="rounded-xl outline-none"
+                          data-ui-tree-item
                           [parent]="fifaGroup"
                           [value]="databaseNode(project.id, database.id)"
                           [label]="database.name"
@@ -401,7 +437,8 @@
                           (expandedChange)="databaseExpanded(project.id, database.id, $event)"
                         >
                           <div
-                            class="qdb-tree-row flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
+                            class="flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
+                            data-ui-tree-row
                           >
                             <mat-icon>storage</mat-icon>
                             <span class="min-w-0 flex-1 truncate">{{ database.name }}</span>
@@ -428,7 +465,8 @@
                           </div>
                           <ul
                             role="group"
-                            class="qdb-tree-group m-0 ml-4 list-none border-l border-outline-variant p-0"
+                            class="m-0 ml-4 list-none border-l border-outline-variant p-0"
+                            data-ui-tree-group
                           >
                             <ng-template
                               #databaseGroup="ngTreeItemGroup"
@@ -438,7 +476,8 @@
                               <li
                                 #objectsItem="ngTreeItem"
                                 ngTreeItem
-                                class="qdb-tree-item rounded-xl outline-none"
+                                class="rounded-xl outline-none"
+                                data-ui-tree-item
                                 label="Objects"
                                 [parent]="databaseGroup"
                                 [value]="objectsNode(project.id, database.id)"
@@ -446,7 +485,8 @@
                                 (expandedChange)="objectsExpanded(project.id, database.id, $event)"
                               >
                                 <div
-                                  class="qdb-tree-row flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
+                                  class="flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
+                                  data-ui-tree-row
                                 >
                                   <mat-icon>category</mat-icon>
                                   <span class="min-w-0 flex-1 truncate">Objects</span>
@@ -469,7 +509,8 @@
                                 </div>
                                 <ul
                                   role="group"
-                                  class="qdb-tree-group m-0 ml-4 list-none border-l border-outline-variant p-0"
+                                  class="m-0 ml-4 list-none border-l border-outline-variant p-0"
+                                  data-ui-tree-group
                                 >
                                   <ng-template
                                     #objectGroup="ngTreeItemGroup"
@@ -479,13 +520,16 @@
                                     @for (kind of objectKinds; track kind) {
                                       <li
                                         ngTreeItem
-                                        class="qdb-tree-item qdb-table-item rounded-xl outline-none"
+                                        class="rounded-xl outline-none"
+                                        data-ui-table-item
+                                        data-ui-tree-item
                                         [parent]="objectGroup"
                                         [value]="objectNode(project.id, database.id, kind)"
                                         [label]="objectConfig[kind].label"
                                       >
                                         <div
-                                          class="qdb-tree-row flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
+                                          class="flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
+                                          data-ui-tree-row
                                         >
                                           <mat-icon>{{ objectConfig[kind].icon }}</mat-icon>
                                           <span class="min-w-0 flex-1 truncate">{{
@@ -501,7 +545,8 @@
                               <li
                                 #tablesItem="ngTreeItem"
                                 ngTreeItem
-                                class="qdb-tree-item rounded-xl outline-none"
+                                class="rounded-xl outline-none"
+                                data-ui-tree-item
                                 label="Tables"
                                 [parent]="databaseGroup"
                                 [value]="tablesNode(project.id, database.id)"
@@ -509,7 +554,8 @@
                                 (expandedChange)="tablesExpanded(project.id, database.id, $event)"
                               >
                                 <div
-                                  class="qdb-tree-row flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
+                                  class="flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
+                                  data-ui-tree-row
                                 >
                                   <mat-icon>table_view</mat-icon>
                                   <span class="min-w-0 flex-1 truncate">Tables</span>
@@ -532,7 +578,8 @@
                                 </div>
                                 <ul
                                   role="group"
-                                  class="qdb-tree-group m-0 ml-4 list-none border-l border-outline-variant p-0"
+                                  class="m-0 ml-4 list-none border-l border-outline-variant p-0"
+                                  data-ui-tree-group
                                 >
                                   <ng-template
                                     #tableGroup="ngTreeItemGroup"
@@ -543,7 +590,8 @@
                                       @case ('loading') {
                                         <li
                                           role="none"
-                                          class="qdb-branch-message flex items-center gap-2 px-2 py-1.5 text-on-surface-variant"
+                                          class="flex items-center gap-2 px-2 py-1.5 text-on-surface-variant"
+                                          data-ui-branch-message
                                           aria-live="polite"
                                         >
                                           <span>Loading tables…</span>
@@ -552,7 +600,9 @@
                                       @case ('error') {
                                         <li
                                           role="none"
-                                          class="qdb-branch-message qdb-error-message flex items-center gap-2 px-2 py-1.5 text-on-surface-variant"
+                                          class="flex items-center gap-2 px-2 py-1.5 text-on-surface-variant"
+                                          data-ui-branch-message
+                                          data-ui-error-message
                                         >
                                           <span>{{ store.tableLoadState(database.id).error }}</span>
                                           <button
@@ -571,13 +621,16 @@
                                         ) {
                                           <li
                                             ngTreeItem
-                                            class="qdb-tree-item qdb-table-item rounded-xl outline-none"
+                                            class="rounded-xl outline-none"
+                                            data-ui-table-item
+                                            data-ui-tree-item
                                             [parent]="tableGroup"
                                             [value]="tableNode(project.id, database.id, table.name)"
                                             [label]="table.name"
                                           >
                                             <div
-                                              class="qdb-tree-row flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
+                                              class="flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
+                                              data-ui-tree-row
                                             >
                                               <mat-icon>table_rows</mat-icon>
                                               <span class="min-w-0 flex-1 truncate">{{
@@ -588,7 +641,8 @@
                                         } @empty {
                                           <li
                                             role="none"
-                                            class="qdb-branch-message flex items-center gap-2 px-2 py-1.5 text-on-surface-variant"
+                                            class="flex items-center gap-2 px-2 py-1.5 text-on-surface-variant"
+                                            data-ui-branch-message
                                           >
                                             No tables available.
                                           </li>
@@ -601,13 +655,15 @@
 
                               <li
                                 ngTreeItem
-                                class="qdb-tree-item rounded-xl outline-none"
+                                class="rounded-xl outline-none"
+                                data-ui-tree-item
                                 label="Settings"
                                 [parent]="databaseGroup"
                                 [value]="settingsNode(project.id, database.id)"
                               >
                                 <div
-                                  class="qdb-tree-row flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
+                                  class="flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
+                                  data-ui-tree-row
                                 >
                                   <mat-icon>tune</mat-icon>
                                   <span class="min-w-0 flex-1 truncate">Settings</span>
@@ -615,13 +671,15 @@
                               </li>
                               <li
                                 ngTreeItem
-                                class="qdb-tree-item rounded-xl outline-none"
+                                class="rounded-xl outline-none"
+                                data-ui-tree-item
                                 label="Validation"
                                 [parent]="databaseGroup"
                                 [value]="validationNode(project.id, database.id)"
                               >
                                 <div
-                                  class="qdb-tree-row flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
+                                  class="flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
+                                  data-ui-tree-row
                                 >
                                   <mat-icon>fact_check</mat-icon>
                                   <span class="min-w-0 flex-1 truncate">Validation</span>
@@ -629,13 +687,15 @@
                               </li>
                               <li
                                 ngTreeItem
-                                class="qdb-tree-item rounded-xl outline-none"
+                                class="rounded-xl outline-none"
+                                data-ui-tree-item
                                 label="Export"
                                 [parent]="databaseGroup"
                                 [value]="exportNode(project.id, database.id)"
                               >
                                 <div
-                                  class="qdb-tree-row flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
+                                  class="flex min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
+                                  data-ui-tree-row
                                 >
                                   <mat-icon>drive_file_move</mat-icon>
                                   <span class="min-w-0 flex-1 truncate">Export</span>
@@ -647,7 +707,8 @@
                       } @empty {
                         <li
                           role="none"
-                          class="qdb-branch-message flex items-center gap-2 px-2 py-1.5 text-on-surface-variant"
+                          class="flex items-center gap-2 px-2 py-1.5 text-on-surface-variant"
+                          data-ui-branch-message
                         >
                           No FIFA databases.
                         </li>
@@ -663,7 +724,8 @@
     } @empty {
       <li
         role="none"
-        class="qdb-branch-message flex items-center gap-2 px-2 py-1.5 text-on-surface-variant"
+        class="flex items-center gap-2 px-2 py-1.5 text-on-surface-variant"
+        data-ui-branch-message
       >
         No projects yet.
       </li>
@@ -671,13 +733,14 @@
   </ul>
 </nav>
 
-<div class="qdb-utility mt-2 flex-none">
+<div class="mt-2 flex-none" data-ui-utility>
   <mat-divider />
   <nav aria-label="Application navigation">
     <ul class="m-0 list-none p-0">
       <li>
         <a
-          class="qdb-utility-item flex w-full min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
+          class="flex w-full min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
+          data-ui-utility-item
           routerLink="/settings"
           routerLinkActive="active"
           ariaCurrentWhenActive="page"
@@ -689,7 +752,8 @@
       <li>
         <button
           type="button"
-          class="qdb-utility-item flex w-full min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
+          class="flex w-full min-w-0 cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-transparent px-2 py-0 text-left no-underline"
+          data-ui-utility-item
           (click)="openAbout()"
         >
           <mat-icon>info</mat-icon>

@@ -5,7 +5,7 @@
     {{ data.entities.length === 1 ? singularEntity() : data.entity }}.
   </p>
   @if (data.badges.length) {
-    <div class="qdb-badge-options grid gap-2" role="group" aria-label="Custom badges">
+    <div class="grid gap-2" data-ui-badge-options role="group" aria-label="Custom badges">
       @for (badge of data.badges; track badge.id) {
         <mat-checkbox
           [checked]="stateFor(badge.id) === 'all'"
@@ -17,7 +17,7 @@
       }
     </div>
     @if (hasMixedBadges()) {
-      <p class="qdb-hint">
+      <p data-ui-hint>
         A mixed checkbox means the badge is assigned to only some selected records. Leave it
         unchanged to preserve those assignments.
       </p>

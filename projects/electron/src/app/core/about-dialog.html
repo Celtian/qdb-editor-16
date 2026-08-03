@@ -1,11 +1,11 @@
 <header
   class="flex items-start justify-between gap-4 px-6 pt-6 pb-0 max-tiny:px-4 max-tiny:pt-5 max-tiny:pb-0"
 >
-  <div class="qdb-identity flex min-w-0 items-center gap-4">
+  <div class="flex min-w-0 items-center gap-4" data-ui-identity>
     <img ngSrc="qdb-editor-16-icon.png" width="64" height="64" alt="" priority />
     <div>
       <h2 mat-dialog-title>QDB Editor 16</h2>
-      <p class="qdb-version">Version {{ version }}</p>
+      <p data-ui-version>Version {{ version }}</p>
     </div>
   </div>
   <button
@@ -20,18 +20,18 @@
 </header>
 
 <mat-dialog-content>
-  <p class="qdb-description">
+  <p data-ui-description>
     A local-first FIFA 16 database project and table editor. Your projects stay in the application
     data directory. Original imports and external exports are never modified by catalog actions.
   </p>
-  <p class="qdb-legal mt-4 text-sm text-on-surface-variant">
+  <p class="mt-4 text-sm text-on-surface-variant" data-ui-legal>
     © {{ copyrightYear }} {{ author }} · MIT License
   </p>
 </mat-dialog-content>
 
 <mat-dialog-actions>
   <button class="max-tiny:self-start" type="button" matButton mat-dialog-close>Close</button>
-  <div class="qdb-external-actions">
+  <div data-ui-external-actions>
     <a
       matButton
       target="_blank"

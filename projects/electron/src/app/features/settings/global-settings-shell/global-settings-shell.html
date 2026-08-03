@@ -1,15 +1,15 @@
-<div class="qdb-settings-layout grid">
-  <aside class="qdb-sidebar">
-    <div class="qdb-sidebar-content">
-      <a class="qdb-brand" routerLink="/" aria-label="QDB Downloader projects">
+<div class="grid" data-ui-settings-layout>
+  <aside data-ui-sidebar>
+    <div data-ui-sidebar-content>
+      <a data-ui-brand routerLink="/" aria-label="QDB Downloader projects">
         <mat-icon aria-hidden="true">storage</mat-icon>
         <span>QDB Downloader</span>
       </a>
 
       <nav aria-label="Global settings navigation">
         @for (group of linkGroups; track group.id) {
-          <div class="qdb-nav-group">
-            <span class="qdb-nav-group-label">{{ group.label }}</span>
+          <div data-ui-nav-group>
+            <span data-ui-nav-group-label>{{ group.label }}</span>
             @for (link of group.links; track link.path) {
               <a
                 matButton
@@ -27,9 +27,9 @@
         }
       </nav>
 
-      <div class="qdb-sidebar-footer">
+      <div data-ui-sidebar-footer>
         <button
-          class="qdb-sidebar-action"
+          data-ui-sidebar-action
           matButton
           type="button"
           aria-label="About"
@@ -45,7 +45,7 @@
   <div class="min-w-0 overflow-auto">
     <mat-toolbar>
       <strong>Global settings</strong>
-      <span class="qdb-spacer"></span>
+      <span data-ui-spacer></span>
       <a matButton [routerLink]="returnDestination.url">
         <mat-icon aria-hidden="true">arrow_back</mat-icon>
         {{ returnDestination.label }}

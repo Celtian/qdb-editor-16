@@ -27,7 +27,7 @@
       <mat-label>Color</mat-label>
       <mat-select [formField]="badgeForm.color">
         <mat-select-trigger>
-          <span class="qdb-color-select-trigger inline-flex items-center gap-2">
+          <span class="inline-flex items-center gap-2" data-ui-color-select-trigger>
             <span aria-hidden="true" [class]="colorSwatchClasses[badgeModel().color]"></span>
             <span>{{ colorLabel(badgeModel().color) }}</span>
           </span>

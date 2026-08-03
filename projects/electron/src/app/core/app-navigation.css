@@ -7,7 +7,7 @@
   padding: 0.75rem;
 }
 
-.qdb-brand {
+[data-ui-brand] {
   display: flex;
   min-width: 0;
   flex: none;
@@ -20,85 +20,85 @@
   text-decoration: none;
 }
 
-.qdb-brand.active {
+[data-ui-brand].active {
   background: var(--mat-sys-secondary-container);
   color: var(--mat-sys-on-secondary-container);
 }
 
-.qdb-primary-navigation {
+[data-ui-primary-navigation] {
   flex: 1 0 auto;
 }
 
-.qdb-tree-group {
+[data-ui-tree-group] {
   padding-left: 0.4rem;
 }
 
-.qdb-tree-row,
-.qdb-utility-item {
+[data-ui-tree-row],
+[data-ui-utility-item] {
   min-height: 2.75rem;
   color: inherit;
 }
 
-.qdb-tree-row mat-icon,
-.qdb-utility-item mat-icon {
+[data-ui-tree-row] mat-icon,
+[data-ui-utility-item] mat-icon {
   flex: none;
   color: var(--mat-sys-on-surface-variant);
 }
 
-.qdb-tree-item[data-active='true'] > .qdb-tree-row,
-.qdb-tree-row:hover,
-.qdb-utility-item:hover {
+[data-ui-tree-item][data-active='true'] > [data-ui-tree-row],
+[data-ui-tree-row]:hover,
+[data-ui-utility-item]:hover {
   background: color-mix(in srgb, var(--mat-sys-on-surface) 8%, transparent);
 }
 
-.qdb-tree-item[aria-current='page'] > .qdb-tree-row,
-.qdb-utility-item.active {
+[data-ui-tree-item][aria-current='page'] > [data-ui-tree-row],
+[data-ui-utility-item].active {
   background: var(--mat-sys-secondary-container);
   color: var(--mat-sys-on-secondary-container);
 }
 
-.qdb-tree-item[aria-current='page'] > .qdb-tree-row mat-icon,
-.qdb-utility-item.active mat-icon {
+[data-ui-tree-item][aria-current='page'] > [data-ui-tree-row] mat-icon,
+[data-ui-utility-item].active mat-icon {
   color: currentcolor;
 }
 
-.qdb-tree-item:focus-visible > .qdb-tree-row,
-.qdb-brand:focus-visible,
-.qdb-utility-item:focus-visible,
-.qdb-branch-message button:focus-visible {
+[data-ui-tree-item]:focus-visible > [data-ui-tree-row],
+[data-ui-brand]:focus-visible,
+[data-ui-utility-item]:focus-visible,
+[data-ui-branch-message] button:focus-visible {
   outline: 3px solid var(--mat-sys-primary);
   outline-offset: 2px;
 }
 
-.qdb-table-item .qdb-tree-row {
+[data-ui-table-item] [data-ui-tree-row] {
   min-height: 2.5rem;
   font-size: 0.875rem;
 }
 
-.qdb-table-item .qdb-tree-row mat-icon {
+[data-ui-table-item] [data-ui-tree-row] mat-icon {
   width: 1.25rem;
   height: 1.25rem;
   font-size: 1.25rem;
 }
 
-.qdb-branch-message {
+[data-ui-branch-message] {
   min-height: 2.75rem;
   font-size: 0.8125rem;
 }
 
-.qdb-error-message {
+[data-ui-error-message] {
   flex-direction: column;
   align-items: flex-start;
   color: var(--mat-sys-error);
 }
 
-.qdb-branch-message mat-icon {
+[data-ui-branch-message] mat-icon {
   width: 1.125rem;
   height: 1.125rem;
   flex: none;
   font-size: 1.125rem;
 }
 
-.qdb-utility mat-divider {
+[data-ui-utility] mat-divider {
   margin: 0 0.25rem 0.25rem;
 }

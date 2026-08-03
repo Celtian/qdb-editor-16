@@ -4,7 +4,7 @@
     Changes are written to the managed SQLite database only after you save.
   </p>
   @if (store.error()) {
-    <p class="qdb-error-banner" role="alert">{{ store.error() }}</p>
+    <p data-ui-error-banner role="alert">{{ store.error() }}</p>
   }
   @if (fields().length) {
     <div class="grid grid-cols-1 gap-3 pt-3 sm:grid-cols-2">

@@ -1001,7 +1001,7 @@ export class CombinedTeamImportPage {
         const tile = [
           ...this.elementRef.nativeElement.querySelectorAll<HTMLElement>('[data-player-id]'),
         ].find((candidate) => candidate.dataset['playerId'] === playerId);
-        tile?.querySelector<HTMLButtonElement>('.qdb-player-drag-handle')?.focus();
+        tile?.querySelector<HTMLButtonElement>('[data-ui-player-drag-handle]')?.focus();
       },
       { injector: this.injector },
     );

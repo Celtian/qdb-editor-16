@@ -1,5 +1,5 @@
 <form
-  class="qdb-filter-form"
+  data-ui-filter-form
   aria-labelledby="entity-filter-title"
   [attr.aria-busy]="loading()"
   (submit)="applyFilters(); $event.preventDefault()"
@@ -15,13 +15,13 @@
     <mat-progress-bar mode="indeterminate" aria-label="Loading filter options" />
   }
   @if (error()) {
-    <div class="qdb-filter-error" role="alert">
+    <div data-ui-filter-error role="alert">
       <p>Filters could not be loaded: {{ error() }}</p>
       <button matButton type="button" (click)="retryRequested.emit()">Retry</button>
     </div>
   }
 
-  <div class="qdb-filter-fields">
+  <div data-ui-filter-fields>
     <mat-form-field appearance="outline" subscriptSizing="dynamic">
       <mat-label>Sources</mat-label>
       <mat-select
@@ -45,7 +45,7 @@
         (selectionChange)="setSelectedBadges($event)"
       >
         <mat-select-trigger>
-          <span class="qdb-filter-badges">
+          <span data-ui-filter-badges>
             @for (status of selectedStatuses(); track status) {
               <app-entity-status-badge [status]="status" />
             }
@@ -78,13 +78,13 @@
         <mat-label>Countries</mat-label>
         <mat-chip-grid
           #countryChipGrid
-          class="qdb-country-chip-grid"
+          data-ui-country-chip-grid
           [attr.aria-label]="selectedCountryOptions().length ? 'Selected countries' : null"
           [disabled]="controlsDisabled()"
         >
           @for (country of selectedCountryOptions(); track country.name) {
             <mat-chip-row (removed)="removeCountry(country.name)">
-              <span class="qdb-country-option">
+              <span data-ui-country-option>
                 @if (country.code) {
                   <app-country-flag decorative [code]="country.code" />
                 }
@@ -115,7 +115,7 @@
         >
           @for (country of filteredCountryOptions(); track country.name) {
             <mat-option [value]="country">
-              <span class="qdb-country-option">
+              <span data-ui-country-option>
                 @if (country.code) {
                   <app-country-flag decorative [code]="country.code" />
                 }
@@ -150,7 +150,7 @@
         <mat-label>{{ parentFilterDetails().label }}</mat-label>
         <mat-chip-grid
           #parentChipGrid
-          class="qdb-parent-chip-grid"
+          data-ui-parent-chip-grid
           [attr.aria-label]="
             selectedParentOptions().length ? parentFilterDetails().selectedAriaLabel : null
           "
@@ -216,13 +216,13 @@
         <mat-label>Nationalities</mat-label>
         <mat-chip-grid
           #nationalityChipGrid
-          class="qdb-nationality-chip-grid"
+          data-ui-nationality-chip-grid
           [attr.aria-label]="selectedNationalityOptions().length ? 'Selected nationalities' : null"
           [disabled]="controlsDisabled()"
         >
           @for (nationality of selectedNationalityOptions(); track nationality.name) {
             <mat-chip-row (removed)="removeNationality(nationality.name)">
-              <span class="qdb-nationality-option">
+              <span data-ui-nationality-option>
                 @if (nationality.code) {
                   <app-country-flag decorative [code]="nationality.code" />
                 }
@@ -253,7 +253,7 @@
         >
           @for (nationality of filteredNationalityOptions(); track nationality.name) {
             <mat-option [value]="nationality">
-              <span class="qdb-nationality-option">
+              <span data-ui-nationality-option>
                 @if (nationality.code) {
                   <app-country-flag decorative [code]="nationality.code" />
                 }
@@ -273,7 +273,7 @@
           [formField]="filtersForm.positions"
         >
           <mat-select-trigger>
-            <span class="qdb-position-badges">
+            <span data-ui-position-badges>
               @for (position of selectedPositions(); track position) {
                 <app-position-badge [position]="position" />
               }
@@ -294,7 +294,7 @@
           [formField]="filtersForm.positionDetails"
         >
           <mat-select-trigger>
-            <span class="qdb-position-badges">
+            <span data-ui-position-badges>
               @for (positionDetail of selectedPositionDetails(); track positionDetail) {
                 <app-position-detail-badge [positionDetail]="positionDetail" />
               }

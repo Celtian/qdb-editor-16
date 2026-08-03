@@ -4,100 +4,100 @@
   display: block;
 }
 
-.qdb-wizard-card {
+[data-ui-wizard-card] {
   overflow: hidden;
 }
 
-.qdb-wizard-card mat-card-header {
+[data-ui-wizard-card] mat-card-header {
   padding-bottom: 1rem;
 }
 
-.qdb-wizard {
+[data-ui-wizard] {
   --mat-stepper-container-color: transparent;
 }
 
-.qdb-step-content {
+[data-ui-step-content] {
   display: grid;
   gap: 1.5rem;
   padding: 1.5rem 0 0.5rem;
 }
 
-.qdb-step-content h2,
-.qdb-step-content h3,
-.qdb-step-content p {
+[data-ui-step-content] h2,
+[data-ui-step-content] h3,
+[data-ui-step-content] p {
   margin: 0;
 }
 
-.qdb-step-content h2 {
+[data-ui-step-content] h2 {
   font-size: 1.35rem;
 }
 
-.qdb-step-content h2 + p,
-.qdb-review-heading p,
-.qdb-source-path {
+[data-ui-step-content] h2 + p,
+[data-ui-review-heading] p,
+[data-ui-source-path] {
   color: var(--mat-sys-on-surface-variant);
 }
 
-.qdb-format-options {
+[data-ui-format-options] {
   display: grid;
   gap: 0.75rem;
   max-width: 52rem;
 }
 
-.qdb-format-options mat-radio-button {
+[data-ui-format-options] mat-radio-button {
   padding: 1rem;
   border: 1px solid var(--mat-sys-outline-variant);
   border-radius: 0.75rem;
 }
 
-.qdb-format-options mat-radio-button:has(input:checked) {
+[data-ui-format-options] mat-radio-button:has(input:checked) {
   border-color: var(--mat-sys-primary);
   background: var(--mat-sys-secondary-container);
 }
 
-.qdb-choice-label {
+[data-ui-choice-label] {
   display: grid;
   gap: 0.2rem;
 }
 
-.qdb-choice-label small {
+[data-ui-choice-label] small {
   color: var(--mat-sys-on-surface-variant);
   white-space: normal;
 }
 
-.qdb-review-card mat-card-content {
+[data-ui-review-card] mat-card-content {
   display: grid;
   gap: 1.25rem;
   padding-top: 1rem;
 }
 
-.qdb-source-icon {
+[data-ui-source-icon] {
   width: 2.75rem;
   height: 2.75rem;
 }
 
-.qdb-source-path {
+[data-ui-source-path] {
   display: flex;
   min-width: 0;
   align-items: center;
   gap: 0.5rem;
 }
 
-.qdb-source-path mat-icon {
+[data-ui-source-path] mat-icon {
   flex: 0 0 auto;
 }
 
-.qdb-source-path span {
+[data-ui-source-path] span {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.qdb-source-warning mat-icon {
+[data-ui-source-warning] mat-icon {
   flex: 0 0 auto;
 }
 
-.qdb-step-actions {
+[data-ui-step-actions] {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -106,8 +106,8 @@
 }
 
 @media (width <= 600px) {
-  .qdb-step-actions button,
-  .qdb-step-actions a {
+  [data-ui-step-actions] button,
+  [data-ui-step-actions] a {
     flex: 1 1 auto;
   }
 }

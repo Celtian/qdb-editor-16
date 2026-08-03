@@ -1,9 +1,9 @@
-<p [id]="instructionsId()">
+<p class="mb-2 text-on-surface-variant" [id]="instructionsId()">
   Choose and reorder the columns shown in the {{ entity() }} table. Drag a handle or focus it and
   use the Up and Down arrow keys.
 </p>
 <div
-  class="qdb-column-list flex flex-col"
+  class="flex flex-col"
   cdkDropList
   cdkDropListLockAxis="y"
   role="list"
@@ -11,8 +11,15 @@
   (cdkDropListDropped)="drop($event)"
 >
   @for (column of orderedColumns(); track column.key) {
-    <div class="qdb-column-row" cdkDrag role="listitem" [cdkDragData]="column">
+    <div
+      class="flex min-h-12 items-center gap-2 rounded-lg bg-surface pl-1"
+      cdkDrag
+      data-column-row
+      role="listitem"
+      [cdkDragData]="column"
+    >
       <mat-checkbox
+        class="min-w-0 flex-1"
         [formField]="columnsForm[column.key]"
         (change)="setColumnVisibility(column, $event.checked)"
       >
@@ -32,7 +39,8 @@
       </button>
       <ng-template cdkDragPreview [matchSize]="true">
         <div
-          class="qdb-column-drag-preview flex items-center justify-between rounded-lg bg-surface px-3 py-0 text-on-surface shadow-level3"
+          class="flex items-center justify-between overflow-clip! rounded-lg bg-surface px-3 py-0 text-on-surface shadow-level3 outline -outline-offset-1 outline-outline-variant"
+          data-column-drag-preview
           aria-hidden="true"
         >
           <span>{{ column.label }}</span>
@@ -42,9 +50,6 @@
     </div>
   }
 </div>
-<p
-  class="qdb-live-announcement absolute size-px overflow-hidden whitespace-nowrap"
-  aria-live="polite"
->
+<p class="sr-only" aria-live="polite" data-column-announcement>
   {{ announcement() }}
 </p>

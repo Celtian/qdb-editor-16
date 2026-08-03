@@ -137,7 +137,7 @@ describe('AppNavigation', () => {
     const loader = TestbedHarnessEnvironment.loader(fixture);
     const tree = await loader.getHarness(TreeHarness);
 
-    expect(element.querySelector('.qdb-brand[aria-current="page"]')).not.toBeNull();
+    expect(element.querySelector('[data-ui-brand][aria-current="page"]')).not.toBeNull();
     expect(await tree.getItems({ level: 1 })).toHaveLength(2);
     element
       .querySelector<HTMLButtonElement>(`button[aria-label="Expand ${project.name}"]`)!
@@ -247,7 +247,7 @@ describe('AppNavigation', () => {
     await fixture.whenStable();
     expect(element.textContent).toContain('Catalog unavailable');
 
-    element.querySelector<HTMLButtonElement>('.qdb-error-message button')!.click();
+    element.querySelector<HTMLButtonElement>('[data-ui-error-message] button')!.click();
     await fixture.whenStable();
     expect(element.textContent).toContain(database.name);
   });

@@ -5,9 +5,9 @@
   </div>
 </app-page-header>
 
-<section class="qdb-settings-page" aria-labelledby="source-settings-title">
+<section data-ui-settings-page aria-labelledby="source-settings-title">
   @if (error()) {
-    <p class="qdb-error" role="alert">{{ error() }}</p>
+    <p data-ui-error role="alert">{{ error() }}</p>
   }
 
   <mat-card appearance="outlined">
@@ -23,7 +23,8 @@
       } @else {
         <ol
           cdkDropList
-          class="qdb-priority-list mx-0 mt-4 mb-0 grid list-none gap-2 p-0"
+          class="mx-0 mt-4 mb-0 grid list-none gap-2 p-0"
+          data-ui-priority-list
           aria-label="Source priority"
           [cdkDropListData]="priority()"
           (cdkDropListDropped)="drop($event)"
@@ -44,7 +45,7 @@
                 >{{ $index + 1 }}</span
               >
               <strong>{{ sourceLabels[sourceName] }}</strong>
-              <span class="qdb-spacer"></span>
+              <span data-ui-spacer></span>
               <button
                 matIconButton
                 type="button"

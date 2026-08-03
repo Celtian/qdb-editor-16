@@ -4,7 +4,7 @@
   overflow: hidden;
 }
 
-.qdb-filter-form {
+[data-ui-filter-form] {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -31,7 +31,7 @@ h2 {
   font-size: 1.25rem;
 }
 
-.qdb-filter-error {
+[data-ui-filter-error] {
   align-items: center;
   background: var(--mat-sys-error-container);
   color: var(--mat-sys-on-error-container);
@@ -41,7 +41,7 @@ h2 {
   padding: 0.75rem 1rem;
 }
 
-.qdb-filter-fields {
+[data-ui-filter-fields] {
   display: flex;
   flex: 1;
   flex-direction: column;
@@ -54,14 +54,14 @@ mat-form-field {
   width: 100%;
 }
 
-.qdb-country-option {
+[data-ui-country-option] {
   align-items: center;
   display: inline-flex;
   gap: 0.5rem;
 }
 
-.qdb-filter-badges,
-.qdb-position-badges {
+[data-ui-filter-badges],
+[data-ui-position-badges] {
   align-items: center;
   display: flex;
   flex-wrap: wrap;

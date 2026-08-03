@@ -2,7 +2,7 @@
 <mat-dialog-content>
   <p>Apply one tier to {{ leagueLabel }}.</p>
   @if (data.mixedTiers) {
-    <p class="qdb-hint">The selected leagues currently have different tiers.</p>
+    <p data-ui-hint>The selected leagues currently have different tiers.</p>
   }
   <form id="change-league-tier-form" (submit)="$event.preventDefault(); save()">
     <mat-form-field appearance="outline">

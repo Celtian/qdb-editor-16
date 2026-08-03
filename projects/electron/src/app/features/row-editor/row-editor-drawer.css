@@ -28,7 +28,7 @@ mat-form-field {
   width: 100%;
 }
 
-.qdb-rating-summary div {
+[data-ui-rating-summary] div {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;

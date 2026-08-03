@@ -6,6 +6,6 @@ mat-form-field {
   width: 100%;
 }
 
-.qdb-hint {
+[data-ui-hint] {
   color: var(--muted-text);
 }

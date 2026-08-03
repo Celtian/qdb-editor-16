@@ -5,8 +5,8 @@
   </div>
 </app-page-header>
 
-<section class="qdb-settings-page" aria-labelledby="settings-title">
-  <mat-card class="qdb-finder-preferences" appearance="outlined">
+<section data-ui-settings-page aria-labelledby="settings-title">
+  <mat-card data-ui-finder-preferences appearance="outlined">
     <mat-card-header>
       <div
         class="flex items-center justify-center bg-secondary-container text-on-secondary-container"
@@ -22,7 +22,7 @@
     <mat-card-content>
       <fieldset>
         <legend>Clear filters for</legend>
-        <p class="qdb-setting-description">
+        <p data-ui-setting-description>
           Each option resets saved selections in its league, team, and player finders. Search text,
           column layouts, and filters in other projects are not affected.
         </p>
@@ -44,7 +44,7 @@
     </mat-card-actions>
   </mat-card>
 
-  <mat-card class="qdb-source-data" appearance="outlined">
+  <mat-card data-ui-source-data appearance="outlined">
     <mat-card-header>
       <div
         class="flex items-center justify-center bg-error-container text-on-error-container"
@@ -58,7 +58,7 @@
     <mat-card-content>
       <fieldset>
         <legend>Delete data by source</legend>
-        <p class="qdb-setting-description">
+        <p data-ui-setting-description>
           Choose one or more sources. The project itself, exports, global settings, and finder
           filters are not affected.
         </p>
@@ -71,10 +71,11 @@
         </div>
       </fieldset>
       <p
-        class="qdb-deletion-preview mt-4 font-medium text-on-surface"
+        class="mt-4 font-medium text-on-surface"
+        data-ui-deletion-preview
         aria-live="polite"
         aria-atomic="true"
-        [class.qdb-error]="sourceDataDeletionPreviewError()"
+        [attr.data-ui-error]="sourceDataDeletionPreviewError() ? '' : null"
       >
         @if (selectedSourceNames().length === 0) {
           Select at least one source to preview affected records.
@@ -89,7 +90,7 @@
     </mat-card-content>
     <mat-card-actions align="end">
       <button
-        class="qdb-delete-button"
+        data-ui-delete-button
         matButton="filled"
         type="button"
         [disabled]="!canDeleteSourceData()"

@@ -1,15 +1,15 @@
-.qdb-empty-row td {
+[data-ui-empty-row] td {
   color: var(--muted-text);
   padding: 3rem;
   text-align: center;
 }
 
-.qdb-error {
+[data-ui-error] {
   color: var(--mat-sys-error);
   padding: 1rem;
 }
 
-.qdb-selection-footer {
+[data-ui-selection-footer] {
   align-items: center;
   background: var(--mat-sys-surface-container-high);
   border-top: 1px solid var(--mat-sys-outline-variant);
@@ -25,39 +25,39 @@
   z-index: 100;
 }
 
-.qdb-selection-actions {
+[data-ui-selection-actions] {
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem;
 }
 
-.qdb-bulk-delete-button:not(:disabled) {
+[data-ui-bulk-delete-button]:not(:disabled) {
   background-color: var(--mat-sys-error);
   color: var(--mat-sys-on-error);
 }
 
 @media (width <= 640px) {
-  .qdb-table-toolbar {
+  [data-ui-table-toolbar] {
     align-items: stretch;
     flex-direction: column;
   }
 
-  .qdb-search-field,
-  .qdb-filter-button,
-  .qdb-column-button {
+  [data-ui-search-field],
+  [data-ui-filter-button],
+  [data-ui-column-button] {
     width: 100%;
   }
 
-  .qdb-record-count {
+  [data-ui-record-count] {
     align-self: flex-end;
   }
 
-  .qdb-selection-footer {
+  [data-ui-selection-footer] {
     align-items: stretch;
     flex-direction: column;
   }
 
-  .qdb-selection-actions {
+  [data-ui-selection-actions] {
     display: grid;
     grid-template-columns: 1fr 1fr;
   }

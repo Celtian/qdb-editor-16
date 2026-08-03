@@ -2,7 +2,7 @@
   display: contents;
 }
 
-.qdb-page-header {
+[data-ui-page-header] {
   position: sticky;
   top: 0;
   z-index: 101;
@@ -17,27 +17,27 @@
   background: var(--mat-sys-surface);
 }
 
-.qdb-page-header-icon mat-icon {
+[data-ui-page-header-icon] mat-icon {
   width: 2rem;
   height: 2rem;
   font-size: 2rem;
 }
 
-.qdb-page-header-title-action:empty {
+[data-ui-page-header-title-action]:empty {
   display: none;
 }
 
-.qdb-page-header-actions:empty {
+[data-ui-page-header-actions]:empty {
   display: none;
 }
 
 @media (width <= 800px) {
-  .qdb-page-header {
+  [data-ui-page-header] {
     grid-template-columns: 3.5rem minmax(0, 1fr);
     padding: 1rem;
   }
 
-  .qdb-page-header-icon {
+  [data-ui-page-header-icon] {
     border-radius: 0.875rem;
   }
 }

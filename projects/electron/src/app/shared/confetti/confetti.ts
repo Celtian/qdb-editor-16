@@ -25,8 +25,8 @@ const defaultColors = ['#22c55e', '#0ea5e9', '#f59e0b', '#ef4444', '#a855f7', '#
 
 @Component({
   selector: 'app-confetti',
-  template: '<canvas #canvas class="qdb-confetti-canvas"></canvas>',
-  styleUrl: './confetti.css',
+  template: '<canvas #canvas class="pointer-events-none block size-full"></canvas>',
+  host: { class: 'block size-full pointer-events-none' },
 })
 export class Confetti implements AfterViewInit, OnDestroy {
   private readonly platformId = inject(PLATFORM_ID);

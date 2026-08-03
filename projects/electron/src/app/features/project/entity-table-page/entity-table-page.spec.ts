@@ -319,7 +319,7 @@ describe('EntityTablePage', () => {
       expect(headerCells).not.toContain('Updated');
       expect(
         await (
-          await loader.getHarness(MatButtonHarness.with({ selector: '.qdb-column-button' }))
+          await loader.getHarness(MatButtonHarness.with({ selector: '[data-ui-column-button]' }))
         )
           .host()
           .then((host) => host.getAttribute('aria-label')),
@@ -577,7 +577,7 @@ describe('EntityTablePage', () => {
       rows: [teamRecord('team-id', 'Team', 20)],
     });
     await (
-      await loader.getHarness(MatButtonHarness.with({ selector: '.qdb-column-button' }))
+      await loader.getHarness(MatButtonHarness.with({ selector: '[data-ui-column-button]' }))
     ).click();
     const badgeColumn = await documentLoader.getHarness(
       MatCheckboxHarness.with({ label: 'Badge' }),
@@ -673,7 +673,7 @@ describe('EntityTablePage', () => {
       });
 
       await (
-        await loader.getHarness(MatButtonHarness.with({ selector: '.qdb-column-button' }))
+        await loader.getHarness(MatButtonHarness.with({ selector: '[data-ui-column-button]' }))
       ).click();
       const leagueColumn = await documentLoader.getHarness(
         MatCheckboxHarness.with({ label: 'League' }),
@@ -734,7 +734,7 @@ describe('EntityTablePage', () => {
     });
 
     await (
-      await loader.getHarness(MatButtonHarness.with({ selector: '.qdb-column-button' }))
+      await loader.getHarness(MatButtonHarness.with({ selector: '[data-ui-column-button]' }))
     ).click();
     const teamColumn = await documentLoader.getHarness(MatCheckboxHarness.with({ label: 'Team' }));
     expect(await teamColumn.isChecked()).toBe(false);
@@ -785,7 +785,7 @@ describe('EntityTablePage', () => {
     expect(await (await table.getHeaderRows())[0].getCellTextByIndex()).not.toContain('Weight');
 
     await (
-      await loader.getHarness(MatButtonHarness.with({ selector: '.qdb-column-button' }))
+      await loader.getHarness(MatButtonHarness.with({ selector: '[data-ui-column-button]' }))
     ).click();
     const weightColumn = await documentLoader.getHarness(
       MatCheckboxHarness.with({ label: 'Weight' }),
@@ -999,7 +999,7 @@ describe('EntityTablePage', () => {
       options: { entity: 'leagues', countries: [], seasons: [] },
     });
     const columnButton = await loader.getHarness(
-      MatButtonHarness.with({ selector: '.qdb-column-button' }),
+      MatButtonHarness.with({ selector: '[data-ui-column-button]' }),
     );
     expect(await (await columnButton.host()).getAttribute('aria-label')).toBe(
       'Choose columns, 5 hidden',
@@ -1144,12 +1144,12 @@ describe('EntityTablePage', () => {
       options: { entity: 'leagues', countries: [], seasons: [] },
     });
     const columnButton = await loader.getHarness(
-      MatButtonHarness.with({ selector: '.qdb-column-button' }),
+      MatButtonHarness.with({ selector: '[data-ui-column-button]' }),
     );
     await columnButton.click();
     await fixture.whenStable();
 
-    const dropList = document.querySelector<HTMLElement>('.qdb-column-list');
+    const dropList = document.querySelector<HTMLElement>('[role="list"]');
     if (!dropList) throw new Error('Column drop list was not created.');
     const debugElement = getDebugNode(dropList) as DebugElement | null;
     if (!debugElement) throw new Error('Column drop list debug element was not created.');
@@ -1217,7 +1217,7 @@ describe('EntityTablePage', () => {
     });
     const callsBeforeReordering = api.listEntities.mock.calls.length;
     await (
-      await loader.getHarness(MatButtonHarness.with({ selector: '.qdb-column-button' }))
+      await loader.getHarness(MatButtonHarness.with({ selector: '[data-ui-column-button]' }))
     ).click();
     await fixture.whenStable();
     const nameHandle = await documentLoader.getHarness(
@@ -1226,7 +1226,7 @@ describe('EntityTablePage', () => {
     const handleElement = await nameHandle.host();
     await handleElement.sendKeys(TestKey.DOWN_ARROW, TestKey.DOWN_ARROW);
     await fixture.whenStable();
-    expect(document.querySelector('.qdb-live-announcement')?.textContent).toContain(
+    expect(document.querySelector('[data-column-announcement]')?.textContent).toContain(
       'Name moved to position 3 of 12.',
     );
     await (await documentLoader.getHarness(MatButtonHarness.with({ text: 'Apply' }))).click();
@@ -1315,7 +1315,7 @@ describe('EntityTablePage', () => {
     });
 
     await (
-      await loader.getHarness(MatButtonHarness.with({ selector: '.qdb-column-button' }))
+      await loader.getHarness(MatButtonHarness.with({ selector: '[data-ui-column-button]' }))
     ).click();
     await (
       await documentLoader.getHarness(MatCheckboxHarness.with({ label: 'Created' }))
@@ -1440,29 +1440,29 @@ describe('EntityTablePage', () => {
       total: 51,
     });
     const alpha = await loader.getHarness(
-      MatCheckboxHarness.with({ selector: '.qdb-row-select-checkbox' }),
+      MatCheckboxHarness.with({ selector: '[data-ui-row-select-checkbox]' }),
     );
     const selectAll = await loader.getHarness(
-      MatCheckboxHarness.with({ selector: '.qdb-select-all-checkbox' }),
+      MatCheckboxHarness.with({ selector: '[data-ui-select-all-checkbox]' }),
     );
 
     expect(
       (fixture.nativeElement as HTMLElement)
-        .querySelector<HTMLInputElement>('.qdb-row-select-checkbox input')
+        .querySelector<HTMLInputElement>('[data-ui-row-select-checkbox] input')
         ?.getAttribute('aria-label'),
     ).toBe('Select Alpha League');
     expect(
-      (fixture.nativeElement as HTMLElement).querySelector('.qdb-selection-footer'),
+      (fixture.nativeElement as HTMLElement).querySelector('[data-ui-selection-footer]'),
     ).toBeNull();
     await alpha.check();
     await fixture.whenStable();
     expect(await selectAll.isIndeterminate()).toBe(true);
     expect((fixture.nativeElement as HTMLElement).textContent).toContain('1 league selected');
     expect(
-      await loader.getHarness(MatButtonHarness.with({ selector: '.qdb-bulk-country-button' })),
+      await loader.getHarness(MatButtonHarness.with({ selector: '[data-ui-bulk-country-button]' })),
     ).toBeTruthy();
     expect(
-      await loader.getHarness(MatButtonHarness.with({ selector: '.qdb-bulk-delete-button' })),
+      await loader.getHarness(MatButtonHarness.with({ selector: '[data-ui-bulk-delete-button]' })),
     ).toBeTruthy();
     expect((await axe.run(fixture.nativeElement as HTMLElement)).violations).toEqual([]);
 
@@ -1475,17 +1475,19 @@ describe('EntityTablePage', () => {
     await paginator.goToNextPage();
     await fixture.whenStable();
     expect(
-      (fixture.nativeElement as HTMLElement).querySelector('.qdb-selection-footer'),
+      (fixture.nativeElement as HTMLElement).querySelector('[data-ui-selection-footer]'),
     ).toBeNull();
 
     await (
-      await loader.getHarness(MatCheckboxHarness.with({ selector: '.qdb-select-all-checkbox' }))
+      await loader.getHarness(
+        MatCheckboxHarness.with({ selector: '[data-ui-select-all-checkbox]' }),
+      )
     ).check();
     const sort = await loader.getHarness(MatSortHarness);
     await (await sort.getSortHeaders({ label: 'Name' }))[0]?.click();
     await fixture.whenStable();
     expect(
-      (fixture.nativeElement as HTMLElement).querySelector('.qdb-selection-footer'),
+      (fixture.nativeElement as HTMLElement).querySelector('[data-ui-selection-footer]'),
     ).toBeNull();
   });
 
@@ -1502,22 +1504,24 @@ describe('EntityTablePage', () => {
       rows: [teamRecord('team-a', 'Alpha FC', 28), teamRecord('team-b', 'Beta FC', 29)],
     });
     const rowCheckboxes = await loader.getAllHarnesses(
-      MatCheckboxHarness.with({ selector: '.qdb-row-select-checkbox' }),
+      MatCheckboxHarness.with({ selector: '[data-ui-row-select-checkbox]' }),
     );
     const selectAll = await loader.getHarness(
-      MatCheckboxHarness.with({ selector: '.qdb-select-all-checkbox' }),
+      MatCheckboxHarness.with({ selector: '[data-ui-select-all-checkbox]' }),
     );
 
     expect(rowCheckboxes).toHaveLength(2);
     expect(
       (fixture.nativeElement as HTMLElement)
-        .querySelector<HTMLInputElement>('.qdb-row-select-checkbox input')
+        .querySelector<HTMLInputElement>('[data-ui-row-select-checkbox] input')
         ?.getAttribute('aria-label'),
     ).toBe('Select Alpha FC');
     await rowCheckboxes[0]?.check();
     await fixture.whenStable();
 
-    const footer = (fixture.nativeElement as HTMLElement).querySelector('.qdb-selection-footer');
+    const footer = (fixture.nativeElement as HTMLElement).querySelector(
+      '[data-ui-selection-footer]',
+    );
     expect(footer?.getAttribute('aria-label')).toBe('Selected team actions');
     expect(footer?.textContent).toContain('1 team selected');
     expect(await selectAll.isIndeterminate()).toBe(true);
@@ -1553,11 +1557,13 @@ describe('EntityTablePage', () => {
       ],
     });
     await (
-      await loader.getHarness(MatCheckboxHarness.with({ selector: '.qdb-select-all-checkbox' }))
+      await loader.getHarness(
+        MatCheckboxHarness.with({ selector: '[data-ui-select-all-checkbox]' }),
+      )
     ).check();
     await fixture.whenStable();
     await (
-      await loader.getHarness(MatButtonHarness.with({ selector: '.qdb-bulk-badges-button' }))
+      await loader.getHarness(MatButtonHarness.with({ selector: '[data-ui-bulk-badges-button]' }))
     ).click();
     const badgeCheckbox = await documentLoader.getHarness(
       MatCheckboxHarness.with({ label: /Review/ }),
@@ -1637,19 +1643,25 @@ describe('EntityTablePage', () => {
     });
 
     await (
-      await loader.getHarness(MatCheckboxHarness.with({ selector: '.qdb-select-all-checkbox' }))
+      await loader.getHarness(
+        MatCheckboxHarness.with({ selector: '[data-ui-select-all-checkbox]' }),
+      )
     ).check();
     await fixture.whenStable();
-    const footer = (fixture.nativeElement as HTMLElement).querySelector('.qdb-selection-footer');
+    const footer = (fixture.nativeElement as HTMLElement).querySelector(
+      '[data-ui-selection-footer]',
+    );
     expect(footer?.getAttribute('aria-label')).toBe('Selected player actions');
     expect(footer?.textContent).toContain('2 players selected');
     expect(
-      await loader.getAllHarnesses(MatButtonHarness.with({ selector: '.qdb-bulk-country-button' })),
+      await loader.getAllHarnesses(
+        MatButtonHarness.with({ selector: '[data-ui-bulk-country-button]' }),
+      ),
     ).toHaveLength(0);
     expect((await axe.run(fixture.nativeElement as HTMLElement)).violations).toEqual([]);
 
     await (
-      await loader.getHarness(MatButtonHarness.with({ selector: '.qdb-bulk-delete-button' }))
+      await loader.getHarness(MatButtonHarness.with({ selector: '[data-ui-bulk-delete-button]' }))
     ).click();
     const dialog = await documentLoader.getHarness(MatDialogHarness);
     expect(await dialog.getTitleText()).toBe('Delete selected players?');
@@ -1660,7 +1672,7 @@ describe('EntityTablePage', () => {
     );
     await fixture.whenStable();
     expect(
-      (fixture.nativeElement as HTMLElement).querySelector('.qdb-selection-footer'),
+      (fixture.nativeElement as HTMLElement).querySelector('[data-ui-selection-footer]'),
     ).toBeNull();
     expect(snackBar.open).toHaveBeenCalledWith('2 players deleted.', 'Dismiss', {
       duration: 3000,
@@ -1685,10 +1697,12 @@ describe('EntityTablePage', () => {
     const paginator = await loader.getHarness(MatPaginatorHarness);
     await paginator.goToNextPage();
     await (
-      await loader.getHarness(MatCheckboxHarness.with({ selector: '.qdb-select-all-checkbox' }))
+      await loader.getHarness(
+        MatCheckboxHarness.with({ selector: '[data-ui-select-all-checkbox]' }),
+      )
     ).check();
     await (
-      await loader.getHarness(MatButtonHarness.with({ selector: '.qdb-bulk-delete-button' }))
+      await loader.getHarness(MatButtonHarness.with({ selector: '[data-ui-bulk-delete-button]' }))
     ).click();
     const dialog = await documentLoader.getHarness(MatDialogHarness);
 
@@ -1703,7 +1717,7 @@ describe('EntityTablePage', () => {
     await fixture.whenStable();
     expect(api.listEntities.mock.calls.at(-1)?.[0]).toMatchObject({ pageIndex: 0 });
     expect(
-      (fixture.nativeElement as HTMLElement).querySelector('.qdb-selection-footer'),
+      (fixture.nativeElement as HTMLElement).querySelector('[data-ui-selection-footer]'),
     ).toBeNull();
     expect(snackBar.open).toHaveBeenCalledWith('2 teams deleted.', 'Dismiss', {
       duration: 3000,
@@ -1742,16 +1756,18 @@ describe('EntityTablePage', () => {
       rowsAfterUpdate: updated,
     });
     await (
-      await loader.getHarness(MatCheckboxHarness.with({ selector: '.qdb-select-all-checkbox' }))
+      await loader.getHarness(
+        MatCheckboxHarness.with({ selector: '[data-ui-select-all-checkbox]' }),
+      )
     ).check();
     await (
-      await loader.getHarness(MatButtonHarness.with({ selector: '.qdb-bulk-country-button' }))
+      await loader.getHarness(MatButtonHarness.with({ selector: '[data-ui-bulk-country-button]' }))
     ).click();
     const dialog = await documentLoader.getHarness(MatDialogHarness);
     expect(await dialog.getTitleText()).toBe('Change country for selected teams');
     expect(await dialog.getText()).toContain('selected teams currently have different countries');
     const autocomplete = await documentLoader.getHarness(
-      MatAutocompleteHarness.with({ selector: '.qdb-country-input' }),
+      MatAutocompleteHarness.with({ selector: '[data-ui-country-input]' }),
     );
     await autocomplete.enterText('svk');
     await autocomplete.selectOption({ text: 'Slovakia' });
@@ -1766,7 +1782,7 @@ describe('EntityTablePage', () => {
     );
     await fixture.whenStable();
     expect(
-      (fixture.nativeElement as HTMLElement).querySelector('.qdb-selection-footer'),
+      (fixture.nativeElement as HTMLElement).querySelector('[data-ui-selection-footer]'),
     ).toBeNull();
     expect(snackBar.open).toHaveBeenCalledWith('Country updated for 2 teams.', 'Dismiss', {
       duration: 3000,
@@ -1803,14 +1819,16 @@ describe('EntityTablePage', () => {
       updateTeamCountriesResult: failure,
     });
     await (
-      await loader.getHarness(MatCheckboxHarness.with({ selector: '.qdb-select-all-checkbox' }))
+      await loader.getHarness(
+        MatCheckboxHarness.with({ selector: '[data-ui-select-all-checkbox]' }),
+      )
     ).check();
     await (
-      await loader.getHarness(MatButtonHarness.with({ selector: '.qdb-bulk-country-button' }))
+      await loader.getHarness(MatButtonHarness.with({ selector: '[data-ui-bulk-country-button]' }))
     ).click();
     const dialog = await documentLoader.getHarness(MatDialogHarness);
     const autocomplete = await documentLoader.getHarness(
-      MatAutocompleteHarness.with({ selector: '.qdb-country-input' }),
+      MatAutocompleteHarness.with({ selector: '[data-ui-country-input]' }),
     );
     expect(await autocomplete.getValue()).toBe('Czech Republic');
     await autocomplete.clear();
@@ -1851,13 +1869,15 @@ describe('EntityTablePage', () => {
         }),
     );
     await (
-      await loader.getHarness(MatCheckboxHarness.with({ selector: '.qdb-select-all-checkbox' }))
+      await loader.getHarness(
+        MatCheckboxHarness.with({ selector: '[data-ui-select-all-checkbox]' }),
+      )
     ).check();
     const countryButton = await loader.getHarness(
-      MatButtonHarness.with({ selector: '.qdb-bulk-country-button' }),
+      MatButtonHarness.with({ selector: '[data-ui-bulk-country-button]' }),
     );
     const deleteButton = await loader.getHarness(
-      MatButtonHarness.with({ selector: '.qdb-bulk-delete-button' }),
+      MatButtonHarness.with({ selector: '[data-ui-bulk-delete-button]' }),
     );
     await deleteButton.click();
     const dialog = await documentLoader.getHarness(MatDialogHarness);
@@ -1901,10 +1921,12 @@ describe('EntityTablePage', () => {
     const paginator = await loader.getHarness(MatPaginatorHarness);
     await paginator.goToNextPage();
     await (
-      await loader.getHarness(MatCheckboxHarness.with({ selector: '.qdb-select-all-checkbox' }))
+      await loader.getHarness(
+        MatCheckboxHarness.with({ selector: '[data-ui-select-all-checkbox]' }),
+      )
     ).check();
     await (
-      await loader.getHarness(MatButtonHarness.with({ selector: '.qdb-bulk-delete-button' }))
+      await loader.getHarness(MatButtonHarness.with({ selector: '[data-ui-bulk-delete-button]' }))
     ).click();
     const dialog = await documentLoader.getHarness(MatDialogHarness);
 
@@ -1931,7 +1953,7 @@ describe('EntityTablePage', () => {
     await fixture.whenStable();
     expect(api.listEntities.mock.calls.at(-1)?.[0]).toMatchObject({ pageIndex: 0 });
     expect(
-      (fixture.nativeElement as HTMLElement).querySelector('.qdb-selection-footer'),
+      (fixture.nativeElement as HTMLElement).querySelector('[data-ui-selection-footer]'),
     ).toBeNull();
     expect(snackBar.open).toHaveBeenCalledWith('2 leagues deleted.', 'Dismiss', {
       duration: 3000,
@@ -1958,10 +1980,12 @@ describe('EntityTablePage', () => {
     });
 
     await (
-      await loader.getHarness(MatCheckboxHarness.with({ selector: '.qdb-select-all-checkbox' }))
+      await loader.getHarness(
+        MatCheckboxHarness.with({ selector: '[data-ui-select-all-checkbox]' }),
+      )
     ).check();
     await (
-      await loader.getHarness(MatButtonHarness.with({ selector: '.qdb-bulk-tier-button' }))
+      await loader.getHarness(MatButtonHarness.with({ selector: '[data-ui-bulk-tier-button]' }))
     ).click();
     const dialog = await documentLoader.getHarness(MatDialogHarness);
     expect(await dialog.getTitleText()).toBe('Change tier for selected leagues');
@@ -1978,7 +2002,7 @@ describe('EntityTablePage', () => {
     );
     await fixture.whenStable();
     expect(
-      (fixture.nativeElement as HTMLElement).querySelector('.qdb-selection-footer'),
+      (fixture.nativeElement as HTMLElement).querySelector('[data-ui-selection-footer]'),
     ).toBeNull();
     expect(snackBar.open).toHaveBeenCalledWith('Tier updated for 2 leagues.', 'Dismiss', {
       duration: 3000,
@@ -2011,15 +2035,17 @@ describe('EntityTablePage', () => {
       rowsAfterUpdate: updated,
     });
     await (
-      await loader.getHarness(MatCheckboxHarness.with({ selector: '.qdb-select-all-checkbox' }))
+      await loader.getHarness(
+        MatCheckboxHarness.with({ selector: '[data-ui-select-all-checkbox]' }),
+      )
     ).check();
     await (
-      await loader.getHarness(MatButtonHarness.with({ selector: '.qdb-bulk-country-button' }))
+      await loader.getHarness(MatButtonHarness.with({ selector: '[data-ui-bulk-country-button]' }))
     ).click();
     const dialog = await documentLoader.getHarness(MatDialogHarness);
     expect(await dialog.getText()).toContain('currently have different countries');
     const autocomplete = await documentLoader.getHarness(
-      MatAutocompleteHarness.with({ selector: '.qdb-country-input' }),
+      MatAutocompleteHarness.with({ selector: '[data-ui-country-input]' }),
     );
     await autocomplete.enterText('svk');
     await autocomplete.selectOption({ text: 'Slovakia' });
@@ -2034,7 +2060,7 @@ describe('EntityTablePage', () => {
     );
     await fixture.whenStable();
     expect(
-      (fixture.nativeElement as HTMLElement).querySelector('.qdb-selection-footer'),
+      (fixture.nativeElement as HTMLElement).querySelector('[data-ui-selection-footer]'),
     ).toBeNull();
     expect(snackBar.open).toHaveBeenCalledWith('Country updated for 2 leagues.', 'Dismiss', {
       duration: 3000,
@@ -2065,14 +2091,16 @@ describe('EntityTablePage', () => {
       updateLeagueCountriesResult: failure,
     });
     await (
-      await loader.getHarness(MatCheckboxHarness.with({ selector: '.qdb-select-all-checkbox' }))
+      await loader.getHarness(
+        MatCheckboxHarness.with({ selector: '[data-ui-select-all-checkbox]' }),
+      )
     ).check();
     await (
-      await loader.getHarness(MatButtonHarness.with({ selector: '.qdb-bulk-country-button' }))
+      await loader.getHarness(MatButtonHarness.with({ selector: '[data-ui-bulk-country-button]' }))
     ).click();
     const dialog = await documentLoader.getHarness(MatDialogHarness);
     const autocomplete = await documentLoader.getHarness(
-      MatAutocompleteHarness.with({ selector: '.qdb-country-input' }),
+      MatAutocompleteHarness.with({ selector: '[data-ui-country-input]' }),
     );
     expect(await autocomplete.getValue()).toBe('Czech Republic');
     await autocomplete.clear();
@@ -2107,13 +2135,15 @@ describe('EntityTablePage', () => {
         }),
     );
     await (
-      await loader.getHarness(MatCheckboxHarness.with({ selector: '.qdb-select-all-checkbox' }))
+      await loader.getHarness(
+        MatCheckboxHarness.with({ selector: '[data-ui-select-all-checkbox]' }),
+      )
     ).check();
     const countryButton = await loader.getHarness(
-      MatButtonHarness.with({ selector: '.qdb-bulk-country-button' }),
+      MatButtonHarness.with({ selector: '[data-ui-bulk-country-button]' }),
     );
     const deleteButton = await loader.getHarness(
-      MatButtonHarness.with({ selector: '.qdb-bulk-delete-button' }),
+      MatButtonHarness.with({ selector: '[data-ui-bulk-delete-button]' }),
     );
     await deleteButton.click();
     const dialog = await documentLoader.getHarness(MatDialogHarness);
@@ -2393,7 +2423,7 @@ describe('EntityTablePage', () => {
       },
     });
     const filterButton = await loader.getHarness(
-      MatButtonHarness.with({ selector: '.qdb-filter-button' }),
+      MatButtonHarness.with({ selector: '[data-ui-filter-button]' }),
     );
     expect(await filterButton.getAppearance()).toBe('tonal');
 
@@ -2405,7 +2435,7 @@ describe('EntityTablePage', () => {
     const panel = document.querySelector<HTMLElement>('.entity-filter-drawer-panel');
     expect(panel?.style.height).toBe('100vh');
     expect(panel?.parentElement?.style.justifyContent).toBe('flex-end');
-    expect(panel?.querySelector('.qdb-filter-form > footer')).toBeTruthy();
+    expect(panel?.querySelector('[data-ui-filter-form] > footer')).toBeTruthy();
     const countryAutocomplete = await documentLoader.getHarness(
       MatAutocompleteHarness.with({
         selector: 'input[aria-label="Filter teams by countries"]',
@@ -2418,7 +2448,7 @@ describe('EntityTablePage', () => {
     await countryAutocomplete.enterText('sco');
     await countryAutocomplete.selectOption({ text: 'Scotland' });
     const countryGrid = await documentLoader.getHarness(
-      MatChipGridHarness.with({ selector: '.qdb-country-chip-grid' }),
+      MatChipGridHarness.with({ selector: '[data-ui-country-chip-grid]' }),
     );
     const selectedCountries = await countryGrid.getRows();
     expect(await Promise.all(selectedCountries.map((row) => row.getText()))).toEqual([
@@ -2427,7 +2457,7 @@ describe('EntityTablePage', () => {
     ]);
     expect(
       Array.from(
-        document.querySelectorAll<HTMLImageElement>('.qdb-country-chip-grid img'),
+        document.querySelectorAll<HTMLImageElement>('[data-ui-country-chip-grid] img'),
         (image) => image.getAttribute('src'),
       ),
     ).toEqual(
@@ -2453,7 +2483,7 @@ describe('EntityTablePage', () => {
     await leagueAutocomplete.enterText('league b');
     await leagueAutocomplete.selectOption({ text: 'League B' });
     const leagueGrid = await documentLoader.getHarness(
-      MatChipGridHarness.with({ selector: '.qdb-parent-chip-grid' }),
+      MatChipGridHarness.with({ selector: '[data-ui-parent-chip-grid]' }),
     );
     const selectedLeagues = await leagueGrid.getRows();
     expect(await Promise.all(selectedLeagues.map((row) => row.getText()))).toEqual([
@@ -2555,7 +2585,7 @@ describe('EntityTablePage', () => {
 
     await filterButton.click();
     const reopenedCountryGrid = await documentLoader.getHarness(
-      MatChipGridHarness.with({ selector: '.qdb-country-chip-grid' }),
+      MatChipGridHarness.with({ selector: '[data-ui-country-chip-grid]' }),
     );
     expect(
       await Promise.all((await reopenedCountryGrid.getRows()).map((row) => row.getText())),
@@ -2593,7 +2623,7 @@ describe('EntityTablePage', () => {
       },
     });
     const filterButton = await loader.getHarness(
-      MatButtonHarness.with({ selector: '.qdb-filter-button' }),
+      MatButtonHarness.with({ selector: '[data-ui-filter-button]' }),
     );
     await filterButton.click();
 
@@ -2615,7 +2645,7 @@ describe('EntityTablePage', () => {
     await countryAutocomplete.blur();
 
     const countryGrid = await documentLoader.getHarness(
-      MatChipGridHarness.with({ selector: '.qdb-country-chip-grid' }),
+      MatChipGridHarness.with({ selector: '[data-ui-country-chip-grid]' }),
     );
     const selectedCountries = await countryGrid.getRows();
     expect(await Promise.all(selectedCountries.map((row) => row.getText()))).toEqual([
@@ -2623,7 +2653,7 @@ describe('EntityTablePage', () => {
       'Scotland',
     ]);
     const selectedFlagSources = Array.from(
-      document.querySelectorAll<HTMLImageElement>('.qdb-country-chip-grid img'),
+      document.querySelectorAll<HTMLImageElement>('[data-ui-country-chip-grid] img'),
       (image) => image.getAttribute('src'),
     );
     expect(selectedFlagSources).toEqual(
@@ -2719,7 +2749,7 @@ describe('EntityTablePage', () => {
       },
     });
     const filterButton = await loader.getHarness(
-      MatButtonHarness.with({ selector: '.qdb-filter-button' }),
+      MatButtonHarness.with({ selector: '[data-ui-filter-button]' }),
     );
     await filterButton.click();
     const tierSelect = await documentLoader.getHarness(
@@ -2920,7 +2950,7 @@ describe('EntityTablePage', () => {
       replaceUrl: true,
     });
     const filterButton = await loader.getHarness(
-      MatButtonHarness.with({ selector: '.qdb-filter-button' }),
+      MatButtonHarness.with({ selector: '[data-ui-filter-button]' }),
     );
     expect(await (await filterButton.host()).getAttribute('aria-label')).toBe(
       'Open filters, 7 active',
@@ -2932,7 +2962,7 @@ describe('EntityTablePage', () => {
 
     await filterButton.click();
     const teamGrid = await documentLoader.getHarness(
-      MatChipGridHarness.with({ selector: '.qdb-parent-chip-grid' }),
+      MatChipGridHarness.with({ selector: '[data-ui-parent-chip-grid]' }),
     );
     expect(await Promise.all((await teamGrid.getRows()).map((row) => row.getText()))).toEqual([
       'Alpha FC',
@@ -2949,7 +2979,7 @@ describe('EntityTablePage', () => {
     expect(await teamAutocomplete.getValue()).toBe('');
     const nationalityGrid = await documentLoader.getHarness(
       MatChipGridHarness.with({
-        selector: '.qdb-nationality-chip-grid',
+        selector: '[data-ui-nationality-chip-grid]',
       }),
     );
     expect(
@@ -2975,7 +3005,7 @@ describe('EntityTablePage', () => {
     const positionSelect = await documentLoader.getHarness(
       MatSelectHarness.with({ selector: 'mat-select[aria-label="Filter players by positions"]' }),
     );
-    expect(document.querySelector('.qdb-position-badges')?.textContent.trim()).toBe('ATT');
+    expect(document.querySelector('[data-ui-position-badges]')?.textContent.trim()).toBe('ATT');
     await positionSelect.open();
     expect(await positionSelect.getOptions({ text: 'DEF' })).toHaveLength(1);
     expect(await positionSelect.getOptions({ text: 'ATT' })).toHaveLength(1);
@@ -3068,7 +3098,7 @@ describe('EntityTablePage', () => {
       },
     });
     const filterButton = await loader.getHarness(
-      MatButtonHarness.with({ selector: '.qdb-filter-button' }),
+      MatButtonHarness.with({ selector: '[data-ui-filter-button]' }),
     );
     await filterButton.click();
 
@@ -3090,7 +3120,7 @@ describe('EntityTablePage', () => {
     await teamAutocomplete.blur();
 
     const teamGrid = await documentLoader.getHarness(
-      MatChipGridHarness.with({ selector: '.qdb-parent-chip-grid' }),
+      MatChipGridHarness.with({ selector: '[data-ui-parent-chip-grid]' }),
     );
     const selectedTeams = await teamGrid.getRows();
     expect(await Promise.all(selectedTeams.map((row) => row.getText()))).toEqual([
@@ -3110,7 +3140,7 @@ describe('EntityTablePage', () => {
     await nationalityAutocomplete.selectOption({ text: 'Senegal' });
     const nationalityGrid = await documentLoader.getHarness(
       MatChipGridHarness.with({
-        selector: '.qdb-nationality-chip-grid',
+        selector: '[data-ui-nationality-chip-grid]',
       }),
     );
     const selectedNationalities = await nationalityGrid.getRows();
@@ -3180,7 +3210,7 @@ describe('EntityTablePage', () => {
       } as unknown as EntityFilterOptions,
     });
     await (
-      await loader.getHarness(MatButtonHarness.with({ selector: '.qdb-filter-button' }))
+      await loader.getHarness(MatButtonHarness.with({ selector: '[data-ui-filter-button]' }))
     ).click();
     const nationalityAutocomplete = await documentLoader.getHarness(
       MatAutocompleteHarness.with({
@@ -3236,7 +3266,7 @@ describe('EntityTablePage', () => {
     const loader = TestbedHarnessEnvironment.loader(fixture);
     const documentLoader = TestbedHarnessEnvironment.documentRootLoader(fixture);
     await (
-      await loader.getHarness(MatButtonHarness.with({ selector: '.qdb-filter-button' }))
+      await loader.getHarness(MatButtonHarness.with({ selector: '[data-ui-filter-button]' }))
     ).click();
     await fixture.whenStable();
     const element = fixture.nativeElement as HTMLElement;
@@ -3276,7 +3306,7 @@ describe('EntityTablePage', () => {
         },
       });
       await (
-        await loader.getHarness(MatButtonHarness.with({ selector: '.qdb-filter-button' }))
+        await loader.getHarness(MatButtonHarness.with({ selector: '[data-ui-filter-button]' }))
       ).click();
       await fixture.whenStable();
 
@@ -3300,7 +3330,7 @@ describe('EntityTablePage', () => {
       },
     });
     await (
-      await loader.getHarness(MatButtonHarness.with({ selector: '.qdb-filter-button' }))
+      await loader.getHarness(MatButtonHarness.with({ selector: '[data-ui-filter-button]' }))
     ).click();
     await fixture.whenStable();
 
@@ -3323,7 +3353,7 @@ describe('EntityTablePage', () => {
       },
     });
     await (
-      await loader.getHarness(MatButtonHarness.with({ selector: '.qdb-filter-button' }))
+      await loader.getHarness(MatButtonHarness.with({ selector: '[data-ui-filter-button]' }))
     ).click();
     await fixture.whenStable();
 
@@ -3339,7 +3369,7 @@ describe('EntityTablePage', () => {
       options: { entity: 'leagues', countries: [], seasons: [] },
     });
     await (
-      await loader.getHarness(MatButtonHarness.with({ selector: '.qdb-column-button' }))
+      await loader.getHarness(MatButtonHarness.with({ selector: '[data-ui-column-button]' }))
     ).click();
     await fixture.whenStable();
 

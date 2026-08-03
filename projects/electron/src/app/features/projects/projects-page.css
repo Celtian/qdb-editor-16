@@ -1,22 +1,22 @@
-.qdb-projects-empty-state {
+[data-ui-projects-empty-state] {
   min-height: 22rem;
 }
 
-.qdb-projects-empty-state-icon {
+[data-ui-projects-empty-state-icon] {
   box-shadow: 0 0.5rem 1.5rem color-mix(in srgb, var(--mat-sys-primary) 16%, transparent);
 }
 
-.qdb-projects-empty-state-icon mat-icon {
+[data-ui-projects-empty-state-icon] mat-icon {
   width: 2.5rem;
   height: 2.5rem;
   font-size: 2.5rem;
 }
 
-.qdb-projects-empty-state-copy {
+[data-ui-projects-empty-state-copy] {
   max-width: 34rem;
 }
 
-.qdb-projects-empty-state-copy h2 {
+[data-ui-projects-empty-state-copy] h2 {
   margin: 0;
   color: var(--mat-sys-on-surface);
   font-size: 1.5rem;
@@ -25,23 +25,23 @@
   letter-spacing: -0.015em;
 }
 
-.qdb-projects-empty-state-copy p {
+[data-ui-projects-empty-state-copy] p {
   margin: 0;
   color: var(--mat-sys-on-surface-variant);
   font-size: 1rem;
   line-height: 1.5rem;
 }
 
-.qdb-projects-empty-state-action {
+[data-ui-projects-empty-state-action] {
   min-width: 10rem;
 }
 
 @media (width <= 600px) {
-  .qdb-projects-empty-state {
+  [data-ui-projects-empty-state] {
     min-height: 19rem;
   }
 
-  .qdb-projects-empty-state-icon {
+  [data-ui-projects-empty-state-icon] {
     width: 4.5rem;
     height: 4.5rem;
     border-radius: 1.25rem;

@@ -21,14 +21,14 @@ export const combinedEntityStatusDetails: Record<
 > = {
   ready: {
     className:
-      'qdb-record-status-badge inline-flex items-center gap-status-gap whitespace-nowrap rounded-full bg-tertiary-container px-2.5 py-0 text-xs font-bold leading-6 text-on-tertiary-container',
+      'inline-flex items-center gap-status-gap whitespace-nowrap rounded-full bg-tertiary-container px-2.5 py-0 text-xs font-bold leading-6 text-on-tertiary-container focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary',
     description: 'All linked source records are still available.',
     icon: 'check_circle',
     label: 'Ready',
   },
   needsReview: {
     className:
-      'qdb-record-status-badge inline-flex items-center gap-status-gap whitespace-nowrap rounded-full bg-error-container px-2.5 py-0 text-xs font-bold leading-6 text-on-error-container',
+      'inline-flex items-center gap-status-gap whitespace-nowrap rounded-full bg-error-container px-2.5 py-0 text-xs font-bold leading-6 text-on-error-container focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary',
     description: 'One or more linked source records are missing. Review this combined record.',
     icon: 'warning',
     label: 'Needs review',
@@ -66,7 +66,6 @@ export function combinedEntityStatusDescription(
   selector: 'app-combined-entity-status-badge',
   imports: [MatIconModule, MatTooltipModule],
   templateUrl: './combined-entity-status-badge-inline-1.html',
-  styleUrl: './combined-entity-status-badge.css',
   host: { class: 'inline-flex' },
 })
 export class CombinedEntityStatusBadge {

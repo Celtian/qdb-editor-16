@@ -1,6 +1,6 @@
 /* stylelint-disable no-descending-specificity -- nested review rows intentionally override their section summary */
 
-.qdb-summary {
+[data-ui-summary] {
   display: grid;
   gap: 1.25rem;
 }
@@ -15,26 +15,26 @@ h2 {
   font-size: 1.35rem;
 }
 
-.qdb-summary > div:first-child p,
-.qdb-review-section li span,
-.qdb-safe {
+[data-ui-summary] > div:first-child p,
+[data-ui-review-section] li span,
+[data-ui-safe] {
   color: var(--mat-sys-on-surface-variant);
 }
 
-.qdb-summary-list {
+[data-ui-summary-list] {
   border: 1px solid var(--mat-sys-outline-variant);
   border-radius: 0.75rem;
   margin: 0;
 }
 
-.qdb-summary-list div {
+[data-ui-summary-list] div {
   display: grid;
   gap: 1rem;
   grid-template-columns: minmax(8rem, 11rem) minmax(0, 1fr);
   padding: 0.75rem 1rem;
 }
 
-.qdb-summary-list div + div {
+[data-ui-summary-list] div + div {
   border-top: 1px solid var(--mat-sys-outline-variant);
 }
 
@@ -48,31 +48,31 @@ dd {
   overflow-wrap: anywhere;
 }
 
-.qdb-review-section > div:first-child {
+[data-ui-review-section] > div:first-child {
   align-items: center;
   display: flex;
   justify-content: space-between;
 }
 
-.qdb-review-section > div:first-child > span {
+[data-ui-review-section] > div:first-child > span {
   background: var(--mat-sys-secondary-container);
   border-radius: 1rem;
   padding: 0.15rem 0.55rem;
 }
 
-.qdb-review-section ul {
+[data-ui-review-section] ul {
   display: grid;
   gap: 0.5rem;
   margin: 0.75rem 0;
   padding-inline-start: 1.25rem;
 }
 
-.qdb-review-section li span {
+[data-ui-review-section] li span {
   display: block;
   font-size: 0.85rem;
 }
 
-.qdb-review-section mat-form-field {
+[data-ui-review-section] mat-form-field {
   width: min(28rem, 100%);
 }
 
@@ -101,19 +101,19 @@ th:first-child {
 }
 
 .destructive,
-.qdb-warning {
+[data-ui-warning] {
   color: var(--mat-sys-error);
 }
 
-.qdb-warning,
-.qdb-safe {
+[data-ui-warning],
+[data-ui-safe] {
   align-items: center;
   display: flex;
   gap: 0.5rem;
 }
 
 @media (width <= 48rem) {
-  .qdb-summary-list div {
+  [data-ui-summary-list] div {
     grid-template-columns: 1fr;
   }
 }

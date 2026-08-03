@@ -5,14 +5,14 @@
   </div>
 </app-page-header>
 
-<section class="qdb-settings-page" aria-labelledby="export-settings-title">
+<section data-ui-settings-page aria-labelledby="export-settings-title">
   @if (presetError()) {
     <p class="m-0 text-error" role="alert">{{ presetError() }}</p>
   }
 
   <mat-card class="max-w-6xl" appearance="outlined" aria-labelledby="visibility-presets-title">
     <mat-card-header>
-      <div class="qdb-export-presets-icon" mat-card-avatar>
+      <div data-ui-export-presets-icon mat-card-avatar>
         <mat-icon aria-hidden="true">visibility</mat-icon>
       </div>
       <mat-card-title id="visibility-presets-title">Visibility presets</mat-card-title>
@@ -21,7 +21,7 @@
       </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
-      <div class="qdb-preset-toolbar mb-4 flex flex-wrap items-center gap-3">
+      <div class="mb-4 flex flex-wrap items-center gap-3" data-ui-preset-toolbar>
         <mat-form-field appearance="outline" subscriptSizing="dynamic">
           <mat-label>Visibility preset</mat-label>
           <mat-select
@@ -59,7 +59,7 @@
 
       <form (submit)="saveVisibilityPreset(); $event.preventDefault()">
         @if (!visibilityPresetIsBuiltIn()) {
-          <mat-form-field class="qdb-preset-name" appearance="outline">
+          <mat-form-field data-ui-preset-name appearance="outline">
             <mat-label>Visibility preset name</mat-label>
             <input matInput autocomplete="off" [formField]="visibilityNameForm.name" />
             @if (visibilityNameForm.name().touched() && visibilityNameForm.name().errors().length) {
@@ -101,7 +101,7 @@
 
   <mat-card class="max-w-6xl" appearance="outlined" aria-labelledby="field-name-presets-title">
     <mat-card-header>
-      <div class="qdb-export-presets-icon qdb-names-icon" mat-card-avatar>
+      <div data-ui-export-presets-icon data-ui-names-icon mat-card-avatar>
         <mat-icon aria-hidden="true">text_fields</mat-icon>
       </div>
       <mat-card-title id="field-name-presets-title">Field-name presets</mat-card-title>
@@ -110,7 +110,7 @@
       </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
-      <div class="qdb-preset-toolbar mb-4 flex flex-wrap items-center gap-3">
+      <div class="mb-4 flex flex-wrap items-center gap-3" data-ui-preset-toolbar>
         <mat-form-field appearance="outline" subscriptSizing="dynamic">
           <mat-label>Field names preset</mat-label>
           <mat-select
@@ -148,7 +148,7 @@
 
       <form (submit)="saveFieldNamePreset(); $event.preventDefault()">
         @if (!fieldNamePresetIsBuiltIn()) {
-          <mat-form-field class="qdb-preset-name" appearance="outline">
+          <mat-form-field data-ui-preset-name appearance="outline">
             <mat-label>Field-name preset name</mat-label>
             <input matInput autocomplete="off" [formField]="fieldNameForm.name" />
             @if (fieldNameForm.name().touched() && fieldNameForm.name().errors().length) {

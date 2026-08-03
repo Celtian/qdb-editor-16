@@ -1,20 +1,20 @@
-.qdb-project-date + .qdb-project-date {
+[data-ui-project-date] + [data-ui-project-date] {
   border-left: 1px solid var(--mat-sys-outline-variant);
 }
 
-.qdb-project-date dd {
+[data-ui-project-date] dd {
   overflow-wrap: anywhere;
   white-space: nowrap;
 }
 
-.qdb-delete-action,
-.qdb-delete-action mat-icon {
+[data-ui-delete-action],
+[data-ui-delete-action] mat-icon {
   color: var(--mat-sys-error);
 }
 
-.qdb-state,
-.qdb-empty mat-card-content,
-.qdb-no-results {
+[data-ui-state],
+[data-ui-empty] mat-card-content,
+[data-ui-no-results] {
   align-items: center;
   display: flex;
   flex-direction: column;
@@ -24,37 +24,37 @@
   text-align: center;
 }
 
-.qdb-no-results p,
-.qdb-no-results h2 {
+[data-ui-no-results] p,
+[data-ui-no-results] h2 {
   margin: 0;
 }
 
-.qdb-no-results > mat-icon {
+[data-ui-no-results] > mat-icon {
   color: var(--muted-text);
   font-size: 2.5rem;
   height: 2.5rem;
   width: 2.5rem;
 }
 
-.qdb-empty mat-icon {
+[data-ui-empty] mat-icon {
   color: var(--mat-sys-tertiary);
   font-size: 3rem;
   height: 3rem;
   width: 3rem;
 }
 
-.qdb-error {
+[data-ui-error] {
   color: var(--mat-sys-error);
 }
 
 @media (width <= 640px) {
-  .qdb-hero {
+  [data-ui-hero] {
     align-items: flex-start;
     flex-direction: column;
     gap: 2rem;
   }
 
-  .qdb-project-date + .qdb-project-date {
+  [data-ui-project-date] + [data-ui-project-date] {
     border-left: 0;
   }
 }

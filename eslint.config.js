@@ -113,7 +113,7 @@ module.exports = defineConfig([
       'tailwindcss/important-modifier-suffix': 'error',
       'tailwindcss/no-arbitrary-value': 'error',
       'tailwindcss/no-contradicting-classname': 'error',
-      'tailwindcss/no-custom-classname': ['error', { whitelist: ['qdb-.*'] }],
+      'tailwindcss/no-custom-classname': 'error',
       'tailwindcss/no-unnecessary-arbitrary-value': 'error',
     },
   },

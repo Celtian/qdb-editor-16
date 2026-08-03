@@ -1,6 +1,6 @@
-<header class="qdb-hero">
+<header data-ui-hero>
   <div>
-    <p class="qdb-eyebrow">LOCAL FOOTBALL DATA</p>
+    <p data-ui-eyebrow>LOCAL FOOTBALL DATA</p>
     <h1>Snapshot projects</h1>
     <p>
       Keep Transfermarkt, Soccerway, and WorldFootball league, team, and player data organized by a
@@ -9,7 +9,7 @@
   </div>
   <div class="flex items-center gap-3 max-sm:flex-wrap">
     <a
-      class="qdb-hero-secondary-action"
+      data-ui-hero-secondary-action
       matButton="outlined"
       routerLink="/settings"
       aria-label="Global settings"
@@ -24,16 +24,16 @@
   </div>
 </header>
 
-<main #mainContent id="main-content" class="qdb-content max-w-360" tabindex="-1">
+<main #mainContent id="main-content" class="max-w-360" data-ui-content tabindex="-1">
   @if (loading()) {
-    <div class="qdb-state"><mat-spinner diameter="36" /><span>Loading projects…</span></div>
+    <div data-ui-state><mat-spinner diameter="36" /><span>Loading projects…</span></div>
   } @else if (error()) {
-    <div class="qdb-state qdb-error" role="alert">
+    <div data-ui-error data-ui-state role="alert">
       <mat-icon>error</mat-icon>
       <span>{{ error() }}</span>
     </div>
   } @else if (!projects().length) {
-    <mat-card appearance="outlined" class="qdb-empty">
+    <mat-card appearance="outlined" data-ui-empty>
       <mat-card-content>
         <mat-icon>calendar_month</mat-icon>
         <h2>Create your first snapshot</h2>
@@ -44,7 +44,7 @@
   } @else {
     @if (showSearch()) {
       <div class="mb-5 flex">
-        <mat-form-field class="qdb-search-field" appearance="outline" subscriptSizing="dynamic">
+        <mat-form-field data-ui-search-field appearance="outline" subscriptSizing="dynamic">
           <mat-label>Search projects</mat-label>
           <mat-icon matPrefix aria-hidden="true">search</mat-icon>
           <input
@@ -71,11 +71,12 @@
     }
 
     @if (visibleProjects().length) {
-      <section class="qdb-project-grid grid gap-5" aria-label="Snapshot projects">
+      <section class="grid gap-5" data-ui-project-grid aria-label="Snapshot projects">
         @for (project of visibleProjects(); track project.id) {
-          <mat-card appearance="outlined" class="qdb-project-card relative overflow-hidden">
+          <mat-card appearance="outlined" class="relative overflow-hidden" data-ui-project-card>
             <button
-              class="qdb-project-menu absolute z-1"
+              class="absolute z-1"
+              data-ui-project-menu
               matIconButton
               type="button"
               [matMenuTriggerFor]="projectActionsMenu"
@@ -93,29 +94,32 @@
             </mat-card-header>
             <mat-card-content>
               <dl
-                class="qdb-project-details mx-0 mt-3 mb-0 grid grid-cols-6 overflow-hidden rounded-xl border border-outline-variant bg-surface-container-low"
+                class="mx-0 mt-3 mb-0 grid grid-cols-6 overflow-hidden rounded-xl border border-outline-variant bg-surface-container-low"
+                data-ui-project-details
                 aria-label="Project details"
               >
-                <div class="qdb-project-metric gap-micro">
+                <div class="gap-micro" data-ui-project-metric>
                   <dt>Leagues</dt>
                   <dd>{{ project.leagueCount | number }}</dd>
                 </div>
-                <div class="qdb-project-metric gap-micro">
+                <div class="gap-micro" data-ui-project-metric>
                   <dt>Teams</dt>
                   <dd>{{ project.teamCount | number }}</dd>
                 </div>
-                <div class="qdb-project-metric gap-micro">
+                <div class="gap-micro" data-ui-project-metric>
                   <dt>Players</dt>
                   <dd>{{ project.playerCount | number }}</dd>
                 </div>
                 <div
-                  class="qdb-project-date items-baseline gap-2 border-t border-outline-variant max-sm:col-span-full"
+                  class="items-baseline gap-2 border-t border-outline-variant max-sm:col-span-full"
+                  data-ui-project-date
                 >
                   <dt>Created</dt>
                   <dd>{{ project.createdAt | date: 'medium' }}</dd>
                 </div>
                 <div
-                  class="qdb-project-date items-baseline gap-2 border-t border-outline-variant max-sm:col-span-full"
+                  class="items-baseline gap-2 border-t border-outline-variant max-sm:col-span-full"
+                  data-ui-project-date
                 >
                   <dt>Updated</dt>
                   <dd>{{ project.updatedAt | date: 'medium' }}</dd>
@@ -129,7 +133,7 @@
                   <span>Rename</span>
                 </button>
                 <button
-                  class="qdb-delete-action"
+                  data-ui-delete-action
                   mat-menu-item
                   type="button"
                   [attr.aria-label]="'Delete ' + project.name"
@@ -148,7 +152,7 @@
         }
       </section>
     } @else {
-      <div class="qdb-no-results" role="status">
+      <div data-ui-no-results role="status">
         <mat-icon aria-hidden="true">search_off</mat-icon>
         <h2>No projects found</h2>
         <p>No project names match “{{ search().trim() }}”.</p>

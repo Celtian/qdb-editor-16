@@ -11,7 +11,7 @@
   </div>
 </app-page-header>
 
-<section class="qdb-page max-w-5xl">
+<section class="max-w-5xl" data-ui-page>
   <nav mat-tab-nav-bar aria-label="Object detail sections" [tabPanel]="tabPanel">
     @for (tab of config().sections; track tab.id) {
       <a
@@ -38,7 +38,7 @@
 
   <mat-tab-nav-panel #tabPanel>
     @if (store.error()) {
-      <p class="qdb-error-banner mt-4" role="alert">{{ store.error() }}</p>
+      <p class="mt-4" data-ui-error-banner role="alert">{{ store.error() }}</p>
     }
 
     @if (detail(); as data) {
@@ -46,7 +46,8 @@
         <mat-card-content class="pt-4">
           @if (stadiumImageUrl(); as imageUrl) {
             <img
-              class="qdb-stadium-image mb-5 block h-auto object-cover"
+              class="mb-5 block h-auto object-cover"
+              data-ui-stadium-image
               width="600"
               height="233"
               [ngSrc]="imageUrl"
@@ -67,7 +68,8 @@
               </mat-select>
             </mat-form-field>
             <div
-              class="qdb-offline-map relative mb-5 min-h-80 overflow-hidden rounded-xl border border-outline-variant bg-surface-container"
+              class="relative mb-5 min-h-80 overflow-hidden rounded-xl border border-outline-variant bg-surface-container"
+              data-ui-offline-map
               role="img"
               [attr.aria-label]="
                 'Offline coordinate map at latitude ' +
@@ -77,12 +79,14 @@
               "
             >
               <span
-                class="qdb-map-marker absolute size-4 rounded-full bg-primary"
+                class="absolute size-4 rounded-full bg-primary"
+                data-ui-map-marker
                 [style.left]="mapPosition().left"
                 [style.top]="mapPosition().top"
               ></span>
               <span
-                class="qdb-map-label absolute rounded-lg bg-surface px-2 py-1 text-xs text-on-surface-variant"
+                class="absolute rounded-lg bg-surface px-2 py-1 text-xs text-on-surface-variant"
+                data-ui-map-label
                 >Offline coordinate grid</span
               >
             </div>
@@ -90,7 +94,7 @@
 
           @if (data.fields.length) {
             @if (data.readOnly) {
-              <dl class="qdb-detail-values m-0 grid list-none gap-4 p-0">
+              <dl class="m-0 grid list-none gap-4 p-0" data-ui-detail-values>
                 @for (field of data.fields; track field.name) {
                   <div>
                     <dt>{{ field.name.replaceAll('_', ' ') }}</dt>
@@ -101,7 +105,7 @@
             } @else if (section() === 'jersey-numbers') {
               <div class="grid gap-3">
                 @for (item of related(); track item.id) {
-                  <div class="qdb-related-editor grid items-center gap-4">
+                  <div class="grid items-center gap-4" data-ui-related-editor>
                     <span>{{ item.name }}</span>
                     <app-object-value-field
                       [field]="data.fields[0]"
@@ -166,7 +170,7 @@
           }
 
           @if (!data.fields.length && !data.related.length) {
-            <div class="qdb-empty-state">
+            <div data-ui-empty-state>
               <mat-icon>inbox</mat-icon>
               <p>No related objects.</p>
             </div>

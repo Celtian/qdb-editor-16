@@ -15,64 +15,68 @@
   </button>
 </app-page-header>
 
-<section class="qdb-page max-w-5xl" aria-labelledby="validation-heading">
+<section class="max-w-5xl" data-ui-page aria-labelledby="validation-heading">
   @if (store.error()) {
-    <p class="qdb-error-banner" role="alert">{{ store.error() }}</p>
+    <p data-ui-error-banner role="alert">{{ store.error() }}</p>
   }
 
   @if (report(); as result) {
     <div class="mb-4 grid grid-cols-4 gap-3 max-editor:grid-cols-2 max-nano:grid-cols-1">
-      <mat-card appearance="outlined" class="qdb-metric">
+      <mat-card appearance="outlined" data-ui-metric>
         <mat-card-content>
           <span
-            class="qdb-metric-icon grid size-10 flex-none place-items-center rounded-xl"
+            class="grid size-10 flex-none place-items-center rounded-xl"
+            data-ui-metric-icon
             aria-hidden="true"
           >
             <mat-icon>table_view</mat-icon>
           </span>
-          <span class="qdb-metric-copy grid">
+          <span class="grid" data-ui-metric-copy>
             <strong>{{ result.tablesChecked | number }}</strong>
             <span>Tables checked</span>
           </span>
         </mat-card-content>
       </mat-card>
-      <mat-card appearance="outlined" class="qdb-metric">
+      <mat-card appearance="outlined" data-ui-metric>
         <mat-card-content>
           <span
-            class="qdb-metric-icon grid size-10 flex-none place-items-center rounded-xl"
+            class="grid size-10 flex-none place-items-center rounded-xl"
+            data-ui-metric-icon
             aria-hidden="true"
           >
             <mat-icon>view_list</mat-icon>
           </span>
-          <span class="qdb-metric-copy grid">
+          <span class="grid" data-ui-metric-copy>
             <strong>{{ result.rowsChecked | number }}</strong>
             <span>Rows checked</span>
           </span>
         </mat-card-content>
       </mat-card>
-      <mat-card appearance="outlined" class="qdb-metric qdb-metric-error">
+      <mat-card appearance="outlined" data-ui-metric data-ui-metric-error>
         <mat-card-content>
           <span
-            class="qdb-metric-icon grid size-10 flex-none place-items-center rounded-xl"
+            class="grid size-10 flex-none place-items-center rounded-xl"
+            data-ui-metric-icon
             aria-hidden="true"
           >
             <mat-icon>error_outline</mat-icon>
           </span>
-          <span class="qdb-metric-copy grid">
+          <span class="grid" data-ui-metric-copy>
             <strong>{{ result.errorCount | number }}</strong>
             <span>Errors</span>
           </span>
         </mat-card-content>
       </mat-card>
-      <mat-card appearance="outlined" class="qdb-metric qdb-metric-warning">
+      <mat-card appearance="outlined" data-ui-metric data-ui-metric-warning>
         <mat-card-content>
           <span
-            class="qdb-metric-icon grid size-10 flex-none place-items-center rounded-xl"
+            class="grid size-10 flex-none place-items-center rounded-xl"
+            data-ui-metric-icon
             aria-hidden="true"
           >
             <mat-icon>warning_amber</mat-icon>
           </span>
-          <span class="qdb-metric-copy grid">
+          <span class="grid" data-ui-metric-copy>
             <strong>{{ result.warningCount | number }}</strong>
             <span>Warnings</span>
           </span>
@@ -82,7 +86,8 @@
 
     @if (result.validatedAt) {
       <p
-        class="qdb-validation-time mx-0 mt-0 mb-3 flex items-center gap-2 text-sm leading-5 text-on-surface-variant"
+        class="mx-0 mt-0 mb-3 flex items-center gap-2 text-sm leading-5 text-on-surface-variant"
+        data-ui-validation-time
       >
         <mat-icon aria-hidden="true">schedule</mat-icon>
         <span>
@@ -100,49 +105,54 @@
         track issue.severity + issue.table + issue.field + issue.message
       ) {
         <details
-          class="qdb-issue overflow-hidden border border-outline-variant bg-surface-container-low"
-          [class.qdb-issue-error]="issue.severity === 'error'"
+          class="overflow-hidden border border-outline-variant bg-surface-container-low"
+          data-ui-issue
+          [attr.data-ui-issue-error]="issue.severity === 'error' ? '' : null"
           [class.issue--warning]="issue.severity === 'warning'"
         >
           <summary>
             <span
-              class="qdb-issue-icon grid size-10 place-items-center rounded-xl"
+              class="grid size-10 place-items-center rounded-xl"
+              data-ui-issue-icon
               aria-hidden="true"
             >
               <mat-icon>{{
                 issue.severity === 'error' ? 'error_outline' : 'warning_amber'
               }}</mat-icon>
             </span>
-            <span class="qdb-issue-heading grid min-w-0 gap-0.5">
+            <span class="grid min-w-0 gap-0.5" data-ui-issue-heading>
               <strong>
                 {{ issue.table }}
                 @if (issue.field) {
-                  <span class="qdb-issue__separator">.</span>{{ issue.field }}
+                  <span data-ui-issue--separator>.</span>{{ issue.field }}
                 }
               </strong>
               <span>{{ issue.message }}</span>
             </span>
             <span
-              class="qdb-issue-count rounded-full px-2.5 py-1.5 text-xs leading-4 font-medium whitespace-nowrap max-compact:justify-self-start"
+              class="rounded-full px-2.5 py-1.5 text-xs leading-4 font-medium whitespace-nowrap max-compact:justify-self-start"
+              data-ui-issue-count
             >
               {{ issue.occurrences | number }}
               {{ issue.occurrences === 1 ? 'occurrence' : 'occurrences' }}
             </span>
-            <mat-icon class="qdb-issue-chevron text-on-surface-variant" aria-hidden="true"
+            <mat-icon class="text-on-surface-variant" data-ui-issue-chevron aria-hidden="true"
               >expand_more</mat-icon
             >
           </summary>
 
           <div
-            class="qdb-issue-details border-t border-outline-variant bg-surface max-compact:pl-4"
+            class="border-t border-outline-variant bg-surface max-compact:pl-4"
+            data-ui-issue-details
           >
             @if (issue.samples.length) {
               <p
-                class="qdb-issue-label mx-0 mt-0 mb-2 text-xs font-medium text-on-surface-variant uppercase"
+                class="mx-0 mt-0 mb-2 text-xs font-medium text-on-surface-variant uppercase"
+                data-ui-issue-label
               >
                 Sample rows
               </p>
-              <ul class="qdb-samples m-0 grid list-none gap-1.5 p-0">
+              <ul class="m-0 grid list-none gap-1.5 p-0" data-ui-samples>
                 @for (sample of issue.samples; track sample.rowId) {
                   <li>
                     <span>Row {{ sample.rowId | number }}</span>
@@ -170,7 +180,7 @@
           </div>
         </details>
       } @empty {
-        <mat-card appearance="outlined" class="qdb-empty-state qdb-validation-empty-state">
+        <mat-card appearance="outlined" data-ui-empty-state data-ui-validation-empty-state>
           <span class="text-primary" aria-hidden="true">
             <mat-icon>check_circle</mat-icon>
           </span>

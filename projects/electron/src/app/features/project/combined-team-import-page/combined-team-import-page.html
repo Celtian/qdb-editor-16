@@ -5,15 +5,15 @@
   </div>
 </app-page-header>
 
-<section class="qdb-page" aria-labelledby="import-heading">
+<section data-ui-page aria-labelledby="import-heading">
   @if (error()) {
-    <p class="qdb-error" role="alert">{{ error() }}</p>
+    <p data-ui-error role="alert">{{ error() }}</p>
   }
   @if (loading()) {
     <mat-progress-bar mode="indeterminate" aria-label="Loading source teams" />
   } @else {
-    <mat-card appearance="outlined" class="qdb-wizard-card">
-      <mat-stepper class="qdb-wizard" linear aria-label="Import team wizard">
+    <mat-card appearance="outlined" data-ui-wizard-card>
+      <mat-stepper data-ui-wizard linear aria-label="Import team wizard">
         <ng-template let-index="index" matStepperIcon="number">
           <span aria-hidden="true">{{ index + 1 }}</span>
         </ng-template>
@@ -26,7 +26,7 @@
 
         <mat-step data-step-id="source-teams" [completed]="!!preview()">
           <ng-template matStepLabel>Source teams</ng-template>
-          <div class="qdb-step-content">
+          <div data-ui-step-content>
             <div>
               <h2>Select one or more source teams</h2>
               <p>
@@ -41,10 +41,11 @@
                 automatically.
               </p>
             </div>
-            <div class="qdb-provider-groups grid grid-cols-2 gap-4">
+            <div class="grid grid-cols-2 gap-4" data-ui-provider-groups>
               @for (sourceName of orderedSources(); track sourceName) {
                 <fieldset
-                  class="qdb-provider-group m-0 box-border grid min-w-0 gap-4 rounded-xl border border-outline-variant p-4"
+                  class="m-0 box-border grid min-w-0 gap-4 rounded-xl border border-outline-variant p-4"
+                  data-ui-provider-group
                 >
                   <legend>{{ sourceLabels[sourceName] }}</legend>
 
@@ -53,7 +54,10 @@
                     @if (!selectedLeague(sourceName)) {
                       <mat-icon matPrefix aria-hidden="true">search</mat-icon>
                     }
-                    <div class="qdb-autocomplete-control flex w-full min-w-0 items-center gap-2">
+                    <div
+                      class="flex w-full min-w-0 items-center gap-2"
+                      data-ui-autocomplete-control
+                    >
                       @if (selectedLeague(sourceName); as league) {
                         @if (countryFlagCode(league); as flagCode) {
                           <app-country-flag decorative [code]="flagCode" />
@@ -73,7 +77,8 @@
                     @if (selectedLeague(sourceName); as league) {
                       <span
                         matTextSuffix
-                        class="qdb-selected-tier text-xs whitespace-nowrap text-on-surface-variant"
+                        class="text-xs whitespace-nowrap text-on-surface-variant"
+                        data-ui-selected-tier
                       >
                         {{ league.tier ? 'Tier ' + league.tier : 'Tier not set' }}
                       </span>
@@ -102,7 +107,8 @@
                             }
                             <span class="min-w-0 truncate">{{ league.name }}</span>
                             <span
-                              class="qdb-option-metadata text-sm whitespace-nowrap text-on-surface-variant"
+                              class="text-sm whitespace-nowrap text-on-surface-variant"
+                              data-ui-option-metadata
                             >
                               {{ league.tier ? 'Tier ' + league.tier : 'Tier not set' }}
                             </span>
@@ -120,7 +126,10 @@
                     @if (!selectedCandidate(sourceName)) {
                       <mat-icon matPrefix aria-hidden="true">search</mat-icon>
                     }
-                    <div class="qdb-autocomplete-control flex w-full min-w-0 items-center gap-2">
+                    <div
+                      class="flex w-full min-w-0 items-center gap-2"
+                      data-ui-autocomplete-control
+                    >
                       @if (selectedCandidate(sourceName); as candidate) {
                         @if (countryFlagCode(candidate); as flagCode) {
                           <app-country-flag decorative [code]="flagCode" />
@@ -162,13 +171,15 @@
                             <span class="min-w-0 truncate">{{ candidate.name }}</span>
                             @if (candidate.combinedTeamName) {
                               <span
-                                class="qdb-option-metadata text-sm whitespace-nowrap text-on-surface-variant"
+                                class="text-sm whitespace-nowrap text-on-surface-variant"
+                                data-ui-option-metadata
                               >
                                 Already linked to {{ candidate.combinedTeamName }}
                               </span>
                             } @else {
                               <span
-                                class="qdb-option-metadata text-sm whitespace-nowrap text-on-surface-variant"
+                                class="text-sm whitespace-nowrap text-on-surface-variant"
+                                data-ui-option-metadata
                               >
                                 {{ candidate.playerCount ?? 0 | number }} players
                               </span>
@@ -212,7 +223,7 @@
             @if (busy()) {
               <mat-progress-bar mode="indeterminate" aria-label="Identifying source players" />
             }
-            <div class="qdb-step-actions">
+            <div data-ui-step-actions>
               <button
                 matButton="filled"
                 type="button"
@@ -227,10 +238,10 @@
 
         <mat-step data-step-id="league" [completed]="true">
           <ng-template matStepLabel>League</ng-template>
-          <div class="qdb-step-content">
+          <div data-ui-step-content>
             <h2>Choose the project league</h2>
             <mat-radio-group
-              class="qdb-league-options"
+              data-ui-league-options
               aria-label="Project league behavior"
               [value]="leagueMode()"
               (change)="setLeagueMode($event.value)"
@@ -256,7 +267,8 @@
                         }
                         <span class="min-w-0 truncate">{{ league.name }}</span>
                         <span
-                          class="qdb-option-metadata text-sm whitespace-nowrap text-on-surface-variant"
+                          class="text-sm whitespace-nowrap text-on-surface-variant"
+                          data-ui-option-metadata
                         >
                           {{ league.tier === undefined ? 'Tier not set' : 'Tier ' + league.tier }}
                         </span>
@@ -271,7 +283,8 @@
                         }
                         <span class="min-w-0 truncate">{{ league.name }}</span>
                         <span
-                          class="qdb-option-metadata text-sm whitespace-nowrap text-on-surface-variant"
+                          class="text-sm whitespace-nowrap text-on-surface-variant"
+                          data-ui-option-metadata
                         >
                           {{ league.tier === undefined ? 'Tier not set' : 'Tier ' + league.tier }}
                         </span>
@@ -281,7 +294,7 @@
                 </mat-select>
               </mat-form-field>
             } @else if (leagueMode() === 'create') {
-              <div class="qdb-source-leagues" role="group" aria-label="Source leagues">
+              <div data-ui-source-leagues role="group" aria-label="Source leagues">
                 @for (league of preview()?.sourceLeagues ?? []; track league.id) {
                   <mat-checkbox
                     [checked]="sourceLeagueIds().includes(league.id)"
@@ -298,7 +311,7 @@
                 }
               </div>
             }
-            <div class="qdb-step-actions">
+            <div data-ui-step-actions>
               <button matButton matStepperPrevious type="button">Back</button>
               <button matButton="filled" matStepperNext type="button">
                 {{
@@ -316,7 +329,7 @@
         @if (showPlayerMatches()) {
           <mat-step data-step-id="player-matches" [completed]="true">
             <ng-template matStepLabel>Player matches</ng-template>
-            <div class="qdb-step-content">
+            <div data-ui-step-content>
               <div>
                 <h2>Review player identification</h2>
                 <p id="player-alignment-help">
@@ -329,7 +342,8 @@
                 </p>
               </div>
               <div
-                class="qdb-alignment-scroll max-w-full overflow-x-auto px-0.5 pt-0.5 pb-3 focus-visible:rounded-xl"
+                class="max-w-full overflow-x-auto px-0.5 pt-0.5 pb-3 focus-visible:rounded-xl"
+                data-ui-alignment-scroll
                 role="region"
                 tabindex="0"
                 aria-label="Player matching table"
@@ -337,12 +351,13 @@
               >
                 <div
                   cdkDropListGroup
-                  class="qdb-alignment-board grid gap-2.5"
+                  class="grid gap-2.5"
+                  data-ui-alignment-board
                   role="table"
                   aria-label="Players grouped by provider and canonical identity"
                   [style.--provider-count]="activeSources().length"
                 >
-                  <div class="qdb-alignment-header sticky z-2 grid gap-2.5" role="row">
+                  <div class="sticky z-2 grid gap-2.5" data-ui-alignment-header role="row">
                     @for (sourceName of activeSources(); track sourceName) {
                       <div role="columnheader">
                         {{ sourceLabels[sourceName] }}
@@ -356,16 +371,18 @@
                     let rowIndex = $index, rowCount = $count
                   ) {
                     <div
-                      class="qdb-alignment-row grid gap-2.5 rounded-xl border border-outline-variant bg-surface-container-lowest p-2.5"
+                      class="grid gap-2.5 rounded-xl border border-outline-variant bg-surface-container-lowest p-2.5"
+                      data-ui-alignment-row
                       role="row"
                       [attr.aria-label]="'Player match row ' + (rowIndex + 1)"
                       [attr.data-group-id]="group.id"
                     >
                       <div class="col-span-full flex min-h-6 items-center">
                         <span
-                          class="qdb-status-badge rounded-full bg-tertiary-container px-2.5 py-micro text-xs font-semibold text-on-tertiary-container"
+                          class="rounded-full bg-tertiary-container px-2.5 py-micro text-xs font-semibold text-on-tertiary-container"
+                          data-ui-status-badge
                           [class.automatic]="group.automatic"
-                          [class.qdb-single-source]="group.players.length === 1"
+                          [attr.data-ui-single-source]="group.players.length === 1 ? '' : null"
                         >
                           Row {{ rowIndex + 1 }} · {{ matchStatus(group) }}
                         </span>
@@ -373,7 +390,8 @@
                       @for (sourceName of activeSources(); track sourceName) {
                         <div
                           cdkDropList
-                          class="qdb-player-cell box-border flex items-stretch rounded-notice bg-surface-container-low p-1.5"
+                          class="box-border flex items-stretch rounded-notice bg-surface-container-low p-1.5"
+                          data-ui-player-cell
                           role="cell"
                           [class.empty-cell]="!playerFor(group, sourceName)"
                           [attr.aria-label]="
@@ -393,13 +411,15 @@
                             <article
                               cdkDrag
                               cdkDragLockAxis="y"
-                              class="qdb-player-tile box-border grid w-full min-w-0 gap-2.5 rounded-lg border border-outline-variant bg-surface p-3"
+                              class="box-border grid w-full min-w-0 gap-2.5 rounded-lg border border-outline-variant bg-surface p-3"
+                              data-ui-player-tile
                               [attr.data-player-id]="player.id"
                               [cdkDragData]="dragData(group, player)"
                             >
-                              <div class="qdb-player-details grid min-w-0 gap-micro">
+                              <div class="grid min-w-0 gap-micro" data-ui-player-details>
                                 <div
-                                  class="qdb-player-heading flex min-w-0 items-start justify-between gap-2"
+                                  class="flex min-w-0 items-start justify-between gap-2"
+                                  data-ui-player-heading
                                 >
                                   <strong>{{ player.name }}</strong>
                                   @if (player.position) {
@@ -407,9 +427,10 @@
                                   }
                                 </div>
                                 <div
-                                  class="qdb-player-metadata flex flex-wrap items-center text-on-surface-variant"
+                                  class="flex flex-wrap items-center text-on-surface-variant"
+                                  data-ui-player-metadata
                                 >
-                                  <span class="qdb-player-birthdate">
+                                  <span data-ui-player-birthdate>
                                     {{
                                       player.birthdate
                                         ? (player.birthdate | referenceDate)
@@ -421,7 +442,7 @@
                                       @if (player.countryCode2) {
                                         <app-country-flag decorative [code]="player.countryCode2" />
                                       }
-                                      <span class="qdb-player-country-name">
+                                      <span data-ui-player-country-name>
                                         {{ countryLabel(player) }}
                                       </span>
                                     </span>
@@ -429,7 +450,8 @@
                                 </div>
                               </div>
                               <div
-                                class="qdb-player-actions flex flex-wrap items-center justify-end gap-0.5"
+                                class="flex flex-wrap items-center justify-end gap-0.5"
+                                data-ui-player-actions
                                 aria-label="Player row controls"
                               >
                                 <span
@@ -442,7 +464,9 @@
                                   <button
                                     cdkDragHandle
                                     matIconButton
-                                    class="qdb-player-action-button qdb-player-drag-handle cursor-grab active:cursor-grabbing"
+                                    class="cursor-grab active:cursor-grabbing"
+                                    data-ui-player-action-button
+                                    data-ui-player-drag-handle
                                     type="button"
                                     [attr.aria-label]="
                                       'Drag ' +
@@ -463,7 +487,7 @@
                                 >
                                   <button
                                     matIconButton
-                                    class="qdb-player-action-button"
+                                    data-ui-player-action-button
                                     type="button"
                                     [disabled]="rowIndex === 0"
                                     [attr.aria-label]="'Move ' + player.name + ' up one row'"
@@ -480,7 +504,7 @@
                                 >
                                   <button
                                     matIconButton
-                                    class="qdb-player-action-button"
+                                    data-ui-player-action-button
                                     type="button"
                                     [disabled]="rowIndex === rowCount - 1"
                                     [attr.aria-label]="'Move ' + player.name + ' down one row'"
@@ -497,7 +521,7 @@
                                 >
                                   <button
                                     matIconButton
-                                    class="qdb-player-action-button"
+                                    data-ui-player-action-button
                                     type="button"
                                     [disabled]="group.players.length === 1"
                                     [attr.aria-label]="
@@ -511,7 +535,10 @@
                               </div>
                             </article>
                           } @else {
-                            <span class="qdb-empty-label text-on-surface-variant" aria-hidden="true"
+                            <span
+                              class="text-on-surface-variant"
+                              data-ui-empty-label
+                              aria-hidden="true"
                               >Empty</span
                             >
                           }
@@ -521,20 +548,26 @@
                   }
 
                   <div
-                    class="qdb-alignment-row qdb-new-row grid gap-2.5 rounded-xl border border-outline-variant bg-surface-container-lowest p-2.5"
+                    class="grid gap-2.5 rounded-xl border border-outline-variant bg-surface-container-lowest p-2.5"
+                    data-ui-alignment-row
+                    data-ui-new-row
                     role="row"
                     aria-label="New unmatched row"
                   >
                     <div class="col-span-full flex min-h-6 items-center">
                       <span
-                        class="qdb-status-badge qdb-single-source rounded-full bg-tertiary-container px-2.5 py-micro text-xs font-semibold text-on-tertiary-container"
+                        class="rounded-full bg-tertiary-container px-2.5 py-micro text-xs font-semibold text-on-tertiary-container"
+                        data-ui-single-source
+                        data-ui-status-badge
                         >New unmatched row</span
                       >
                     </div>
                     @for (sourceName of activeSources(); track sourceName) {
                       <div
                         cdkDropList
-                        class="qdb-player-cell qdb-new-row-cell box-border flex items-stretch justify-center gap-1.5 rounded-notice bg-surface-container-low p-1.5 text-center text-on-surface-variant"
+                        class="box-border flex items-stretch justify-center gap-1.5 rounded-notice bg-surface-container-low p-1.5 text-center text-on-surface-variant"
+                        data-ui-new-row-cell
+                        data-ui-player-cell
                         role="cell"
                         data-new-row="true"
                         [attr.aria-label]="
@@ -553,7 +586,7 @@
                   </div>
                 </div>
               </div>
-              <div class="qdb-step-actions">
+              <div data-ui-step-actions>
                 <button matButton matStepperPrevious type="button">Back</button>
                 <button matButton="filled" type="button" (click)="continueMatches()">
                   {{ showConflicts() ? 'Resolve fields' : 'Review summary' }}
@@ -566,32 +599,37 @@
         @if (showConflicts()) {
           <mat-step data-step-id="conflicts" [completed]="true">
             <ng-template matStepLabel>Conflicts</ng-template>
-            <div class="qdb-step-content">
+            <div data-ui-step-content>
               <h2>Resolve conflicting information</h2>
               <p>
                 Only team and player fields with conflicting values are shown below. Names prefer
                 equivalent variants with diacritics; other values follow the global source priority.
               </p>
               @if (reviewCards().length) {
-                <div class="qdb-review-cards grid gap-4">
+                <div class="grid gap-4" data-ui-review-cards>
                   @for (card of reviewCards(); track card.id) {
                     <mat-card
                       appearance="outlined"
-                      class="qdb-review-card qdb-player-tile box-border grid w-full min-w-0 gap-2.5 rounded-lg border border-outline-variant bg-surface p-3"
+                      class="box-border grid w-full min-w-0 gap-2.5 rounded-lg border border-outline-variant bg-surface p-3"
+                      data-ui-player-tile
+                      data-ui-review-card
                       [attr.data-review-card]="card.id"
                       [attr.aria-labelledby]="card.headingId"
                     >
                       <mat-card-header
-                        class="qdb-review-card-heading flex items-start justify-between gap-2"
+                        class="flex items-start justify-between gap-2"
+                        data-ui-review-card-heading
                       >
                         <mat-card-title>
                           <span [id]="card.headingId">{{ card.name }}</span>
                         </mat-card-title>
                         <mat-card-subtitle
-                          class="qdb-player-metadata qdb-review-card-metadata flex flex-wrap items-center text-on-surface-variant"
+                          class="flex flex-wrap items-center text-on-surface-variant"
+                          data-ui-player-metadata
+                          data-ui-review-card-metadata
                         >
                           @if (card.kind === 'player') {
-                            <span class="qdb-player-birthdate">
+                            <span data-ui-player-birthdate>
                               {{
                                 card.birthdate
                                   ? (card.birthdate | referenceDate)
@@ -604,7 +642,7 @@
                               @if (card.countryCode2) {
                                 <app-country-flag decorative [code]="card.countryCode2" />
                               }
-                              <span class="qdb-player-country-name">
+                              <span data-ui-player-country-name>
                                 {{ countryLabel(card) || 'Country unknown' }}
                               </span>
                             </span>
@@ -618,13 +656,16 @@
                         <dl class="m-0 grid">
                           @for (field of card.fields; track field.key) {
                             <div
-                              class="qdb-review-field qdb-conflicting grid gap-3 border-t border-outline-variant px-0 py-3 max-md:gap-1.5"
+                              class="grid gap-3 border-t border-outline-variant px-0 py-3 max-md:gap-1.5"
+                              data-ui-conflicting
+                              data-ui-review-field
                               [attr.data-review-field]="field.key"
                             >
                               <dt>{{ field.label }}</dt>
                               <dd>
                                 <mat-button-toggle-group
-                                  class="qdb-resolution-options flex w-fit max-w-full overflow-hidden"
+                                  class="flex w-fit max-w-full overflow-hidden"
+                                  data-ui-resolution-options
                                   hideSingleSelectionIndicator
                                   [attr.aria-label]="'Choose ' + field.label + ' for ' + card.name"
                                   [value]="field.selectedOptionKey"
@@ -645,9 +686,9 @@
                   }
                 </div>
               } @else {
-                <p class="qdb-empty-state" role="status">No conflicts to resolve.</p>
+                <p data-ui-empty-state role="status">No conflicts to resolve.</p>
               }
-              <div class="qdb-step-actions">
+              <div data-ui-step-actions>
                 <button matButton matStepperPrevious type="button">Back</button>
                 <button matButton="filled" type="button" (click)="continueConflicts()">
                   Review summary
@@ -659,9 +700,9 @@
 
         <mat-step data-step-id="summary">
           <ng-template matStepLabel>Summary</ng-template>
-          <div class="qdb-step-content">
+          <div data-ui-step-content>
             <h2>{{ combinedTeamId() ? 'Apply team recombination' : 'Import project team' }}</h2>
-            <dl class="qdb-summary">
+            <dl data-ui-summary>
               <div>
                 <dt>Source teams</dt>
                 <dd>{{ selectedTeamCount() | number }}</dd>
@@ -686,11 +727,13 @@
               committed in one database transaction.
             </p>
             <section
-              class="qdb-summary-player-section grid gap-2"
+              class="grid gap-2"
+              data-ui-summary-player-section
               aria-labelledby="summary-player-heading"
             >
               <div
-                class="qdb-summary-player-heading flex flex-wrap items-center justify-between gap-3"
+                class="flex flex-wrap items-center justify-between gap-3"
+                data-ui-summary-player-heading
               >
                 <div>
                   <h3 id="summary-player-heading">Select project players</h3>
@@ -710,20 +753,23 @@
                 Deselect players without birthdate
               </button>
               <div
-                class="qdb-summary-player-list grid gap-3"
+                class="grid gap-3"
+                data-ui-summary-player-list
                 role="group"
                 aria-labelledby="summary-player-heading"
               >
                 @for (player of summaryPlayers(); track player.groupId) {
                   <mat-checkbox
-                    class="qdb-summary-player-option relative rounded-xl border border-outline-variant bg-surface-container-low p-3"
+                    class="relative rounded-xl border border-outline-variant bg-surface-container-low p-3"
+                    data-ui-summary-player-option
                     [checked]="selectedPlayerGroupIds().has(player.groupId)"
                     [attr.data-summary-player-group-id]="player.groupId"
                     (change)="toggleSummaryPlayer(player.groupId, $event.checked)"
                   >
-                    <span class="qdb-summary-player-label grid gap-2">
+                    <span class="grid gap-2" data-ui-summary-player-label>
                       <span
-                        class="qdb-player-heading flex min-w-0 items-start justify-between gap-2"
+                        class="flex min-w-0 items-start justify-between gap-2"
+                        data-ui-player-heading
                       >
                         <strong>{{ player.name }}</strong>
                         @if (player.position) {
@@ -731,9 +777,10 @@
                         }
                       </span>
                       <span
-                        class="qdb-player-metadata flex flex-wrap items-center text-on-surface-variant"
+                        class="flex flex-wrap items-center text-on-surface-variant"
+                        data-ui-player-metadata
                       >
-                        <span class="qdb-player-birthdate">
+                        <span data-ui-player-birthdate>
                           {{
                             player.birthdate
                               ? (player.birthdate | referenceDate)
@@ -745,7 +792,7 @@
                             @if (player.countryCode2) {
                               <app-country-flag decorative [code]="player.countryCode2" />
                             }
-                            <span class="qdb-player-country-name">{{ countryLabel(player) }}</span>
+                            <span data-ui-player-country-name>{{ countryLabel(player) }}</span>
                           </span>
                         }
                       </span>
@@ -754,7 +801,7 @@
                 }
               </div>
               @if (!selectedPlayerCount()) {
-                <p class="qdb-summary-player-error" role="status">
+                <p data-ui-summary-player-error role="status">
                   Select at least one project player to continue.
                 </p>
               }
@@ -762,7 +809,7 @@
             @if (busy()) {
               <mat-progress-bar mode="indeterminate" aria-label="Saving project team" />
             }
-            <div class="qdb-step-actions">
+            <div data-ui-step-actions>
               <button matButton matStepperPrevious type="button" [disabled]="busy()">Back</button>
               <button
                 matButton="filled"

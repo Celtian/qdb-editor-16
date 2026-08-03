@@ -2,14 +2,14 @@
   display: block;
 }
 
-.qdb-project-form-page {
+[data-ui-project-form-page] {
   width: min(100%, 54rem);
 }
 
-.qdb-form-grid {
+[data-ui-form-grid] {
   grid-template-columns: minmax(0, 1.5fr) minmax(15rem, 1fr);
 }
 
-.qdb-form-grid mat-form-field {
+[data-ui-form-grid] mat-form-field {
   width: 100%;
 }

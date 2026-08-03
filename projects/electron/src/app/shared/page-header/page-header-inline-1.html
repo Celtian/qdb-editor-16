@@ -1,6 +1,7 @@
-<header class="qdb-page-header">
+<header data-ui-page-header>
   <div
-    class="qdb-page-header-icon grid size-16 place-items-center rounded-2xl bg-primary-container text-on-primary-container max-nav:size-14"
+    class="grid size-16 place-items-center rounded-2xl bg-primary-container text-on-primary-container max-nav:size-14"
+    data-ui-page-header-icon
     aria-hidden="true"
   >
     <mat-icon>{{ icon() }}</mat-icon>
@@ -9,12 +10,13 @@
     <div class="min-w-0">
       <ng-content select="[pageHeaderContent]" />
     </div>
-    <div class="qdb-page-header-title-action flex-none">
+    <div class="flex-none" data-ui-page-header-title-action>
       <ng-content select="[pageHeaderTitleAction]" />
     </div>
   </div>
   <div
-    class="qdb-page-header-actions flex flex-wrap items-center justify-end gap-2 max-nav:col-span-full max-nav:justify-start"
+    class="flex flex-wrap items-center justify-end gap-2 max-nav:col-span-full max-nav:justify-start"
+    data-ui-page-header-actions
   >
     <ng-content select="[pageHeaderActions]" />
   </div>

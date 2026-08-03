@@ -2,7 +2,7 @@
   display: block;
 }
 
-.qdb-settings-page {
+[data-ui-settings-page] {
   display: grid;
   gap: 1.25rem;
   margin: 0 auto;
@@ -10,7 +10,7 @@
   padding: 2.5rem clamp(1rem, 4vw, 3.5rem);
 }
 
-.qdb-priority-list li {
+[data-ui-priority-list] li {
   display: flex;
   align-items: center;
   gap: 0.75rem;
@@ -21,11 +21,11 @@
   background: var(--mat-sys-surface);
 }
 
-.qdb-spacer {
+[data-ui-spacer] {
   flex: 1;
 }
 
-.qdb-error {
+[data-ui-error] {
   color: var(--mat-sys-error);
 }
 

@@ -1,10 +1,10 @@
-.qdb-warning-heading {
+[data-ui-warning-heading] {
   align-items: center;
   display: flex;
   gap: 0.65rem;
 }
 
-.qdb-warning-heading mat-icon {
+[data-ui-warning-heading] mat-icon {
   color: var(--mat-sys-error);
 }
 
@@ -20,21 +20,21 @@ mat-radio-button {
   padding: 0.75rem;
 }
 
-.qdb-option-title,
-.qdb-option-description {
+[data-ui-option-title],
+[data-ui-option-description] {
   display: block;
 }
 
-.qdb-option-title {
+[data-ui-option-title] {
   font-weight: 500;
 }
 
-.qdb-option-description {
+[data-ui-option-description] {
   color: var(--mat-sys-on-surface-variant);
   margin-top: 0.25rem;
 }
 
-.qdb-delete-button:not(:disabled) {
+[data-ui-delete-button]:not(:disabled) {
   background-color: var(--mat-sys-error);
   color: var(--mat-sys-on-error);
 }

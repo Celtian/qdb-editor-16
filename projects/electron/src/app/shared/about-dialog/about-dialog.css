@@ -5,17 +5,17 @@
   display: block;
 }
 
-.qdb-dialog-header {
+[data-ui-dialog-header] {
   grid-template-columns: 4.5rem minmax(0, 1fr) 3rem;
 }
 
-.qdb-dialog-header img {
+[data-ui-dialog-header] img {
   background: #102b4e;
   border-radius: 1rem;
   display: block;
 }
 
-.qdb-product-heading h2 {
+[data-ui-product-heading] h2 {
   font-size: 2rem;
   letter-spacing: -0.03em;
   line-height: 1.15;
@@ -23,28 +23,28 @@
   padding: 0;
 }
 
-.qdb-product-heading h2::before {
+[data-ui-product-heading] h2::before {
   display: none;
 }
 
-.qdb-version {
+[data-ui-version] {
   color: var(--muted-text);
   font-size: 1.1rem;
   margin: 0.35rem 0 0;
 }
 
-.qdb-dialog-header button {
+[data-ui-dialog-header] button {
   align-self: start;
 }
 
-.qdb-description {
+[data-ui-description] {
   color: var(--mat-sys-on-surface);
   font-size: 1rem;
   line-height: 1.6;
   margin: 0;
 }
 
-.qdb-copyright {
+[data-ui-copyright] {
   color: var(--muted-text);
 }
 
@@ -52,7 +52,7 @@ mat-dialog-actions {
   justify-content: space-between;
 }
 
-.qdb-external-actions {
+[data-ui-external-actions] {
   align-items: center;
   display: flex;
   gap: 0.5rem;
@@ -64,33 +64,33 @@ mat-dialog-actions {
     --mat-dialog-with-actions-content-padding: 0.75rem 1.25rem 0;
   }
 
-  .qdb-dialog-header {
+  [data-ui-dialog-header] {
     gap: 0.9rem;
     grid-template-columns: 3.75rem minmax(0, 1fr) 3rem;
   }
 
-  .qdb-dialog-header img {
+  [data-ui-dialog-header] img {
     height: 3.75rem;
     width: 3.75rem;
   }
 
-  .qdb-product-heading h2 {
+  [data-ui-product-heading] h2 {
     font-size: 1.5rem;
   }
 
-  .qdb-version {
+  [data-ui-version] {
     font-size: 1rem;
   }
 
   mat-dialog-actions,
-  .qdb-external-actions {
+  [data-ui-external-actions] {
     align-items: stretch;
     display: grid;
     gap: 0.5rem;
   }
 
   mat-dialog-actions > button,
-  .qdb-external-actions a {
+  [data-ui-external-actions] a {
     justify-content: center;
     width: 100%;
   }

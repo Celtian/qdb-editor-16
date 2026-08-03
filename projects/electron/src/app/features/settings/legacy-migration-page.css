@@ -1,24 +1,24 @@
-.qdb-migration-page {
+[data-ui-migration-page] {
   max-width: 70rem;
 }
 
-.qdb-source-path {
+[data-ui-source-path] {
   overflow-wrap: anywhere;
 }
 
-.qdb-project-preview h2,
-.qdb-project-preview p,
-.qdb-project-preview dl,
-.qdb-project-preview dd {
+[data-ui-project-preview] h2,
+[data-ui-project-preview] p,
+[data-ui-project-preview] dl,
+[data-ui-project-preview] dd {
   margin: 0;
 }
 
-.qdb-project-preview dl {
+[data-ui-project-preview] dl {
   display: flex;
   gap: 1rem;
 }
 
-.qdb-project-preview dt {
+[data-ui-project-preview] dt {
   color: var(--mat-sys-on-surface-variant);
   font-size: 0.75rem;
 }

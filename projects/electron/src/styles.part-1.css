@@ -26,7 +26,7 @@ select {
   font: inherit;
 }
 
-.qdb-wizard {
+[data-ui-wizard] {
   --mat-stepper-header-icon-background-color: var(--mat-sys-surface-container-highest);
   --mat-stepper-header-icon-foreground-color: var(--mat-sys-on-surface-variant);
   --mat-stepper-header-done-state-icon-background-color: var(--mat-sys-surface-container-highest);
@@ -83,18 +83,18 @@ select {
   }
 }
 
-.qdb-app-content > router-outlet + * {
+[data-ui-app-content] > router-outlet + * {
   display: block;
   min-height: 100%;
 }
 
-.qdb-page {
+[data-ui-page] {
   width: min(100%, 90rem);
   margin: 0 auto;
   padding: 2rem;
 }
 
-.qdb-page-header h1 {
+[data-ui-page-header] h1 {
   margin: 0 0 0.25rem;
   font-size: 1.5rem;
   font-weight: 500;
@@ -102,7 +102,7 @@ select {
   letter-spacing: normal;
 }
 
-.qdb-page-header p {
+[data-ui-page-header] p {
   margin: 0;
   color: var(--mat-sys-on-surface-variant);
   font-size: 1rem;
@@ -110,13 +110,13 @@ select {
   line-height: 1.5rem;
 }
 
-.qdb-empty-state {
+[data-ui-empty-state] {
   padding: 3rem 1rem;
   text-align: center;
   color: var(--mat-sys-on-surface-variant);
 }
 
-.qdb-empty-state mat-icon {
+[data-ui-empty-state] mat-icon {
   width: 3rem;
   height: 3rem;
   font-size: 3rem;

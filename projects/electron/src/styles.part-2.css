@@ -1,5 +1,5 @@
-.qdb-error-banner,
-.qdb-error {
+[data-ui-error-banner],
+[data-ui-error] {
   padding: 0.75rem 1rem;
   border-radius: 0.75rem;
   background: var(--mat-sys-error-container);
@@ -32,16 +32,16 @@
   }
 }
 
-.qdb-table-container table {
+[data-ui-table-container] table {
   width: 100%;
 }
 
-.qdb-table-container mat-paginator {
+[data-ui-table-container] mat-paginator {
   border-top: 1px solid var(--mat-sys-outline-variant);
   background: transparent;
 }
 
-.qdb-visually-hidden {
+[data-ui-visually-hidden] {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -62,7 +62,7 @@
 }
 
 @media (width <= 800px) {
-  .qdb-page {
+  [data-ui-page] {
     padding: 1rem;
   }
 }

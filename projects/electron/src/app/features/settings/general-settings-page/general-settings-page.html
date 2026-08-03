@@ -5,14 +5,12 @@
   </div>
 </app-page-header>
 
-<section class="qdb-settings-page" aria-labelledby="settings-title">
+<section data-ui-settings-page aria-labelledby="settings-title">
   <mat-card appearance="outlined">
     <mat-card-content>
       <fieldset>
         <legend>Theme</legend>
-        <p class="qdb-setting-description">
-          Choose the appearance used throughout the application.
-        </p>
+        <p data-ui-setting-description>Choose the appearance used throughout the application.</p>
         <mat-radio-group aria-label="Theme" [value]="theme.preference()">
           @for (option of themeOptions; track option.value) {
             <mat-radio-button
@@ -20,7 +18,7 @@
               [value]="option.value"
               (change)="selectTheme(option.value)"
             >
-              <span class="qdb-theme-option flex items-center gap-3 px-0 py-1">
+              <span class="flex items-center gap-3 px-0 py-1" data-ui-theme-option>
                 <mat-icon aria-hidden="true">{{ option.icon }}</mat-icon>
                 <span>
                   <strong>{{ option.label }}</strong>
@@ -34,7 +32,7 @@
     </mat-card-content>
   </mat-card>
 
-  <mat-card class="qdb-project-data qdb-settings-card" appearance="outlined">
+  <mat-card data-ui-project-data data-ui-settings-card appearance="outlined">
     <mat-card-header>
       <div
         class="flex items-center justify-center bg-error-container text-on-error-container"
@@ -52,13 +50,15 @@
         finder filters are not affected.
       </p>
       @if (loadingProjects()) {
-        <p class="qdb-project-count-status font-medium" role="status">Checking stored projects…</p>
+        <p class="font-medium" data-ui-project-count-status role="status">
+          Checking stored projects…
+        </p>
       } @else if (projectCountError()) {
-        <p class="qdb-project-count-status qdb-error font-medium" role="alert">
+        <p class="font-medium" data-ui-error data-ui-project-count-status role="alert">
           Project count could not be loaded. {{ projectCountError() }}
         </p>
       } @else {
-        <p class="qdb-project-count-status font-medium">
+        <p class="font-medium" data-ui-project-count-status>
           {{ projectCount() | number }}
           {{ projectCount() === 1 ? 'project is' : 'projects are' }} currently stored.
         </p>
@@ -66,7 +66,7 @@
     </mat-card-content>
     <mat-card-actions align="end">
       <button
-        class="qdb-clear-projects-button"
+        data-ui-clear-projects-button
         matButton="filled"
         type="button"
         [disabled]="!canClearProjects()"

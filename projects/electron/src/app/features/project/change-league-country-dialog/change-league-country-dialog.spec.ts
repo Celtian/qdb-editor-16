@@ -32,7 +32,7 @@ const createDialog = async (data: ChangeLeagueCountryDialogData) => {
 };
 
 const expectSelectedCountryFlag = (element: HTMLElement, code?: string): void => {
-  const flag = element.querySelector<HTMLImageElement>('.qdb-selected-country-flag img');
+  const flag = element.querySelector<HTMLImageElement>('[data-ui-selected-country-flag] img');
   if (!code) {
     expect(flag).toBeNull();
     return;
@@ -51,7 +51,7 @@ describe('ChangeLeagueCountryDialog', () => {
       mixedCountries: false,
     });
     const autocomplete = await documentLoader.getHarness(
-      MatAutocompleteHarness.with({ selector: '.qdb-country-input' }),
+      MatAutocompleteHarness.with({ selector: '[data-ui-country-input]' }),
     );
 
     expect(await autocomplete.getValue()).toBe('Czech Republic');
@@ -107,7 +107,7 @@ describe('ChangeLeagueCountryDialog', () => {
       mixedCountries: false,
     });
     const autocomplete = await documentLoader.getHarness(
-      MatAutocompleteHarness.with({ selector: '.qdb-country-input' }),
+      MatAutocompleteHarness.with({ selector: '[data-ui-country-input]' }),
     );
     const form = element.querySelector('form');
     if (!form) throw new Error('Country form did not render.');

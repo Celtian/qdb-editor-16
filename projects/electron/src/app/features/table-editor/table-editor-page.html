@@ -31,9 +31,9 @@
   </div>
 </app-page-header>
 
-<section class="qdb-page max-w-none">
+<section class="max-w-none" data-ui-page>
   @if (store.error()) {
-    <p class="qdb-error-banner" role="alert">{{ store.error() }}</p>
+    <p data-ui-error-banner role="alert">{{ store.error() }}</p>
   }
 
   <mat-form-field appearance="outline" class="w-full max-w-xl">
@@ -43,7 +43,7 @@
   </mat-form-field>
 
   @if (page(); as data) {
-    <div class="qdb-table-container overflow-auto rounded-xl border border-outline-variant">
+    <div class="overflow-auto rounded-xl border border-outline-variant" data-ui-table-container>
       <table
         mat-table
         matSort

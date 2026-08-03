@@ -11,15 +11,11 @@
   >
 </app-page-header>
 
-<section
-  class="qdb-page"
-  aria-labelledby="entity-heading"
-  [class.has-selection]="selectedCount() > 0"
->
+<section data-ui-page aria-labelledby="entity-heading" [class.has-selection]="selectedCount() > 0">
   <mat-card appearance="outlined">
-    <div class="qdb-table-toolbar">
-      <div class="qdb-table-controls">
-        <mat-form-field class="qdb-search-field" appearance="outline" subscriptSizing="dynamic">
+    <div data-ui-table-toolbar>
+      <div data-ui-table-controls>
+        <mat-form-field data-ui-search-field appearance="outline" subscriptSizing="dynamic">
           <mat-label>Search {{ entity() }}</mat-label>
           <mat-icon matPrefix>search</mat-icon>
           <input
@@ -31,7 +27,7 @@
           />
         </mat-form-field>
         <button
-          class="qdb-filter-button"
+          data-ui-filter-button
           matButton="tonal"
           type="button"
           [attr.aria-label]="
@@ -44,13 +40,11 @@
           <mat-icon aria-hidden="true">filter_alt</mat-icon>
           Filters
           @if (activeFilterCount()) {
-            <span class="qdb-filter-count" aria-hidden="true">{{
-              activeFilterCount() | number
-            }}</span>
+            <span data-ui-filter-count aria-hidden="true">{{ activeFilterCount() | number }}</span>
           }
         </button>
         <button
-          class="qdb-column-button"
+          data-ui-column-button
           matButton="tonal"
           type="button"
           [attr.aria-label]="'Choose columns, ' + (hiddenColumnCount() | number) + ' hidden'"
@@ -59,21 +53,19 @@
           <mat-icon aria-hidden="true">view_column</mat-icon>
           Columns
           @if (hiddenColumnCount()) {
-            <span class="qdb-column-count" aria-hidden="true">{{
-              hiddenColumnCount() | number
-            }}</span>
+            <span data-ui-column-count aria-hidden="true">{{ hiddenColumnCount() | number }}</span>
           }
         </button>
       </div>
-      <span class="qdb-record-count">{{ total() | number }} records</span>
+      <span data-ui-record-count>{{ total() | number }} records</span>
     </div>
     @if (loading()) {
       <mat-progress-bar mode="indeterminate" aria-label="Loading records" />
     }
     @if (error()) {
-      <p class="qdb-error" role="alert">{{ error() }}</p>
+      <p data-ui-error role="alert">{{ error() }}</p>
     }
-    <div class="qdb-table-scroll">
+    <div data-ui-table-scroll>
       <table
         mat-table
         matSort
@@ -86,7 +78,7 @@
         <ng-container matColumnDef="select">
           <th *matHeaderCellDef mat-header-cell>
             <mat-checkbox
-              class="qdb-select-all-checkbox"
+              data-ui-select-all-checkbox
               [checked]="allRowsSelected()"
               [indeterminate]="someRowsSelected()"
               [disabled]="bulkActionPending() || rows().length === 0"
@@ -100,7 +92,7 @@
           </th>
           <td *matCellDef="let row" mat-cell>
             <mat-checkbox
-              class="qdb-row-select-checkbox"
+              data-ui-row-select-checkbox
               [checked]="entitySelection.isSelected(row)"
               [disabled]="bulkActionPending()"
               [aria-label]="
@@ -148,7 +140,7 @@
               } @else if (
                 column === 'countryName' || column === 'leagueCountry' || column === 'teamCountry'
               ) {
-                <span class="qdb-country-with-flag">
+                <span data-ui-country-with-flag>
                   @if (row.countryCode) {
                     <app-country-flag decorative [code]="row.countryCode" />
                   }
@@ -160,7 +152,8 @@
                 <app-position-detail-badge [positionDetail]="row.positionDetail" />
               } @else if (column === 'sourceUrl' && row.sourceUrl) {
                 <a
-                  class="qdb-source-link inline-flex items-center gap-1"
+                  class="inline-flex items-center gap-1"
+                  data-ui-source-link
                   target="_blank"
                   rel="noopener noreferrer"
                   [href]="row.sourceUrl"
@@ -253,7 +246,7 @@
           mat-row
           [class.selected-row]="entitySelection.isSelected(row)"
         ></tr>
-        <tr *matNoDataRow class="qdb-empty-row">
+        <tr *matNoDataRow data-ui-empty-row>
           <td [attr.colspan]="displayedColumns().length">No {{ entity() }} match this view.</td>
         </tr>
       </table>
@@ -270,7 +263,7 @@
 
   @if (selectedCount()) {
     <aside
-      class="qdb-selection-footer"
+      data-ui-selection-footer
       [attr.aria-label]="'Selected ' + selectedEntitySingular() + ' actions'"
       [attr.aria-busy]="bulkActionPending()"
     >
@@ -278,9 +271,9 @@
         {{ selectedCount() | number }}
         {{ selectedCount() === 1 ? selectedEntitySingular() : selectedEntityPlural() }} selected
       </strong>
-      <div class="qdb-selection-actions">
+      <div data-ui-selection-actions>
         <button
-          class="qdb-bulk-badges-button"
+          data-ui-bulk-badges-button
           matButton="tonal"
           type="button"
           [disabled]="bulkActionPending()"
@@ -291,7 +284,7 @@
         </button>
         @if (entity() === 'leagues') {
           <button
-            class="qdb-bulk-tier-button"
+            data-ui-bulk-tier-button
             matButton="tonal"
             type="button"
             [disabled]="bulkActionPending()"
@@ -303,7 +296,7 @@
         }
         @if (entity() !== 'players') {
           <button
-            class="qdb-bulk-country-button"
+            data-ui-bulk-country-button
             matButton="tonal"
             type="button"
             [disabled]="bulkActionPending()"
@@ -314,7 +307,7 @@
           </button>
         }
         <button
-          class="qdb-bulk-delete-button"
+          data-ui-bulk-delete-button
           matButton="filled"
           type="button"
           [disabled]="bulkActionPending()"

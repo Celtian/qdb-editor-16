@@ -1,6 +1,6 @@
 /* stylelint-disable no-descending-specificity -- provider notices intentionally refine shared step copy */
 
-.qdb-page {
+[data-ui-page] {
   display: grid;
   gap: 1.5rem;
   margin: 0 auto;
@@ -8,118 +8,118 @@
   padding: 2.5rem clamp(1rem, 4vw, 3.5rem) 6rem;
 }
 
-.qdb-step-content p,
-.qdb-selection-heading span,
-.qdb-progress,
-.qdb-behavior-hint {
+[data-ui-step-content] p,
+[data-ui-selection-heading] span,
+[data-ui-progress],
+[data-ui-behavior-hint] {
   color: var(--mat-sys-on-surface-variant);
 }
 
-.qdb-wizard-card {
+[data-ui-wizard-card] {
   overflow: hidden;
 }
 
-.qdb-step-content {
+[data-ui-step-content] {
   display: grid;
   gap: 1.5rem;
   padding: 1.5rem 0 0.5rem;
 }
 
-.qdb-step-content h2,
-.qdb-step-content p {
+[data-ui-step-content] h2,
+[data-ui-step-content] p {
   margin: 0;
 }
 
-.qdb-step-content h2 {
+[data-ui-step-content] h2 {
   font-size: 1.35rem;
 }
 
-.qdb-step-content h2 + p {
+[data-ui-step-content] h2 + p {
   margin-top: 0.35rem;
 }
 
-.qdb-provider-notice mat-icon {
+[data-ui-provider-notice] mat-icon {
   flex: 0 0 auto;
 }
 
-.qdb-provider-notice div {
+[data-ui-provider-notice] div {
   display: grid;
   gap: 0.25rem;
 }
 
-.qdb-provider-notice p {
+[data-ui-provider-notice] p {
   color: inherit;
 }
 
-.qdb-choice-options {
+[data-ui-choice-options] {
   max-width: 46rem;
 }
 
-.qdb-choice-options mat-radio-button {
+[data-ui-choice-options] mat-radio-button {
   border: 1px solid var(--mat-sys-outline-variant);
   border-radius: 0.75rem;
   padding: 1rem;
 }
 
-.qdb-choice-options mat-radio-button:has(input:checked) {
+[data-ui-choice-options] mat-radio-button:has(input:checked) {
   background: var(--mat-sys-secondary-container);
   border-color: var(--mat-sys-primary);
 }
 
-.qdb-choice-label {
+[data-ui-choice-label] {
   display: grid;
   gap: 0.2rem;
 }
 
-.qdb-choice-label small {
+[data-ui-choice-label] small {
   color: var(--mat-sys-on-surface-variant);
   white-space: normal;
 }
 
-.qdb-target-selector mat-form-field {
+[data-ui-target-selector] mat-form-field {
   width: min(38rem, 100%);
 }
 
-.qdb-selected-target div {
+[data-ui-selected-target] div {
   display: grid;
   gap: 0.15rem;
 }
 
-.qdb-selected-target span {
+[data-ui-selected-target] span {
   color: var(--mat-sys-on-tertiary-container);
   font-size: 0.85rem;
 }
 
-.qdb-fields {
+[data-ui-fields] {
   grid-template-columns: minmax(0, 1fr);
   max-width: 38rem;
 }
 
-.qdb-source-url-card {
+[data-ui-source-url-card] {
   max-width: 50rem;
 }
 
-.qdb-source-url-link:focus-visible {
+[data-ui-source-url-link]:focus-visible {
   outline: 0.1875rem solid var(--mat-sys-primary);
   outline-offset: 0.125rem;
 }
 
-.qdb-source-url-link > mat-icon {
+[data-ui-source-url-link] > mat-icon {
   color: var(--mat-sys-primary);
   flex: 0 0 auto;
 }
 
-.qdb-source-url-example {
+[data-ui-source-url-example] {
   font-family: ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace;
   line-height: 1.45;
 }
 
-.qdb-source-url-example strong {
+[data-ui-source-url-example] strong {
   color: var(--mat-sys-primary);
   font-weight: 800;
 }
 
-.qdb-update-behavior legend {
+[data-ui-update-behavior] legend {
   font-size: 1rem;
   font-weight: 700;
   padding-inline: 0.35rem;

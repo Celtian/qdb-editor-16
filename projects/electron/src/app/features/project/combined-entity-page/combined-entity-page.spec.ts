@@ -274,13 +274,13 @@ describe('CombinedEntityPage', () => {
     const { element, loader } = await renderPage('players', []);
     const card = element.querySelector('mat-card');
     const table = element.querySelector('table');
-    const emptyCell = element.querySelector<HTMLTableCellElement>('.qdb-empty-row td');
+    const emptyCell = element.querySelector<HTMLTableCellElement>('[data-ui-empty-row] td');
 
     expect(card).not.toBeNull();
     expect(element.querySelector('app-page-header mat-icon')?.textContent?.trim()).toBe('groups');
     expect(element.querySelector('h1')?.textContent).toContain('Players');
-    expect(card?.querySelector('.qdb-table-toolbar')).not.toBeNull();
-    expect(card?.querySelector('.qdb-table-scroll')).not.toBeNull();
+    expect(card?.querySelector('[data-ui-table-toolbar]')).not.toBeNull();
+    expect(card?.querySelector('[data-ui-table-scroll]')).not.toBeNull();
     expect(card?.contains(table)).toBe(true);
     expect(card?.querySelector('mat-paginator')).not.toBeNull();
     expect(element.querySelector('.table-wrapper')).toBeNull();
@@ -293,7 +293,7 @@ describe('CombinedEntityPage', () => {
   it('applies, persists, cancels, and resets combined column layouts from the finder', async () => {
     const { documentLoader, element, fixture, loader } = await renderPage('players', [player()]);
     const columnButton = await loader.getHarness(
-      MatButtonHarness.with({ selector: '.qdb-column-button' }),
+      MatButtonHarness.with({ selector: '[data-ui-column-button]' }),
     );
     expect(await (await columnButton.host()).getAttribute('aria-label')).toBe(
       'Choose columns, 4 hidden',
@@ -598,13 +598,13 @@ describe('CombinedEntityPage', () => {
     );
 
     const rowCheckboxes = await loader.getAllHarnesses(
-      MatCheckboxHarness.with({ selector: '.qdb-row-select-checkbox' }),
+      MatCheckboxHarness.with({ selector: '[data-ui-row-select-checkbox]' }),
     );
     await rowCheckboxes[0].check();
     await rowCheckboxes[1].check();
     await fixture.whenStable();
     await (
-      await loader.getHarness(MatButtonHarness.with({ selector: '.qdb-bulk-badges-button' }))
+      await loader.getHarness(MatButtonHarness.with({ selector: '[data-ui-bulk-badges-button]' }))
     ).click();
     const badgeCheckbox = await documentLoader.getHarness(
       MatCheckboxHarness.with({ label: /Manual review/ }),
@@ -777,7 +777,7 @@ describe('CombinedEntityPage', () => {
     await fixture.whenStable();
 
     expect(await selectAll.isIndeterminate()).toBe(true);
-    expect(element.querySelector('.qdb-selection-footer')?.textContent).toContain(
+    expect(element.querySelector('[data-ui-selection-footer]')?.textContent).toContain(
       '1 player selected',
     );
     expect(element.querySelectorAll('tr.selected-row')).toHaveLength(1);
@@ -785,14 +785,14 @@ describe('CombinedEntityPage', () => {
 
     await selectAll.check();
     await fixture.whenStable();
-    expect(element.querySelector('.qdb-selection-footer')?.textContent).toContain(
+    expect(element.querySelector('[data-ui-selection-footer]')?.textContent).toContain(
       '2 players selected',
     );
     expect(element.querySelectorAll('tr.selected-row')).toHaveLength(2);
 
     await selectAll.uncheck();
     await fixture.whenStable();
-    expect(element.querySelector('.qdb-selection-footer')).toBeNull();
+    expect(element.querySelector('[data-ui-selection-footer]')).toBeNull();
   });
 
   it('keeps the existing row-menu deletion for a combined player', async () => {
@@ -845,11 +845,11 @@ describe('CombinedEntityPage', () => {
     await checkboxes[0].check();
     await fixture.whenStable();
 
-    expect(element.querySelector('.qdb-selection-footer')?.textContent).toContain(
+    expect(element.querySelector('[data-ui-selection-footer]')?.textContent).toContain(
       '2 leagues selected',
     );
     await (
-      await loader.getHarness(MatButtonHarness.with({ selector: '.qdb-bulk-delete-button' }))
+      await loader.getHarness(MatButtonHarness.with({ selector: '[data-ui-bulk-delete-button]' }))
     ).click();
     const dialog = await documentLoader.getHarness(MatDialogHarness);
     expect(await dialog.getTitleText()).toBe('Delete selected project leagues?');
@@ -875,7 +875,7 @@ describe('CombinedEntityPage', () => {
       ),
     );
     expect(api.listCombinedEntityFilterOptions).toHaveBeenCalledTimes(2);
-    expect(element.querySelector('.qdb-selection-footer')).toBeNull();
+    expect(element.querySelector('[data-ui-selection-footer]')).toBeNull();
     expect(snackBar.open).toHaveBeenCalledWith(
       '2 project leagues deleted. Source data was preserved.',
       'Dismiss',
@@ -893,7 +893,7 @@ describe('CombinedEntityPage', () => {
     await checkboxes[1].check();
     await fixture.whenStable();
     await (
-      await loader.getHarness(MatButtonHarness.with({ selector: '.qdb-bulk-delete-button' }))
+      await loader.getHarness(MatButtonHarness.with({ selector: '[data-ui-bulk-delete-button]' }))
     ).click();
     const dialog = await documentLoader.getHarness(MatDialogHarness);
 
@@ -908,7 +908,7 @@ describe('CombinedEntityPage', () => {
     await vi.waitFor(() =>
       expect(api.deleteCombinedTeams).toHaveBeenCalledWith('project-id', ['team-1']),
     );
-    expect(element.querySelector('.qdb-selection-footer')).toBeNull();
+    expect(element.querySelector('[data-ui-selection-footer]')).toBeNull();
   });
 
   it('confirms and atomically deletes selected combined players', async () => {
@@ -921,7 +921,7 @@ describe('CombinedEntityPage', () => {
     await checkboxes[2].check();
     await fixture.whenStable();
     const deleteButton = await loader.getHarness(
-      MatButtonHarness.with({ selector: '.qdb-bulk-delete-button' }),
+      MatButtonHarness.with({ selector: '[data-ui-bulk-delete-button]' }),
     );
 
     await deleteButton.click();
@@ -938,7 +938,7 @@ describe('CombinedEntityPage', () => {
     await (await documentLoader.getHarness(MatButtonHarness.with({ text: 'Cancel' }))).click();
     await fixture.whenStable();
     expect(api.deleteCombinedPlayers).not.toHaveBeenCalled();
-    expect(element.querySelector('.qdb-selection-footer')?.textContent).toContain(
+    expect(element.querySelector('[data-ui-selection-footer]')?.textContent).toContain(
       '2 players selected',
     );
 
@@ -955,7 +955,7 @@ describe('CombinedEntityPage', () => {
         'player-2',
       ]),
     );
-    expect(element.querySelector('.qdb-selection-footer')).toBeNull();
+    expect(element.querySelector('[data-ui-selection-footer]')).toBeNull();
     expect(snackBar.open).toHaveBeenCalledWith(
       '2 project players deleted. Source data was preserved.',
       'Dismiss',
@@ -975,7 +975,7 @@ describe('CombinedEntityPage', () => {
     const checkboxes = await loader.getAllHarnesses(MatCheckboxHarness);
     await checkboxes[1].check();
     await (
-      await loader.getHarness(MatButtonHarness.with({ selector: '.qdb-bulk-delete-button' }))
+      await loader.getHarness(MatButtonHarness.with({ selector: '[data-ui-bulk-delete-button]' }))
     ).click();
     await (
       await documentLoader.getHarness(MatButtonHarness.with({ text: 'Delete 1 project player' }))
@@ -983,7 +983,7 @@ describe('CombinedEntityPage', () => {
     await fixture.whenStable();
     await vi.waitFor(() => expect(api.deleteCombinedPlayers).toHaveBeenCalledOnce());
 
-    expect(element.querySelector('.qdb-selection-footer')?.textContent).toContain(
+    expect(element.querySelector('[data-ui-selection-footer]')?.textContent).toContain(
       '1 player selected',
     );
     expect(snackBar.open).toHaveBeenCalledWith(
@@ -1001,7 +1001,7 @@ describe('CombinedEntityPage', () => {
     const checkboxes = await loader.getAllHarnesses(MatCheckboxHarness);
     await checkboxes[1].check();
     await (
-      await loader.getHarness(MatButtonHarness.with({ selector: '.qdb-bulk-delete-button' }))
+      await loader.getHarness(MatButtonHarness.with({ selector: '[data-ui-bulk-delete-button]' }))
     ).click();
     await (
       await documentLoader.getHarness(MatButtonHarness.with({ text: 'Delete 1 project player' }))
@@ -1049,7 +1049,7 @@ describe('CombinedEntityPage', () => {
     );
     expect(router.url).toBe('/projects/project-id/combined/players?teamId=team-2');
     const filterButton = await loader.getHarness(
-      MatButtonHarness.with({ selector: '.qdb-filter-button' }),
+      MatButtonHarness.with({ selector: '[data-ui-filter-button]' }),
     );
     expect(await (await filterButton.host()).getAttribute('aria-label')).toBe(
       'Open filters, 7 active',
@@ -1147,13 +1147,15 @@ describe('CombinedEntityPage', () => {
       12_345,
     );
     const filterButton = await loader.getHarness(
-      MatButtonHarness.with({ selector: '.qdb-filter-button' }),
+      MatButtonHarness.with({ selector: '[data-ui-filter-button]' }),
     );
-    const filterButtonElement = element.querySelector<HTMLButtonElement>('.qdb-filter-button');
+    const filterButtonElement = element.querySelector<HTMLButtonElement>('[data-ui-filter-button]');
 
     expect(await filterButton.getAppearance()).toBe('tonal');
     expect(await (await filterButton.host()).getAttribute('aria-label')).toBe('Open filters');
-    expect(element.querySelector('.qdb-record-count')?.textContent).toContain('12,345 records');
+    expect(element.querySelector('[data-ui-record-count]')?.textContent).toContain(
+      '12,345 records',
+    );
     expect(element.textContent).not.toContain('Linked providers');
 
     const paginator = await loader.getHarness(MatPaginatorHarness);
@@ -1243,7 +1245,7 @@ describe('CombinedEntityPage', () => {
   it('maps Ready to false and both selected statuses to no request restriction', async () => {
     const { api, documentLoader, fixture, loader } = await renderPage('players', [player()]);
     const filterButton = await loader.getHarness(
-      MatButtonHarness.with({ selector: '.qdb-filter-button' }),
+      MatButtonHarness.with({ selector: '[data-ui-filter-button]' }),
     );
     await filterButton.click();
 
@@ -1306,7 +1308,7 @@ describe('CombinedEntityPage', () => {
   it('applies every player-specific canonical filter as one staged request', async () => {
     const { api, documentLoader, fixture, loader } = await renderPage('players', [player()]);
     const filterButton = await loader.getHarness(
-      MatButtonHarness.with({ selector: '.qdb-filter-button' }),
+      MatButtonHarness.with({ selector: '[data-ui-filter-button]' }),
     );
     await filterButton.click();
 
@@ -1318,7 +1320,7 @@ describe('CombinedEntityPage', () => {
     await teamAutocomplete.enterText('ars');
     await teamAutocomplete.selectOption({ text: 'Arsenal' });
     const teamGrid = await documentLoader.getHarness(
-      MatChipGridHarness.with({ selector: '.qdb-parent-chip-grid' }),
+      MatChipGridHarness.with({ selector: '[data-ui-parent-chip-grid]' }),
     );
     expect(await Promise.all((await teamGrid.getRows()).map((row) => row.getText()))).toEqual([
       'Arsenal',
@@ -1377,7 +1379,7 @@ describe('CombinedEntityPage', () => {
   it('applies league country, tier, and missing-tier filters without offering seasons', async () => {
     const { api, documentLoader, fixture, loader } = await renderPage('leagues', [league()]);
     const filterButton = await loader.getHarness(
-      MatButtonHarness.with({ selector: '.qdb-filter-button' }),
+      MatButtonHarness.with({ selector: '[data-ui-filter-button]' }),
     );
     await filterButton.click();
 
@@ -1428,7 +1430,7 @@ describe('CombinedEntityPage', () => {
   it('applies project league, missing-league, and country filters without offering seasons', async () => {
     const { api, documentLoader, fixture, loader, router } = await renderPage('teams', [team()]);
     const filterButton = await loader.getHarness(
-      MatButtonHarness.with({ selector: '.qdb-filter-button' }),
+      MatButtonHarness.with({ selector: '[data-ui-filter-button]' }),
     );
     await filterButton.click();
     await fixture.whenStable();
@@ -1488,7 +1490,7 @@ describe('CombinedEntityPage', () => {
       { leagueId: 'league-1' },
     );
     await (
-      await loader.getHarness(MatButtonHarness.with({ selector: '.qdb-filter-button' }))
+      await loader.getHarness(MatButtonHarness.with({ selector: '[data-ui-filter-button]' }))
     ).click();
     await (await documentLoader.getHarness(MatButtonHarness.with({ text: 'Clear all' }))).click();
     await (await documentLoader.getHarness(MatButtonHarness.with({ text: 'Apply' }))).click();
@@ -1507,7 +1509,7 @@ describe('CombinedEntityPage', () => {
       'Options unavailable',
     );
     const filterButton = await loader.getHarness(
-      MatButtonHarness.with({ selector: '.qdb-filter-button' }),
+      MatButtonHarness.with({ selector: '[data-ui-filter-button]' }),
     );
     await filterButton.click();
 
@@ -1555,7 +1557,7 @@ describe('CombinedEntityPage', () => {
   it('discards cancelled filter edits and applies Clear all once confirmed', async () => {
     const { api, documentLoader, fixture, loader } = await renderPage('teams', [team()]);
     const filterButton = await loader.getHarness(
-      MatButtonHarness.with({ selector: '.qdb-filter-button' }),
+      MatButtonHarness.with({ selector: '[data-ui-filter-button]' }),
     );
     await filterButton.click();
     const providers = await documentLoader.getHarness(
@@ -1641,7 +1643,7 @@ describe('CombinedEntityPage', () => {
   it('has no detectable AXE violations with the combined filter drawer open', async () => {
     const { fixture, loader } = await renderPage('leagues', [league()]);
     await (
-      await loader.getHarness(MatButtonHarness.with({ selector: '.qdb-filter-button' }))
+      await loader.getHarness(MatButtonHarness.with({ selector: '[data-ui-filter-button]' }))
     ).click();
     await fixture.whenStable();
 

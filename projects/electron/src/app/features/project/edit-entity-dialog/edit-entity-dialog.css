@@ -2,7 +2,7 @@
   display: block;
 }
 
-.qdb-hint {
+[data-ui-hint] {
   color: var(--muted-text);
   margin: 0 0 1.5rem;
 }
@@ -14,53 +14,53 @@ form {
   padding-top: 0.25rem;
 }
 
-.qdb-country-option {
+[data-ui-country-option] {
   align-items: center;
   display: inline-flex;
   gap: 0.5rem;
 }
 
-.qdb-selected-country-flag {
+[data-ui-selected-country-flag] {
   margin-inline: 0.75rem 0.5rem;
 }
 
-.qdb-source-note {
+[data-ui-source-note] {
   align-items: start;
   grid-template-columns: auto minmax(0, 1fr);
 }
 
-.qdb-source-note > mat-icon {
+[data-ui-source-note] > mat-icon {
   color: var(--mat-sys-primary);
   margin-top: 0.125rem;
 }
 
-.qdb-source-note h3 {
+[data-ui-source-note] h3 {
   font-size: 1rem;
   line-height: 1.4;
   margin: 0;
 }
 
-.qdb-source-note-intro,
-.qdb-source-note-detail {
+[data-ui-source-note-intro],
+[data-ui-source-note-detail] {
   color: inherit;
   line-height: 1.45;
 }
 
-.qdb-source-example {
+[data-ui-source-example] {
   grid-template-columns: minmax(0, 1fr) auto;
 }
 
-.qdb-source-example:focus-visible {
+[data-ui-source-example]:focus-visible {
   outline: 0.1875rem solid var(--mat-sys-primary);
   outline-offset: 0.125rem;
 }
 
-.qdb-source-example-copy strong {
+[data-ui-source-example-copy] strong {
   color: var(--mat-sys-primary);
   font-size: 0.8125rem;
 }
 
-.qdb-source-example code {
+[data-ui-source-example] code {
   font-family: ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace;
   font-size: 0.75rem;
   line-height: 1.45;
@@ -68,6 +68,6 @@ form {
   white-space: normal;
 }
 
-.qdb-source-example > mat-icon {
+[data-ui-source-example] > mat-icon {
   color: var(--mat-sys-primary);
 }
