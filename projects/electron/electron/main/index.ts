@@ -69,6 +69,11 @@ const progress = (operation: OperationProgress['operation'], message: string): v
 
 const workerPath = (): string => join(__dirname, '..', 'operation-worker.js');
 
+const windowIconPath = (): string =>
+  app.isPackaged
+    ? join(app.getAppPath(), 'dist', 'electron', 'browser', 'qdb-editor-16-icon.png')
+    : join(app.getAppPath(), 'projects', 'electron', 'public', 'qdb-editor-16-icon.png');
+
 const runWorker = <T>(
   operation: OperationProgress['operation'],
   request: Record<string, unknown>,
@@ -487,7 +492,7 @@ const createWindow = (): BrowserWindow => {
     minHeight: 560,
     show: false,
     backgroundColor: nativeTheme.shouldUseDarkColors ? '#111318' : '#f9f9ff',
-    icon: join(app.getAppPath(), 'resources', 'icons', 'qdb-editor-16.png'),
+    icon: windowIconPath(),
     webPreferences: {
       preload: join(__dirname, '..', 'preload.js'),
       contextIsolation: true,

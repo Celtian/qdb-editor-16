@@ -1,24 +1,18 @@
-<header
-  class="flex items-start justify-between gap-4 px-6 pt-6 pb-0 max-tiny:px-4 max-tiny:pt-5 max-tiny:pb-0"
->
-  <div class="flex min-w-0 items-center gap-4">
-    <img
-      class="flex-none rounded-card max-tiny:size-14 max-tiny:rounded-xl"
-      ngSrc="qdb-editor-16-icon.png"
-      width="64"
-      height="64"
-      alt=""
-      priority
-    />
+<header class="flex items-start justify-between gap-4 px-10 pt-8 max-compact:px-6 max-compact:pt-6">
+  <div class="flex min-w-0 items-center gap-6 max-compact:gap-4">
+    <img ngSrc="qdb-editor-16-icon.png" width="88" height="88" alt="" priority />
     <div>
-      <h2 class="m-0 p-0 text-dialog-title max-tiny:text-dialog-title-compact" mat-dialog-title>
-        QDB Editor 16
-      </h2>
-      <p class="m-0 text-on-surface-variant tabular-nums" data-version>Version {{ version }}</p>
+      <h2 mat-dialog-title>QDB Editor 16</h2>
+      <p
+        class="mt-2 text-version text-on-surface-variant tabular-nums max-compact:text-base"
+        data-version
+      >
+        Version {{ version }}
+      </p>
     </div>
   </div>
   <button
-    class="flex-none"
+    class="shrink-0 bg-surface-container-high"
     type="button"
     matIconButton
     mat-dialog-close
@@ -29,23 +23,21 @@
 </header>
 
 <mat-dialog-content>
-  <p class="m-0 leading-copy" data-description>
+  <p class="m-0 max-w-152 text-body-lg leading-copy" data-description>
     A local-first FIFA 16 database project and table editor. Your projects stay in the application
     data directory. Original imports and external exports are never modified by catalog actions.
   </p>
-  <p class="m-0 mt-4 text-sm text-on-surface-variant" data-legal>
+  <p class="mt-6 text-on-surface-variant" data-legal>
     © {{ copyrightYear }} {{ author }} · MIT License
   </p>
 </mat-dialog-content>
 
-<mat-dialog-actions>
-  <button class="max-tiny:self-start" type="button" matButton mat-dialog-close>Close</button>
-  <div
-    class="flex flex-wrap justify-end gap-1 max-tiny:grid max-tiny:justify-stretch"
-    data-external-actions
-  >
+<mat-dialog-actions
+  class="flex-wrap justify-between gap-4 px-10 pt-6 pb-8 max-compact:flex-col max-compact:items-stretch max-compact:px-6 max-compact:pt-5 max-compact:pb-6"
+>
+  <button class="max-xs:self-start" type="button" matButton mat-dialog-close>Close</button>
+  <div class="flex flex-wrap justify-end gap-2 max-compact:justify-start" data-external-actions>
     <a
-      class="max-tiny:justify-center"
       matButton
       target="_blank"
       rel="noopener noreferrer"
@@ -56,7 +48,6 @@
       <span>Documentation</span>
     </a>
     <a
-      class="max-tiny:justify-center"
       matButton="filled"
       target="_blank"
       rel="noopener noreferrer"

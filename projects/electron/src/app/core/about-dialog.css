@@ -2,29 +2,34 @@
   display: block;
 }
 
-[data-version] {
-  margin-top: 0.25rem !important;
+header img {
+  flex: 0 0 auto;
+  border-radius: 18px;
+}
+
+header h2 {
+  margin: 0;
+  padding: 0;
+  font-size: 2rem;
+  line-height: 1.2;
 }
 
 mat-dialog-content {
-  padding-top: 1.25rem;
+  padding: 2rem 2.5rem 0;
 }
 
-mat-dialog-actions {
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 0.75rem;
-  padding: 0.75rem 1.5rem 1.25rem;
-}
-
-@media (width <= 480px) {
-  mat-dialog-content {
-    padding-inline: 1rem;
+@media (width <= 560px) {
+  header img {
+    width: 64px;
+    height: 64px;
+    border-radius: 14px;
   }
 
-  mat-dialog-actions {
-    align-items: stretch;
-    flex-direction: column;
-    padding-inline: 1rem;
+  header h2 {
+    font-size: 1.5rem;
+  }
+
+  mat-dialog-content {
+    padding: 1.5rem 1.5rem 0;
   }
 }

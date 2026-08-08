@@ -61,6 +61,11 @@ Existing QDB Downloader v0.0.22 data can be migrated from Settings. The app prev
 merges and renamed imports before copying records transactionally; the legacy database remains
 untouched and a failed migration can be retried.
 
+Brand artwork is maintained and generated in
+[`Celtian/app-logos`](https://github.com/Celtian/app-logos) under the `qdb-editor-16` project. This
+repository checks in only the generated logo and favicon it consumes, plus the derived Windows
+packaging icon. Update the canonical artwork there before refreshing these assets.
+
 ## Getting started
 
 Requirements:
