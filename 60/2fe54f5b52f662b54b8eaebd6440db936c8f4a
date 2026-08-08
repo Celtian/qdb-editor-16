@@ -1,0 +1,42 @@
+tools/images/flags.spec.ts
+  s_6d0447f8b40536::t_4d9204bec428eb 1,13,25-28
+projects/electron/src/app/core/about-dialog.css
+  s_6d0447f8b40536::t_801aafd6a1d18c 5-7,10-14,22-25,28-31
+  s_6d0447f8b40536::t_d8b4093b501fd8 21
+  s_6d0447f8b40536::t_3fae65f988d162 18,33
+  s_6d0447f8b40536::t_4a79ad115facff 17
+  s_6d0447f8b40536::t_81929a4a0f48c4 32
+projects/electron/src/app/core/about-dialog.html
+  s_6d0447f8b40536::t_c9cf22edfb1790 6-9
+  s_6d0447f8b40536::t_801aafd6a1d18c 1-3,5,10-11,15
+  s_6d0447f8b40536::t_3fae65f988d162 26,30,35-38
+  s_6d0447f8b40536::t_6b9bad9f156210 39
+README.md
+  s_6d0447f8b40536::t_4d9204bec428eb 64-68
+projects/electron/electron/main/index.ts
+  s_e57287f115515e::t_634ae18a42d96f 72-76,495
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "602fe54f5b52f662b54b8eaebd6440db936c8f4a",
+  "prompts": {},
+  "sessions": {
+    "s_6d0447f8b40536": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019fe03f-74ce-7123-8cbf-66085e8d6c45",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "Celtian <dominik.hladik@seznam.cz>"
+    },
+    "s_e57287f115515e": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019fe052-01ae-7402-b632-8b1e4fff1833",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "Celtian <dominik.hladik@seznam.cz>"
+    }
+  }
+}
